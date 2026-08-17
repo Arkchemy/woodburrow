@@ -15,7 +15,7 @@ No build step needed — this is plain static HTML/CSS. `vercel.json`
 in this folder is already set up for it. To connect:
 
 1. In the [Vercel dashboard](https://vercel.com), import the
-   `aaronateataco/Bramble` GitHub repo as a new project.
+   `aaronateataco/thornybush` GitHub repo as a new project.
 2. In the project's settings, set **Root Directory** to `website`.
 3. Leave **Build Command** and **Output Directory** blank/default —
    there's nothing to build, Vercel will serve the folder as-is.
