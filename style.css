@@ -1,0 +1,123 @@
+:root {
+    --bg: #12141a;
+    --bg-alt: #1b1e27;
+    --text: #e8e9ee;
+    --muted: #9aa0ad;
+    --accent: #7fb8ff;
+    --border: #2a2e3a;
+    --max-width: 780px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+}
+
+header .inner, main, footer .inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+header nav {
+    margin-top: 0.75rem;
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+header nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+header nav a:hover, header nav a.active {
+    color: var(--accent);
+}
+
+main {
+    padding: 2rem 1rem 3rem;
+}
+
+h1, h2, h3 {
+    line-height: 1.3;
+}
+
+h2 {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+}
+
+a { color: var(--accent); }
+
+.lede {
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.card-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+}
+
+.card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    flex: 1 1 200px;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.card:hover {
+    border-color: var(--accent);
+}
+
+.card strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.notice {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.9rem 1.1rem;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+code {
+    background: var(--bg-alt);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
