@@ -5,16 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Skylanders Lore Guide — Bramble</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="icon" href="../branding/logo-256.png" type="image/png">
 </head>
 <body>
 
 <header>
   <div class="inner">
     <a href="index.html" class="logo">
-      <div class="logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      </div>
-      <span>Bramble</span>
+      <img src="../branding/NewBrambleTextLogo.svg" alt="Bramble" class="logo-img logo-img-small">
     </a>
     <nav>
       <a href="index.html">Home</a>
@@ -28,9 +26,9 @@
 </header>
 
 <main>
-  <div class="hero-header">
+  <div class="hero-header" style="text-align: center; margin-bottom: 3rem; padding-top: 1rem;">
     <h1>Skylanders Universe Lore Guide</h1>
-    <p class="lede">An official chronicle of Skylands history, elemental cosmology, game eras, and prominent factions.</p>
+    <p class="lede" style="margin: 0 auto;">An official chronicle of Skylands history, elemental cosmology, game eras, and prominent factions.</p>
   </div>
 
   <div class="search-container">
@@ -46,15 +44,254 @@
     </div>
   </div>
 
-  <div class="faction-card searchable-item" data-category="faction">
+  <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--accent); --faction-border: var(--accent-border); --faction-glow: rgba(0, 212, 255, 0.3);">
     <h3>
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
       The Core of Light & Portal Masters
     </h3>
     <p>
       Skylands is a universe composed of vast floating islands suspended in a magical sky. Harmony was preserved for millennia by the <strong>Core of Light</strong>, an ancient monument powered by the ten fundamental elements. Human Portal Masters from Earth channel elemental energy to bridge realms, summoning Skylanders figures to defend the world against dark forces.
     </p>
   </div>
+
+  <section>
+    <div class="section-header">
+      <h2>Chronological Eras</h2>
+      <p class="section-desc">The history of Skylands spans epochs of peace, conflict, and cosmic upheaval.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-card searchable-item" data-category="era">
+        <div class="era-header">
+          <h3 class="era-title">The Ancients' Epoch</h3>
+          <span class="era-year">Pre-History</span>
+        </div>
+        <p>The Ancients — a highly advanced, enigmatic race — constructed the Core of Light and established the elemental balance. They created the Elemental Gates, the Mask of Power artifacts, and the very fabric of Skylands' magic before vanishing, leaving behind ruins and autonomous constructs like the Arkeyan robots.</p>
+      </div>
+
+      <div class="timeline-card searchable-item" data-category="era">
+        <div class="era-header">
+          <h3 class="era-title">The Arkeyan Age</h3>
+          <span class="era-year">~10,000 Years Ago</span>
+        </div>
+        <p>The Arkeyan King Jolly and his Iron Fist of Arkus ruled through technological tyranny. Their machine empire enslaved the populace until the Original Skylanders — the Giants — rose up, shattering the Iron Fist and toppling the Arkeyan dynasty. The Giants then vanished, entering a long slumber.</p>
+      </div>
+
+      <div class="timeline-card searchable-item" data-category="era">
+        <div class="era-header">
+          <h3 class="era-title">The Dark Ages</h3>
+          <span class="era-year">~100 Years Ago</span>
+        </div>
+        <p>With the Giants gone, Kaos rose to power. The Darkness entity corrupted the land, and the Core of Light was destroyed by Kaos and the Hydra. Master Eon called upon a new Portal Master from Earth, beginning the modern era of Skylanders: Spyro's Adventure.</p>
+      </div>
+
+      <div class="timeline-card searchable-item" data-category="era">
+        <div class="era-header">
+          <h3 class="era-title">The Modern Era</h3>
+          <span class="era-year">Present Day</span>
+        </div>
+        <p>Through Spyro's Adventure, Giants, SWAP Force, Trap Team, SuperChargers, and Imaginators, Skylands has faced Kaos, The Darkness, Malefor, and the Doom Raiders. The Core of Light was restored, the Giants awakened, Traptanium harnessed, vehicles forged, and Imaginite crystals unlocked — each era expanding the roster of Skylanders and the lore of the elements.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>The Ten Elements</h2>
+      <p class="section-desc">Fundamental forces that compose all magic in Skylands. Every Skylander aligns with one element, determining strengths, weaknesses, and elemental zones.</p>
+    </div>
+    <div class="element-grid">
+      <div class="element-card element-fire searchable-item" data-category="element" data-name="fire">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 1 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 1 2.5 2.5z"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Fire</h4>
+          <p>Aggressive, destructive force. Skylanders: Ignitor, Eruptor, Sunburn, Smolderdash, Torch, Wildfire, Barbella.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-water searchable-item" data-category="element" data-name="water">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Water</h4>
+          <p>Fluid, adaptive magic. Skylanders: Gill Grunt, Zap, Wham-Shell, Thumpback, Tidal Wave, Wash Buckler, Bubble Bath.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-earth searchable-item" data-category="element" data-name="earth">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 20H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Earth</h4>
+          <p>Solid, enduring power. Skylanders: Crusher, Bash, Flashwing, Hot Head, Wallop, Rock Jaw, Tri-Tip.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-air searchable-item" data-category="element" data-name="air">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Air</h4>
+          <p>Swift, evasive currents. Skylanders: Sonic Boom, Warnado, Lightning Rod, High Five, Freeze Blade, Scratch, Gusto.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-life searchable-item" data-category="element" data-name="life">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Life</h4>
+          <p>Growth, healing, nature. Skylanders: Stealth Elf, Stump Smash, Shroomboom, Bushwack, Tuff Luck, Brawl & Chain, Aurora.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-undead searchable-item" data-category="element" data-name="undead">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Undead</h4>
+          <p>Death, shadows, necromancy. Skylanders: Hex, Chop Chop, Cynder, Fright Rider, Night Shift, Funny Bone, Hood Sickle.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-tech searchable-item" data-category="element" data-name="tech">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Tech</h4>
+          <p>Machinery, innovation, gadgets. Skylanders: Drill Sergeant, Drobot, Boom Jet, Jawbreaker, Fryno, Sprocket, Gearshift.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-magic searchable-item" data-category="element" data-name="magic">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Magic</h4>
+          <p>Arcane, reality-bending. Skylanders: Spyro, Double Trouble, Voodood, Pop Fizz, Enigma, Dreamcatcher, Mysticat.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-light searchable-item" data-category="element" data-name="light">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Light</h4>
+          <p>Radiance, purity, revelation. Skylanders: Spotlight, Knight Light, Sirious, Amperage, Splatter Splasher.</p>
+        </div>
+      </div>
+
+      <div class="element-card element-dark searchable-item" data-category="element" data-name="dark">
+        <div class="element-badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </div>
+        <div class="element-info">
+          <h4>Dark</h4>
+          <p>Void, stealth, corruption. Skylanders: Blackout, Bat Spin, Pain-Yatta, Star Strike, Deja Vu, Chill Bill, Mesmeralda.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>Key Factions</h2>
+      <p class="section-desc">Major organizations and groups that shape the politics and conflicts of Skylands.</p>
+    </div>
+    <div class="faction-grid">
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--accent); --faction-border: var(--accent-border); --faction-glow: rgba(0, 212, 255, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Skylanders
+        </h3>
+        <p>The heroic protectors of Skylands, summoned by Portal Masters from Earth. Each Skylander wields one of the ten elements and possesses unique abilities. They are organized by game debut: Core, Giants, SWAP Force, Trap Masters, SuperChargers, Senseis, and Imaginators.</p>
+      </div>
+
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--el-undead); --faction-border: rgba(191, 0, 255, 0.3); --faction-glow: rgba(191, 0, 255, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--el-undead)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          The Doom Raiders
+        </h3>
+        <p>Kaos's elite villain team from Trap Team, each representing an element twisted to darkness: Wolfgang (Air), Dreamcatcher (Magic), Chef Pepper Jack (Fire), Luminous (Light), Shield Shredder (Tech), Golden Queen (Earth), Chompies (Life), Tussle Sprout (Water), Eye-Small (Undead), and Pain-Yatta (Dark).</p>
+      </div>
+
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--el-tech); --faction-border: rgba(255, 204, 0, 0.3); --faction-glow: rgba(255, 204, 0, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--el-tech)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Arkeyans
+        </h3>
+        <p>Ancient robotic civilization that once ruled Skylands through the Iron Fist of Arkus. Their ruins dot the landscape, and their automatons still guard forgotten vaults. The Giants shattered their empire, but Arkeyan tech persists in traps, vehicles, and Imaginators.</p>
+      </div>
+
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--el-dark); --faction-border: rgba(74, 74, 106, 0.3); --faction-glow: rgba(74, 74, 106, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--el-dark)" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          The Darkness
+        </h3>
+        <p>The primordial entity of entropy and void, sealed away by the Ancients. It corrupts all it touches — Kaos, Malefor, the Hydra. Its goal: unmake the Core of Light and return Skylands to nothingness. Only the combined elemental power of Skylanders can repel it.</p>
+      </div>
+
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--el-life); --faction-border: rgba(57, 255, 20, 0.3); --faction-glow: rgba(57, 255, 20, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--el-life)" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          Mabu & Villagers
+        </h3>
+        <p>The peaceful inhabitants of Skylands — Mabu, Drow, Elves, Cyclopses, and more. They build towns, tend farms, and support Skylanders with shops, upgrades, and quests. Notable settlements: Woodburrow, Skylanders Academy, Ruins of the Ancients, and the various elemental realms.</p>
+      </div>
+
+      <div class="faction-card searchable-item" data-category="faction" style="--faction-color: var(--el-magic); --faction-border: rgba(255, 45, 149, 0.3); --faction-glow: rgba(255, 45, 149, 0.3);">
+        <h3>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--el-magic)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Portal Masters
+        </h3>
+        <p>Humans from Earth who wield the Portal of Power to summon Skylanders. The most famous is the player — the "Portal Master" — guided by Master Eon. Other Portal Masters include Flynn, Cali, Hugo, Persephone, and Tessa, each with their own connection to the Portal network.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function filterLore() {
+      const input = document.getElementById('loreSearch');
+      const filter = input.value.toLowerCase();
+      const items = document.querySelectorAll('.searchable-item');
+      
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const name = item.dataset.name ? item.dataset.name.toLowerCase() : '';
+        if (text.includes(filter) || name.includes(filter)) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    function setFilter(category, btn) {
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const items = document.querySelectorAll('.searchable-item');
+      items.forEach(item => {
+        if (category === 'all' || item.dataset.category === category) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+      
+      const search = document.getElementById('loreSearch');
+      if (search) search.value = '';
+    }
+  </script>
 </main>
 
 <footer>
