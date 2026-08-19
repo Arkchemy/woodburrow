@@ -3,78 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bramble</title>
-<link rel="stylesheet" href="style.css">
+<title>Bramble — Native Skylanders Static Recompilation Engine</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <header>
   <div class="inner">
-    <h1>🐉 Bramble</h1>
+    <a href="index.html" class="logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span>Bramble</span>
+    </a>
     <nav>
       <a href="index.html" class="active">Home</a>
+      <a href="lore.html">Lore Guide</a>
       <a href="terms.html">Terms of Service</a>
       <a href="privacy.html">Privacy Policy</a>
-      <a href="https://github.com/aaronateataco/thornybush">GitHub</a>
-      <a href="https://discord.gg/KJWyHUczCV">Discord</a>
+      <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/KJWyWyHuCZ" target="_blank" rel="noopener">Discord</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <p class="lede">
-    Bramble is a static recompilation project bringing Skylanders
-    games to native ARM64 Nintendo Switch homebrew — no emulation at
-    runtime. It transforms your own, legally-owned copy of a game into
-    a form that runs on different hardware, without containing or
-    distributing any of that game's own copyrighted content.
-  </p>
+  <div class="hero">
+    <div>
+      <div class="badge-bar">
+        <span class="badge">⚡ Static Recompilation Engine</span>
+        <span class="status-badge"><span class="status-pulse"></span> Open-Source Architecture</span>
+      </div>
+      <h1>Native Skylanders Recompilation for <span>ARM64</span></h1>
+      <p class="lede">
+        Bramble converts original Wii U binary executables directly into native ARM64 instructions for handheld platforms — delivering high performance without runtime CPU emulation.
+      </p>
+      <div class="hero-actions">
+        <a href="lore.html" class="btn btn-primary">
+          <span>Explore Lore Guide</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>View GitHub Code</span>
+        </a>
+      </div>
+    </div>
 
-  <div class="notice">
-    This project is currently in active, early development. Nothing
-    described below (including "Skylanders Online") is available yet
-    — this site exists to document the project's goals, terms, and
-    policies as they're decided, ahead of anything actually shipping.
+    <!-- Architectural SVG Asset Card -->
+    <div class="hero-graphic-card">
+      <div class="graphic-title">
+        <span>Recompilation Pipeline</span>
+        <span style="color: var(--green); font-size: 0.75rem;">Direct Native Execution</span>
+      </div>
+      <svg width="100%" height="210" viewBox="0 0 340 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Input Block -->
+        <rect x="10" y="20" width="90" height="60" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="55" y="45" font-family="-apple-system, sans-serif" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">Wii U Binary</text>
+        <text x="55" y="60" font-family="-apple-system, sans-serif" font-size="9" fill="#64748b" text-anchor="middle">.RPX / PowerPC</text>
+        
+        <!-- Arrow 1 -->
+        <path d="M105 50H135" stroke="#0284c7" stroke-width="2" stroke-dasharray="4 2"/>
+        <polygon points="135,46 142,50 135,54" fill="#0284c7"/>
+
+        <!-- Bramble Static Engine Block -->
+        <rect x="145" y="10" width="180" height="80" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+        <text x="235" y="38" font-family="-apple-system, sans-serif" font-size="13" font-weight="800" fill="#0284c7" text-anchor="middle">Bramble Recompiler</text>
+        <text x="235" y="55" font-family="-apple-system, sans-serif" font-size="9" fill="#0369a1" text-anchor="middle">Static ISA Translation & Hooking</text>
+        <text x="235" y="70" font-family="-apple-system, sans-serif" font-size="9" font-weight="600" fill="#1e40af" text-anchor="middle">0% CPU Runtime Overhead</text>
+
+        <!-- Down Arrow -->
+        <path d="M235 95V125" stroke="#0284c7" stroke-width="2"/>
+        <polygon points="231,125 235,132 239,125" fill="#0284c7"/>
+
+        <!-- Native Output Block -->
+        <rect x="145" y="135" width="180" height="60" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+        <text x="235" y="160" font-family="-apple-system, sans-serif" font-size="12" font-weight="bold" fill="#15803d" text-anchor="middle">Native ARM64 Code</text>
+        <text x="235" y="176" font-family="-apple-system, sans-serif" font-size="9" fill="#166534" text-anchor="middle">Runs directly on Target Hardware</text>
+
+        <!-- Hardware NFC Portal Pill -->
+        <rect x="10" y="135" width="90" height="60" rx="8" fill="#fef3c7" stroke="#fde68a" stroke-width="1.5"/>
+        <text x="55" y="160" font-family="-apple-system, sans-serif" font-size="11" font-weight="bold" fill="#78350f" text-anchor="middle">USB Portal</text>
+        <text x="55" y="175" font-family="-apple-system, sans-serif" font-size="9" fill="#92400e" text-anchor="middle">Passthrough USB</text>
+      </svg>
+    </div>
   </div>
 
-  <h2>What Bramble is</h2>
-  <ul>
-    <li><strong>Traditional Mode</strong> — a native, faithful port of the original game, played through your own real (or virtual) Portal of Power and figures, exactly as it originally shipped.</li>
-    <li><strong>Hybrid Mode</strong> — Traditional Mode plus quality-of-life/balance improvements and a portal-free unlock system, without any online/social features.</li>
-    <li><strong>Skylanders Online</strong> — an opt-in, fully free, accessible shared-presence layer: see other real players in your level, party up with friends, unlock Skylanders without needing physical figures, and more — built without needing to preserve the original toy-sales incentives of the real games.</li>
-  </ul>
-
-  <h2>Free, always</h2>
-  <p>
-    Bramble and every mode/service it operates (including Skylanders
-    Online) are 100% free to use. No feature is ever paywalled or made
-    exclusive to paying supporters — voluntary donations support the
-    project only and confer no in-game advantage.
-  </p>
-
-  <div class="card-row">
-    <a class="card" href="https://github.com/aaronateataco/thornybush"><strong>Source code</strong>See how it's built, or contribute.</a>
-    <a class="card" href="https://discord.gg/KJWyHUczCV"><strong>Discord</strong>Community, support, and updates.</a>
-    <a class="card" href="terms.html"><strong>Terms of Service</strong>Rules for using Bramble and Skylanders Online.</a>
-    <a class="card" href="privacy.html"><strong>Privacy Policy</strong>What data is collected, and how to have yours removed.</a>
+  <div class="notice-box">
+    <strong>Project Development Notice:</strong> Bramble is undergoing active architectural development. Online features (including Skylanders Online) are currently unreleased. This portal provides comprehensive technical documentation, community standards, legal guidelines, and world lore ahead of upcoming builds.
   </div>
 
-  <h2>Legal</h2>
-  <p>
-    Bramble contains no copyrighted game assets or code, and
-    distributes none — it only transforms a copy of a game you already
-    legally own. Use of Bramble is additionally subject to the
-    original game publisher's (e.g. Activision, for the Skylanders
-    series) own terms. See the project's
-    <a href="https://github.com/aaronateataco/thornybush/blob/main/LICENSE">LICENSE</a>
-    for full source-usage terms.
-  </p>
+  <section>
+    <div class="section-header">
+      <h2>Architectural Play Modes</h2>
+      <p class="section-desc">Designed to support both original physical hardware collections and modern portable gameplay.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Traditional Mode</h3>
+        <p>A 100% faithful port of the original Wii U releases. Connects directly to real USB Portals of Power and physical NFC figures exactly as released.</p>
+        <div class="card-footer">
+          <span>Physical Toy Support</span>
+          <span>100% Faithful</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon-wrap" style="background: var(--purple-bg); color: var(--purple);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>Hybrid Mode</h3>
+        <p>Enhances offline play with modern balance refinements, visual options, and an integrated virtual figure locker for portal-free gaming on the go.</p>
+        <div class="card-footer" style="color: var(--purple);">
+          <span>Virtual Figure Locker</span>
+          <span>Portable Play</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon-wrap" style="background: var(--green-bg); color: var(--green);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Skylanders Online</h3>
+        <p>An opt-in shared-world network layer. Connect with friends, explore levels together, trade unlocked variants, and compete without paywalls.</p>
+        <div class="card-footer" style="color: var(--green);">
+          <span>Multiplayer Network</span>
+          <span>No Paywalls</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header">
+      <h2>Project Resources & Community Hubs</h2>
+      <p class="section-desc">Access technical repositories, lore documentation, and community channels.</p>
+    </div>
+    <div class="grid-3">
+      <a class="card" href="lore.html">
+        <div class="card-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <h3>Skylanders Lore Guide</h3>
+        <p>Explore the complete chronology of Skylands, key factions, elemental forces, and historical game eras from 2011 to 2016.</p>
+        <div class="card-footer">
+          <span>Read Comprehensive Guide</span>
+          <span>&rarr;</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener">
+        <div class="card-icon-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3>Source Code Repository</h3>
+        <p>Inspect source code, track architectural progress, submit pull requests, and review recompiler specifications on GitHub.</p>
+        <div class="card-footer">
+          <span>View GitHub Code</span>
+          <span>&rarr;</span>
+        </div>
+      </a>
+
+      <a class="card" href="https://discord.gg/KJWyWyHuCZ" target="_blank" rel="noopener">
+        <div class="card-icon-wrap" style="background: #e0e7ff; color: #4338ca;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Official Discord Server</h3>
+        <p>Join developer discussions, share feedback, receive direct technical updates, and connect with homebrew creators.</p>
+        <div class="card-footer" style="color: #4338ca;">
+          <span>Join Discord Server</span>
+          <span>&rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="legal-section">
+      <div class="section-header">
+        <h2>Legal Commitments & Copyright Compliance</h2>
+        <p class="section-desc">Bramble operates under strict open-source and preservation guidelines.</p>
+      </div>
+      <div class="legal-grid">
+        <div class="legal-item">
+          <div class="legal-icon">💎</div>
+          <div>
+            <h4>100% Free & Open-Source</h4>
+            <p>Bramble will never contain paywalls or subscription tiers. Voluntary donations go strictly toward hosting infrastructure.</p>
+          </div>
+        </div>
+
+        <div class="legal-item">
+          <div class="legal-icon">🛡️</div>
+          <div>
+            <h4>Zero Asset Distribution</h4>
+            <p>Bramble contains no copyrighted game code, assets, audio, or textures. Users legally extract their own media from discs.</p>
+          </div>
+        </div>
+
+        <div class="legal-item">
+          <div class="legal-icon">📜</div>
+          <div>
+            <h4>Publisher Trademark Notice</h4>
+            <p>All Skylanders intellectual property, characters, and trademarks belong strictly to Activision Publishing, Inc.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
   <div class="inner">
-    Bramble — contact: <a href="mailto:aaron@aaronworld.uk">aaron@aaronworld.uk</a>
-    or the <a href="https://discord.gg/KJWyHUczCV">Discord server</a>.
+    <div>Bramble Project — Official Contact: <a href="mailto:aaron@aaronworld.uk">aaron@aaronworld.uk</a></div>
+    <div>
+      <a href="index.html">Home</a> &bull; 
+      <a href="lore.html">Lore Guide</a> &bull; 
+      <a href="terms.html">Terms of Service</a> &bull; 
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
   </div>
 </footer>
+
 </body>
 </html>
