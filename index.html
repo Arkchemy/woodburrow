@@ -3,583 +3,630 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bramble — Native Skylanders Recompilation Engine</title>
+    <title>Bramble — Static Recompilation Engine for Skylanders: Spyro's Adventure</title>
     <meta name="description" content="Bramble statically recompiles the original Wii U Skylanders: Spyro's Adventure binary into native ARM64 code for Switch — no PowerPC emulation at runtime.">
     <link rel="icon" href="../branding/logo-256.png" type="image/png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        display: ['"Fredoka One"', 'cursive'],
-                        sans: ['Nunito', 'sans-serif'],
-                    },
-                    colors: {
-                        bramble: {
-                            50:  '#f1faf0',
-                            100: '#ddf1da',
-                            200: '#bae2b6',
-                            300: '#8dce88',
-                            400: '#5cb955',
-                            500: '#3d9933',
-                            600: '#2d7d21',
-                            700: '#236317',
-                            800: '#1b4b11',
-                            900: '#13330a',
-                        },
-                        gold: {
-                            50:  '#fef9ec',
-                            100: '#fbf0d0',
-                            200: '#f7dfa1',
-                            300: '#f5ca66',
-                            400: '#f8b530',
-                            500: '#f09d0f',
-                            600: '#c67710',
-                            700: '#a5590d',
-                            800: '#81440e',
-                            900: '#592e0d',
-                        },
-                        element: {
-                            fire: '#ef4444',
-                            water: '#3b82f6',
-                            earth: '#b45309',
-                            air: '#06b6d4',
-                            life: '#22c55e',
-                            undead: '#9333ea',
-                            tech: '#f59e0b',
-                            magic: '#ec4899',
-                            light: '#fde047',
-                            dark: '#1e293b'
-                        }
-                    },
-                    boxShadow: {
-                        'chunky': '0 8px 0 rgba(0,0,0,0.15)',
-                        'chunky-hover': '0 4px 0 rgba(0,0,0,0.15)',
-                        'card': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                        'element': '0 0 20px rgba(255,255,255,0.5)'
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --bg: #0a0b0d;
+            --bg-raised: #111318;
+            --bg-raised-2: #16191f;
+            --border: rgba(255,255,255,0.08);
+            --border-strong: rgba(255,255,255,0.16);
+            --text: #eef0f2;
+            --text-muted: #9aa1ab;
+            --text-faint: #676e78;
+
+            --accent: #3fae6f;
+            --accent-strong: #57cf8a;
+            --accent-bg: rgba(63,174,111,0.12);
+            --accent-border: rgba(63,174,111,0.35);
+
+            --gold: #d3a445;
+            --gold-bg: rgba(211,164,69,0.10);
+            --gold-border: rgba(211,164,69,0.32);
+
+            --red: #e0665f;
+            --red-bg: rgba(224,102,95,0.10);
+            --red-border: rgba(224,102,95,0.32);
+
+            --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+            --max: 1080px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            background: linear-gradient(180deg, #163d10 0%, #3d8f2f 42%, #eef8ea 100%);
+            margin: 0;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse 900px 500px at 15% -10%, rgba(63,174,111,0.07), transparent 60%),
+                radial-gradient(ellipse 700px 400px at 100% 10%, rgba(211,164,69,0.05), transparent 55%);
             background-attachment: fixed;
-            color: #1e293b;
-            min-height: 100vh;
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; }
+        img { max-width: 100%; }
+        .container { max-width: var(--max); margin: 0 auto; padding: 0 1.5rem; }
+
+        code, .mono { font-family: var(--mono); }
+
+        /* ---------- header ---------- */
+        header {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(10,11,13,0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border);
+        }
+        header .inner {
+            max-width: var(--max); margin: 0 auto; padding: 0.9rem 1.5rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; cursor: pointer; }
+        .brand img { height: 26px; width: 26px; display: block; }
+        .brand span {
+            font-weight: 800; font-size: 1.02rem; letter-spacing: 0.02em; color: var(--text);
+        }
+        nav.mainnav { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }
+        nav.mainnav button {
+            font-family: var(--font); background: none; border: none; cursor: pointer;
+            color: var(--text-muted); font-size: 0.88rem; font-weight: 600;
+            padding: 0.5rem 0.7rem; border-radius: 6px; transition: color 0.15s ease, background 0.15s ease;
+        }
+        nav.mainnav button:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+        nav.mainnav button.active { color: var(--accent-strong); }
+        .gh-link {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            font-size: 0.85rem; font-weight: 600; color: var(--text-muted);
+            border: 1px solid var(--border-strong); border-radius: 6px;
+            padding: 0.4rem 0.7rem; text-decoration: none; transition: all 0.15s ease;
+        }
+        .gh-link:hover { color: var(--text); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.03); }
+        .gh-link .star-count { font-family: var(--mono); color: var(--gold); }
+
+        /* ---------- generic ---------- */
+        main { padding: 0 0 5rem; }
+        .page-view { display: none; }
+        .page-view.active { display: block; }
+
+        .eyebrow {
+            font-family: var(--mono); font-size: 0.76rem; font-weight: 600;
+            letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-strong);
+            margin-bottom: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .eyebrow::before, .eyebrow::after { content: ''; height: 1px; width: 24px; background: var(--accent-border); }
+
+        h1 { font-size: clamp(2.1rem, 4.4vw, 3.1rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.12; margin: 0 0 1.1rem; }
+        h2 { font-size: 1.55rem; font-weight: 750; letter-spacing: -0.01em; margin: 0 0 0.6rem; }
+        h3 { font-size: 1.1rem; font-weight: 700; margin: 0 0 0.5rem; }
+        p { margin: 0 0 1rem; color: var(--text-muted); }
+
+        .section { padding: 4.5rem 0; border-top: 1px solid var(--border); }
+        .section:first-child { border-top: none; }
+        .section-head { max-width: 640px; margin: 0 auto 2.5rem; text-align: center; }
+        .section-head p { margin: 0; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--font); font-weight: 650; font-size: 0.92rem;
+            padding: 0.7rem 1.3rem; border-radius: 7px; cursor: pointer;
+            text-decoration: none; border: 1px solid transparent; transition: all 0.15s ease;
+        }
+        .btn-primary { background: var(--accent); color: #06120a; }
+        .btn-primary:hover { background: var(--accent-strong); }
+        .btn-secondary { background: var(--bg-raised); color: var(--text); border-color: var(--border-strong); }
+        .btn-secondary:hover { border-color: rgba(255,255,255,0.35); background: var(--bg-raised-2); }
+        .btn-sm { padding: 0.5rem 0.9rem; font-size: 0.82rem; border-radius: 6px; }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: var(--mono); font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.04em; text-transform: uppercase;
+            padding: 0.32rem 0.65rem; border-radius: 5px;
+            background: var(--bg-raised); border: 1px solid var(--border-strong); color: var(--text-muted);
+        }
+        .badge b { color: var(--text); font-weight: 700; }
+        .badge.b-accent { background: var(--accent-bg); border-color: var(--accent-border); color: var(--accent-strong); }
+        .badge.b-gold { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold); }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+        .dot.pulse { animation: pulse 1.8s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+        .card {
+            background: linear-gradient(180deg, var(--bg-raised), var(--bg-raised-2));
+            border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem;
         }
 
-        .logo-glow {
-            background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, rgba(220,241,218,0.35) 45%, rgba(220,241,218,0) 72%);
+        .notice {
+            border: 1px solid var(--border); border-left: 3px solid var(--gold);
+            background: var(--gold-bg); border-radius: 8px; padding: 1.1rem 1.3rem;
+            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 2.5rem;
+        }
+        .notice strong { color: var(--text); }
+        .notice.n-red { border-left-color: var(--red); background: var(--red-bg); }
+
+        /* ---------- hero ---------- */
+        .hero { padding: 4.5rem 0 3.5rem; text-align: center; }
+        .hero-logo { height: 30px; margin-bottom: 1.6rem; opacity: 0.95; }
+        .hero .lede { max-width: 620px; margin: 0 auto 1.8rem; font-size: 1.08rem; }
+        .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2.1rem; }
+        .hero-actions { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.6rem; }
+
+        .stats-strip {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 0 2.2rem;
+            font-family: var(--mono); font-size: 0.82rem; color: var(--text-faint);
+        }
+        .stats-strip .item { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0; }
+        .stats-strip .item b { color: var(--text); font-weight: 600; }
+        .stats-strip .skel { display: inline-block; width: 3.5em; height: 0.9em; background: var(--bg-raised); border-radius: 3px; animation: pulse 1.4s ease-in-out infinite; }
+
+        /* ---------- diagram ---------- */
+        .diagram-wrap { display: flex; justify-content: center; margin-top: 3rem; }
+        .diagram-card { max-width: 620px; width: 100%; }
+        .diagram-card .card-label {
+            font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--text-faint); margin-bottom: 1rem; display: flex; justify-content: space-between;
         }
 
-        .vine-divider {
-            height: 3px;
-            background: repeating-linear-gradient(90deg, #2d7d21 0 10px, #5cb955 10px 20px);
-            border-radius: 999px;
-            opacity: 0.6;
+        /* ---------- status / milestones ---------- */
+        .status-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; }
+        .status-item {
+            display: grid; grid-template-columns: 44px 1fr; gap: 1.1rem;
+            padding: 1.4rem 0; border-top: 1px solid var(--border);
+        }
+        .status-item:first-child { border-top: none; }
+        .status-num {
+            font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--accent-strong);
+            width: 36px; height: 36px; border-radius: 8px; background: var(--accent-bg); border: 1px solid var(--accent-border);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .status-item h3 { margin-bottom: 0.35rem; }
+        .status-item p { margin: 0; font-size: 0.92rem; }
+
+        /* ---------- downloads page ---------- */
+        .status-line {
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            font-family: var(--mono); font-size: 0.8rem; color: var(--text-faint);
+            margin-bottom: 2.4rem;
         }
 
-        .page-view {
-            display: none;
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-        .page-view.active {
-            display: block;
-        }
+        .release-panel { margin-bottom: 2.5rem; }
+        .release-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+        .release-title { font-size: 1.5rem; font-weight: 750; margin: 0 0 0.2rem; }
+        .release-tag { font-family: var(--mono); font-size: 0.82rem; color: var(--text-faint); margin-bottom: 1.4rem; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .asset-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.6rem; }
+        .asset-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0.9rem 1.1rem; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--bg); text-decoration: none; transition: border-color 0.15s ease, background 0.15s ease;
         }
+        .asset-row:hover { border-color: var(--accent-border); background: rgba(63,174,111,0.05); }
+        .asset-name { font-family: var(--mono); font-size: 0.88rem; color: var(--text); }
+        .asset-meta { font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); margin-top: 0.15rem; }
+        .asset-cta { font-size: 0.82rem; font-weight: 650; color: var(--accent-strong); white-space: nowrap; }
 
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
+        .release-body { border-top: 1px solid var(--border); padding-top: 1.4rem; font-size: 0.92rem; }
+        .release-body p { margin-bottom: 0.8rem; }
+        .release-body h3, .release-body h4 { margin-top: 1.1rem; }
+        .release-body code { background: var(--bg); border: 1px solid var(--border); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.82em; color: var(--accent-strong); }
+        .release-body ul { padding-left: 1.2rem; }
+        .release-body a { color: var(--accent-strong); }
+        .release-link { display: inline-block; margin-top: 1.2rem; font-size: 0.85rem; font-weight: 650; color: var(--accent-strong); text-decoration: none; }
+        .release-link:hover { text-decoration: underline; }
 
-        .btn-game {
-            transition: all 0.1s ease;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
-        }
-        .btn-game:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 rgba(0,0,0,0.15) !important;
-        }
+        .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2.5rem; }
+        .stat-tile { border: 1px solid var(--border); border-radius: 10px; padding: 1.3rem 1rem; text-align: center; background: var(--bg-raised); }
+        .stat-tile .num { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; color: var(--text); }
+        .stat-tile .lbl { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.3rem; }
 
-        .portal-gradient {
-            background: conic-gradient(from 0deg,
-                #ef4444 0deg 36deg,
-                #3b82f6 36deg 72deg,
-                #b45309 72deg 108deg,
-                #06b6d4 108deg 144deg,
-                #22c55e 144deg 180deg,
-                #9333ea 180deg 216deg,
-                #f59e0b 216deg 252deg,
-                #ec4899 252deg 288deg,
-                #fde047 288deg 324deg,
-                #1e293b 324deg 360deg);
-        }
+        .lang-bar { width: 100%; height: 8px; border-radius: 4px; overflow: hidden; display: flex; background: var(--bg-raised); margin-bottom: 1rem; }
+        .lang-legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.3rem; font-family: var(--mono); font-size: 0.78rem; color: var(--text-muted); }
+        .lang-legend .sw { width: 8px; height: 8px; border-radius: 2px; display: inline-block; margin-right: 0.4rem; }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: #ddf1da; }
-        ::-webkit-scrollbar-thumb { background: #2d7d21; border-radius: 6px; border: 2px solid #ddf1da; }
-        ::-webkit-scrollbar-thumb:hover { background: #1b4b11; }
+        .commit-line { display: flex; align-items: flex-start; gap: 0.9rem; margin-bottom: 2.5rem; }
+        .commit-line .icon { color: var(--text-faint); flex-shrink: 0; margin-top: 0.15rem; }
+        .commit-line a { color: var(--accent-strong); text-decoration: none; }
+        .commit-line a:hover { text-decoration: underline; }
+        .commit-line .sha { font-family: var(--mono); background: var(--bg-raised); border: 1px solid var(--border); padding: 0.05rem 0.35rem; border-radius: 4px; font-size: 0.8em; }
 
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .rel-history { display: flex; flex-direction: column; }
+        .rel-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 1.1rem 0; border-top: 1px solid var(--border); flex-wrap: wrap;
+        }
+        .rel-row:first-child { border-top: none; }
+        .rel-row .left { min-width: 0; }
+        .rel-row .tag { font-family: var(--mono); font-size: 0.82rem; color: var(--accent-strong); margin-right: 0.6rem; }
+        .rel-row .name { font-size: 0.94rem; font-weight: 600; }
+        .rel-row .meta { font-family: var(--mono); font-size: 0.76rem; color: var(--text-faint); margin-top: 0.2rem; }
+        .rel-row .view { font-size: 0.82rem; font-weight: 650; color: var(--text-muted); text-decoration: none; flex-shrink: 0; }
+        .rel-row .view:hover { color: var(--accent-strong); }
 
-        .element-card-inner {
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-        }
-        .element-card:hover .element-card-inner {
-            transform: scale(1.03) translateY(-4px);
-            box-shadow: 0 15px 30px -5px rgba(0,0,0,0.15);
-        }
+        .skeleton { background: var(--bg-raised); border-radius: 6px; animation: pulse 1.4s ease-in-out infinite; }
 
-        .stat-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(255,255,255,0.9);
-            border: 2px solid #ddf1da;
-            padding: 0.4rem 0.9rem;
-            border-radius: 9999px;
-            font-weight: 800;
-            font-size: 0.8rem;
-            color: #1b4b11;
-        }
+        /* ---------- legal doc pages ---------- */
+        .doc { max-width: 700px; margin: 0 auto; }
+        .doc .doc-head { margin-bottom: 2.5rem; }
+        .doc .doc-head p { font-family: var(--mono); font-size: 0.82rem; color: var(--text-faint); }
+        .doc section { margin-bottom: 2.1rem; padding-top: 1.6rem; border-top: 1px solid var(--border); }
+        .doc section:first-of-type { border-top: none; padding-top: 0; }
+        .doc h2 { font-size: 1.05rem; display: flex; align-items: baseline; gap: 0.6rem; }
+        .doc h2 .n { font-family: var(--mono); color: var(--text-faint); font-weight: 500; font-size: 0.9rem; }
+        .doc p, .doc li { font-size: 0.93rem; color: var(--text-muted); }
+        .doc strong { color: var(--text); }
+        .doc a { color: var(--accent-strong); text-decoration: underline; text-decoration-color: var(--accent-border); text-underline-offset: 2px; }
+        .doc ul { padding-left: 1.3rem; }
 
-        .skeleton-pulse {
-            animation: skeletonPulse 1.4s ease-in-out infinite;
-        }
-        @keyframes skeletonPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
+        /* ---------- license page ---------- */
+        .license-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+        .license-meta-line { font-family: var(--mono); font-size: 0.8rem; color: var(--text-faint); margin-top: 0.3rem; }
+        .license-box-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 0.82rem; color: var(--text-muted); }
+        #licenseContainer { font-family: var(--mono); font-size: 0.82rem; white-space: pre-wrap; line-height: 1.65; color: var(--text-muted); max-height: 560px; overflow-y: auto; }
 
-        .lang-bar-seg:first-child { border-top-left-radius: 9999px; border-bottom-left-radius: 9999px; }
-        .lang-bar-seg:last-child { border-top-right-radius: 9999px; border-bottom-right-radius: 9999px; }
+        /* ---------- footer ---------- */
+        footer { border-top: 1px solid var(--border); padding: 2.6rem 0; }
+        footer .inner { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-faint); }
+        footer .fbrand { display: flex; align-items: center; gap: 0.5rem; }
+        footer .fbrand img { height: 18px; width: 18px; opacity: 0.7; }
+        footer nav { display: flex; gap: 1.3rem; flex-wrap: wrap; }
+        footer nav a, footer .contact a { color: var(--text-faint); text-decoration: none; font-weight: 600; }
+        footer nav a:hover, footer .contact a:hover { color: var(--accent-strong); }
+
+        ::selection { background: var(--accent-bg); color: var(--accent-strong); }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 5px; }
+
+        @media (max-width: 720px) {
+            .stat-grid { grid-template-columns: repeat(2,1fr); }
+            nav.mainnav { order: 3; width: 100%; justify-content: flex-start; overflow-x: auto; }
+            header .inner { padding-bottom: 0.6rem; }
+        }
     </style>
 </head>
-<body class="font-sans antialiased overflow-x-hidden">
+<body>
 
-    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/80 border-b-[3px] border-gold-400 shadow-sm">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
-            <a href="#" onclick="navigate('home')" class="flex items-center group">
-                <img src="../branding/NewBrambleTextLogo.svg" alt="Bramble Logo" class="h-10 drop-shadow-sm group-hover:opacity-80 transition-opacity">
+    <header>
+        <div class="inner">
+            <a href="#" onclick="navigate('home');return false;" class="brand">
+                <img src="../branding/logo-256.png" alt="">
+                <span>BRAMBLE</span>
             </a>
-            <nav class="flex gap-2 sm:gap-4 overflow-x-auto pb-1 sm:pb-0 hide-scrollbar">
-                <button onclick="navigate('home')" class="nav-btn px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors whitespace-nowrap">Home</button>
-                <button onclick="navigate('downloads')" class="nav-btn px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors whitespace-nowrap">Downloads</button>
-                <button onclick="navigate('license')" class="nav-btn px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors whitespace-nowrap">License</button>
-                <button onclick="navigate('terms')" class="nav-btn px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors whitespace-nowrap">Terms</button>
-                <button onclick="navigate('privacy')" class="nav-btn px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors whitespace-nowrap">Privacy</button>
-                <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="px-4 py-2 rounded-full font-bold text-bramble-800 hover:bg-bramble-100 hover:text-bramble-600 transition-colors flex items-center gap-2 whitespace-nowrap">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    GitHub
-                </a>
+            <nav class="mainnav">
+                <button onclick="navigate('home')" data-page="home">Overview</button>
+                <button onclick="navigate('downloads')" data-page="downloads">Downloads</button>
+                <button onclick="navigate('license')" data-page="license">License</button>
+                <button onclick="navigate('terms')" data-page="terms">Terms</button>
+                <button onclick="navigate('privacy')" data-page="privacy">Privacy</button>
             </nav>
+            <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="gh-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                <span>GitHub</span>
+                <span id="headerStars" class="star-count"></span>
+            </a>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8">
-        <!-- HOME PAGE -->
+    <main>
+        <!-- OVERVIEW -->
         <section id="home" class="page-view active">
+            <div class="container">
+                <div class="hero">
+                    <img src="../branding/NewBrambleTextLogo.svg" alt="Bramble" class="hero-logo">
+                    <div class="eyebrow">Static Recompilation Engine</div>
+                    <h1>Native Skylanders for ARM64</h1>
+                    <p class="lede">Bramble statically translates the original Wii U <em>Skylanders: Spyro's Adventure</em> binary into native ARM64 machine code — no PowerPC emulation, no runtime interpretation. Wii U instructions become real, compiled ARM64 instructions ahead of time.</p>
 
-            <!-- PROMINENT CENTERED LOGO -->
-            <div class="relative flex flex-col items-center text-center mb-10 pt-4">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[280px] max-w-full logo-glow rounded-full pointer-events-none"></div>
-                <img src="../branding/NewBrambleTextLogo.svg" alt="Bramble Logo" class="relative floating h-24 md:h-32 drop-shadow-2xl mb-4">
-                <div class="vine-divider w-40 mb-6"></div>
-                <div class="inline-flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow-sm border-2 border-gold-400 mb-6 font-bold text-bramble-800 uppercase tracking-widest text-sm">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" class="text-gold-500"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                    Static Recompilation Engine
+                    <div class="badge-row" id="badgeRow">
+                        <span class="badge b-accent"><span class="dot"></span> ACTIVE DEVELOPMENT</span>
+                        <span class="badge">PLATFORM · SWITCH HOMEBREW</span>
+                        <span class="badge">LICENSE · SOURCE-AVAILABLE</span>
+                        <span class="badge b-gold" id="versionBadge">LATEST · —</span>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button onclick="navigate('downloads')" class="btn btn-primary">
+                            Get the Latest Build
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        </button>
+                        <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="btn btn-secondary">View Source</a>
+                    </div>
+
+                    <div class="stats-strip" id="homeStats">
+                        <span class="item"><span class="skel"></span></span>
+                        <span class="item"><span class="skel"></span></span>
+                        <span class="item"><span class="skel"></span></span>
+                    </div>
                 </div>
-                <h1 class="font-display text-5xl md:text-6xl text-bramble-900 mb-6 drop-shadow-md leading-tight max-w-3xl">
-                    Native Skylanders for <span class="text-transparent bg-clip-text bg-gradient-to-r from-bramble-600 to-gold-500">ARM64</span>
-                </h1>
-                <p class="text-xl text-bramble-800 font-semibold mb-6 max-w-2xl">
-                    Bramble magically converts original Wii U binary executables directly into native ARM64 instructions — delivering portal-shattering performance without runtime CPU emulation.
-                </p>
 
-                <!-- LIVE MINI STATS STRIP -->
-                <div id="homeStats" class="flex flex-wrap items-center justify-center gap-2 mb-8">
-                    <span class="stat-pill skeleton-pulse">⭐ &nbsp;···</span>
-                    <span class="stat-pill skeleton-pulse">🍴 &nbsp;···</span>
-                    <span class="stat-pill skeleton-pulse">🏷️ &nbsp;···</span>
-                    <span class="stat-pill skeleton-pulse">🕒 &nbsp;···</span>
-                </div>
+                <div class="diagram-wrap">
+                    <div class="card diagram-card">
+                        <div class="card-label"><span>RECOMPILATION PIPELINE</span><span style="color:var(--accent-strong)">0% RUNTIME OVERHEAD</span></div>
+                        <svg width="100%" height="200" viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="70" width="130" height="60" rx="8" fill="var(--bg)" stroke="var(--border-strong)"/>
+                            <text x="73" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="#eef0f2" text-anchor="middle">Wii U Binary</text>
+                            <text x="73" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="#676e78" text-anchor="middle">PowerPC / .rpx</text>
 
-                <div class="flex flex-wrap gap-4 justify-center">
-                    <button onclick="navigate('downloads')" class="btn-game bg-gradient-to-b from-bramble-400 to-bramble-600 text-white px-8 py-4 rounded-2xl font-display text-xl tracking-wide shadow-chunky hover:shadow-chunky-hover border-2 border-bramble-300 flex items-center gap-2">
-                        Get the Latest Build
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    </button>
-                    <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="btn-game bg-white text-bramble-800 px-8 py-4 rounded-2xl font-display text-xl tracking-wide shadow-chunky hover:shadow-chunky-hover border-2 border-gray-200 flex items-center gap-2">
-                        View GitHub
-                    </a>
-                </div>
-            </div>
+                            <path d="M140 100H190" stroke="var(--accent-border)" stroke-width="1.5"/>
+                            <polygon points="190,96 198,100 190,104" fill="#3fae6f"/>
 
-            <div class="flex justify-center mb-16">
-                <div class="w-full max-w-md relative">
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-card border-4 border-white">
-                        <div class="flex justify-between items-center mb-6 border-b-2 border-gray-100 pb-2">
-                            <span class="font-display text-gray-500 uppercase tracking-widest text-sm">Magic Pipeline</span>
-                            <span class="bg-bramble-100 text-bramble-600 px-3 py-1 rounded-full font-bold text-xs uppercase flex items-center gap-1">
-                                <span class="w-2 h-2 rounded-full bg-bramble-500 animate-pulse"></span>
-                                Direct Execution
-                            </span>
-                        </div>
+                            <rect x="200" y="55" width="150" height="90" rx="8" fill="rgba(63,174,111,0.08)" stroke="var(--accent-border)"/>
+                            <text x="275" y="88" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#57cf8a" text-anchor="middle">Bramble</text>
+                            <text x="275" y="104" font-family="JetBrains Mono, monospace" font-size="10" fill="#9aa1ab" text-anchor="middle">static translation</text>
+                            <text x="275" y="120" font-family="JetBrains Mono, monospace" font-size="10" fill="#9aa1ab" text-anchor="middle">+ CafeOS shim layer</text>
 
-                        <svg width="100%" height="240" viewBox="0 0 360 240" fill="none" xmlns="http://www.w3.org/2000/svg" class="font-sans">
-                            <defs>
-                                <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.1"/>
-                                </filter>
-                                <linearGradient id="magic-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#2d7d21"/>
-                                    <stop offset="100%" stop-color="#f09d0f"/>
-                                </linearGradient>
-                            </defs>
-                            <rect x="20" y="30" width="100" height="70" rx="12" fill="white" stroke="#94a3b8" stroke-width="3" filter="url(#drop-shadow)"/>
-                            <text x="70" y="60" font-size="14" font-weight="800" fill="#334155" text-anchor="middle">Wii U Binary</text>
-                            <text x="70" y="78" font-size="11" font-weight="700" fill="#94a3b8" text-anchor="middle">PowerPC</text>
+                            <path d="M352 100H402" stroke="var(--accent-border)" stroke-width="1.5"/>
+                            <polygon points="402,96 410,100 402,104" fill="#3fae6f"/>
 
-                            <path d="M120 65H155" stroke="#2d7d21" stroke-width="4" stroke-dasharray="6 4" class="animate-pulse"/>
-                            <polygon points="155,59 165,65 155,71" fill="#2d7d21"/>
-
-                            <rect x="170" y="20" width="170" height="90" rx="16" fill="url(#magic-grad)" stroke="#1b4b11" stroke-width="3" filter="url(#drop-shadow)"/>
-                            <text x="255" y="50" font-size="16" font-weight="800" fill="white" text-anchor="middle">Bramble Engine</text>
-                            <text x="255" y="70" font-size="10" font-weight="700" fill="#ecfdf3" text-anchor="middle">Static Translation</text>
-                            <rect x="195" y="80" width="120" height="18" rx="9" fill="#13330a"/>
-                            <text x="255" y="93" font-size="10" font-weight="800" fill="#8dce88" text-anchor="middle">0% CPU Overhead</text>
-
-                            <path d="M255 110V145" stroke="#f09d0f" stroke-width="4"/>
-                            <polygon points="249,145 255,155 261,145" fill="#f09d0f"/>
-
-                            <rect x="170" y="160" width="170" height="60" rx="12" fill="white" stroke="#22c55e" stroke-width="3" filter="url(#drop-shadow)"/>
-                            <text x="255" y="185" font-size="14" font-weight="800" fill="#166534" text-anchor="middle">Native ARM64 Code</text>
-                            <text x="255" y="202" font-size="10" font-weight="700" fill="#86efac" text-anchor="middle">Runs directly on Target</text>
-
-                            <rect x="20" y="160" width="100" height="60" rx="12" fill="white" stroke="#f59e0b" stroke-width="3" filter="url(#drop-shadow)"/>
-                            <text x="70" y="185" font-size="14" font-weight="800" fill="#b45309" text-anchor="middle">USB Portal</text>
-                            <text x="70" y="202" font-size="10" font-weight="700" fill="#fcd34d" text-anchor="middle">Passthrough</text>
+                            <rect x="412" y="70" width="100" height="60" rx="8" fill="var(--bg)" stroke="var(--border-strong)"/>
+                            <text x="462" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="#eef0f2" text-anchor="middle">ARM64</text>
+                            <text x="462" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="#676e78" text-anchor="middle">native .nro</text>
                         </svg>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-gold-50 border-l-8 border-gold-400 p-6 rounded-2xl shadow-sm mb-16 flex items-start gap-4">
-                <div class="bg-gold-400 p-2 rounded-full text-white shrink-0 mt-1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="section">
+                <div class="container">
+                    <div class="section-head">
+                        <div class="eyebrow">Project Status</div>
+                        <h2 style="text-align:center">Milestones</h2>
+                        <p>A condensed, factual log of verified progress. Full technical detail — including every real bug found and fixed along the way — is in the repository's README.</p>
+                    </div>
+                    <div class="status-list">
+                        <div class="status-item">
+                            <div class="status-num">1</div>
+                            <div>
+                                <h3>PowerPC → C recompiler core</h3>
+                                <p>A working static recompiler translating PowerPC instructions into portable C, verified end-to-end against known-correct output on both host and QEMU-ARM64.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">2</div>
+                            <div>
+                                <h3>First hardware-verified homebrew build</h3>
+                                <p>Recompiled test programs confirmed running correctly on real Switch hardware — not just emulation — including indirect calls and rodata addressing.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">3</div>
+                            <div>
+                                <h3>Full retail binary recompiled</h3>
+                                <p>Every one of the real game's ~19,600 functions compiles with zero unhandled instructions, validated against three independent real-world Wii U homebrew binaries along the way.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">4</div>
+                            <div>
+                                <h3>CafeOS runtime shim layer</h3>
+                                <p>Real filesystem I/O, heap allocation, threading, and synchronization primitives — genuine multi-threaded execution backed by host pthreads, not stubs.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">5</div>
+                            <div>
+                                <h3>GX2 → deko3d rendering</h3>
+                                <p>All 284 real GX2 graphics imports have a callable shim; render-state, samplers, and buffer management confirmed on real hardware. Shader translation and draw calls remain the largest open problem.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">6</div>
+                            <div>
+                                <h3>Complete game links and boots</h3>
+                                <p>The actual, complete recompiled game — not a test program — links and runs on real hardware via its real entry point. Post-boot correctness work is ongoing; see the repository for current status.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-display text-xl text-gold-800 mb-1">Project Development Notice</h4>
-                    <p class="text-gold-700 font-semibold">Bramble is undergoing active architectural development. Online features are currently unreleased, and downloadable builds are early developer test programs, not the finished game. This portal shows the project's real, live progress straight from GitHub — nothing here is hand-written or exaggerated.</p>
+            </div>
+
+            <div class="container">
+                <div class="notice">
+                    <strong>Project development notice.</strong> Bramble is under active architectural development. Downloadable builds are early developer test programs used to validate the recompiler — not the finished game. This site reflects the project's real, live state; nothing here is aspirational marketing copy.
                 </div>
             </div>
         </section>
 
-        <!-- DOWNLOADS & LIVE GITHUB STATS PAGE -->
-        <section id="downloads" class="page-view hidden">
-            <div class="text-center mb-6">
-                <h1 class="font-display text-5xl md:text-6xl text-bramble-900 mb-4 drop-shadow-md">Downloads &amp; Live Repo Stats</h1>
-                <p class="text-xl text-bramble-800 font-semibold max-w-3xl mx-auto">Queried live from the GitHub API — every number, release, and file below reflects the real state of the repository right now.</p>
-            </div>
-
-            <div class="flex justify-center mb-10">
-                <div id="downloadsStatus" class="inline-flex items-center gap-2 bg-white/90 px-4 py-2 rounded-full shadow-sm border-2 border-bramble-100 font-bold text-bramble-700 text-sm">
-                    <span class="w-2 h-2 rounded-full bg-bramble-500 animate-pulse"></span>
-                    Connecting to the GitHub API…
+        <!-- DOWNLOADS -->
+        <section id="downloads" class="page-view">
+            <div class="container">
+                <div class="section-head">
+                    <div class="eyebrow">Downloads</div>
+                    <h2 style="text-align:center">Downloads &amp; Repository Stats</h2>
+                    <p>Queried live from the GitHub API on every page load — every number, release, and file below reflects the repository's real current state.</p>
                 </div>
-            </div>
 
-            <div class="bg-gold-50 border-l-8 border-gold-400 p-6 rounded-2xl shadow-sm mb-10 flex items-start gap-4">
-                <div class="bg-gold-400 p-2 rounded-full text-white shrink-0 mt-1">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div class="status-line" id="downloadsStatus">
+                    <span class="dot pulse" style="color:var(--gold)"></span> Connecting to the GitHub API…
                 </div>
-                <div>
-                    <h4 class="font-display text-xl text-gold-800 mb-1">These are developer test builds</h4>
-                    <p class="text-gold-700 font-semibold">Every release below is a proof-of-concept homebrew program used to validate the recompiler on real Switch hardware (arithmetic tests, GX2 rendering checks, etc.) — not a build of the actual game yet. See the repository's README for the honest, current status of every milestone.</p>
-                </div>
-            </div>
 
-            <!-- LATEST RELEASE HERO -->
-            <div id="latestReleaseCard" class="mb-10">
-                <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-card border-4 border-white">
-                    <div class="space-y-3">
-                        <div class="h-4 w-1/3 bg-bramble-100 rounded-full skeleton-pulse"></div>
-                        <div class="h-8 w-2/3 bg-bramble-100 rounded-full skeleton-pulse"></div>
-                        <div class="h-4 w-full bg-bramble-50 rounded-full skeleton-pulse"></div>
-                        <div class="h-4 w-5/6 bg-bramble-50 rounded-full skeleton-pulse"></div>
+                <div class="notice">
+                    <strong>These are developer test builds.</strong> Every release below is a proof-of-concept homebrew program used to validate the recompiler on real Switch hardware — not a build of the actual game. See the repository README for the current, honest status of every milestone.
+                </div>
+
+                <div id="latestReleaseCard" class="release-panel">
+                    <div class="card">
+                        <div class="skeleton" style="height:14px;width:30%;margin-bottom:0.8rem;"></div>
+                        <div class="skeleton" style="height:28px;width:60%;margin-bottom:1rem;"></div>
+                        <div class="skeleton" style="height:60px;width:100%;"></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- LIVE REPO STAT GRID -->
-            <div id="repoStatsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                <!-- populated live -->
-            </div>
+                <div class="stat-grid" id="repoStatsGrid"></div>
 
-            <!-- LANGUAGE BREAKDOWN -->
-            <div class="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-sm border-2 border-white mb-10">
-                <h3 class="font-display text-xl text-bramble-900 mb-4">Language Breakdown</h3>
-                <div id="langBar" class="w-full h-5 rounded-full overflow-hidden flex bg-bramble-50 mb-3 skeleton-pulse"></div>
-                <div id="langLegend" class="flex flex-wrap gap-x-4 gap-y-2 text-sm font-bold text-bramble-700"></div>
-            </div>
-
-            <!-- LAST COMMIT -->
-            <div id="lastCommitCard" class="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-sm border-2 border-white mb-10 flex items-start gap-4">
-                <div class="bg-bramble-100 text-bramble-600 p-3 rounded-xl shrink-0">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6"/></svg>
+                <div class="card" style="margin-bottom:2.5rem;">
+                    <h3 style="margin-bottom:1rem;">Language Breakdown</h3>
+                    <div id="langBar" class="lang-bar skeleton"></div>
+                    <div id="langLegend" class="lang-legend"></div>
                 </div>
-                <div class="min-w-0">
-                    <h4 class="font-display text-lg text-bramble-900 mb-1">Latest Commit</h4>
-                    <p class="text-bramble-700 font-semibold text-sm break-words">Loading latest commit…</p>
-                </div>
-            </div>
 
-            <!-- RELEASE HISTORY -->
-            <div class="mb-6 flex items-center justify-between flex-wrap gap-3">
-                <h3 class="font-display text-2xl text-bramble-900">Release History</h3>
-                <a href="https://github.com/aaronateataco/thornybush/releases" target="_blank" rel="noopener" class="text-bramble-600 hover:text-bramble-800 font-bold text-sm underline">View all on GitHub &rarr;</a>
-            </div>
-            <div id="releaseHistory" class="space-y-4 mb-4">
-                <!-- populated live -->
+                <div class="commit-line" id="lastCommitCard">
+                    <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6"/></svg></span>
+                    <div>
+                        <div style="font-size:0.7rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:0.3rem;">Latest Commit</div>
+                        <p style="margin:0;">Loading…</p>
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:0.6rem;">
+                    <h2>Release History</h2>
+                    <a href="https://github.com/aaronateataco/thornybush/releases" target="_blank" rel="noopener" class="release-link">All releases on GitHub →</a>
+                </div>
+                <div id="releaseHistory" class="rel-history"></div>
             </div>
         </section>
 
-        <!-- PRIVACY PAGE -->
-        <section id="privacy" class="page-view hidden max-w-4xl mx-auto">
-            <div class="bg-white rounded-3xl p-10 border-4 border-bramble-100 shadow-card">
-                <div class="mb-10 border-b-2 border-gray-100 pb-8 text-center">
-                    <h1 class="font-display text-4xl text-bramble-900 mb-4">Privacy Policy</h1>
-                    <p class="text-lg text-slate-500 font-semibold">Last updated: August 20, 2026</p>
-                </div>
-
-                <div class="bg-green-50 border-l-8 border-green-400 p-6 rounded-2xl shadow-sm mb-10 flex items-start gap-4">
-                    <div class="bg-green-400 p-2 rounded-full text-white shrink-0 mt-1">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-display text-xl text-green-800 mb-1">Zero Local Telemetry</h4>
-                        <p class="text-green-700 font-semibold">The offline Software collects zero telemetry or user data. This policy strictly governs this website itself and the opt-in, not-yet-released "Skylanders Online" network service.</p>
-                    </div>
-                </div>
-
-                <div class="space-y-10">
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">1</span>
-                            Data Controller
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">The Bramble Project is the data controller for personal data processed through this website and, in future, Skylanders Online network services. Contact: <a href="mailto:aaron@aaronworld.uk" class="text-bramble-600 underline">aaron@aaronworld.uk</a>. The offline Software (the recompiler and anything it produces) runs entirely on your own device and transmits no data to any server.</p>
+        <!-- PRIVACY -->
+        <section id="privacy" class="page-view">
+            <div class="container">
+                <div class="doc">
+                    <div class="doc-head">
+                        <h1 style="font-size:2rem;">Privacy Policy</h1>
+                        <p>Last updated: August 20, 2026</p>
                     </div>
 
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">2</span>
-                            The Offline Software — No Data Collection
-                        </h2>
-                        <ul class="text-slate-600 font-semibold space-y-2 ml-14 list-disc pl-5 marker:text-bramble-400">
+                    <div class="notice" style="border-left-color:var(--accent);background:var(--accent-bg);">
+                        <strong>Zero local telemetry.</strong> The offline Software collects zero telemetry or user data. This policy governs this website itself and the opt-in, not-yet-released "Skylanders Online" network service.
+                    </div>
+
+                    <section>
+                        <h2><span class="n">01</span> Data Controller</h2>
+                        <p>The Bramble Project is the data controller for personal data processed through this website and, in future, Skylanders Online network services. Contact: <a href="mailto:aaron@aaronworld.uk">aaron@aaronworld.uk</a>. The offline Software runs entirely on your own device and transmits no data to any server.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">02</span> The Offline Software</h2>
+                        <ul>
                             <li>No analytics, crash reports, or usage statistics are collected by the recompiler or anything it produces.</li>
                             <li>No network connections are initiated by the Software itself.</li>
                             <li>Figure data read from a Portal of Power or local dump never leaves your device.</li>
-                            <li>Your gameplay is completely private. We cannot see what you play.</li>
                         </ul>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">3</span>
-                            This Website
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14 mb-3">This site's Downloads and License pages call the public, unauthenticated GitHub API directly from your browser to display live repository statistics, release listings, and license text — no personal data is sent as part of those requests, and GitHub's own privacy policy governs what GitHub itself logs about that request. This site sets no cookies and runs no analytics or tracking scripts of its own.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">4</span>
-                            Skylanders Online (Future, Opt-In)
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14 mb-3">Skylanders Online is a planned, not-yet-released, opt-in multiplayer layer. When it launches, this policy will be updated with the final details, but the intended scope is:</p>
-                        <ul class="text-slate-600 font-semibold space-y-2 ml-14 list-disc pl-5 marker:text-bramble-400">
-                            <li>Account basics: email address, chosen display name, hashed password.</li>
-                            <li>Transient session state: lobby membership, character selection, in-match positions.</li>
-                            <li>IP addresses, kept only as needed for connection routing and abuse/DDoS mitigation.</li>
-                        </ul>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14 mt-3">No data is ever shared with Activision, Microsoft, Nintendo, or any other franchise rights holder, and nothing is sold. You may request access to, correction of, or deletion of any account data by emailing the contact above.</p>
-                    </div>
+                    </section>
+                    <section>
+                        <h2><span class="n">03</span> This Website</h2>
+                        <p>The Downloads and License pages call the public, unauthenticated GitHub API directly from your browser to display live repository statistics, release listings, and license text — no personal data is sent as part of those requests. This site sets no cookies and runs no analytics or tracking scripts of its own.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">04</span> Skylanders Online (Future, Opt-In)</h2>
+                        <p>A planned, not-yet-released, opt-in multiplayer layer. Intended scope: account basics (email, display name, hashed password), transient session state, and IP addresses kept only as needed for connection routing and abuse mitigation. No data is ever shared with Activision, Microsoft, Nintendo, or any other rights holder, and nothing is sold.</p>
+                    </section>
                 </div>
             </div>
         </section>
 
-        <!-- TERMS PAGE -->
-        <section id="terms" class="page-view hidden max-w-4xl mx-auto">
-            <div class="bg-white rounded-3xl p-10 border-4 border-bramble-100 shadow-card">
-                <div class="mb-10 border-b-2 border-gray-100 pb-8 text-center">
-                    <h1 class="font-display text-4xl text-bramble-900 mb-4">Terms of Service</h1>
-                    <p class="text-lg text-slate-500 font-semibold">Last updated: August 20, 2026</p>
-                </div>
+        <!-- TERMS -->
+        <section id="terms" class="page-view">
+            <div class="container">
+                <div class="doc">
+                    <div class="doc-head">
+                        <h1 style="font-size:2rem;">Terms of Service</h1>
+                        <p>Last updated: August 20, 2026</p>
+                    </div>
 
-                <div class="bg-gold-50 border-l-8 border-gold-400 p-6 rounded-2xl shadow-sm mb-10">
-                    <p class="text-gold-700 font-semibold">These Terms govern your use of this website, the Bramble static recompiler and its source code, and (once released) the opt-in "Skylanders Online" network service. By using any of these you agree to the terms below.</p>
-                </div>
-
-                <div class="space-y-10">
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">1</span>
-                            Definitions
-                        </h2>
-                        <ul class="text-slate-600 font-semibold space-y-2 ml-14 list-disc pl-5 marker:text-bramble-400">
-                            <li><strong class="text-slate-800">"Software"</strong> — the Bramble static recompiler, its runtime shims, build tooling, and any native ARM64 binaries it generates.</li>
-                            <li><strong class="text-slate-800">"Source Game"</strong> — <em>Skylanders: Spyro's Adventure</em> for Wii U, a copyrighted work of Activision Publishing, Inc. and Toys for Bob.</li>
-                            <li><strong class="text-slate-800">"Legal Dump"</strong> — a backup a user creates from their own, legitimately purchased copy of the Source Game, for personal use only.</li>
-                            <li><strong class="text-slate-800">"Skylanders Online"</strong> — the planned, opt-in multiplayer network layer described in the Privacy Policy (currently unreleased).</li>
+                    <section>
+                        <h2><span class="n">01</span> Definitions</h2>
+                        <ul>
+                            <li><strong>"Software"</strong> — the Bramble static recompiler, its runtime shims, build tooling, and any native ARM64 binaries it generates.</li>
+                            <li><strong>"Source Game"</strong> — <em>Skylanders: Spyro's Adventure</em> for Wii U, a copyrighted work of Activision Publishing, Inc. and Toys for Bob.</li>
+                            <li><strong>"Legal Dump"</strong> — a backup a user creates from their own, legitimately purchased copy of the Source Game, for personal use only.</li>
                         </ul>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">2</span>
-                            License to the Software
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">The Software is <strong class="text-slate-800">not</strong> MIT- or Apache-licensed. It is distributed under the project's own <a href="https://github.com/aaronateataco/thornybush/blob/main/LICENSE" target="_blank" rel="noopener" class="text-bramble-600 underline">Bramble Free &amp; Source-Available License v1.0</a> — a permission-required, non-commercial, source-available license. Using, copying, modifying, or distributing the Software (or anything derived from it) requires the project owner's prior permission, in addition to the conditions written into the license itself: mandatory attribution, no resale, share-alike, and no redistribution of anything the tool generates by running against a copyrighted game file. See the License page on this site, which pulls the current license text live from GitHub, or the LICENSE file in the repository for the authoritative terms.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">3</span>
-                            No Game Content Included
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">This project contains no copyrighted game assets or code and distributes none. It only transforms a copy of the Source Game that you separately and legally obtained yourself. You are solely responsible for only using the Software against a Legal Dump you personally own, and for complying with the original publisher's own license terms for the Source Game.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">4</span>
-                            Downloadable Builds
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">Builds published on the Downloads page and the GitHub Releases page are early developer test programs used to validate the recompiler on real hardware — not the finished game, and not guaranteed to be stable. They are provided "as is", without warranty of any kind. Running homebrew software on a Nintendo Switch carries inherent risk (including to your console's warranty) that you assume yourself.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">5</span>
-                            Skylanders Online (Future Service)
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">Skylanders Online is planned as a free, opt-in network layer — no paywalls, loot boxes, or pay-to-win mechanics. Additional, more detailed terms covering accounts, conduct, and moderation will be published before it launches; continued use after that update constitutes acceptance of it.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">6</span>
-                            Disclaimer &amp; Liability
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">The Software and this website are provided "as is", without warranty of any kind, express or implied. To the fullest extent permitted by law, the project and its contributors are not liable for any indirect, incidental, or consequential damages arising from your use of the Software or this site.</p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-display text-2xl text-bramble-800 mb-4 flex items-center gap-3">
-                            <span class="bg-bramble-100 text-bramble-600 w-10 h-10 rounded-xl flex items-center justify-center">7</span>
-                            Governing Law &amp; Contact
-                        </h2>
-                        <p class="text-slate-600 font-semibold leading-relaxed ml-14">These Terms are governed by the laws of England and Wales. Questions: <a href="mailto:aaron@aaronworld.uk" class="text-bramble-600 underline">aaron@aaronworld.uk</a>, or open an issue on <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener" class="text-bramble-600 underline">GitHub</a>.</p>
-                    </div>
+                    </section>
+                    <section>
+                        <h2><span class="n">02</span> License to the Software</h2>
+                        <p>The Software is <strong>not</strong> MIT- or Apache-licensed. It is distributed under the project's own <a href="https://github.com/aaronateataco/thornybush/blob/main/LICENSE" target="_blank" rel="noopener">Bramble Free &amp; Source-Available License</a> — a permission-required, non-commercial, source-available license requiring the owner's prior permission, mandatory attribution, no resale, share-alike terms, and no redistribution of anything generated by running the tool against a copyrighted game file. See the <a href="#" onclick="navigate('license');return false;">License page</a>, which pulls the current text live from GitHub, for the authoritative terms.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">03</span> No Game Content Included</h2>
+                        <p>This project contains no copyrighted game assets or code and distributes none. It only transforms a copy of the Source Game you separately and legally obtained. You are responsible for only using the Software against a Legal Dump you personally own.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">04</span> Downloadable Builds</h2>
+                        <p>Builds published on the Downloads page and GitHub Releases are early developer test programs used to validate the recompiler — not the finished game, and not guaranteed to be stable. Provided "as is", without warranty of any kind. Running homebrew software carries inherent risk that you assume yourself.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">05</span> Disclaimer &amp; Liability</h2>
+                        <p>The Software and this website are provided "as is". To the fullest extent permitted by law, the project and its contributors are not liable for any indirect, incidental, or consequential damages arising from use of the Software or this site.</p>
+                    </section>
+                    <section>
+                        <h2><span class="n">06</span> Governing Law &amp; Contact</h2>
+                        <p>These Terms are governed by the laws of England and Wales. Questions: <a href="mailto:aaron@aaronworld.uk">aaron@aaronworld.uk</a>, or open an issue on <a href="https://github.com/aaronateataco/thornybush" target="_blank" rel="noopener">GitHub</a>.</p>
+                    </section>
                 </div>
             </div>
         </section>
 
-        <!-- LIVE LICENSE PAGE -->
-        <section id="license" class="page-view hidden max-w-4xl mx-auto">
-            <div class="bg-white rounded-3xl p-8 md:p-10 border-4 border-bramble-100 shadow-card">
-                <div class="mb-8 border-b-2 border-gray-100 pb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <div class="inline-flex items-center gap-2 bg-bramble-50 text-bramble-700 px-3 py-1 rounded-full font-bold text-xs uppercase mb-2 border border-bramble-200">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Live GitHub Sync
+        <!-- LICENSE -->
+        <section id="license" class="page-view">
+            <div class="container">
+                <div class="doc" style="max-width:760px;">
+                    <div class="license-head">
+                        <div>
+                            <span class="badge b-accent" style="margin-bottom:0.6rem;"><span class="dot pulse"></span> LIVE GITHUB SYNC</span>
+                            <h1 style="font-size:1.8rem;margin-top:0.6rem;">Project License</h1>
+                            <p id="licenseMeta" class="license-meta-line">Fetching synchronization data…</p>
                         </div>
-                        <h1 class="font-display text-3xl md:text-4xl text-bramble-900">Project License</h1>
-                        <p id="licenseMeta" class="text-sm text-slate-500 font-semibold mt-1">Fetching synchronization data...</p>
+                        <div style="display:flex;gap:0.5rem;">
+                            <button onclick="copyLicenseText()" class="btn btn-secondary btn-sm">Copy</button>
+                            <button onclick="loadLicense()" class="btn btn-secondary btn-sm">Refresh</button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="copyLicenseText()" class="btn-game bg-bramble-100 text-bramble-700 hover:bg-bramble-200 px-4 py-2 rounded-xl text-sm font-display shadow-sm flex items-center gap-2">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            Copy License
-                        </button>
-                        <button onclick="loadLicense()" class="btn-game bg-bramble-500 text-white hover:bg-bramble-600 px-4 py-2 rounded-xl text-sm font-display shadow-sm flex items-center gap-2">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.66-5.66"/></svg>
-                            Refresh
-                        </button>
-                    </div>
-                </div>
-                <div class="bg-bramble-50 rounded-2xl p-6 md:p-8 border-2 border-bramble-100 shadow-sm relative">
-                    <div class="flex justify-between items-center mb-6 pb-4 border-b-2 border-bramble-200">
-                        <span class="font-bold text-bramble-800 flex items-center gap-2">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                            thornybush/LICENSE
-                        </span>
-                        <span id="licenseCommitHash" class="text-xs font-bold bg-bramble-200 text-bramble-800 px-3 py-1 rounded-full shadow-sm">syncing...</span>
-                    </div>
-                    <div id="licenseContainer" class="text-slate-700 font-semibold text-sm md:text-base overflow-x-auto min-h-[300px] whitespace-pre-wrap leading-relaxed">
-                        Connecting to GitHub repository API...
+                    <div class="card">
+                        <div class="license-box-head">
+                            <span>thornybush/LICENSE</span>
+                            <span id="licenseCommitHash">syncing…</span>
+                        </div>
+                        <div id="licenseContainer">Connecting to GitHub repository API...</div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-white/80 backdrop-blur-sm border-t-[3px] border-gold-400 py-8 mt-12">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3 opacity-70">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <span class="font-display text-slate-500 tracking-wide">BRAMBLE PROJECT</span>
+    <footer>
+        <div class="container inner">
+            <div class="fbrand">
+                <img src="../branding/logo-256.png" alt="">
+                <span>Bramble Project</span>
             </div>
-            <div class="text-slate-500 font-semibold text-sm">
-                Official Contact: <a href="mailto:aaron@aaronworld.uk" class="text-bramble-600 hover:underline font-bold">aaron@aaronworld.uk</a>
-            </div>
-            <div class="flex gap-6 font-bold text-sm">
-                <a href="#" onclick="navigate('home')" class="text-slate-500 hover:text-bramble-600 transition-colors">Home</a>
-                <a href="#" onclick="navigate('downloads')" class="text-slate-500 hover:text-bramble-600 transition-colors">Downloads</a>
-                <a href="#" onclick="navigate('license')" class="text-slate-500 hover:text-bramble-600 transition-colors">License</a>
-                <a href="#" onclick="navigate('terms')" class="text-slate-500 hover:text-bramble-600 transition-colors">Terms</a>
-                <a href="#" onclick="navigate('privacy')" class="text-slate-500 hover:text-bramble-600 transition-colors">Privacy</a>
-            </div>
+            <nav>
+                <a href="#" onclick="navigate('home');return false;">Overview</a>
+                <a href="#" onclick="navigate('downloads');return false;">Downloads</a>
+                <a href="#" onclick="navigate('license');return false;">License</a>
+                <a href="#" onclick="navigate('terms');return false;">Terms</a>
+                <a href="#" onclick="navigate('privacy');return false;">Privacy</a>
+            </nav>
+            <div class="contact">Contact: <a href="mailto:aaron@aaronworld.uk">aaron@aaronworld.uk</a></div>
         </div>
     </footer>
 
     <script>
         // ---------------------------------------------------------------
-        // LIVE GITHUB INTEGRATION
-        // Every stat, release, asset, and license text on this page is
-        // fetched live from the public, unauthenticated GitHub REST API
-        // at https://api.github.com — nothing below is hand-written or
-        // hard-coded snapshot data. See: https://docs.github.com/rest
+        // LIVE GITHUB INTEGRATION -- every stat, release, asset, and
+        // license text below is fetched live from the public,
+        // unauthenticated GitHub REST API (api.github.com), nothing here
+        // is hand-written snapshot data. See: https://docs.github.com/rest
         // ---------------------------------------------------------------
         const GITHUB_REPO = 'aaronateataco/thornybush';
         const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
 
         const LANG_COLORS = {
-            'C': '#555555', 'C++': '#f34b7d', 'HTML': '#e34c26', 'Shell': '#89e051',
-            'Python': '#3572A5', 'CSS': '#563d7c', 'Makefile': '#427819', 'CMake': '#DA3434',
-            'Linker Script': '#94a3b8', 'Assembly': '#6E4C13', 'JavaScript': '#f1e05a'
+            'C': '#8a8f98', 'C++': '#e8739a', 'HTML': '#e0794a', 'Shell': '#7fc97f',
+            'Python': '#5a93c9', 'CSS': '#8f7fd9', 'Makefile': '#4a9e5c', 'CMake': '#d9714a',
+            'Linker Script': '#5a6470', 'Assembly': '#c9a45a'
         };
-        const LANG_FALLBACK_COLORS = ['#3d9933', '#f09d0f', '#3b82f6', '#ec4899', '#06b6d4', '#9333ea'];
+        const LANG_FALLBACK_COLORS = ['#3fae6f', '#d3a445', '#5a93c9', '#e8739a', '#7fc97f', '#8f7fd9'];
 
         let ghDataPromise = null;
 
@@ -608,16 +655,16 @@
         }
 
         // Small, purpose-built renderer for GitHub release-note markdown
-        // (headings, bold, inline code, links, bullet lists) — not a
+        // (headings, bold, inline code, links, bullet lists) -- not a
         // general-purpose markdown parser.
         function renderMarkdownLite(md) {
-            if (!md || !md.trim()) return '<p class="text-slate-500 italic">No release notes provided.</p>';
+            if (!md || !md.trim()) return '<p style="color:var(--text-faint);font-style:italic;">No release notes provided.</p>';
             let html = escapeHtml(md);
-            html = html.replace(/^## (.*)$/gm, '<h4 class="font-display text-lg text-bramble-800 mt-4 mb-2">$1</h4>');
-            html = html.replace(/^# (.*)$/gm, '<h3 class="font-display text-xl text-bramble-900 mt-4 mb-2">$1</h3>');
-            html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="text-bramble-900">$1</strong>');
-            html = html.replace(/`([^`]+)`/g, '<code class="bg-bramble-50 text-bramble-700 px-1.5 py-0.5 rounded font-mono text-xs">$1</code>');
-            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-bramble-600 underline hover:text-bramble-800">$1</a>');
+            html = html.replace(/^## (.*)$/gm, '<h4>$1</h4>');
+            html = html.replace(/^# (.*)$/gm, '<h3>$1</h3>');
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
             const lines = html.split('\n');
             const out = [];
@@ -625,13 +672,13 @@
             for (const line of lines) {
                 const m = line.match(/^[-*] (.*)$/);
                 if (m) {
-                    if (!inList) { out.push('<ul class="list-disc pl-5 space-y-1 my-2">'); inList = true; }
+                    if (!inList) { out.push('<ul>'); inList = true; }
                     out.push('<li>' + m[1] + '</li>');
                 } else {
                     if (inList) { out.push('</ul>'); inList = false; }
                     if (line.trim() === '') continue;
                     if (line.startsWith('<h')) out.push(line);
-                    else out.push('<p class="mb-2">' + line + '</p>');
+                    else out.push('<p>' + line + '</p>');
                 }
             }
             if (inList) out.push('</ul>');
@@ -641,14 +688,11 @@
         function setDownloadsStatus(state, message) {
             const el = document.getElementById('downloadsStatus');
             if (!el) return;
-            const dotColor = state === 'live' ? 'bg-bramble-500' : state === 'error' ? 'bg-red-500' : 'bg-gold-500';
-            const pulse = state === 'loading' ? 'animate-pulse' : '';
-            el.innerHTML = `<span class="w-2 h-2 rounded-full ${dotColor} ${pulse}"></span> ${message}`;
+            const color = state === 'live' ? 'var(--accent-strong)' : state === 'error' ? 'var(--red)' : 'var(--gold)';
+            const pulse = state === 'loading' ? 'pulse' : '';
+            el.innerHTML = `<span class="dot ${pulse}" style="color:${color}"></span> ${message}`;
         }
 
-        // Fetches everything needed once, shares the same in-flight
-        // promise between the home-page stat strip and the Downloads
-        // page so navigating between them doesn't re-fetch.
         function fetchGitHubData() {
             if (ghDataPromise) return ghDataPromise;
             ghDataPromise = (async () => {
@@ -672,28 +716,20 @@
         }
 
         // Decides what "the latest download" actually is: the newest
-        // GitHub Release, unless a newer tag exists with no release yet
-        // — in which case that tag's auto-generated source archive is
-        // offered instead, per "whichever is latest".
+        // GitHub Release, unless a newer tag exists with no release yet.
         async function resolveLatestDownload(releases, tags) {
             const latestRelease = releases && releases.length ? releases[0] : null;
             const latestTag = tags && tags.length ? tags[0] : null;
 
-            if (!latestRelease) {
-                return latestTag ? { type: 'tag', tag: latestTag } : null;
-            }
-            if (!latestTag || latestTag.name === latestRelease.tag_name) {
-                return { type: 'release', release: latestRelease };
-            }
+            if (!latestRelease) return latestTag ? { type: 'tag', tag: latestTag } : null;
+            if (!latestTag || latestTag.name === latestRelease.tag_name) return { type: 'release', release: latestRelease };
             try {
                 const res = await fetch(`${GITHUB_API}/commits/${latestTag.commit.sha}`);
                 if (res.ok) {
                     const commitData = await res.json();
                     const tagDate = new Date(commitData.commit.committer.date);
                     const releaseDate = new Date(latestRelease.published_at || latestRelease.created_at);
-                    if (tagDate > releaseDate) {
-                        return { type: 'tag', tag: latestTag };
-                    }
+                    if (tagDate > releaseDate) return { type: 'tag', tag: latestTag };
                 }
             } catch (e) { /* fall through to the release */ }
             return { type: 'release', release: latestRelease };
@@ -701,31 +737,33 @@
 
         function renderHomeStats(data) {
             const el = document.getElementById('homeStats');
+            const starsEl = document.getElementById('headerStars');
+            const verBadge = document.getElementById('versionBadge');
             if (!el) return;
             const { repo, releases } = data;
             const latestTag = releases && releases.length ? releases[0].tag_name : null;
             el.innerHTML = `
-                <span class="stat-pill">⭐ ${repo.stargazers_count.toLocaleString()} stars</span>
-                <span class="stat-pill">🍴 ${repo.forks_count.toLocaleString()} forks</span>
-                ${latestTag ? `<span class="stat-pill">🏷️ ${latestTag}</span>` : ''}
-                <span class="stat-pill">🕒 updated ${formatRelativeTime(repo.pushed_at)}</span>
+                <span class="item">⭐ <b>${repo.stargazers_count.toLocaleString()}</b> stars</span>
+                <span class="item">⑂ <b>${repo.forks_count.toLocaleString()}</b> forks</span>
+                <span class="item">updated <b>${formatRelativeTime(repo.pushed_at)}</b></span>
             `;
+            if (starsEl) starsEl.textContent = `★ ${repo.stargazers_count}`;
+            if (verBadge && latestTag) verBadge.innerHTML = `LATEST · <b>${latestTag}</b>`;
         }
 
         function renderRepoStatsGrid(repo) {
             const grid = document.getElementById('repoStatsGrid');
             if (!grid) return;
             const stats = [
-                { label: 'Stars', value: repo.stargazers_count, icon: '⭐' },
-                { label: 'Forks', value: repo.forks_count, icon: '🍴' },
-                { label: 'Watchers', value: repo.subscribers_count ?? repo.watchers_count, icon: '👀' },
-                { label: 'Open Issues', value: repo.open_issues_count, icon: '🐛' }
+                { label: 'Stars', value: repo.stargazers_count },
+                { label: 'Forks', value: repo.forks_count },
+                { label: 'Watchers', value: repo.subscribers_count ?? repo.watchers_count },
+                { label: 'Open Issues', value: repo.open_issues_count }
             ];
             grid.innerHTML = stats.map(s => `
-                <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm border-2 border-white text-center">
-                    <div class="text-2xl mb-1">${s.icon}</div>
-                    <div class="font-display text-3xl text-bramble-900">${(s.value ?? 0).toLocaleString()}</div>
-                    <div class="text-xs font-bold text-bramble-500 uppercase tracking-wider mt-1">${s.label}</div>
+                <div class="stat-tile">
+                    <div class="num">${(s.value ?? 0).toLocaleString()}</div>
+                    <div class="lbl">${s.label}</div>
                 </div>
             `).join('');
         }
@@ -734,44 +772,41 @@
             const bar = document.getElementById('langBar');
             const legend = document.getElementById('langLegend');
             if (!bar || !legend) return;
-            bar.classList.remove('skeleton-pulse');
+            bar.classList.remove('skeleton');
 
             const entries = Object.entries(languages);
             const total = entries.reduce((sum, [, bytes]) => sum + bytes, 0);
             if (!total) {
                 bar.innerHTML = '';
-                legend.innerHTML = '<span class="text-slate-400">No language data available.</span>';
+                legend.innerHTML = '<span style="color:var(--text-faint)">No language data available.</span>';
                 return;
             }
 
             bar.innerHTML = entries.map(([lang, bytes], i) => {
                 const pct = (bytes / total * 100).toFixed(1);
                 const color = LANG_COLORS[lang] || LANG_FALLBACK_COLORS[i % LANG_FALLBACK_COLORS.length];
-                return `<div class="lang-bar-seg h-full" style="width:${pct}%; background:${color};" title="${lang}: ${pct}%"></div>`;
+                return `<div style="height:100%;width:${pct}%;background:${color};" title="${lang}: ${pct}%"></div>`;
             }).join('');
 
             legend.innerHTML = entries.map(([lang, bytes], i) => {
                 const pct = (bytes / total * 100).toFixed(1);
                 const color = LANG_COLORS[lang] || LANG_FALLBACK_COLORS[i % LANG_FALLBACK_COLORS.length];
-                return `<span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${color};"></span>${lang} <span class="text-bramble-400 font-normal">${pct}%</span></span>`;
+                return `<span><span class="sw" style="background:${color};"></span>${lang} <span style="color:var(--text-faint)">${pct}%</span></span>`;
             }).join('');
         }
 
         function renderLastCommit(commit) {
             const card = document.getElementById('lastCommitCard');
             if (!card) return;
-            if (!commit) {
-                card.querySelector('p').textContent = "Couldn't load the latest commit.";
-                return;
-            }
+            const p = card.querySelector('p');
+            if (!commit) { p.textContent = "Couldn't load the latest commit."; return; }
             const sha = commit.sha.substring(0, 7);
             const message = (commit.commit.message || '').split('\n')[0];
             const author = commit.commit.author ? commit.commit.author.name : 'unknown';
             const date = commit.commit.author ? commit.commit.author.date : null;
-            card.querySelector('p').innerHTML = `
-                <a href="${commit.html_url}" target="_blank" rel="noopener" class="text-bramble-600 underline hover:text-bramble-800">${escapeHtml(message)}</a>
-                — <span class="font-mono bg-bramble-50 px-1.5 py-0.5 rounded text-xs">${sha}</span>
-                by ${escapeHtml(author)}${date ? ', ' + formatRelativeTime(date) : ''}
+            p.innerHTML = `
+                <a href="${commit.html_url}" target="_blank" rel="noopener">${escapeHtml(message)}</a>
+                — <span class="sha">${sha}</span> by ${escapeHtml(author)}${date ? ', ' + formatRelativeTime(date) : ''}
             `;
         }
 
@@ -780,10 +815,7 @@
             if (!container) return;
 
             if (!resolved) {
-                container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-card border-4 border-white text-center">
-                        <p class="text-slate-500 font-semibold">No releases or tags published yet — check back soon, or watch the repository on GitHub.</p>
-                    </div>`;
+                container.innerHTML = `<div class="card" style="text-align:center;"><p style="margin:0;">No releases or tags published yet.</p></div>`;
                 return;
             }
 
@@ -791,16 +823,10 @@
                 const tag = resolved.tag;
                 const zipUrl = `https://github.com/${GITHUB_REPO}/archive/refs/tags/${tag.name}.zip`;
                 container.innerHTML = `
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-card border-4 border-white">
-                        <div class="flex flex-wrap items-center gap-3 mb-4">
-                            <span class="bg-bramble-500 text-white px-3 py-1 rounded-full font-bold text-xs uppercase">Latest Tag</span>
-                            <span class="font-display text-2xl text-bramble-900">${escapeHtml(tag.name)}</span>
-                        </div>
-                        <p class="text-slate-600 font-semibold mb-6">This tag is newer than the latest packaged release. Only an auto-generated source-code archive is available for it — no built binary asset has been published yet.</p>
-                        <a href="${zipUrl}" class="btn-game bg-gradient-to-b from-bramble-400 to-bramble-600 text-white px-6 py-3 rounded-xl font-display text-lg shadow-chunky hover:shadow-chunky-hover border-2 border-bramble-300 inline-flex items-center gap-2">
-                            Download Source (.zip)
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        </a>
+                    <div class="card">
+                        <div class="release-meta"><span class="badge b-accent">Latest Tag</span><span class="release-title" style="font-size:1.2rem;">${escapeHtml(tag.name)}</span></div>
+                        <p>This tag is newer than the latest packaged release. Only an auto-generated source archive is available for it.</p>
+                        <a href="${zipUrl}" class="btn btn-primary">Download Source (.zip)</a>
                     </div>`;
                 return;
             }
@@ -808,37 +834,31 @@
             const release = resolved.release;
             const assets = release.assets || [];
             container.innerHTML = `
-                <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-card border-4 border-white">
-                    <div class="flex flex-wrap items-center gap-3 mb-2">
-                        <span class="bg-bramble-500 text-white px-3 py-1 rounded-full font-bold text-xs uppercase">Latest Release</span>
-                        ${release.prerelease ? '<span class="bg-gold-400 text-white px-3 py-1 rounded-full font-bold text-xs uppercase">Pre-release</span>' : ''}
-                        <span class="text-slate-400 font-semibold text-sm">${formatRelativeTime(release.published_at || release.created_at)}</span>
+                <div class="card">
+                    <div class="release-meta">
+                        <span class="badge b-accent">Latest Release</span>
+                        ${release.prerelease ? '<span class="badge b-gold">Pre-release</span>' : ''}
+                        <span style="font-family:var(--mono);font-size:0.78rem;color:var(--text-faint);">${formatRelativeTime(release.published_at || release.created_at)}</span>
                     </div>
-                    <h2 class="font-display text-3xl text-bramble-900 mb-1">${escapeHtml(release.name || release.tag_name)}</h2>
-                    <p class="text-sm font-bold text-bramble-500 mb-6">Tag: <span class="font-mono">${escapeHtml(release.tag_name)}</span></p>
+                    <h2 class="release-title">${escapeHtml(release.name || release.tag_name)}</h2>
+                    <p class="release-tag">Tag: ${escapeHtml(release.tag_name)}</p>
 
                     ${assets.length ? `
-                        <div class="grid gap-3 mb-6">
+                        <div class="asset-list">
                             ${assets.map(a => `
-                                <a href="${a.browser_download_url}" class="flex items-center justify-between gap-3 bg-bramble-50 hover:bg-bramble-100 border-2 border-bramble-100 rounded-xl px-5 py-4 transition-colors group">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-bramble-500 shrink-0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                                        <div class="min-w-0">
-                                            <div class="font-bold text-bramble-900 truncate">${escapeHtml(a.name)}</div>
-                                            <div class="text-xs text-bramble-500 font-semibold">${formatBytes(a.size)} &middot; ${a.download_count.toLocaleString()} downloads</div>
-                                        </div>
+                                <a href="${a.browser_download_url}" class="asset-row">
+                                    <div>
+                                        <div class="asset-name">${escapeHtml(a.name)}</div>
+                                        <div class="asset-meta">${formatBytes(a.size)} · ${a.download_count.toLocaleString()} downloads</div>
                                     </div>
-                                    <span class="font-display text-bramble-600 group-hover:text-bramble-800 shrink-0">Download &rarr;</span>
+                                    <span class="asset-cta">Download →</span>
                                 </a>
                             `).join('')}
                         </div>
-                    ` : `<p class="text-slate-500 italic mb-6">No downloadable assets were attached to this release.</p>`}
+                    ` : `<p style="font-style:italic;">No downloadable assets were attached to this release.</p>`}
 
-                    <div class="prose-sm text-slate-600 border-t-2 border-gray-100 pt-6">
-                        ${renderMarkdownLite(release.body)}
-                    </div>
-
-                    <a href="${release.html_url}" target="_blank" rel="noopener" class="inline-block mt-4 text-bramble-600 hover:text-bramble-800 font-bold text-sm underline">View this release on GitHub &rarr;</a>
+                    <div class="release-body">${renderMarkdownLite(release.body)}</div>
+                    <a href="${release.html_url}" target="_blank" rel="noopener" class="release-link">View this release on GitHub →</a>
                 </div>`;
         }
 
@@ -846,20 +866,18 @@
             const el = document.getElementById('releaseHistory');
             if (!el) return;
             if (!releases || !releases.length) {
-                el.innerHTML = '<p class="text-center text-slate-500 font-semibold py-8">No releases published yet.</p>';
+                el.innerHTML = '<p style="text-align:center;padding:2rem 0;">No releases published yet.</p>';
                 return;
             }
             el.innerHTML = releases.map(r => `
-                <div class="bg-white/90 backdrop-blur rounded-2xl p-6 shadow-sm border-2 border-white flex flex-wrap items-start justify-between gap-4">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-2 mb-1 flex-wrap">
-                            <span class="font-mono font-bold text-bramble-600 text-sm">${escapeHtml(r.tag_name)}</span>
-                            ${r.prerelease ? '<span class="bg-gold-100 text-gold-700 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase">Pre-release</span>' : ''}
-                        </div>
-                        <h4 class="font-display text-lg text-bramble-900">${escapeHtml(r.name || r.tag_name)}</h4>
-                        <p class="text-xs text-slate-400 font-semibold mt-1">${formatRelativeTime(r.published_at || r.created_at)} &middot; ${(r.assets || []).length} asset${(r.assets || []).length === 1 ? '' : 's'}</p>
+                <div class="rel-row">
+                    <div class="left">
+                        <span class="tag">${escapeHtml(r.tag_name)}</span>
+                        <span class="name">${escapeHtml(r.name || r.tag_name)}</span>
+                        ${r.prerelease ? ' <span class="badge b-gold" style="padding:0.15rem 0.4rem;">pre</span>' : ''}
+                        <div class="meta">${formatRelativeTime(r.published_at || r.created_at)} · ${(r.assets || []).length} asset${(r.assets || []).length === 1 ? '' : 's'}</div>
                     </div>
-                    <a href="${r.html_url}" target="_blank" rel="noopener" class="text-bramble-600 hover:text-bramble-800 font-bold text-sm underline shrink-0">View &rarr;</a>
+                    <a href="${r.html_url}" target="_blank" rel="noopener" class="view">View →</a>
                 </div>
             `).join('');
         }
@@ -882,14 +900,13 @@
                 console.error('GitHub fetch failed:', err);
                 setDownloadsStatus('error', "Couldn't reach the GitHub API — try the link below");
                 document.getElementById('latestReleaseCard').innerHTML = `
-                    <div class="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-card border-4 border-white text-center">
-                        <p class="text-slate-600 font-semibold mb-4">Live stats couldn't be loaded right now (offline, or GitHub's API rate limit was hit).</p>
-                        <a href="https://github.com/${GITHUB_REPO}/releases" target="_blank" rel="noopener" class="btn-game bg-bramble-500 text-white px-6 py-3 rounded-xl font-display shadow-chunky inline-flex items-center gap-2">View Releases on GitHub &rarr;</a>
+                    <div class="card" style="text-align:center;">
+                        <p>Live stats couldn't be loaded right now (offline, or GitHub's API rate limit was hit).</p>
+                        <a href="https://github.com/${GITHUB_REPO}/releases" target="_blank" rel="noopener" class="btn btn-primary">View Releases on GitHub →</a>
                     </div>`;
             }
         }
 
-        // Fetch live license from GitHub raw URL and commit metadata for last edit date
         async function loadLicense() {
             const container = document.getElementById('licenseContainer');
             const meta = document.getElementById('licenseMeta');
@@ -899,7 +916,6 @@
             meta.textContent = "Querying GitHub API...";
 
             try {
-                // Fetch commit history for LICENSE file to get last edit date and hash
                 const commitRes = await fetch(`${GITHUB_API}/commits?path=LICENSE&per_page=1`);
                 if (commitRes.ok) {
                     const commits = await commitRes.json();
@@ -907,7 +923,7 @@
                         const lastCommit = commits[0];
                         const commitDate = new Date(lastCommit.commit.committer.date);
                         const formattedDate = commitDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                        meta.textContent = `Last edited on ${formattedDate} (Commit: ${lastCommit.sha.substring(0, 7)})`;
+                        meta.textContent = `Last edited on ${formattedDate} (commit ${lastCommit.sha.substring(0, 7)})`;
                         commitHashSpan.textContent = `sha: ${lastCommit.sha.substring(0, 7)}`;
                     } else {
                         meta.textContent = "Live-synced from thornybush/LICENSE";
@@ -918,32 +934,24 @@
                     commitHashSpan.textContent = "main branch";
                 }
 
-                // Fetch raw license text
                 const response = await fetch('https://raw.githubusercontent.com/aaronateataco/thornybush/refs/heads/main/LICENSE');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const text = await response.text();
                 container.textContent = text;
             } catch (err) {
-                container.textContent = "Error loading live license: " + err.message + "\n\n(Note: Ensure your browser allows cross-origin requests or check network connectivity).";
+                container.textContent = "Error loading live license: " + err.message;
                 meta.textContent = "Sync failed — offline or rate limited";
                 commitHashSpan.textContent = "error";
             }
         }
 
         function copyLicenseText() {
-            const container = document.getElementById('licenseContainer');
-            const text = container.textContent;
+            const text = document.getElementById('licenseContainer').textContent;
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast("License copied to clipboard!");
-                }).catch(() => {
-                    showToast("License copied to clipboard!");
-                });
+                navigator.clipboard.writeText(text).then(() => showToast("License copied to clipboard")).catch(() => showToast("License copied to clipboard"));
             } else {
                 document.execCommand('copy');
-                showToast("License copied to clipboard!");
+                showToast("License copied to clipboard");
             }
         }
 
@@ -952,63 +960,36 @@
             if (existing) existing.remove();
             const toast = document.createElement('div');
             toast.id = 'toastNotification';
-            toast.className = 'fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border-2 border-bramble-400 font-bold z-50 animate-fadeIn flex items-center gap-2';
-            toast.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> ${msg}`;
+            toast.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg-raised-2);color:var(--text);padding:0.7rem 1.1rem;border-radius:8px;border:1px solid var(--border-strong);font-size:0.85rem;font-weight:600;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,0.4);';
+            toast.textContent = msg;
             document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
         }
 
-        // SPA Routing functionality
+        // SPA routing
         const VALID_PAGES = ['home', 'downloads', 'license', 'terms', 'privacy'];
 
         function navigate(pageId, pushHash) {
             if (!VALID_PAGES.includes(pageId)) pageId = 'home';
 
-            document.querySelectorAll('.page-view').forEach(page => {
-                page.classList.remove('active');
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(pageId);
+            if (target) target.classList.add('active');
+
+            if (pageId === 'license') loadLicense();
+            if (pageId === 'downloads') loadDownloads();
+
+            document.querySelectorAll('nav.mainnav button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.page === pageId);
             });
 
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-
-            if (pageId === 'license') {
-                loadLicense();
-            }
-            if (pageId === 'downloads') {
-                loadDownloads();
-            }
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                const text = btn.innerText.toLowerCase();
-                if ((pageId === 'home' && text.includes('home')) ||
-                    (pageId === 'downloads' && text.includes('downloads')) ||
-                    (pageId === 'license' && text.includes('license')) ||
-                    (pageId === 'terms' && text.includes('terms')) ||
-                    (pageId === 'privacy' && text.includes('privacy'))) {
-                    btn.classList.add('bg-bramble-100', 'text-bramble-600');
-                } else {
-                    btn.classList.remove('bg-bramble-100', 'text-bramble-600');
-                }
-            });
-
-            if (pushHash !== false) {
-                history.replaceState(null, '', pageId === 'home' ? '#' : '#' + pageId);
-            }
-
+            if (pushHash !== false) history.replaceState(null, '', pageId === 'home' ? '#' : '#' + pageId);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize on load — kick off the live home-stats fetch, and
-        // honor a deep link like index.html#downloads (used by the old
-        // lore.html/terms.html/privacy.html redirect stubs).
         fetchGitHubData().then(renderHomeStats).catch(() => {
             const el = document.getElementById('homeStats');
-            if (el) el.innerHTML = '<span class="stat-pill">Live stats unavailable right now</span>';
+            if (el) el.innerHTML = '<span class="item">Live stats unavailable right now</span>';
         });
         navigate(location.hash.replace('#', '') || 'home', false);
         window.addEventListener('hashchange', () => navigate(location.hash.replace('#', '') || 'home', false));
