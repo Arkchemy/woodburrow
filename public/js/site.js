@@ -267,11 +267,11 @@
       const avatar = ghUser
         ? `<img class="contributor-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
-      // Styled after the real in-game HUD's health/mana bar (icon set
-      // into the bar's left end) rather than a corner badge on the
-      // portrait -- see contributor-element-bar's own CSS comment.
-      const elementBar = elem
-        ? `<div class="contributor-element-bar" title="${escapeHtml(elem.label)} element"><span class="contributor-element-icon-wrap"><img class="contributor-element-icon" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span><span class="contributor-element-fill"></span></div>`
+      // A small badge overlapping the portrait's bottom-left corner,
+      // like the in-game HUD's own element icon on a character's
+      // portrait frame -- only rendered when an element was picked.
+      const elementBadge = elem
+        ? `<span class="contributor-element-badge" title="${escapeHtml(elem.label)} element"><img src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span>`
         : '';
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function
@@ -287,7 +287,11 @@
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
       const style = elem ? ` style="--elem-color:${elem.color}"` : '';
-      return `<article class="project-card contributor-card"${style}><div class="contributor-card-inner"><div class="contributor-avatar-wrap">${avatar}</div><div class="contributor-info"><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3>${elementBar}<p>${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></div></div></article>`;
+      // No card frame (no background/border/shadow box) -- just the
+      // portrait+name HUD row, a flat health-bar-green stat bar, then
+      // role/links underneath, all left-aligned like the real in-game
+      // nameplate this is modeled on.
+      return `<article class="contributor-card"${style}><div class="contributor-header"><div class="contributor-avatar-wrap">${avatar}${elementBadge}</div><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3></div><div class="contributor-health-bar"><div class="contributor-health-fill"></div></div><p class="contributor-role">${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></article>`;
     }).join('');
     container.innerHTML = items;
 
@@ -302,8 +306,6 @@
       if (ghUser) fillGithubInfo(ghUser, avatarId, ghLinkId);
       if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, dcLinkId, !ghUser);
     });
-
-    attachTiltEffect(container);
   }
 
   // One name, not "display name (@username)" -- a lot of accounts just
@@ -321,30 +323,6 @@
   function setLinkTitle(linkId, text){
     const el = document.getElementById(linkId);
     if (el) el.title = text;
-  }
-
-  // Real 3D tilt: each card rotates toward the cursor as it moves across
-  // it, like a figure on a rotating display stand, and eases back flat
-  // on pointer leave. Skipped on touch (no hover/pointermove signal to
-  // drive it from, and CSS `:hover` still gives touch a flat tap-state).
-  function attachTiltEffect(container){
-    const cards = container.querySelectorAll('.contributor-card');
-    cards.forEach(card => {
-      card.addEventListener('pointermove', (ev) => {
-        if (ev.pointerType === 'touch') return;
-        const rect = card.getBoundingClientRect();
-        const px = (ev.clientX - rect.left) / rect.width - 0.5;
-        const py = (ev.clientY - rect.top) / rect.height - 0.5;
-        card.style.setProperty('--tilt-x', (py * -10).toFixed(2) + 'deg');
-        card.style.setProperty('--tilt-y', (px * 10).toFixed(2) + 'deg');
-        card.style.setProperty('--shine-x', ((px + 0.5) * 100).toFixed(1) + '%');
-        card.style.setProperty('--shine-y', ((py + 0.5) * 100).toFixed(1) + '%');
-      });
-      card.addEventListener('pointerleave', () => {
-        card.style.setProperty('--tilt-x', '0deg');
-        card.style.setProperty('--tilt-y', '0deg');
-      });
-    });
   }
 
   function swapAvatar(avatarId, src){

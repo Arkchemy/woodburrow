@@ -465,103 +465,44 @@ code {
   padding: 10px 0;
 }
 
-/* Contributors page -- kept scoped to .contributor-*. Each card is styled
-   like a Skylanders figure display card: a real 3D pointer-tracked tilt
-   (driven by --tilt-x/--tilt-y/--shine-x/--shine-y, set in site.js'
-   attachTiltEffect), an element-tinted glow (--elem-color, set inline
-   per-card from CONTRIBUTORS.csv's element column), and the name set in
-   the actual Skylanders logo lookalike font so each contributor reads
-   like a character card rather than a plain directory entry. */
+/* Contributors page -- kept scoped to .contributor-*. Modeled directly on
+   the real in-game HUD character nameplate: a gold-framed portrait with
+   an element badge overlapping its bottom-left corner, the name beside
+   it, and a flat health-bar-green stat bar underneath -- left-aligned
+   throughout, deliberately no card frame (no background/border/shadow
+   box) around any of it. */
 .contributor-list {
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 28px;
   align-items: start;
 }
 
 .contributor-card {
   --elem-color: var(--accent);
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 18px;
-  border-color: color-mix(in srgb, var(--elem-color) 35%, var(--border));
-  background: var(--card-bg);
-  /* perspective() lives inline in the transform itself (not as a
-     `perspective` property on the grid container) and there's no
-     transform-style: preserve-3d here -- both of those on a grid item
-     trip a real Chromium sizing bug where the row's track height
-     balloons to roughly the viewport height instead of the card's
-     actual content height. */
-  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-  transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
-  box-shadow:
-    0 1px 3px rgba(15, 23, 42, 0.08),
-    0 0 0 1px color-mix(in srgb, var(--elem-color) 25%, transparent) inset;
 }
 
-.contributor-card:hover {
-  box-shadow:
-    0 18px 30px -12px color-mix(in srgb, var(--elem-color) 45%, rgba(15, 23, 42, 0.35)),
-    0 0 0 1px color-mix(in srgb, var(--elem-color) 55%, transparent) inset;
-}
-
-/* Pointer-tracked shine sweep -- a soft highlight that follows the
-   cursor across the card, reinforcing the tilt as a real light-catching
-   surface rather than just a rotated flat image. */
-.contributor-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at var(--shine-x, 50%) var(--shine-y, 20%),
-    color-mix(in srgb, var(--elem-color) 55%, white) 0%,
-    transparent 55%
-  );
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  mix-blend-mode: overlay;
-}
-
-.contributor-card:hover::before {
-  opacity: 0.55;
-}
-
-.contributor-card-inner {
-  position: relative;
-  z-index: 1;
+.contributor-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 4px;
-  padding: 26px 20px 22px;
-  background: radial-gradient(
-    circle at 50% -10%,
-    color-mix(in srgb, var(--elem-color) 16%, transparent) 0%,
-    transparent 65%
-  );
+  gap: 12px;
 }
 
 .contributor-avatar-wrap {
   position: relative;
-  margin-bottom: 10px;
+  flex-shrink: 0;
 }
 
 /* Portrait ring is a fixed gold, not element-tinted -- this matches
    the real in-game HUD character nameplate (the portrait frame is
-   always gold regardless of which element that character is), which
-   the whole card is now deliberately modeled after. */
+   always gold regardless of which element that character is). */
 .contributor-avatar {
-  width: 92px;
-  height: 92px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  flex-shrink: 0;
   object-fit: cover;
   background: var(--bg);
   border: 3px solid #f6d34a;
-  box-shadow: 0 0 0 2px #8a5a12, 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 2px #8a5a12, 0 4px 10px rgba(0, 0, 0, 0.35);
   display: block;
 }
 
@@ -572,24 +513,44 @@ code {
   background: var(--nav-bg);
   color: var(--nav-fg);
   font-weight: 700;
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
 }
 
-.contributor-info {
-  min-width: 0;
-  width: 100%;
+/* Overlaps the portrait's bottom-left corner, like the element icon on
+   the real in-game HUD's own character portrait frame. Only rendered
+   when a contributor actually picked an element. */
+.contributor-element-badge {
+  position: absolute;
+  left: -6px;
+  bottom: -6px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 2px solid var(--elem-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contributor-element-badge img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* Same gold-on-dark-outline treatment as the in-game HUD's own
    character nameplate text (see the reference screenshot this was
-   built from -- e.g. "MYSTICAT" under the portrait). */
+   built from -- e.g. "MYSTICAT"/"EMBER" next to the portrait). */
 .contributor-name {
-  margin: 0 0 8px;
+  margin: 0;
+  min-width: 0;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
   font-weight: 400;
-  letter-spacing: 0.03em;
-  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  font-size: 1.2rem;
   line-height: 1.2;
   text-transform: uppercase;
   color: #ffd54a;
@@ -599,65 +560,36 @@ code {
     0 0 14px rgba(255, 213, 74, 0.35);
 }
 
-/* The in-game HUD pairs the name with a colored stat bar (health/mana)
-   that has the relevant icon set into its left end -- reused here as
-   an element indicator: the bar is tinted to the contributor's own
-   picked element instead of a health/mana value. Only rendered when
-   an element was actually picked (see renderContributors in site.js). */
-.contributor-element-bar {
-  display: flex;
-  align-items: center;
-  width: 78%;
-  max-width: 150px;
-  margin: 0 auto 12px;
+/* Always this green -- a flat health bar, not tinted per element (the
+   element now lives only in the small portrait badge above). */
+.contributor-health-bar {
+  margin-top: 14px;
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
-.contributor-element-icon-wrap {
-  position: relative;
-  z-index: 1;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 2px solid var(--elem-color);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.contributor-health-fill {
+  width: 100%;
+  height: 100%;
+  background: #71c74c;
 }
 
-.contributor-element-icon {
-  width: 13px;
-  height: 13px;
-  object-fit: contain;
-}
-
-.contributor-element-fill {
-  flex: 1;
-  height: 9px;
-  margin-left: -7px;
-  border-radius: 0 5px 5px 0;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--elem-color) 90%, white 15%), var(--elem-color));
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), inset 0 -2px 3px rgba(0, 0, 0, 0.35);
-}
-
-.contributor-info p {
-  margin: 0 0 14px;
+.contributor-role {
+  margin: 10px 0 10px;
   color: var(--fg-muted);
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   line-height: 1.4;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .contributor-links {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: auto;
 }
 
 .contributor-link {
@@ -685,7 +617,7 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .contributor-card, .contributor-card::before, .contributor-link {
+  .contributor-link {
     transition: none;
   }
 }
