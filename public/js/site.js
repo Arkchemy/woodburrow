@@ -38,24 +38,25 @@
   const ICON_GITHUB = '<svg class="contributor-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>';
   const ICON_DISCORD = '<svg class="contributor-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>';
 
-  // Real Skylanders element symbols, pulled straight from the Skylanders
-  // Wiki's own asset CDN (static.wikia.nocookie.net) rather than redrawn --
-  // these are the actual in-game icons. The wiki serves them through a
-  // thumbnail resizer (".../revision/latest/scale-to-width-down/{px}"), so
-  // a wide 240px pull is requested once and displayed scaled down in CSS
-  // for a crisp icon at any size instead of a blown-up 31px source.
+  // Real Skylanders element symbols -- these are the actual in-game
+  // icons, originally sourced from the Skylanders Wiki's own asset CDN
+  // (static.wikia.nocookie.net) but downloaded and self-hosted under
+  // /images/elements/ rather than hotlinked: the wiki's CDN isn't
+  // reliably reachable from every visitor's network, which was
+  // producing real broken-image icons. Self-hosting means this site
+  // never depends on a third party being up.
   const ELEMENT_INFO = {
-    air: { label: 'Air', color: '#5bc8e8', img: 'f/f3/AirSymbolSkylanders.png?cb=20160925223423' },
-    dark: { label: 'Dark', color: '#4a3768', img: '9/98/DarkSymbolSkylanders.png?cb=20160925223430' },
-    earth: { label: 'Earth', color: '#c97a34', img: 'f/f8/EarthSymbolSkylanders.png?cb=20160925223434' },
-    fire: { label: 'Fire', color: '#e8531f', img: '9/9c/FireSymbolSkylanders.png?cb=20160925223439' },
-    kaos: { label: 'Kaos', color: '#a349a4', img: 'd/dc/KaosSymbolSkylanders.png?cb=20160925223516' },
-    life: { label: 'Life', color: '#4caf50', img: 'e/ee/LifeSymbolSkylanders.png?cb=20160925223443' },
-    light: { label: 'Light', color: '#f0c419', img: 'c/cd/LightSymbolSkylanders.png?cb=20160925223446' },
-    magic: { label: 'Magic', color: '#9c4dcc', img: '7/72/MagicSymbolSkylanders.png?cb=20160925223451' },
-    tech: { label: 'Tech', color: '#e8b923', img: 'd/d7/TechSymbolSkylanders.png?cb=20160925223504' },
-    undead: { label: 'Undead', color: '#6a4c93', img: '1/18/UndeadSymbolSkylanders.png?cb=20160925223508' },
-    water: { label: 'Water', color: '#2196f3', img: '4/4f/WaterSymbolSkylanders.png?cb=20160925223512' },
+    air: { label: 'Air', color: '#5bc8e8', img: 'air.webp' },
+    dark: { label: 'Dark', color: '#4a3768', img: 'dark.webp' },
+    earth: { label: 'Earth', color: '#c97a34', img: 'earth.webp' },
+    fire: { label: 'Fire', color: '#e8531f', img: 'fire.webp' },
+    kaos: { label: 'Kaos', color: '#a349a4', img: 'kaos.webp' },
+    life: { label: 'Life', color: '#4caf50', img: 'life.webp' },
+    light: { label: 'Light', color: '#f0c419', img: 'light.webp' },
+    magic: { label: 'Magic', color: '#9c4dcc', img: 'magic.webp' },
+    tech: { label: 'Tech', color: '#e8b923', img: 'tech.webp' },
+    undead: { label: 'Undead', color: '#6a4c93', img: 'undead.webp' },
+    water: { label: 'Water', color: '#2196f3', img: 'water.webp' },
   };
 
   function elementInfoFor(name){
@@ -65,7 +66,7 @@
   }
 
   function elementImageUrl(path){
-    return `https://static.wikia.nocookie.net/skylanders/images/${path.replace('?cb=', '/revision/latest/scale-to-width-down/240?cb=')}`;
+    return `/images/elements/${path}`;
   }
 
   const THEME_KEY = 'arkchemy-theme';
@@ -266,8 +267,11 @@
       const avatar = ghUser
         ? `<img class="contributor-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
-      const badge = elem
-        ? `<img class="contributor-element-badge" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`
+      // Styled after the real in-game HUD's health/mana bar (icon set
+      // into the bar's left end) rather than a corner badge on the
+      // portrait -- see contributor-element-bar's own CSS comment.
+      const elementBar = elem
+        ? `<div class="contributor-element-bar" title="${escapeHtml(elem.label)} element"><span class="contributor-element-icon-wrap"><img class="contributor-element-icon" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span><span class="contributor-element-fill"></span></div>`
         : '';
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function
@@ -283,7 +287,7 @@
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
       const style = elem ? ` style="--elem-color:${elem.color}"` : '';
-      return `<article class="project-card contributor-card"${style}><div class="contributor-card-inner"><div class="contributor-avatar-wrap">${avatar}${badge}</div><div class="contributor-info"><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></div></div></article>`;
+      return `<article class="project-card contributor-card"${style}><div class="contributor-card-inner"><div class="contributor-avatar-wrap">${avatar}</div><div class="contributor-info"><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3>${elementBar}<p>${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></div></div></article>`;
     }).join('');
     container.innerHTML = items;
 
