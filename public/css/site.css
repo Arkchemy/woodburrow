@@ -316,6 +316,7 @@ code {
 .contributor-info p {
   margin: 0 0 4px;
   color: var(--fg-muted);
+  font-weight: 600;
 }
 
 .contributor-handles {
@@ -338,9 +339,24 @@ code {
 }
 
 .contributor-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+.contributor-link:hover {
+  border-color: var(--accent);
+}
+
+.contributor-icon {
+  flex-shrink: 0;
 }
 
 /* Footer */
