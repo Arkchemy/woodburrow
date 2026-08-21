@@ -483,7 +483,7 @@ code {
 
 .contributor-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -495,7 +495,10 @@ code {
 
 /* Portrait ring is a fixed gold, not element-tinted -- this matches
    the real in-game HUD character nameplate (the portrait frame is
-   always gold regardless of which element that character is). */
+   always gold regardless of which element that character is). The
+   flanges (::before/::after) are the two short horizontal bars the
+   real frame has poking out above and below the circle -- also always
+   gold, same as the ring itself. */
 .contributor-avatar {
   width: 72px;
   height: 72px;
@@ -505,6 +508,28 @@ code {
   border: 3px solid #f6d34a;
   box-shadow: 0 0 0 2px #8a5a12, 0 4px 10px rgba(0, 0, 0, 0.35);
   display: block;
+}
+
+.contributor-avatar-wrap::before,
+.contributor-avatar-wrap::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  height: 4px;
+  border-radius: 2px;
+  background: #f6d34a;
+  box-shadow: 0 0 0 1px #8a5a12;
+}
+
+.contributor-avatar-wrap::before {
+  top: -2px;
+}
+
+.contributor-avatar-wrap::after {
+  bottom: -2px;
 }
 
 .contributor-avatar-fallback {
@@ -523,6 +548,7 @@ code {
    when a contributor actually picked an element. */
 .contributor-element-badge {
   position: absolute;
+  z-index: 1;
   left: -6px;
   bottom: -6px;
   width: 28px;
@@ -546,7 +572,7 @@ code {
    character nameplate text (see the reference screenshot this was
    built from -- e.g. "MYSTICAT"/"EMBER" next to the portrait). */
 .contributor-name {
-  margin: 0;
+  margin: -6px 0 0;
   min-width: 0;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
   font-weight: 400;
