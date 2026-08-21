@@ -181,67 +181,116 @@
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
       const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
-      // GitHub avatar (real, public, no auth) takes priority since it's
-      // reliable; a Discord-only contributor gets a real id so a later
-      // pass can try filling in a real Discord avatar, with the initial
-      // as the img's own fallback if that fetch fails or is blocked.
       const avatarId = `contributor-avatar-${i}`;
+      const handlesId = `contributor-handles-${i}`;
+      // Placeholder avatar until the real fetches below resolve --
+      // GitHub's own avatar-by-username shortcut (github.com/{u}.png)
+      // is used as an immediate first paint (real, public, no fetch
+      // needed), then swapped for the api.github.com response's own
+      // avatar_url once that real lookup completes, so a slow/failed
+      // JSON fetch never leaves a contributor with no image at all.
       const avatar = ghUser
         ? `<img class="contributor-avatar" id="${avatarId}" src="https://github.com/${encodeURIComponent(ghUser)}.png" alt="" loading="lazy">`
         : hasDiscord
-          ? `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}" data-discord-id="${escapeHtml(r.discord_id)}">${escapeHtml(initial)}</div>`
+          ? `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`
           : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
       const links = [
         hasDiscord ? `<a class="contributor-link" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">Discord</a>` : '',
         ghUser ? `<a class="contributor-link" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''
       ].filter(Boolean).join(' ');
-      return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}<div class="contributor-links">${links}</div></div></article>`;
+      return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}<div class="contributor-handles" id="${handlesId}"></div><div class="contributor-links">${links}</div></div></article>`;
     }).join('');
     container.innerHTML = items;
-    fillDiscordAvatars(container);
+
+    rows.forEach((r, i) => {
+      const avatarId = `contributor-avatar-${i}`;
+      const handlesId = `contributor-handles-${i}`;
+      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
+      const ghUser = githubUsernameFromUrl(r.github_url);
+      if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, handlesId, !ghUser);
+      if (ghUser) fillGithubInfo(ghUser, avatarId, handlesId);
+    });
   }
 
-  // Real Discord avatars for contributors who only have a Discord id,
-  // via this site's own same-origin serverless function
-  // (/api/discord-avatar), which holds a real Discord bot token and
-  // calls Discord's own official Bot API server-side. Two earlier
-  // client-side-only attempts didn't work and won't ever: a public
-  // third-party proxy (dcdn.dstn.ru) that doesn't send CORS headers at
-  // all, and Lanyard (api.lanyard.rest), which is CORS-friendly but
-  // only returns data for users who've joined Lanyard's own Discord
-  // server -- neither of which is fixable from the browser side, since
-  // Discord's real API itself has no public, unauthenticated lookup.
-  // Every fetch here is still wrapped so a failure (env var not set
-  // yet, Discord API hiccup, rate limit) just leaves the existing
-  // initial-letter fallback in place, never a broken image or a thrown
-  // error visible to a visitor.
-  async function fillDiscordAvatars(container){
-    const targets = container.querySelectorAll('.contributor-avatar-fallback[data-discord-id]');
-    await Promise.all(Array.from(targets).map(async (el) => {
-      const id = el.dataset.discordId;
-      try {
-        const res = await fetch(`/api/discord-avatar?id=${encodeURIComponent(id)}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!data || !data.avatar) return;
-        const img = new Image();
-        img.onload = () => {
-          const replacement = document.createElement('img');
-          replacement.className = 'contributor-avatar';
-          replacement.id = el.id;
-          replacement.loading = 'lazy';
-          replacement.alt = '';
-          replacement.src = img.src;
-          el.replaceWith(replacement);
-        };
-        img.src = data.avatar;
-      } catch (err) {
-        // Server route unreachable/erroring -- leave the initial letter
-        // in place, this is a real, expected possibility (e.g. before
-        // the bot token env var is set), not a bug to surface to the
-        // visitor.
+  function appendHandleLine(handlesId, text){
+    const el = document.getElementById(handlesId);
+    if (!el) return;
+    const line = document.createElement('div');
+    line.className = 'contributor-handle';
+    line.textContent = text;
+    el.appendChild(line);
+  }
+
+  function swapAvatar(avatarId, src){
+    const el = document.getElementById(avatarId);
+    if (!el) return;
+    const img = new Image();
+    img.onload = () => {
+      const replacement = document.createElement('img');
+      replacement.className = 'contributor-avatar';
+      replacement.id = avatarId;
+      replacement.loading = 'lazy';
+      replacement.alt = '';
+      replacement.src = img.src;
+      el.replaceWith(replacement);
+    };
+    img.src = src;
+  }
+
+  // Real Discord username + display name + avatar, via this site's own
+  // same-origin serverless function (/api/discord-avatar), which holds
+  // a real Discord bot token and calls Discord's own official Bot API
+  // server-side. Two earlier client-side-only attempts didn't work and
+  // won't ever: a public third-party proxy (dcdn.dstn.ru) that doesn't
+  // send CORS headers at all, and Lanyard (api.lanyard.rest), which is
+  // CORS-friendly but only returns data for users who've joined
+  // Lanyard's own Discord server -- neither fixable from the browser
+  // side, since Discord's real API itself has no public,
+  // unauthenticated lookup. Every fetch here is still wrapped so a
+  // failure (env var not set yet, Discord API hiccup, rate limit) just
+  // leaves the existing initial-letter fallback and no handle line,
+  // never a broken image or a thrown error visible to a visitor.
+  async function fillDiscordInfo(id, avatarId, handlesId, useAvatar){
+    try {
+      const res = await fetch(`/api/discord-avatar?id=${encodeURIComponent(id)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data) return;
+      if (data.username) {
+        const label = data.display_name && data.display_name !== data.username
+          ? `Discord: ${data.display_name} (@${data.username})`
+          : `Discord: @${data.username}`;
+        appendHandleLine(handlesId, label);
       }
-    }));
+      if (useAvatar && data.avatar) swapAvatar(avatarId, data.avatar);
+    } catch (err) {
+      // Server route unreachable/erroring -- leave the initial letter
+      // and no Discord handle line, this is a real, expected
+      // possibility (e.g. before the bot token env var is set), not a
+      // bug to surface to the visitor.
+    }
+  }
+
+  // Real GitHub username + display name + avatar, straight from
+  // GitHub's own public REST API (api.github.com/users/{username}) --
+  // genuinely public and CORS-enabled, no auth or proxy needed, unlike
+  // Discord's equivalent.
+  async function fillGithubInfo(username, avatarId, handlesId){
+    try {
+      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data) return;
+      const label = data.name && data.name !== data.login
+        ? `GitHub: ${data.name} (@${data.login})`
+        : `GitHub: @${data.login}`;
+      appendHandleLine(handlesId, label);
+      if (data.avatar_url) swapAvatar(avatarId, data.avatar_url);
+    } catch (err) {
+      // GitHub API unreachable/rate-limited -- the github.com/{u}.png
+      // shortcut used for the initial paint stays in place, and no
+      // GitHub handle line gets added. Not a bug to surface.
+    }
   }
 
   function renderRepos(repos, container){

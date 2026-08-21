@@ -318,6 +318,15 @@ code {
   color: var(--fg-muted);
 }
 
+.contributor-handles {
+  margin: 2px 0 4px;
+}
+
+.contributor-handle {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+}
+
 .contributor-links {
   display: flex;
   gap: 10px;
