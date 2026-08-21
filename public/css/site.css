@@ -1,4 +1,9 @@
-/* Arkchemy site stylesheet -- shared across every page, light/dark aware. */
+/* Arkchemy site stylesheet -- shared across every page, light/dark aware.
+   Themed after the Skylanders Portal of Power: a glowing-vortex motif
+   (--portal-*) reused across the hero, nav, buttons, and section cards
+   so every page reads as part of the same "figure on a portal" visual
+   language the contributors page already established. */
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
 :root {
   --bg: #f6f7fb;
@@ -12,6 +17,18 @@
   --accent-fg: #04121f;
   --card-bg: #ffffff;
   --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+
+  /* Portal energy palette -- deliberately kept to three colors used
+     consistently everywhere (nav underline, hero glow, buttons, card
+     accent bars) rather than a different color per section, so the
+     whole site reads as one cohesive "portal" theme instead of a
+     rainbow of unrelated accents. Full elemental colors stay scoped to
+     the contributors page, where they mean something specific
+     (each person's own picked element). */
+  --portal-cyan: #22d3ee;
+  --portal-purple: #a855f7;
+  --portal-gold: #facc15;
+  --portal-gradient: linear-gradient(90deg, var(--portal-cyan), var(--portal-purple), var(--portal-gold));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -78,10 +95,25 @@ code {
 
 /* Navbar (injected by site.js on every page) */
 .site-navbar {
-  background: var(--nav-bg);
+  background: linear-gradient(180deg, var(--nav-bg), color-mix(in srgb, var(--nav-bg) 80%, black));
   color: var(--nav-fg);
   padding: 14px 18px;
   box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* A thin sweep of portal energy along the bottom edge instead of a
+   plain border -- the same gradient the hero glow and section accent
+   bars use, so the nav reads as the top edge of one continuous theme. */
+.site-navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--portal-gradient);
+  opacity: 0.85;
 }
 
 .site-navbar .nav-inner {
@@ -94,11 +126,15 @@ code {
 }
 
 .site-navbar .brand {
-  color: var(--nav-fg);
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
   text-decoration: none;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  background: linear-gradient(90deg, var(--portal-cyan), var(--portal-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .site-navbar .nav-links {
@@ -113,21 +149,42 @@ code {
 
 .site-navbar .nav-links a,
 .site-navbar .nav-links button {
+  position: relative;
   color: var(--nav-fg);
   text-decoration: none;
   opacity: 0.85;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  padding: 0;
+  padding: 0 0 3px;
+}
+
+.site-navbar .nav-links a::after,
+.site-navbar .nav-links button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 2px;
+  background: var(--portal-gradient);
+  transition: right 0.2s ease;
 }
 
 .site-navbar .nav-links a:hover,
 .site-navbar .nav-links button:hover {
   opacity: 1;
-  color: var(--accent);
+  color: var(--portal-cyan);
+}
+
+.site-navbar .nav-links a:hover::after,
+.site-navbar .nav-links button:hover::after {
+  right: 0;
 }
 
 .theme-toggle {
@@ -136,51 +193,144 @@ code {
   justify-content: center;
 }
 
-/* Hero */
+/* Hero -- the real "put a Skylander on the Portal of Power" summon
+   screen from Skylanders: Spyro's Adventure itself (the actual game
+   this project recompiles), sourced from the Skylanders Wiki (CC
+   BY-SA, credited in the footer). Framed tight and darkened at the
+   edges so it reads as a glowing texture behind the title rather than
+   a literal screenshot with its own in-game text still legible. */
 .hero {
-  background: linear-gradient(160deg, var(--nav-bg) 0%, #142a4d 100%);
+  position: relative;
+  overflow: hidden;
+  background:
+    /* Opaque at the very top, fading out by mid-height -- the source
+       image has its own baked-in "Please put a Skylander on the
+       Portal of Power" UI text in its upper third, and this is what
+       keeps it fully hidden regardless of hero height/viewport width
+       (background-position alone isn't reliable enough across sizes). */
+    linear-gradient(180deg, var(--nav-bg) 0%, var(--nav-bg) 30%, transparent 62%, color-mix(in srgb, var(--nav-bg) 92%, transparent) 100%),
+    radial-gradient(circle at 50% 15%, color-mix(in srgb, var(--portal-purple) 30%, transparent) 0%, transparent 60%),
+    url('https://skylanderswiki.com/w/images/Skylanders_Images/1/15/Portal_Space_SSA_Wii.png') center 130% / 180% auto no-repeat,
+    linear-gradient(160deg, var(--nav-bg) 0%, #142a4d 100%);
   color: var(--nav-fg);
   border-radius: 14px;
-  padding: 56px 28px;
+  padding: 72px 28px 56px;
   margin: 28px 0;
   text-align: center;
 }
 
+.hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* A ring of portal energy behind the title, pulsing gently -- pure CSS,
+   no image, so it still reads even before/if the background photo is
+   slow to load. */
+.portal-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280px;
+  height: 280px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--portal-cyan) 55%, transparent);
+  box-shadow:
+    0 0 50px color-mix(in srgb, var(--portal-cyan) 40%, transparent),
+    inset 0 0 50px color-mix(in srgb, var(--portal-purple) 30%, transparent);
+  pointer-events: none;
+  z-index: 0;
+  animation: portal-pulse 5s ease-in-out infinite;
+}
+
+@keyframes portal-pulse {
+  0%, 100% { opacity: 0.45; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-ring { animation: none; }
+}
+
 .hero-inner h1 {
   margin: 0 0 10px;
-  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  font-size: clamp(2.2rem, 6vw, 3.25rem);
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.35), 0 0 30px color-mix(in srgb, var(--portal-cyan) 45%, transparent);
 }
 
 .hero .tagline {
-  margin: 0 auto 20px;
+  margin: 0 auto 22px;
   max-width: 42em;
-  opacity: 0.9;
+  opacity: 0.92;
   font-size: 1.1rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .cta {
   display: inline-block;
-  background: var(--accent);
-  color: var(--accent-fg);
-  padding: 10px 18px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, var(--portal-cyan), var(--portal-purple));
+  color: #04121f;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  padding: 12px 26px;
+  border-radius: 999px;
   text-decoration: none;
-  font-weight: 600;
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--portal-purple) 65%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .cta:hover {
   filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -10px color-mix(in srgb, var(--portal-cyan) 65%, transparent);
 }
 
-/* Content sections */
+@media (prefers-reduced-motion: reduce) {
+  .cta { transition: none; }
+}
+
+/* Content sections -- each gets the same thin portal-gradient top edge
+   as the navbar/hero/footer, tying every page's content blocks back to
+   the same theme. */
 .about,
 .projects,
 .license {
+  position: relative;
+  overflow: hidden;
   background: var(--bg-alt);
   border: 1px solid var(--border);
   padding: 24px 28px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 20px;
+}
+
+.about::before,
+.projects::before,
+.license::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--portal-gradient);
+}
+
+.about h1,
+.about h2,
+.projects h1,
+.projects h2,
+.license h1,
+.license h2,
+.hero-inner h1 {
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
 }
 
 .about h1,
@@ -190,6 +340,27 @@ code {
 .license h1,
 .license h2 {
   margin-top: 0;
+}
+
+/* Official Skylanders: Spyro's Adventure key art, sourced from the
+   Skylanders Wiki (CC BY-SA) -- used once, at the top of the About
+   page, since that's the page that's specifically about this exact
+   game. Framed like a figure card rather than dropped in as a raw
+   screenshot. */
+.about-banner {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--border), 0 12px 30px -14px color-mix(in srgb, var(--portal-purple) 50%, rgba(15, 23, 42, 0.4));
+}
+
+.page-icon {
+  width: 28px;
+  height: 28px;
+  vertical-align: -6px;
+  margin-right: 8px;
 }
 
 .project-list {
@@ -205,17 +376,32 @@ code {
   padding: 16px 18px;
   border-radius: 10px;
   box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--portal-purple) 45%, var(--border));
+  box-shadow: 0 14px 26px -14px color-mix(in srgb, var(--portal-cyan) 45%, rgba(15, 23, 42, 0.35));
 }
 
 .project-card h3 {
   margin: 0 0 8px;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-size: 1.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card { transition: none; }
 }
 
 .license-pre {
   white-space: pre-wrap;
   word-break: break-word;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--portal-gold) 5%, var(--bg));
+  border: 1px solid color-mix(in srgb, var(--portal-gold) 25%, var(--border));
   border-radius: 8px;
   padding: 16px;
   font-size: 0.85rem;
@@ -468,12 +654,30 @@ code {
 
 /* Footer */
 .site-footer {
+  position: relative;
   margin-top: 32px;
-  padding: 20px 0 40px;
+  padding: 24px 0 40px;
   color: var(--fg-muted);
   font-size: 0.88rem;
   text-align: center;
-  border-top: 1px solid var(--border);
+  border-top: none;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 2px;
+  background: var(--portal-gradient);
+}
+
+.site-footer .credits {
+  margin-top: 4px;
+  font-size: 0.82rem;
+  opacity: 0.85;
 }
 
 @media (max-width: 640px) {
