@@ -288,8 +288,8 @@ code {
    like a character card rather than a plain directory entry. */
 .contributor-list {
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  perspective: 1200px;
   gap: 22px;
+  align-items: start;
 }
 
 .contributor-card {
@@ -300,8 +300,13 @@ code {
   border-radius: 18px;
   border-color: color-mix(in srgb, var(--elem-color) 35%, var(--border));
   background: var(--card-bg);
-  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateZ(0);
-  transform-style: preserve-3d;
+  /* perspective() lives inline in the transform itself (not as a
+     `perspective` property on the grid container) and there's no
+     transform-style: preserve-3d here -- both of those on a grid item
+     trip a real Chromium sizing bug where the row's track height
+     balloons to roughly the viewport height instead of the card's
+     actual content height. */
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
   box-shadow:
     0 1px 3px rgba(15, 23, 42, 0.08),
