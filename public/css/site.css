@@ -498,7 +498,7 @@ code {
    smaller: a lower minmax() on the grid, tighter gap, and reduced
    role/link text sizes to match. */
 .contributor-list-compact {
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 12px;
 }
 
@@ -739,6 +739,7 @@ code {
   font-size: 0.85rem;
   line-height: 1.15;
   color: var(--fg);
+  overflow-wrap: anywhere;
 }
 
 .contributor-role {
