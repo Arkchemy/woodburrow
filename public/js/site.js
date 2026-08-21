@@ -335,26 +335,25 @@
       // Discord-only contributor still gets a real photo in the big
       // slot rather than an empty one.
       const mainAvatar = ghUser
-        ? `<img class="hud-avatar-main hud-ring-gold" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
-        : `<div class="hud-avatar-main hud-ring-gold hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
+        ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
+        : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
       // Mini badge (PSD: "PFP2ProbablyDiscord") is a real second identity
       // when a contributor has both GitHub and Discord -- otherwise
       // there's no second photo to show there, so it falls back to a
       // deterministically-picked Battle Class symbol (gold, matching
       // the frame) on a solid dark-blue fill instead of sitting empty.
       const miniAvatar = hasBoth
-        ? `<div class="hud-avatar-mini hud-ring-gold hud-avatar-fallback" id="${miniAvatarId}"></div>`
-        : `<div class="hud-avatar-mini hud-ring-gold hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
-      const elementIcon = `<img class="hud-element hud-ring-gold" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
+        ? `<div class="hud-avatar-mini hud-avatar-fallback" id="${miniAvatarId}"></div>`
+        : `<div class="hud-avatar-mini hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
+      const elementIcon = `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
       const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
       const coinCount = coinCountFor(r.discord_id, r.name);
       // Drop a redundant "Special Thanks -- " prefix from the role
       // text -- the Special Thanks section it's rendered under already
       // says that once, in the heading. Only ever matches rows that
-      // legitimately have that prefix (i.e. ones already headed for
-      // that section by isSpecialThanks), so this is a no-op for
-      // everyone else -- e.g. NefariousTechSupport/winnernombre's real,
-      // distinct role text is untouched.
+      // legitimately have that prefix, so this is a no-op for everyone
+      // else -- e.g. NefariousTechSupport/winnernombre's real, distinct
+      // role text is untouched.
       const roleText = (r.role || '').replace(/^special thanks\s*--\s*/i, '');
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function
@@ -367,20 +366,19 @@
         ghUser ? `<a class="contributor-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}GitHub</a>` : '',
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
-      // The banners are still the contributor's own hand-made background
-      // art; the three rings and both bars are real CSS now instead of
-      // traced PNGs (.hud-ring-gold / .hud-bar-*) -- see .hud's own CSS
-      // comment for why. Every percentage position below still maps
-      // back to the original PSD's/image's real coordinates.
+      // The whole HUD graphic (rings/bars/banners) is the contributor's
+      // own hand-made design -- see .hud's own CSS comment for how each
+      // ring PNG and every percentage position below map back to the
+      // original PSD's real layer coordinates and stacking order.
       return `<article class="contributor-card" style="--elem-color:${elem.color}">` +
         `<div class="hud">` +
           `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
-          `<div class="hud-bar-health" aria-hidden="true"></div>` +
-          `<div class="hud-bar-mana-track" aria-hidden="true"></div>` +
-          `<div class="hud-bar-mana-fill" aria-hidden="true"></div>` +
           mainAvatar +
+          `<img class="hud-ring hud-ring-pfp1" src="/images/contributor-frame-ring-pfp1.png" alt="" aria-hidden="true">` +
           miniAvatar +
+          `<img class="hud-ring hud-ring-pfp2" src="/images/contributor-frame-ring-pfp2.png" alt="" aria-hidden="true">` +
           elementIcon +
+          `<img class="hud-ring hud-ring-element" src="/images/contributor-frame-ring-element.png" alt="" aria-hidden="true">` +
           `<h3 class="hud-name">${escapeHtml(r.name || 'Unknown')}</h3>` +
           `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
           `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
@@ -388,8 +386,7 @@
         // Duplicate of .hud-name -- hidden by default, only shown (with
         // .hud-name itself hidden instead) in the compact Special
         // Thanks grid, where the in-HUD name slot is too small for a
-        // full line without cramming onto 2-3 lines. Full card width
-        // down here instead of that narrow column.
+        // full line without cramming onto 2-3 lines.
         `<p class="contributor-name-below">${escapeHtml(r.name || 'Unknown')}</p>` +
         `<p class="contributor-role">${escapeHtml(roleText)}</p>` +
         `<div class="contributor-links">${links}</div>` +
@@ -405,11 +402,11 @@
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
       const hasBoth = !!ghUser && hasDiscord;
-      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main hud-ring-gold');
+      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main');
       // Discord fills the mini slot when there's a GitHub avatar
       // already occupying the main one, otherwise it's the only photo
       // this contributor has, so it becomes the main avatar instead.
-      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini hud-ring-gold' : 'hud-avatar-main hud-ring-gold');
+      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini' : 'hud-avatar-main');
     });
 
     fitHudNames(container);

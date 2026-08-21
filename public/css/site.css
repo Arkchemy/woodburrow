@@ -525,26 +525,17 @@ code {
   font-size: 0.72rem;
 }
 
-/* Same problem the name had: clamp()'s vw component is relative to the
-   viewport, not this card, so on a normal desktop it computed the same
-   size here as in the big cards regardless of how small the compact
-   grid actually made the box -- these numbers were overflowing their
-   tiny boxes. Fixed rem sizes here instead, sized for the compact
-   card's real width, not the viewport's. */
+/* clamp()'s vw component is relative to the viewport, not this card,
+   so on a normal desktop it computed the same size here as in the big
+   cards regardless of how small the compact grid actually made the
+   box -- these numbers were overflowing their tiny boxes. Fixed rem
+   sizes here instead, sized for the compact card's real width. */
 .contributor-list-compact .hud-repo-count {
   font-size: 0.42rem;
 }
 
 .contributor-list-compact .hud-coin-count {
   font-size: 0.44rem;
-}
-
-/* A 3px border + 2px shadow ring reads fine on a ~130px avatar but
-   looks chunky/disproportionate on a ~40-60px compact one -- thinner
-   ring at this scale. */
-.contributor-list-compact .hud-ring-gold {
-  border-width: 2px;
-  box-shadow: 0 0 0 1px #8a5a12, 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .contributor-card {
@@ -557,69 +548,29 @@ code {
   aspect-ratio: 317 / 188;
 }
 
-.hud-bg {
+.hud-bg,
+.hud-ring {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.hud-bg {
   z-index: 0;
 }
 
-/* The two bars were hand-drawn gradients/shapes in the original PSD and
-   asked to be redone cleanly -- erased from contributor-frame-bg.png
-   (color-matched + a few px of padding to catch anti-aliased edges) and
-   rebuilt here as real CSS gradients instead. Positions come from
-   scanning the original image's actual pixel data for each bar's real
-   color (health bar: green, g>165, r 70-170, b<150; mana bar: cyan,
-   b>190, g>160, r<60) with Python/Pillow, not eyeballed. */
-.hud-bar-health {
-  position: absolute;
-  left: 14.51%;
-  top: 67.02%;
-  width: 82.02%;
-  height: 13.30%;
-  z-index: 0;
-  border-radius: 999px 0 0 999px;
-  clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
-  background: linear-gradient(90deg, #a8e46a 0%, #6bc82c 32%, #2f6e18 70%, #16240f 100%);
-  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+.hud-ring-pfp1 {
+  z-index: 2;
 }
 
-.hud-bar-mana-track {
-  position: absolute;
-  left: 9%;
-  top: 84.57%;
-  width: 88%;
-  height: 8.51%;
-  z-index: 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #1c211c, #050705);
+.hud-ring-pfp2 {
+  z-index: 4;
 }
 
-.hud-bar-mana-fill {
-  position: absolute;
-  left: 29.34%;
-  top: 84.57%;
-  width: 29.97%;
-  height: 8.51%;
-  z-index: 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #7ceaff, #00b8e6 55%, #0090c0);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
-}
-
-/* The three portrait/badge rings used to be separate PNGs traced from
-   the hand-drawn PSD art -- replaced with real CSS borders directly on
-   each avatar instead. A hand-drawn circle is never perfectly round;
-   a CSS border always is, so this is the actual fix for "looks
-   hand-drawn," not just a smoothing pass over the same wobble. It also
-   collapses the z-order: each avatar's ring is now physically part of
-   its own box, so "PFP2 (badge + its ring) above PFP1 (portrait + its
-   ring)" is just two z-index values instead of four interleaved layers. */
-.hud-ring-gold {
-  border: 3px solid #f6d34a;
-  box-shadow: 0 0 0 2px #8a5a12, 0 3px 8px rgba(0, 0, 0, 0.35);
+.hud-ring-element {
+  z-index: 6;
 }
 
 /* FillMaskForPFP1: x=50 y=4 w=132 h=132 -- the big portrait (GitHub,
@@ -656,11 +607,14 @@ code {
 }
 
 /* FillMaskForPFP2: x=162 y=80 w=40 h=40 -- the mini badge (Discord,
-   per "PFP2ProbablyDiscord"). z-index:2, above the main avatar's 1, so
-   the whole badge (photo + its own ring) sits on top where it overlaps
-   the main portrait. Real second photo when a contributor has one;
-   otherwise a Battle Class symbol fallback (see .hud-avatar-battleclass
-   below) so this slot is never empty. */
+   per "PFP2ProbablyDiscord"). z-index:3, above FrameOfPFP1's ring (2)
+   and the main avatar (1) -- matches the PSD's own real stacking order,
+   so the mini badge's photo genuinely sits on top where it overlaps
+   the main portrait's ring, and FrameOfPFP2 (z:4) then frames this
+   badge specifically without bleeding onto the main portrait. Real
+   second photo when a contributor has one; otherwise a Battle Class
+   symbol fallback (see .hud-avatar-battleclass below) so this slot is
+   never empty. */
 .hud-avatar-mini {
   position: absolute;
   left: 51.10%;
@@ -670,7 +624,7 @@ code {
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Fallback for contributors without a second avatar identity: a
@@ -690,9 +644,10 @@ code {
   object-fit: contain;
 }
 
-/* FillMaskForElement: x=7 y=129 w=52 h=52. z-index:3, topmost of the
-   three -- doesn't spatially overlap the PFP1/PFP2 group at all, so
-   this is really just "above the background." */
+/* FillMaskForElement: x=7 y=129 w=52 h=52. z-index:5, below its own
+   FrameOfElement ring (6) but above everything else -- doesn't spatially
+   overlap the PFP1/PFP2 group at all, so this mostly just needs to sit
+   under its own ring. */
 .hud-element {
   position: absolute;
   left: 2.21%;
@@ -701,8 +656,7 @@ code {
   height: 27.66%;
   border-radius: 50%;
   object-fit: contain;
-  background: var(--card-bg);
-  z-index: 3;
+  z-index: 5;
 }
 
 /* Name: x=205 y=113 w=107 h=13 in the PSD, but that box is too short
@@ -775,8 +729,7 @@ code {
 /* Hidden by default -- the main Contributors cards are big enough that
    the name fits fine inside the HUD itself. Special Thanks turns this
    on (and hides .hud-name instead) since its narrow compact column
-   crams a name onto 2-3 tiny lines otherwise -- see
-   .contributor-list-compact below. */
+   crams a name onto 2-3 tiny lines otherwise. */
 .contributor-name-below {
   display: none;
   margin: 8px 0 0;
