@@ -270,8 +270,11 @@
       // A small badge overlapping the portrait's bottom-left corner,
       // like the in-game HUD's own element icon on a character's
       // portrait frame -- only rendered when an element was picked.
+      // The two flange lines are real sibling elements (not the
+      // badge's own ::before/::after) so they can sit behind the
+      // badge's border via real z-index stacking -- see the CSS.
       const elementBadge = elem
-        ? `<span class="contributor-element-badge" title="${escapeHtml(elem.label)} element"><img src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span>`
+        ? `<span class="contributor-element-frame" title="${escapeHtml(elem.label)} element"><span class="contributor-element-flange contributor-element-flange-top"></span><span class="contributor-element-badge"><img src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span><span class="contributor-element-flange contributor-element-flange-bottom"></span></span>`
         : '';
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function

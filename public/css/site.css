@@ -522,15 +522,28 @@ code {
 
 /* Overlaps the portrait's bottom-left corner, like the element icon on
    the real in-game HUD's own character portrait frame. Only rendered
-   when a contributor actually picked an element. This badge -- not the
-   portrait -- is the one with the frame's two flange lines, and its
-   border is always gold too, same as the portrait ring, regardless of
-   which element it's showing. */
-.contributor-element-badge {
+   when a contributor actually picked an element. This frame -- not the
+   portrait -- is the one with the two flange lines. */
+.contributor-element-frame {
   position: absolute;
-  z-index: 1;
   left: -6px;
   bottom: -6px;
+  width: 28px;
+  height: 28px;
+}
+
+/* Badge border is always gold, same as the portrait ring, regardless
+   of which element it's showing. z-index:1 (vs. the flanges' 0) is
+   what actually puts the flanges behind it: a pseudo-element with a
+   negative z-index still paints ABOVE its own parent's background/
+   border (CSS stacking order paints the stacking-context root's own
+   background/border first, then its negative-z-index children on top
+   of that) -- real sibling elements with explicit z-index are the only
+   way to guarantee the flanges render behind the badge instead of
+   over it. */
+.contributor-element-badge {
+  position: relative;
+  z-index: 1;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -542,11 +555,18 @@ code {
   justify-content: center;
 }
 
-.contributor-element-badge::before,
-.contributor-element-badge::after {
-  content: '';
+.contributor-element-badge img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* Centered on the 28px frame box itself (its nearest positioned
+   ancestor), not the badge or the portrait, so it's exactly centered
+   on the badge's own x-axis regardless of anything else on the card. */
+.contributor-element-flange {
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
@@ -556,18 +576,12 @@ code {
   box-shadow: 0 0 0 1px #8a5a12;
 }
 
-.contributor-element-badge::before {
+.contributor-element-flange-top {
   top: -1.5px;
 }
 
-.contributor-element-badge::after {
+.contributor-element-flange-bottom {
   bottom: -1.5px;
-}
-
-.contributor-element-badge img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
 }
 
 /* Same gold-on-dark-outline treatment as the in-game HUD's own
