@@ -12,7 +12,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* Light palette lives on bare :root (the safe default for no-JS/
+           no-media-query cases). Dark redefines the same tokens twice:
+           once under prefers-color-scheme for users with no explicit
+           choice, once under [data-theme="dark"] so the manual toggle
+           below always wins regardless of system preference. */
         :root {
+            --bg: #fafaf9;
+            --bg-raised: #ffffff;
+            --bg-raised-2: #f2f1ee;
+            --border: rgba(20,20,15,0.09);
+            --border-strong: rgba(20,20,15,0.16);
+            --text: #17181a;
+            --text-muted: #55585f;
+            --text-faint: #85888f;
+
+            --accent: #1f8a52;
+            --accent-strong: #17703f;
+            --accent-bg: rgba(31,138,82,0.09);
+            --accent-border: rgba(31,138,82,0.30);
+
+            --gold: #a3711a;
+            --gold-bg: rgba(163,113,26,0.09);
+            --gold-border: rgba(163,113,26,0.30);
+
+            --red: #c53a2f;
+            --red-bg: rgba(197,58,47,0.08);
+            --red-border: rgba(197,58,47,0.28);
+
+            --header-bg: rgba(250,250,249,0.85);
+            --shadow: 0 1px 3px rgba(20,20,15,0.06), 0 8px 24px rgba(20,20,15,0.04);
+
+            --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+            --max: 1080px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0a0b0d;
+                --bg-raised: #111318;
+                --bg-raised-2: #16191f;
+                --border: rgba(255,255,255,0.08);
+                --border-strong: rgba(255,255,255,0.16);
+                --text: #eef0f2;
+                --text-muted: #9aa1ab;
+                --text-faint: #676e78;
+
+                --accent: #3fae6f;
+                --accent-strong: #57cf8a;
+                --accent-bg: rgba(63,174,111,0.12);
+                --accent-border: rgba(63,174,111,0.35);
+
+                --gold: #d3a445;
+                --gold-bg: rgba(211,164,69,0.10);
+                --gold-border: rgba(211,164,69,0.32);
+
+                --red: #e0665f;
+                --red-bg: rgba(224,102,95,0.10);
+                --red-border: rgba(224,102,95,0.32);
+
+                --header-bg: rgba(10,11,13,0.85);
+                --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
+            }
+        }
+        :root[data-theme="dark"] {
             --bg: #0a0b0d;
             --bg-raised: #111318;
             --bg-raised-2: #16191f;
@@ -35,10 +100,8 @@
             --red-bg: rgba(224,102,95,0.10);
             --red-border: rgba(224,102,95,0.32);
 
-            --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-            --max: 1080px;
+            --header-bg: rgba(10,11,13,0.85);
+            --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
         }
 
         * { box-sizing: border-box; }
@@ -47,8 +110,8 @@
             margin: 0;
             background: var(--bg);
             background-image:
-                radial-gradient(ellipse 900px 500px at 15% -10%, rgba(63,174,111,0.07), transparent 60%),
-                radial-gradient(ellipse 700px 400px at 100% 10%, rgba(211,164,69,0.05), transparent 55%);
+                radial-gradient(ellipse 900px 500px at 15% -10%, var(--accent-bg), transparent 60%),
+                radial-gradient(ellipse 700px 400px at 100% 10%, var(--gold-bg), transparent 55%);
             background-attachment: fixed;
             color: var(--text);
             font-family: var(--font);
@@ -64,7 +127,7 @@
         /* ---------- header ---------- */
         header {
             position: sticky; top: 0; z-index: 50;
-            background: rgba(10,11,13,0.85);
+            background: var(--header-bg);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border);
@@ -85,7 +148,7 @@
             color: var(--text-muted); font-size: 0.88rem; font-weight: 600;
             padding: 0.5rem 0.7rem; border-radius: 6px; transition: color 0.15s ease, background 0.15s ease;
         }
-        nav.mainnav button:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+        nav.mainnav button:hover { color: var(--text); background: var(--bg-raised); }
         nav.mainnav button.active { color: var(--accent-strong); }
         .gh-link {
             display: inline-flex; align-items: center; gap: 0.45rem;
@@ -93,8 +156,29 @@
             border: 1px solid var(--border-strong); border-radius: 6px;
             padding: 0.4rem 0.7rem; text-decoration: none; transition: all 0.15s ease;
         }
-        .gh-link:hover { color: var(--text); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.03); }
+        .gh-link:hover { color: var(--text); border-color: var(--text-faint); background: var(--bg-raised); }
         .gh-link .star-count { font-family: var(--mono); color: var(--gold); }
+
+        .theme-toggle {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 34px; height: 34px; flex-shrink: 0;
+            background: var(--bg-raised); border: 1px solid var(--border-strong); border-radius: 7px;
+            color: var(--text-muted); cursor: pointer; transition: all 0.15s ease;
+        }
+        .theme-toggle:hover { color: var(--text); border-color: rgba(127,127,127,0.4); background: var(--bg-raised-2); }
+        /* Icon shown is the theme a click switches *to*: moon while
+           light (offering dark), sun while dark (offering light).
+           Default (no explicit choice, light system pref) is light, so
+           the moon shows by default and only the dark-triggering cases
+           below flip to the sun. */
+        .theme-toggle .icon-moon { display: block; }
+        .theme-toggle .icon-sun { display: none; }
+        @media (prefers-color-scheme: dark) {
+            html:not([data-theme]) .theme-toggle .icon-moon { display: none; }
+            html:not([data-theme]) .theme-toggle .icon-sun { display: block; }
+        }
+        :root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+        :root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 
         /* ---------- generic ---------- */
         main { padding: 0 0 5rem; }
@@ -127,7 +211,7 @@
         .btn-primary { background: var(--accent); color: #06120a; }
         .btn-primary:hover { background: var(--accent-strong); }
         .btn-secondary { background: var(--bg-raised); color: var(--text); border-color: var(--border-strong); }
-        .btn-secondary:hover { border-color: rgba(255,255,255,0.35); background: var(--bg-raised-2); }
+        .btn-secondary:hover { border-color: var(--text-faint); background: var(--bg-raised-2); }
         .btn-sm { padding: 0.5rem 0.9rem; font-size: 0.82rem; border-radius: 6px; }
 
         .badge {
@@ -147,6 +231,7 @@
         .card {
             background: linear-gradient(180deg, var(--bg-raised), var(--bg-raised-2));
             border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem;
+            box-shadow: var(--shadow);
         }
 
         .notice {
@@ -296,6 +381,22 @@
             header .inner { padding-bottom: 0.6rem; }
         }
     </style>
+    <script>
+        // Applied synchronously, before first paint, so a saved theme
+        // choice never flashes the wrong palette on load. Only sets the
+        // attribute when the user has explicitly chosen away from their
+        // system preference -- otherwise the CSS's own prefers-color-
+        // scheme media query is left to decide, so it keeps following
+        // the OS/browser setting live if that changes later.
+        (function () {
+            try {
+                var saved = localStorage.getItem('bramble-theme');
+                if (saved === 'light' || saved === 'dark') {
+                    document.documentElement.setAttribute('data-theme', saved);
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 <body>
 
@@ -317,6 +418,10 @@
                 <span>GitHub</span>
                 <span id="headerStars" class="star-count"></span>
             </a>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme" title="Toggle theme">
+                <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+                <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+            </button>
         </div>
     </header>
 
@@ -357,23 +462,23 @@
                         <div class="card-label"><span>RECOMPILATION PIPELINE</span><span style="color:var(--accent-strong)">0% RUNTIME OVERHEAD</span></div>
                         <svg width="100%" height="200" viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="8" y="70" width="130" height="60" rx="8" fill="var(--bg)" stroke="var(--border-strong)"/>
-                            <text x="73" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="#eef0f2" text-anchor="middle">Wii U Binary</text>
-                            <text x="73" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="#676e78" text-anchor="middle">PowerPC / .rpx</text>
+                            <text x="73" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--text)" text-anchor="middle">Wii U Binary</text>
+                            <text x="73" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--text-faint)" text-anchor="middle">PowerPC / .rpx</text>
 
                             <path d="M140 100H190" stroke="var(--accent-border)" stroke-width="1.5"/>
-                            <polygon points="190,96 198,100 190,104" fill="#3fae6f"/>
+                            <polygon points="190,96 198,100 190,104" fill="var(--accent)"/>
 
-                            <rect x="200" y="55" width="150" height="90" rx="8" fill="rgba(63,174,111,0.08)" stroke="var(--accent-border)"/>
-                            <text x="275" y="88" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#57cf8a" text-anchor="middle">Bramble</text>
-                            <text x="275" y="104" font-family="JetBrains Mono, monospace" font-size="10" fill="#9aa1ab" text-anchor="middle">static translation</text>
-                            <text x="275" y="120" font-family="JetBrains Mono, monospace" font-size="10" fill="#9aa1ab" text-anchor="middle">+ CafeOS shim layer</text>
+                            <rect x="200" y="55" width="150" height="90" rx="8" fill="var(--accent-bg)" stroke="var(--accent-border)"/>
+                            <text x="275" y="88" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="var(--accent-strong)" text-anchor="middle">Bramble</text>
+                            <text x="275" y="104" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--text-muted)" text-anchor="middle">static translation</text>
+                            <text x="275" y="120" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--text-muted)" text-anchor="middle">+ CafeOS shim layer</text>
 
                             <path d="M352 100H402" stroke="var(--accent-border)" stroke-width="1.5"/>
-                            <polygon points="402,96 410,100 402,104" fill="#3fae6f"/>
+                            <polygon points="402,96 410,100 402,104" fill="var(--accent)"/>
 
                             <rect x="412" y="70" width="100" height="60" rx="8" fill="var(--bg)" stroke="var(--border-strong)"/>
-                            <text x="462" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="#eef0f2" text-anchor="middle">ARM64</text>
-                            <text x="462" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="#676e78" text-anchor="middle">native .nro</text>
+                            <text x="462" y="96" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600" fill="var(--text)" text-anchor="middle">ARM64</text>
+                            <text x="462" y="113" font-family="JetBrains Mono, monospace" font-size="10" fill="var(--text-faint)" text-anchor="middle">native .nro</text>
                         </svg>
                     </div>
                 </div>
@@ -427,6 +532,13 @@
                             <div>
                                 <h3>Complete game links and boots</h3>
                                 <p>The actual, complete recompiled game — not a test program — links and runs on real hardware via its real entry point. Post-boot correctness work is ongoing; see the repository for current status.</p>
+                            </div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-num">7</div>
+                            <div>
+                                <h3>Real controller input, live diagnostics, and a genuine heap-leak fix</h3>
+                                <p>Wii U GamePad input now reaches the recompiled game for real over the Switch's own controller. A genuine memory leak in the CafeOS heap shim — silently exhausting the game's own memory during its real static initializers — was root-caused and fixed using live, on-device instrumentation rather than guesswork. Post-boot correctness work continues; the game does not yet reach real gameplay.</p>
                             </div>
                         </div>
                     </div>
@@ -620,6 +732,18 @@
         // ---------------------------------------------------------------
         const GITHUB_REPO = 'aaronateataco/thornybush';
         const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
+
+        // Toggle overrides whatever the current *effective* theme is
+        // (explicit choice if one's saved, else system preference) and
+        // persists the result -- so a first click always visibly flips
+        // the page regardless of which state it started in.
+        function toggleTheme() {
+            const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+            const current = document.documentElement.getAttribute('data-theme') || (dark ? 'dark' : 'light');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try { localStorage.setItem('bramble-theme', next); } catch (e) {}
+        }
 
         const LANG_COLORS = {
             'C': '#8a8f98', 'C++': '#e8739a', 'HTML': '#e0794a', 'Shell': '#7fc97f',
