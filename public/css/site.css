@@ -495,10 +495,9 @@ code {
 
 /* Portrait ring is a fixed gold, not element-tinted -- this matches
    the real in-game HUD character nameplate (the portrait frame is
-   always gold regardless of which element that character is). The
-   flanges (::before/::after) are the two short horizontal bars the
-   real frame has poking out above and below the circle -- also always
-   gold, same as the ring itself. */
+   always gold regardless of which element that character is). Plain
+   ring, no flanges here -- those belong to the element badge below,
+   not the portrait. */
 .contributor-avatar {
   width: 72px;
   height: 72px;
@@ -508,28 +507,6 @@ code {
   border: 3px solid #f6d34a;
   box-shadow: 0 0 0 2px #8a5a12, 0 4px 10px rgba(0, 0, 0, 0.35);
   display: block;
-}
-
-.contributor-avatar-wrap::before,
-.contributor-avatar-wrap::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92px;
-  height: 4px;
-  border-radius: 2px;
-  background: #f6d34a;
-  box-shadow: 0 0 0 1px #8a5a12;
-}
-
-.contributor-avatar-wrap::before {
-  top: -2px;
-}
-
-.contributor-avatar-wrap::after {
-  bottom: -2px;
 }
 
 .contributor-avatar-fallback {
@@ -545,7 +522,10 @@ code {
 
 /* Overlaps the portrait's bottom-left corner, like the element icon on
    the real in-game HUD's own character portrait frame. Only rendered
-   when a contributor actually picked an element. */
+   when a contributor actually picked an element. This badge -- not the
+   portrait -- is the one with the frame's two flange lines, and its
+   border is always gold too, same as the portrait ring, regardless of
+   which element it's showing. */
 .contributor-element-badge {
   position: absolute;
   z-index: 1;
@@ -555,11 +535,33 @@ code {
   height: 28px;
   border-radius: 50%;
   background: var(--card-bg);
-  border: 2px solid var(--elem-color);
+  border: 2px solid #f6d34a;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.contributor-element-badge::before,
+.contributor-element-badge::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  border-radius: 1.5px;
+  background: #f6d34a;
+  box-shadow: 0 0 0 1px #8a5a12;
+}
+
+.contributor-element-badge::before {
+  top: -1.5px;
+}
+
+.contributor-element-badge::after {
+  bottom: -1.5px;
 }
 
 .contributor-element-badge img {
@@ -572,7 +574,7 @@ code {
    character nameplate text (see the reference screenshot this was
    built from -- e.g. "MYSTICAT"/"EMBER" next to the portrait). */
 .contributor-name {
-  margin: -6px 0 0;
+  margin: 0;
   min-width: 0;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
   font-weight: 400;
@@ -587,12 +589,16 @@ code {
     0 0 14px rgba(255, 213, 74, 0.35);
 }
 
+/* 50px matches the element badge's own top edge (28px tall, bottom
+   offset -6px against the 72px portrait: 72 + 6 - 28 = 50) -- the name
+   sits level with the top of the badge, not the top of the portrait. */
 .contributor-name-col {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 0;
   flex: 1;
+  margin-top: 50px;
 }
 
 /* Always this green -- a flat health bar, not tinted per element (the
