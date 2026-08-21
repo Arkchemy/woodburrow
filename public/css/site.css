@@ -1,0 +1,51 @@
+/* Contributors page only -- deliberately scoped to .contributor-* classes
+   so it doesn't touch the general site layout, which is being styled
+   separately by hand. */
+
+.contributor-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.contributor-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.contributor-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #334155;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.contributor-info {
+  min-width: 0;
+}
+
+.contributor-info h3 {
+  margin: 0 0 2px;
+}
+
+.contributor-info p {
+  margin: 0 0 4px;
+}
+
+.contributor-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.contributor-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}

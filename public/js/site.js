@@ -135,6 +135,17 @@
     return cells;
   }
 
+  // GitHub's own avatar-by-username endpoint (github.com/{user}.png) is
+  // real and genuinely public, no auth needed -- unlike Discord, which
+  // has no equivalent unauthenticated lookup (see fetchContributors'
+  // own comment). So a contributor with a known GitHub gets a real
+  // photo; a Discord-only contributor gets an initial instead.
+  function githubUsernameFromUrl(url){
+    if (!url || url === 'n/a') return null;
+    const m = url.match(/github\.com\/([^\/?#]+)/i);
+    return m ? m[1] : null;
+  }
+
   function renderContributors(rows, container){
     if (!rows.length){
       container.innerHTML = '<div class="empty">No contributors listed.</div>';
@@ -143,10 +154,16 @@
     const items = rows.map(r => {
       const contact = r.contact && r.contact !== 'n/a' ? `<div class="meta">${escapeHtml(r.contact)}</div>` : '';
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
-      const name = hasDiscord
-        ? `<a href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.name || 'Unknown')}</a>`
-        : escapeHtml(r.name || 'Unknown');
-      return `<article class="project-card"><h3>${name}</h3><p>${escapeHtml(r.role || '')}</p>${contact}</article>`;
+      const ghUser = githubUsernameFromUrl(r.github_url);
+      const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
+      const avatar = ghUser
+        ? `<img class="contributor-avatar" src="https://github.com/${encodeURIComponent(ghUser)}.png" alt="" loading="lazy">`
+        : `<div class="contributor-avatar contributor-avatar-fallback">${escapeHtml(initial)}</div>`;
+      const links = [
+        hasDiscord ? `<a class="contributor-link" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">Discord</a>` : '',
+        ghUser ? `<a class="contributor-link" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''
+      ].filter(Boolean).join(' ');
+      return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}<div class="contributor-links">${links}</div></div></article>`;
     }).join('');
     container.innerHTML = items;
   }
