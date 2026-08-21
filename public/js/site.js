@@ -288,10 +288,12 @@
       ].filter(Boolean).join(' ');
       const style = elem ? ` style="--elem-color:${elem.color}"` : '';
       // No card frame (no background/border/shadow box) -- just the
-      // portrait+name HUD row, a flat health-bar-green stat bar, then
-      // role/links underneath, all left-aligned like the real in-game
-      // nameplate this is modeled on.
-      return `<article class="contributor-card"${style}><div class="contributor-header"><div class="contributor-avatar-wrap">${avatar}${elementBadge}</div><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3></div><div class="contributor-health-bar"><div class="contributor-health-fill"></div></div><p class="contributor-role">${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></article>`;
+      // portrait+name HUD row, a flat health-bar-green stat bar sitting
+      // right under the name (pulled back behind the portrait via
+      // negative margin, see .contributor-health-bar), then role/links
+      // underneath, all left-aligned like the real in-game nameplate
+      // this is modeled on.
+      return `<article class="contributor-card"${style}><div class="contributor-header"><div class="contributor-avatar-wrap">${avatar}${elementBadge}</div><div class="contributor-name-col"><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3><div class="contributor-health-bar"><div class="contributor-health-fill"></div></div></div></div><p class="contributor-role">${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></article>`;
     }).join('');
     container.innerHTML = items;
 

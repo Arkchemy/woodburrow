@@ -489,6 +489,7 @@ code {
 
 .contributor-avatar-wrap {
   position: relative;
+  z-index: 2;
   flex-shrink: 0;
 }
 
@@ -560,10 +561,25 @@ code {
     0 0 14px rgba(255, 213, 74, 0.35);
 }
 
+.contributor-name-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
 /* Always this green -- a flat health bar, not tinted per element (the
-   element now lives only in the small portrait badge above). */
+   element now lives only in the small portrait badge above). Sits
+   directly under the name, and the negative margin pulls its left
+   edge back out to the card's own left edge -- behind the portrait
+   (z-index 1 vs. the portrait's 2) -- matching the real in-game HUD,
+   where the bar runs the full width and the portrait sits on top of
+   its left end rather than the bar starting only after the portrait. */
 .contributor-health-bar {
-  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+  margin-left: -84px;
   height: 12px;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.15);
