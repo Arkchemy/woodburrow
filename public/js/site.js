@@ -210,8 +210,20 @@
   // looking up an arbitrary user's profile from client-side JS (that
   // needs a bot token behind a real server), so this just renders
   // name/role/contact straight from the CSV for now.
+  // Split into the two sections the page actually shows: real named
+  // roles at the top (Founder, AI assistant, project direction,
+  // specific RE credit, etc.) vs. the generic "Special Thanks --
+  // Community Research" role, which gets its own smaller, more compact
+  // section below rather than the full HUD card treatment -- that
+  // treatment doesn't scale well to a longer list of people who mostly
+  // just have a name and a link, not a distinct role to show off.
+  function isSpecialThanks(role){
+    return /^special thanks/i.test((role || '').trim());
+  }
+
   async function fetchContributors(){
     const container = document.getElementById('contributors-list');
+    const specialThanksContainer = document.getElementById('contributors-special-thanks');
     if (!container) return;
     container.innerHTML = '<div class="loading">Loading contributors…</div>';
     const url = cacheBusted('https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/CONTRIBUTORS.csv');
@@ -219,7 +231,11 @@
       const res = await fetch(url);
       if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
       const text = await res.text();
-      renderContributors(parseCsv(text), container);
+      const rows = parseCsv(text);
+      const main = rows.filter(r => !isSpecialThanks(r.role));
+      const thanks = rows.filter(r => isSpecialThanks(r.role));
+      renderContributors(main, container);
+      if (specialThanksContainer) renderSpecialThanks(thanks, specialThanksContainer);
     } catch (err) {
       container.innerHTML = `<div class="error">Could not load contributors: ${err.message}</div>`;
     }
@@ -368,6 +384,44 @@
     });
 
     fitHudNames(container);
+  }
+
+  // Compact chip list for the "Special Thanks" role -- a small avatar,
+  // name, and icon-only GitHub/Discord links, none of the full HUD
+  // graphic. That treatment doesn't scale to a longer list of people
+  // who mostly just have a name and a link, not a distinct role.
+  function renderSpecialThanks(rows, container){
+    if (!rows.length){
+      container.innerHTML = '';
+      return;
+    }
+    const items = rows.map((r, i) => {
+      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
+      const ghUser = githubUsernameFromUrl(r.github_url);
+      const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
+      const avatarId = `special-thanks-avatar-${i}`;
+      const ghLinkId = `special-thanks-gh-${i}`;
+      const dcLinkId = `special-thanks-dc-${i}`;
+      const avatar = ghUser
+        ? `<img class="special-thanks-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
+        : `<div class="special-thanks-avatar special-thanks-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
+      const links = [
+        ghUser ? `<a class="special-thanks-icon-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}</a>` : '',
+        hasDiscord ? `<a class="special-thanks-icon-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}</a>` : ''
+      ].filter(Boolean).join('');
+      return `<div class="special-thanks-item">${avatar}<span class="special-thanks-name">${escapeHtml(r.name || 'Unknown')}</span><span class="special-thanks-links">${links}</span></div>`;
+    }).join('');
+    container.innerHTML = items;
+
+    rows.forEach((r, i) => {
+      const avatarId = `special-thanks-avatar-${i}`;
+      const ghLinkId = `special-thanks-gh-${i}`;
+      const dcLinkId = `special-thanks-dc-${i}`;
+      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
+      const ghUser = githubUsernameFromUrl(r.github_url);
+      if (ghUser) fillGithubInfo(ghUser, avatarId, ghLinkId, 'special-thanks-avatar');
+      else if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, dcLinkId, 'special-thanks-avatar');
+    });
   }
 
   // The CSS clamp() on .hud-name gets most names to a reasonable size,

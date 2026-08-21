@@ -726,6 +726,78 @@ code {
   }
 }
 
+/* Special Thanks -- a compact chip list (small avatar + name + icon
+   links), not the full HUD card treatment above. That treatment is
+   built for a handful of named-role contributors; it doesn't scale to
+   a longer list of people who mostly just have a name and a link. */
+.special-thanks-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.special-thanks-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px 6px 6px;
+  box-shadow: var(--shadow);
+}
+
+.special-thanks-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg);
+  display: block;
+}
+
+.special-thanks-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nav-bg);
+  color: var(--nav-fg);
+  font-weight: 700;
+  font-size: 0.8rem;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+}
+
+.special-thanks-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.special-thanks-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.special-thanks-icon-link {
+  display: inline-flex;
+  color: var(--fg-muted);
+  transition: color 0.15s ease;
+}
+
+.special-thanks-icon-link:hover {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .special-thanks-icon-link {
+    transition: none;
+  }
+}
+
 /* Footer */
 .site-footer {
   position: relative;
