@@ -348,6 +348,14 @@
       const elementIcon = `<img class="hud-element hud-ring-gold" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
       const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
       const coinCount = coinCountFor(r.discord_id, r.name);
+      // Drop a redundant "Special Thanks -- " prefix from the role
+      // text -- the Special Thanks section it's rendered under already
+      // says that once, in the heading. Only ever matches rows that
+      // legitimately have that prefix (i.e. ones already headed for
+      // that section by isSpecialThanks), so this is a no-op for
+      // everyone else -- e.g. NefariousTechSupport/winnernombre's real,
+      // distinct role text is untouched.
+      const roleText = (r.role || '').replace(/^special thanks\s*--\s*/i, '');
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function
       // needed) whenever a contributor has one. The real fetched
@@ -359,14 +367,17 @@
         ghUser ? `<a class="contributor-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}GitHub</a>` : '',
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
-      // The bars/banners are the contributor's own hand-made background
-      // art; the three rings are real CSS borders now (.hud-ring-gold),
-      // not PNGs -- see .hud's own CSS comment for why. Every percentage
-      // position below still maps back to the original PSD's real layer
-      // coordinates.
+      // The banners are still the contributor's own hand-made background
+      // art; the three rings and both bars are real CSS now instead of
+      // traced PNGs (.hud-ring-gold / .hud-bar-*) -- see .hud's own CSS
+      // comment for why. Every percentage position below still maps
+      // back to the original PSD's/image's real coordinates.
       return `<article class="contributor-card" style="--elem-color:${elem.color}">` +
         `<div class="hud">` +
           `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
+          `<div class="hud-bar-health" aria-hidden="true"></div>` +
+          `<div class="hud-bar-mana-track" aria-hidden="true"></div>` +
+          `<div class="hud-bar-mana-fill" aria-hidden="true"></div>` +
           mainAvatar +
           miniAvatar +
           elementIcon +
@@ -374,7 +385,13 @@
           `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
           `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
         `</div>` +
-        `<p class="contributor-role">${escapeHtml(r.role || '')}</p>` +
+        // Duplicate of .hud-name -- hidden by default, only shown (with
+        // .hud-name itself hidden instead) in the compact Special
+        // Thanks grid, where the in-HUD name slot is too small for a
+        // full line without cramming onto 2-3 lines. Full card width
+        // down here instead of that narrow column.
+        `<p class="contributor-name-below">${escapeHtml(r.name || 'Unknown')}</p>` +
+        `<p class="contributor-role">${escapeHtml(roleText)}</p>` +
         `<div class="contributor-links">${links}</div>` +
       `</article>`;
     }).join('');

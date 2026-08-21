@@ -512,19 +512,17 @@ code {
   padding: 3px 7px;
 }
 
-/* Fixed small size + real wrapping instead of the main list's
-   shrink-to-fit -- these are mostly single unbroken words (usernames),
-   too long for any reasonably legible single-line size in a card this
-   narrow. overflow-wrap: anywhere allows a mid-word break only when a
-   whole word can't fit, same as a real HUD nameplate would just run
-   the name onto a second line rather than shrinking it illegibly small. */
+/* The in-HUD name slot is too small at compact scale to hold a full
+   name without cramming it onto 2-3 tiny lines -- hidden here in favor
+   of .contributor-name-below instead, which gets the card's full width
+   underneath the graphic. */
 .contributor-list-compact .hud-name {
-  white-space: normal;
-  overflow-wrap: anywhere;
-  align-items: flex-start;
-  height: 22%;
-  font-size: 0.52rem;
-  line-height: 1.15;
+  display: none;
+}
+
+.contributor-list-compact .contributor-name-below {
+  display: block;
+  font-size: 0.72rem;
 }
 
 /* Same problem the name had: clamp()'s vw component is relative to the
@@ -566,6 +564,49 @@ code {
   height: 100%;
   pointer-events: none;
   z-index: 0;
+}
+
+/* The two bars were hand-drawn gradients/shapes in the original PSD and
+   asked to be redone cleanly -- erased from contributor-frame-bg.png
+   (color-matched + a few px of padding to catch anti-aliased edges) and
+   rebuilt here as real CSS gradients instead. Positions come from
+   scanning the original image's actual pixel data for each bar's real
+   color (health bar: green, g>165, r 70-170, b<150; mana bar: cyan,
+   b>190, g>160, r<60) with Python/Pillow, not eyeballed. */
+.hud-bar-health {
+  position: absolute;
+  left: 14.51%;
+  top: 67.02%;
+  width: 82.02%;
+  height: 13.30%;
+  z-index: 0;
+  border-radius: 999px 0 0 999px;
+  clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg, #a8e46a 0%, #6bc82c 32%, #2f6e18 70%, #16240f 100%);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.hud-bar-mana-track {
+  position: absolute;
+  left: 9%;
+  top: 84.57%;
+  width: 88%;
+  height: 8.51%;
+  z-index: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #1c211c, #050705);
+}
+
+.hud-bar-mana-fill {
+  position: absolute;
+  left: 29.34%;
+  top: 84.57%;
+  width: 29.97%;
+  height: 8.51%;
+  z-index: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #7ceaff, #00b8e6 55%, #0090c0);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* The three portrait/badge rings used to be separate PNGs traced from
@@ -729,6 +770,22 @@ code {
   color: #ffd54a;
   text-shadow: 0 1px 0 #6b4400, 0 1px 2px rgba(0, 0, 0, 0.6);
   z-index: 7;
+}
+
+/* Hidden by default -- the main Contributors cards are big enough that
+   the name fits fine inside the HUD itself. Special Thanks turns this
+   on (and hides .hud-name instead) since its narrow compact column
+   crams a name onto 2-3 tiny lines otherwise -- see
+   .contributor-list-compact below. */
+.contributor-name-below {
+  display: none;
+  margin: 8px 0 0;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-size: 0.85rem;
+  line-height: 1.15;
+  color: var(--fg);
 }
 
 .contributor-role {
