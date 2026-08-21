@@ -11,10 +11,32 @@
         <li><a href="/contributors.html">Contributors</a></li>
         <li><a href="/license.html">License</a></li>
         <li><a href="#" id="repos-toggle">Repos</a></li>
+        <li><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme">🌓</button></li>
       </ul>
     </div>
   </nav>
   `;
+
+  const THEME_KEY = 'arkchemy-theme';
+
+  function applyStoredTheme(){
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored === 'dark' || stored === 'light') {
+      document.documentElement.setAttribute('data-theme', stored);
+    }
+  }
+
+  function toggleTheme(){
+    const current = document.documentElement.getAttribute('data-theme')
+      || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(THEME_KEY, next);
+  }
+
+  // Applied immediately (not waiting for DOMContentLoaded) so the page
+  // doesn't flash the wrong theme for a frame before this script runs.
+  applyStoredTheme();
 
   document.addEventListener('DOMContentLoaded', () => {
     injectNavbar();
@@ -52,6 +74,9 @@
 
     const toggle = document.getElementById('repos-toggle');
     if (toggle) toggle.addEventListener('click', (ev) => { ev.preventDefault(); toggleRepos(); });
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
   }
 
   async function fetchRepos(user = 'Arkchemy'){
@@ -151,14 +176,21 @@
       container.innerHTML = '<div class="empty">No contributors listed.</div>';
       return;
     }
-    const items = rows.map(r => {
+    const items = rows.map((r, i) => {
       const contact = r.contact && r.contact !== 'n/a' ? `<div class="meta">${escapeHtml(r.contact)}</div>` : '';
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
       const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
+      // GitHub avatar (real, public, no auth) takes priority since it's
+      // reliable; a Discord-only contributor gets a real id so a later
+      // pass can try filling in a real Discord avatar, with the initial
+      // as the img's own fallback if that fetch fails or is blocked.
+      const avatarId = `contributor-avatar-${i}`;
       const avatar = ghUser
-        ? `<img class="contributor-avatar" src="https://github.com/${encodeURIComponent(ghUser)}.png" alt="" loading="lazy">`
-        : `<div class="contributor-avatar contributor-avatar-fallback">${escapeHtml(initial)}</div>`;
+        ? `<img class="contributor-avatar" id="${avatarId}" src="https://github.com/${encodeURIComponent(ghUser)}.png" alt="" loading="lazy">`
+        : hasDiscord
+          ? `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}" data-discord-id="${escapeHtml(r.discord_id)}">${escapeHtml(initial)}</div>`
+          : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
       const links = [
         hasDiscord ? `<a class="contributor-link" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">Discord</a>` : '',
         ghUser ? `<a class="contributor-link" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''
@@ -166,6 +198,46 @@
       return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}<div class="contributor-links">${links}</div></div></article>`;
     }).join('');
     container.innerHTML = items;
+    fillDiscordAvatars(container);
+  }
+
+  // Best-effort real Discord avatars for contributors who only have a
+  // Discord id, via a real, widely-used but *unofficial* third-party
+  // proxy (dcdn.dstn.ru) that mirrors public Discord profile data --
+  // Discord itself has no public, unauthenticated API for looking up an
+  // arbitrary user's avatar from client-side JS (that needs a bot token
+  // behind a real server). Not Discord's own service, so this can go
+  // down or change shape without warning -- every fetch is wrapped so a
+  // failure just leaves the existing initial-letter fallback in place,
+  // never a broken image or a thrown error.
+  async function fillDiscordAvatars(container){
+    const targets = container.querySelectorAll('.contributor-avatar-fallback[data-discord-id]');
+    await Promise.all(Array.from(targets).map(async (el) => {
+      const id = el.dataset.discordId;
+      try {
+        const res = await fetch(`https://dcdn.dstn.ru/profile/${encodeURIComponent(id)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const hash = data && (data.avatar || (data.user && data.user.avatar));
+        if (!hash) return;
+        const ext = hash.startsWith('a_') ? 'gif' : 'png';
+        const img = new Image();
+        img.onload = () => {
+          const replacement = document.createElement('img');
+          replacement.className = 'contributor-avatar';
+          replacement.id = el.id;
+          replacement.loading = 'lazy';
+          replacement.alt = '';
+          replacement.src = img.src;
+          el.replaceWith(replacement);
+        };
+        img.src = `https://cdn.discordapp.com/avatars/${encodeURIComponent(id)}/${hash}.${ext}?size=128`;
+      } catch (err) {
+        // Proxy unreachable/blocked/changed shape -- leave the initial
+        // letter in place, this is a real, expected possibility, not a
+        // bug to surface to the visitor.
+      }
+    }));
   }
 
   function renderRepos(repos, container){
