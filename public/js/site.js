@@ -59,14 +59,35 @@
     water: { label: 'Water', color: '#2196f3', img: 'water.webp' },
   };
 
+  // Real Skylanders "Non-Elemental" symbol -- shown for contributors who
+  // haven't picked an element, so the badge always has something in it
+  // rather than being conditionally absent.
+  const NON_ELEMENTAL = { label: 'Non-Elemental', color: '#9e9e9e', img: 'nonelemental.webp' };
+
   function elementInfoFor(name){
-    if (!name) return null;
+    if (!name || name === 'n/a') return NON_ELEMENTAL;
     const key = name.trim().toLowerCase();
-    return ELEMENT_INFO[key] || null;
+    return ELEMENT_INFO[key] || NON_ELEMENTAL;
   }
 
   function elementImageUrl(path){
     return `/images/elements/${path}`;
+  }
+
+  // Real Imaginators Battle Class symbols (self-hosted, recolored gold to
+  // match the frame) -- used as the mini-badge filler for contributors
+  // who don't have a second avatar identity to show there. Picked
+  // deterministically per contributor (see battleClassFor) rather than
+  // randomly, so it's the same every visit.
+  const BATTLE_CLASSES = [
+    'brawler', 'sorcerer', 'smasher', 'bowslinger', 'knight',
+    'quickshot', 'sentinel', 'ninja', 'bazooker', 'swashbuckler',
+  ];
+
+  function battleClassFor(seed){
+    let h = 11;
+    for (const ch of String(seed || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    return BATTLE_CLASSES[h % BATTLE_CLASSES.length];
   }
 
   const THEME_KEY = 'arkchemy-theme';
@@ -286,18 +307,15 @@
       const mainAvatar = ghUser
         ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
-      // Mini badge (PSD: "PFP2ProbablyDiscord") only makes sense as a
-      // *second* identity next to the main one -- only rendered when a
-      // contributor genuinely has both, so it never sits empty. The
-      // matching frame image (contributor-frame-fg-nomini.png) drops
-      // that ring outline entirely when this is absent.
+      // Mini badge (PSD: "PFP2ProbablyDiscord") is a real second identity
+      // when a contributor has both GitHub and Discord -- otherwise
+      // there's no second photo to show there, so it falls back to a
+      // deterministically-picked Battle Class symbol (gold, matching
+      // the frame) on a solid dark-blue fill instead of sitting empty.
       const miniAvatar = hasBoth
         ? `<div class="hud-avatar-mini hud-avatar-fallback" id="${miniAvatarId}"></div>`
-        : '';
-      const frameFg = hasBoth ? 'contributor-frame-fg.png' : 'contributor-frame-fg-nomini.png';
-      const elementIcon = elem
-        ? `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`
-        : '';
+        : `<div class="hud-avatar-mini hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
+      const elementIcon = `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
       const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
       const coinCount = coinCountFor(r.discord_id, r.name);
       // GitHub first, Discord second -- GitHub is the priority source
@@ -311,19 +329,18 @@
         ghUser ? `<a class="contributor-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}GitHub</a>` : '',
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
-      const style = elem ? ` style="--elem-color:${elem.color}"` : '';
       // The whole HUD graphic (rings/bars/banners) is the contributor's
       // own hand-made design -- see .hud's own CSS comment for how the
       // two PNG layers and every percentage position below map back to
       // the original PSD's real layer coordinates.
-      return `<article class="contributor-card"${style}>` +
+      return `<article class="contributor-card" style="--elem-color:${elem.color}">` +
         `<div class="hud">` +
           `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
           mainAvatar + miniAvatar + elementIcon +
           `<h3 class="hud-name">${escapeHtml(r.name || 'Unknown')}</h3>` +
           `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
           `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
-          `<img class="hud-fg" src="/images/${frameFg}" alt="" aria-hidden="true">` +
+          `<img class="hud-fg" src="/images/contributor-frame-fg.png" alt="" aria-hidden="true">` +
         `</div>` +
         `<p class="contributor-role">${escapeHtml(r.role || '')}</p>` +
         `<div class="contributor-links">${links}</div>` +
@@ -344,6 +361,27 @@
       // already occupying the main one, otherwise it's the only photo
       // this contributor has, so it becomes the main avatar instead.
       if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini' : 'hud-avatar-main');
+    });
+
+    fitHudNames(container);
+  }
+
+  // The CSS clamp() on .hud-name gets most names to a reasonable size,
+  // but names vary too much in length for one static size to fit every
+  // one of them in this fairly narrow column -- long ones (e.g.
+  // "NefariousTechSupport") still need to shrink further than short
+  // ones ("Claude") to avoid overflowing. scrollWidth reflects the
+  // text's real rendered width regardless of the `overflow: visible`
+  // on .hud-name, so this reliably detects overflow and steps the font
+  // down until it actually fits, rather than clipping or spilling out.
+  function fitHudNames(container){
+    container.querySelectorAll('.hud-name').forEach(el => {
+      let tries = 0;
+      while (el.scrollWidth > el.clientWidth && tries < 24) {
+        const current = parseFloat(getComputedStyle(el).fontSize);
+        el.style.fontSize = Math.max(current - 0.5, 7) + 'px';
+        tries++;
+      }
     });
   }
 

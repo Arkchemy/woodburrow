@@ -551,10 +551,11 @@ code {
 }
 
 /* FillMaskForPFP2: x=162 y=80 w=40 h=40 -- the mini badge (Discord,
-   per "PFP2ProbablyDiscord"). Only rendered when there's a genuine
-   second identity to show alongside the main avatar (see
-   renderContributors) -- the matching contributor-frame-fg-nomini.png
-   variant drops its ring outline when this is absent. */
+   per "PFP2ProbablyDiscord"). z-index:2, above the main avatar's 1, so
+   it always sits on top where the two would ever overlap. Real second
+   photo when a contributor has one; otherwise a Battle Class symbol
+   fallback (see .hud-avatar-battleclass below) so this slot is never
+   empty. */
 .hud-avatar-mini {
   position: absolute;
   left: 51.10%;
@@ -565,6 +566,23 @@ code {
   object-fit: cover;
   background: var(--bg);
   z-index: 2;
+}
+
+/* Fallback for contributors without a second avatar identity: a
+   deterministically-picked Battle Class symbol (self-hosted, recolored
+   gold to match the frame -- see battleClassFor in site.js) on a solid
+   dark-blue fill, rather than leaving the badge empty. */
+.hud-avatar-battleclass {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #141851;
+}
+
+.hud-avatar-battleclass img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
 }
 
 /* FillMaskForElement: x=7 y=129 w=52 h=52. Only rendered when a
@@ -580,28 +598,36 @@ code {
   z-index: 1;
 }
 
-/* Name: x=205 y=113 w=107 h=13. Same gold-on-dark-outline treatment as
-   the in-game HUD's own character nameplate text. */
+/* Name: x=205 y=113 w=107 h=13 in the PSD, but that box is too short
+   for Luckiest Guy's actual glyph metrics at any real font-size --
+   ascenders were getting clipped at the top by overflow:hidden. Height
+   bumped up and the top edge nudged up to compensate, `overflow:
+   visible` so nothing clips, and a smaller base clamp() (further
+   reduced per-name in JS for long names -- see fitHudNames in
+   renderContributors) so long names shrink to fit this fairly narrow
+   column instead of overflowing it. Left-aligned throughout (no
+   justify-content override -- flex's own default is flex-start). */
 .hud-name {
   position: absolute;
   left: 64.67%;
-  top: 60.11%;
+  top: 56.5%;
   width: 33.75%;
-  height: 6.91%;
+  height: 11%;
   margin: 0;
   display: flex;
   align-items: center;
-  overflow: hidden;
+  overflow: visible;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
-  font-size: clamp(0.7rem, 3.2vw, 1.05rem);
+  font-size: clamp(0.5rem, 2.6vw, 0.85rem);
   line-height: 1.1;
   text-transform: uppercase;
   color: #ffd54a;
   text-shadow:
     0 2px 0 #6b4400,
     0 1px 2px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
   z-index: 3;
 }
 
