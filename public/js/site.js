@@ -212,13 +212,17 @@
   // name/role/contact straight from the CSV for now.
   // Split into the two sections the page actually shows: real named
   // roles at the top (Founder, AI assistant, project direction,
-  // specific RE credit, etc.) vs. the generic "Special Thanks --
-  // Community Research" role, which gets its own smaller, more compact
-  // section below rather than the full HUD card treatment -- that
-  // treatment doesn't scale well to a longer list of people who mostly
-  // just have a name and a link, not a distinct role to show off.
-  function isSpecialThanks(role){
-    return /^special thanks/i.test((role || '').trim());
+  // specific RE credit, etc.) vs. a smaller, more compact section below
+  // -- that treatment doesn't scale well to a longer list of people who
+  // mostly just have a name and a link, not a distinct role to show
+  // off. Goes to Special Thanks if EITHER the role text itself starts
+  // with "Special Thanks", or the CSV's own `section` column explicitly
+  // says so -- the override exists for people who do have a real named
+  // role but are being placed there anyway for now (without having to
+  // overwrite/lose their actual role text to do it).
+  function isSpecialThanks(row){
+    if ((row.section || '').trim().toLowerCase() === 'special-thanks') return true;
+    return /^special thanks/i.test((row.role || '').trim());
   }
 
   async function fetchContributors(){
@@ -232,8 +236,8 @@
       if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
       const text = await res.text();
       const rows = parseCsv(text);
-      const main = rows.filter(r => !isSpecialThanks(r.role));
-      const thanks = rows.filter(r => isSpecialThanks(r.role));
+      const main = rows.filter(r => !isSpecialThanks(r));
+      const thanks = rows.filter(r => isSpecialThanks(r));
       renderContributors(main, container);
       if (specialThanksContainer) renderSpecialThanks(thanks, specialThanksContainer);
     } catch (err) {
@@ -386,10 +390,12 @@
     fitHudNames(container);
   }
 
-  // Compact chip list for the "Special Thanks" role -- a small avatar,
-  // name, and icon-only GitHub/Discord links, none of the full HUD
-  // graphic. That treatment doesn't scale to a longer list of people
-  // who mostly just have a name and a link, not a distinct role.
+  // Small standalone cards for "Special Thanks" -- avatar, name, role,
+  // and GitHub/Discord links, same pieces as the big HUD cards above
+  // just at a fraction of the size and with none of the custom PSD
+  // frame art. That treatment doesn't scale to a longer list of people
+  // who mostly just have a name and a link, not a whole HUD's worth of
+  // stats to show off.
   function renderSpecialThanks(rows, container){
     if (!rows.length){
       container.innerHTML = '';
@@ -409,7 +415,7 @@
         ghUser ? `<a class="special-thanks-icon-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}</a>` : '',
         hasDiscord ? `<a class="special-thanks-icon-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}</a>` : ''
       ].filter(Boolean).join('');
-      return `<div class="special-thanks-item">${avatar}<span class="special-thanks-name">${escapeHtml(r.name || 'Unknown')}</span><span class="special-thanks-links">${links}</span></div>`;
+      return `<article class="special-thanks-card">${avatar}<span class="special-thanks-name">${escapeHtml(r.name || 'Unknown')}</span><p class="special-thanks-role">${escapeHtml(r.role || '')}</p><div class="special-thanks-links">${links}</div></article>`;
     }).join('');
     container.innerHTML = items;
 
