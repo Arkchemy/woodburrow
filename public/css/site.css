@@ -465,14 +465,27 @@ code {
   padding: 10px 0;
 }
 
-/* Contributors page -- kept scoped to .contributor-*. Modeled directly on
-   the real in-game HUD character nameplate: a gold-framed portrait with
-   an element badge overlapping its bottom-left corner, the name beside
-   it, and a flat health-bar-green stat bar underneath -- left-aligned
-   throughout, deliberately no card frame (no background/border/shadow
-   box) around any of it. */
+/* Contributors page -- kept scoped to .contributor- and .hud- prefixed
+   classes. The whole HUD graphic (rings, bars, banners) is the user's own hand-made Canva
+   design, extracted from their layered PSD as two flat PNGs:
+   contributor-frame-bg.png (bars/banners, bottom layer) and
+   contributor-frame-fg.png (the crisp gold ring outlines, top layer,
+   painted over the dynamic content). Everything between those two
+   images -- both avatars, the element icon, the name, and the two
+   numbers -- is real, live content positioned to match the PSD's exact
+   layer coordinates.
+
+   Positioning technique: .hud has `aspect-ratio: 317 / 188` (the PSD
+   canvas's exact pixel size), and every child is positioned with
+   left/width as a percentage of 317 and top/height as a percentage of
+   188. As long as the container keeps that exact aspect ratio, both
+   axes scale by the same real factor, so a circle stays a circle at
+   any card size -- this is what makes the whole thing responsive
+   without JS. Each percentage below is commented with the literal PSD
+   layer name and pixel rect it came from, straight out of
+   `magick identify -verbose` on the PSD. */
 .contributor-list {
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 28px;
   align-items: start;
 }
@@ -481,161 +494,149 @@ code {
   --elem-color: var(--accent);
 }
 
-.contributor-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.contributor-avatar-wrap {
+.hud {
   position: relative;
-  z-index: 2;
-  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 317 / 188;
 }
 
-/* Portrait ring is a fixed gold, not element-tinted -- this matches
-   the real in-game HUD character nameplate (the portrait frame is
-   always gold regardless of which element that character is). Plain
-   ring, no flanges here -- those belong to the element badge below,
-   not the portrait. */
-.contributor-avatar {
-  width: 72px;
-  height: 72px;
+.hud-bg,
+.hud-fg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hud-bg {
+  z-index: 0;
+}
+
+.hud-fg {
+  z-index: 5;
+}
+
+/* FillMaskForPFP1: x=50 y=4 w=132 h=132 -- the big portrait (GitHub,
+   preferred, since that's what the PSD's own layer name -- literally
+   "PFP1ProbablyGithub" -- called for). */
+.hud-avatar-main {
+  position: absolute;
+  left: 15.77%;
+  top: 2.13%;
+  width: 41.64%;
+  height: 70.21%;
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
-  border: 3px solid #f6d34a;
-  box-shadow: 0 0 0 2px #8a5a12, 0 4px 10px rgba(0, 0, 0, 0.35);
-  display: block;
+  z-index: 1;
 }
 
-.contributor-avatar-fallback {
+.hud-avatar-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--nav-bg);
   color: var(--nav-fg);
   font-weight: 700;
-  font-size: 1.5rem;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
 }
 
-/* Overlaps the portrait's bottom-left corner, like the element icon on
-   the real in-game HUD's own character portrait frame. Only rendered
-   when a contributor actually picked an element. This frame -- not the
-   portrait -- is the one with the two flange lines. */
-.contributor-element-frame {
-  position: absolute;
-  left: -6px;
-  bottom: -6px;
-  width: 28px;
-  height: 28px;
+.hud-avatar-main.hud-avatar-fallback {
+  font-size: 2.2rem;
 }
 
-/* Badge border is always gold, same as the portrait ring, regardless
-   of which element it's showing. z-index:1 (vs. the flanges' 0) is
-   what actually puts the flanges behind it: a pseudo-element with a
-   negative z-index still paints ABOVE its own parent's background/
-   border (CSS stacking order paints the stacking-context root's own
-   background/border first, then its negative-z-index children on top
-   of that) -- real sibling elements with explicit z-index are the only
-   way to guarantee the flanges render behind the badge instead of
-   over it. */
-.contributor-element-badge {
-  position: relative;
-  z-index: 1;
-  width: 28px;
-  height: 28px;
+.hud-avatar-mini.hud-avatar-fallback {
+  font-size: 0.8rem;
+}
+
+/* FillMaskForPFP2: x=162 y=80 w=40 h=40 -- the mini badge (Discord,
+   per "PFP2ProbablyDiscord"). Only rendered when there's a genuine
+   second identity to show alongside the main avatar (see
+   renderContributors) -- the matching contributor-frame-fg-nomini.png
+   variant drops its ring outline when this is absent. */
+.hud-avatar-mini {
+  position: absolute;
+  left: 51.10%;
+  top: 42.55%;
+  width: 12.62%;
+  height: 21.28%;
   border-radius: 50%;
-  background: var(--card-bg);
-  border: 2px solid #f6d34a;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  object-fit: cover;
+  background: var(--bg);
+  z-index: 2;
+}
+
+/* FillMaskForElement: x=7 y=129 w=52 h=52. Only rendered when a
+   contributor picked one. */
+.hud-element {
+  position: absolute;
+  left: 2.21%;
+  top: 68.62%;
+  width: 16.40%;
+  height: 27.66%;
+  border-radius: 50%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+/* Name: x=205 y=113 w=107 h=13. Same gold-on-dark-outline treatment as
+   the in-game HUD's own character nameplate text. */
+.hud-name {
+  position: absolute;
+  left: 64.67%;
+  top: 60.11%;
+  width: 33.75%;
+  height: 6.91%;
+  margin: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.contributor-element-badge img {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-
-/* Centered on the 28px frame box itself (its nearest positioned
-   ancestor), not the badge or the portrait, so it's exactly centered
-   on the badge's own x-axis regardless of anything else on the card. */
-.contributor-element-flange {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
-  border-radius: 1.5px;
-  background: #f6d34a;
-  box-shadow: 0 0 0 1px #8a5a12;
-}
-
-.contributor-element-flange-top {
-  top: -1.5px;
-}
-
-.contributor-element-flange-bottom {
-  bottom: -1.5px;
-}
-
-/* Same gold-on-dark-outline treatment as the in-game HUD's own
-   character nameplate text (see the reference screenshot this was
-   built from -- e.g. "MYSTICAT"/"EMBER" next to the portrait). */
-.contributor-name {
-  margin: 0;
-  min-width: 0;
+  overflow: hidden;
   font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
-  font-size: 1.2rem;
-  line-height: 1.2;
+  font-size: clamp(0.7rem, 3.2vw, 1.05rem);
+  line-height: 1.1;
   text-transform: uppercase;
   color: #ffd54a;
   text-shadow:
     0 2px 0 #6b4400,
-    0 1px 2px rgba(0, 0, 0, 0.6),
-    0 0 14px rgba(255, 213, 74, 0.35);
+    0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 3;
 }
 
-/* 50px matches the element badge's own top edge (28px tall, bottom
-   offset -6px against the 72px portrait: 72 + 6 - 28 = 50) -- the name
-   sits level with the top of the badge, not the top of the portrait. */
-.contributor-name-col {
+/* AmountOfReposContributingTo: x=68 y=159 w=20 h=16. */
+.hud-repo-count {
+  position: absolute;
+  left: 21.45%;
+  top: 84.57%;
+  width: 6.31%;
+  height: 8.51%;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-  flex: 1;
-  margin-top: 50px;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-size: clamp(0.55rem, 2.4vw, 0.85rem);
+  color: #7be0ff;
+  text-shadow: 0 1px 0 #04121f, 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 3;
 }
 
-/* Always this green -- a flat health bar, not tinted per element (the
-   element now lives only in the small portrait badge above). Sits
-   directly under the name, and the negative margin pulls its left
-   edge back out to the card's own left edge -- behind the portrait
-   (z-index 1 vs. the portrait's 2) -- matching the real in-game HUD,
-   where the bar runs the full width and the portrait sits on top of
-   its left end rather than the bar starting only after the portrait. */
-.contributor-health-bar {
-  position: relative;
-  z-index: 1;
-  margin-left: -84px;
-  height: 12px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-.contributor-health-fill {
-  width: 100%;
-  height: 100%;
-  background: #71c74c;
+/* GoldCoinCount: x=229 y=160 w=49 h=19. */
+.hud-coin-count {
+  position: absolute;
+  left: 72.24%;
+  top: 85.11%;
+  width: 15.46%;
+  height: 10.11%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-size: clamp(0.6rem, 2.6vw, 0.95rem);
+  color: #ffd54a;
+  text-shadow: 0 1px 0 #6b4400, 0 1px 2px rgba(0, 0, 0, 0.6);
+  z-index: 3;
 }
 
 .contributor-role {

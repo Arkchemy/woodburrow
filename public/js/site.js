@@ -243,6 +243,24 @@
     return m ? m[1] : null;
   }
 
+  // Not a real stat -- contributors don't have coins -- just a
+  // personalized decorative number derived deterministically from their
+  // own Discord ID (a real snowflake, already all digits) so it's
+  // consistent on every visit instead of random per page load. Falls
+  // back to hashing their name into a digit string for anyone without a
+  // Discord ID, so everyone still gets a number.
+  function coinCountFor(discordId, name){
+    let digits = (discordId && discordId !== 'n/a') ? discordId : '';
+    if (!digits) {
+      let h = 7;
+      for (const ch of String(name || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+      digits = String(h);
+    }
+    const mid = Math.max(0, Math.floor(digits.length / 2) - 2);
+    const slice = (digits + digits).slice(mid, mid + 4).padStart(4, '0');
+    return String(parseInt(slice, 10) || 0);
+  }
+
   function renderContributors(rows, container){
     if (!rows.length){
       container.innerHTML = '<div class="empty">No contributors listed.</div>';
@@ -251,65 +269,81 @@
     const items = rows.map((r, i) => {
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
+      const hasBoth = !!ghUser && hasDiscord;
       const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
-      const avatarId = `contributor-avatar-${i}`;
+      const mainAvatarId = `contributor-avatar-main-${i}`;
+      const miniAvatarId = `contributor-avatar-mini-${i}`;
       const ghLinkId = `contributor-gh-link-${i}`;
       const dcLinkId = `contributor-dc-link-${i}`;
       const elem = elementInfoFor(r.element);
-      // Placeholder avatar until the real fetches below resolve --
-      // GitHub's own avatar-by-username shortcut (github.com/{u}.png)
-      // is used as an immediate first paint (real, public, no fetch
-      // needed), routed through /api/avatar-image so the browser still
-      // never talks to github.com directly, then swapped for the
-      // /api/github-user response's own avatar_url once that real
-      // lookup completes, so a slow/failed JSON fetch never leaves a
-      // contributor with no image at all.
-      const avatar = ghUser
-        ? `<img class="contributor-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
-        : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
-      // A small badge overlapping the portrait's bottom-left corner,
-      // like the in-game HUD's own element icon on a character's
-      // portrait frame -- only rendered when an element was picked.
-      // The two flange lines are real sibling elements (not the
-      // badge's own ::before/::after) so they can sit behind the
-      // badge's border via real z-index stacking -- see the CSS.
-      const elementBadge = elem
-        ? `<span class="contributor-element-frame" title="${escapeHtml(elem.label)} element"><span class="contributor-element-flange contributor-element-flange-top"></span><span class="contributor-element-badge"><img src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" loading="lazy"></span><span class="contributor-element-flange contributor-element-flange-bottom"></span></span>`
+      // Main portrait: GitHub preferred (matches the original PSD layer
+      // -- literally named "PFP1ProbablyGithub" -- and GitHub has a
+      // real public avatar-by-username shortcut for an instant first
+      // paint with no fetch). Falls back to Discord (async, needs
+      // fillDiscordInfo to resolve first) when there's no GitHub, so a
+      // Discord-only contributor still gets a real photo in the big
+      // slot rather than an empty one.
+      const mainAvatar = ghUser
+        ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
+        : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
+      // Mini badge (PSD: "PFP2ProbablyDiscord") only makes sense as a
+      // *second* identity next to the main one -- only rendered when a
+      // contributor genuinely has both, so it never sits empty. The
+      // matching frame image (contributor-frame-fg-nomini.png) drops
+      // that ring outline entirely when this is absent.
+      const miniAvatar = hasBoth
+        ? `<div class="hud-avatar-mini hud-avatar-fallback" id="${miniAvatarId}"></div>`
         : '';
+      const frameFg = hasBoth ? 'contributor-frame-fg.png' : 'contributor-frame-fg-nomini.png';
+      const elementIcon = elem
+        ? `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`
+        : '';
+      const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
+      const coinCount = coinCountFor(r.discord_id, r.name);
       // GitHub first, Discord second -- GitHub is the priority source
       // (real display name + real photo, no proxy/serverless function
       // needed) whenever a contributor has one. The real fetched
       // display name lands on the link's title attribute (a hover
       // tooltip) once fillGithubInfo/fillDiscordInfo resolve, rather
       // than as its own separate visible line -- the card's own name
-      // (styled as its "Skylander name") is already the primary label,
-      // and stacking "GitHub: Real Name" under it again just repeated
-      // what the link itself already represents.
+      // is already the primary label.
       const links = [
         ghUser ? `<a class="contributor-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}GitHub</a>` : '',
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
       const style = elem ? ` style="--elem-color:${elem.color}"` : '';
-      // No card frame (no background/border/shadow box) -- just the
-      // portrait+name HUD row, a flat health-bar-green stat bar sitting
-      // right under the name (pulled back behind the portrait via
-      // negative margin, see .contributor-health-bar), then role/links
-      // underneath, all left-aligned like the real in-game nameplate
-      // this is modeled on.
-      return `<article class="contributor-card"${style}><div class="contributor-header"><div class="contributor-avatar-wrap">${avatar}${elementBadge}</div><div class="contributor-name-col"><h3 class="contributor-name">${escapeHtml(r.name || 'Unknown')}</h3><div class="contributor-health-bar"><div class="contributor-health-fill"></div></div></div></div><p class="contributor-role">${escapeHtml(r.role || '')}</p><div class="contributor-links">${links}</div></article>`;
+      // The whole HUD graphic (rings/bars/banners) is the contributor's
+      // own hand-made design -- see .hud's own CSS comment for how the
+      // two PNG layers and every percentage position below map back to
+      // the original PSD's real layer coordinates.
+      return `<article class="contributor-card"${style}>` +
+        `<div class="hud">` +
+          `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
+          mainAvatar + miniAvatar + elementIcon +
+          `<h3 class="hud-name">${escapeHtml(r.name || 'Unknown')}</h3>` +
+          `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
+          `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
+          `<img class="hud-fg" src="/images/${frameFg}" alt="" aria-hidden="true">` +
+        `</div>` +
+        `<p class="contributor-role">${escapeHtml(r.role || '')}</p>` +
+        `<div class="contributor-links">${links}</div>` +
+      `</article>`;
     }).join('');
     container.innerHTML = items;
 
     rows.forEach((r, i) => {
-      const avatarId = `contributor-avatar-${i}`;
+      const mainAvatarId = `contributor-avatar-main-${i}`;
+      const miniAvatarId = `contributor-avatar-mini-${i}`;
       const ghLinkId = `contributor-gh-link-${i}`;
       const dcLinkId = `contributor-dc-link-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
-      // GitHub is the priority source for the avatar too: Discord only
-      // gets to set the avatar when there's no GitHub to use instead.
-      if (ghUser) fillGithubInfo(ghUser, avatarId, ghLinkId);
-      if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, dcLinkId, !ghUser);
+      const hasBoth = !!ghUser && hasDiscord;
+      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main');
+      // Discord fills the mini slot when there's a GitHub avatar
+      // already occupying the main one, otherwise it's the only photo
+      // this contributor has, so it becomes the main avatar instead.
+      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini' : 'hud-avatar-main');
     });
   }
 
@@ -330,13 +364,13 @@
     if (el) el.title = text;
   }
 
-  function swapAvatar(avatarId, src){
+  function swapAvatar(avatarId, src, className){
     const el = document.getElementById(avatarId);
     if (!el) return;
     const img = new Image();
     img.onload = () => {
       const replacement = document.createElement('img');
-      replacement.className = 'contributor-avatar';
+      replacement.className = className || el.className.replace(/\bhud-avatar-fallback\b/, '').trim();
       replacement.id = avatarId;
       replacement.loading = 'lazy';
       replacement.alt = '';
@@ -359,7 +393,7 @@
   // failure (env var not set yet, Discord API hiccup, rate limit) just
   // leaves the existing initial-letter fallback and no title tooltip,
   // never a broken image or a thrown error visible to a visitor.
-  async function fillDiscordInfo(id, avatarId, linkId, useAvatar){
+  async function fillDiscordInfo(id, avatarId, linkId, avatarClassName){
     try {
       const res = await fetch(`/api/discord-avatar?id=${encodeURIComponent(id)}`);
       if (!res.ok) return;
@@ -368,7 +402,7 @@
       if (data.username) {
         setLinkTitle(linkId, `Discord: ${pickName(data.display_name, data.username)}`);
       }
-      if (useAvatar && data.avatar) swapAvatar(avatarId, data.avatar);
+      if (data.avatar) swapAvatar(avatarId, data.avatar, avatarClassName);
     } catch (err) {
       // Server route unreachable/erroring -- leave the initial letter
       // and no Discord handle line, this is a real, expected
@@ -383,14 +417,14 @@
   // githubusercontent.com), and moves every visitor's lookups onto one
   // shared 5-minute edge cache instead of each browser burning its own
   // share of GitHub's unauthenticated rate limit.
-  async function fillGithubInfo(username, avatarId, linkId){
+  async function fillGithubInfo(username, avatarId, linkId, avatarClassName){
     try {
       const res = await fetch(`/api/github-user?username=${encodeURIComponent(username)}`);
       if (!res.ok) return;
       const data = await res.json();
       if (!data) return;
       setLinkTitle(linkId, `GitHub: ${pickName(data.name, data.login)}`);
-      if (data.avatar_url) swapAvatar(avatarId, data.avatar_url);
+      if (data.avatar_url) swapAvatar(avatarId, data.avatar_url, avatarClassName);
     } catch (err) {
       // /api/github-user unreachable/erroring -- the proxied
       // github.com/{u}.png shortcut used for the initial paint stays in
