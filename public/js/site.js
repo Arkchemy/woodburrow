@@ -194,31 +194,41 @@
         : hasDiscord
           ? `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`
           : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
+      // GitHub first, Discord second -- GitHub is the priority source
+      // (real display name + real photo, no proxy/serverless function
+      // needed) whenever a contributor has one.
       const links = [
-        hasDiscord ? `<a class="contributor-link" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">Discord</a>` : '',
-        ghUser ? `<a class="contributor-link" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''
+        ghUser ? `<a class="contributor-link" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : '',
+        hasDiscord ? `<a class="contributor-link" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">Discord</a>` : ''
       ].filter(Boolean).join(' ');
-      return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}<div class="contributor-handles" id="${handlesId}"></div><div class="contributor-links">${links}</div></div></article>`;
+      // Two fixed, pre-positioned slots (GitHub first, Discord second)
+      // rather than appending whichever fetch happens to resolve
+      // first -- GitHub is the priority source, so its line always
+      // renders above Discord's regardless of which real request comes
+      // back sooner.
+      const githubHandleId = `contributor-gh-handle-${i}`;
+      const discordHandleId = `contributor-dc-handle-${i}`;
+      const handles = `<div class="contributor-handles" id="${handlesId}"><div class="contributor-handle" id="${githubHandleId}"></div><div class="contributor-handle" id="${discordHandleId}"></div></div>`;
+      return `<article class="project-card contributor-card">${avatar}<div class="contributor-info"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}${handles}<div class="contributor-links">${links}</div></div></article>`;
     }).join('');
     container.innerHTML = items;
 
     rows.forEach((r, i) => {
       const avatarId = `contributor-avatar-${i}`;
-      const handlesId = `contributor-handles-${i}`;
+      const githubHandleId = `contributor-gh-handle-${i}`;
+      const discordHandleId = `contributor-dc-handle-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
-      if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, handlesId, !ghUser);
-      if (ghUser) fillGithubInfo(ghUser, avatarId, handlesId);
+      // GitHub is the priority source for the avatar too: Discord only
+      // gets to set the avatar when there's no GitHub to use instead.
+      if (ghUser) fillGithubInfo(ghUser, avatarId, githubHandleId);
+      if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, discordHandleId, !ghUser);
     });
   }
 
-  function appendHandleLine(handlesId, text){
-    const el = document.getElementById(handlesId);
-    if (!el) return;
-    const line = document.createElement('div');
-    line.className = 'contributor-handle';
-    line.textContent = text;
-    el.appendChild(line);
+  function setHandleLine(slotId, text){
+    const el = document.getElementById(slotId);
+    if (el) el.textContent = text;
   }
 
   function swapAvatar(avatarId, src){
@@ -250,7 +260,7 @@
   // failure (env var not set yet, Discord API hiccup, rate limit) just
   // leaves the existing initial-letter fallback and no handle line,
   // never a broken image or a thrown error visible to a visitor.
-  async function fillDiscordInfo(id, avatarId, handlesId, useAvatar){
+  async function fillDiscordInfo(id, avatarId, handleSlotId, useAvatar){
     try {
       const res = await fetch(`/api/discord-avatar?id=${encodeURIComponent(id)}`);
       if (!res.ok) return;
@@ -260,7 +270,7 @@
         const label = data.display_name && data.display_name !== data.username
           ? `Discord: ${data.display_name} (@${data.username})`
           : `Discord: @${data.username}`;
-        appendHandleLine(handlesId, label);
+        setHandleLine(handleSlotId, label);
       }
       if (useAvatar && data.avatar) swapAvatar(avatarId, data.avatar);
     } catch (err) {
@@ -275,7 +285,7 @@
   // GitHub's own public REST API (api.github.com/users/{username}) --
   // genuinely public and CORS-enabled, no auth or proxy needed, unlike
   // Discord's equivalent.
-  async function fillGithubInfo(username, avatarId, handlesId){
+  async function fillGithubInfo(username, avatarId, handleSlotId){
     try {
       const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
       if (!res.ok) return;
@@ -284,7 +294,7 @@
       const label = data.name && data.name !== data.login
         ? `GitHub: ${data.name} (@${data.login})`
         : `GitHub: @${data.login}`;
-      appendHandleLine(handlesId, label);
+      setHandleLine(handleSlotId, label);
       if (data.avatar_url) swapAvatar(avatarId, data.avatar_url);
     } catch (err) {
       // GitHub API unreachable/rate-limited -- the github.com/{u}.png

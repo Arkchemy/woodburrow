@@ -327,6 +327,10 @@ code {
   color: var(--fg-muted);
 }
 
+.contributor-handle:empty {
+  display: none;
+}
+
 .contributor-links {
   display: flex;
   gap: 10px;
