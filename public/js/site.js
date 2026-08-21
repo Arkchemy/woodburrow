@@ -142,7 +142,11 @@
     }
     const items = rows.map(r => {
       const contact = r.contact && r.contact !== 'n/a' ? `<div class="meta">${escapeHtml(r.contact)}</div>` : '';
-      return `<article class="project-card"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}</article>`;
+      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
+      const name = hasDiscord
+        ? `<a href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.name || 'Unknown')}</a>`
+        : escapeHtml(r.name || 'Unknown');
+      return `<article class="project-card"><h3>${name}</h3><p>${escapeHtml(r.role || '')}</p>${contact}</article>`;
     }).join('');
     container.innerHTML = items;
   }
