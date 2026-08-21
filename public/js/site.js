@@ -201,26 +201,29 @@
     fillDiscordAvatars(container);
   }
 
-  // Best-effort real Discord avatars for contributors who only have a
-  // Discord id, via a real, widely-used but *unofficial* third-party
-  // proxy (dcdn.dstn.ru) that mirrors public Discord profile data --
-  // Discord itself has no public, unauthenticated API for looking up an
-  // arbitrary user's avatar from client-side JS (that needs a bot token
-  // behind a real server). Not Discord's own service, so this can go
-  // down or change shape without warning -- every fetch is wrapped so a
-  // failure just leaves the existing initial-letter fallback in place,
-  // never a broken image or a thrown error.
+  // Real Discord avatars for contributors who only have a Discord id,
+  // via this site's own same-origin serverless function
+  // (/api/discord-avatar), which holds a real Discord bot token and
+  // calls Discord's own official Bot API server-side. Two earlier
+  // client-side-only attempts didn't work and won't ever: a public
+  // third-party proxy (dcdn.dstn.ru) that doesn't send CORS headers at
+  // all, and Lanyard (api.lanyard.rest), which is CORS-friendly but
+  // only returns data for users who've joined Lanyard's own Discord
+  // server -- neither of which is fixable from the browser side, since
+  // Discord's real API itself has no public, unauthenticated lookup.
+  // Every fetch here is still wrapped so a failure (env var not set
+  // yet, Discord API hiccup, rate limit) just leaves the existing
+  // initial-letter fallback in place, never a broken image or a thrown
+  // error visible to a visitor.
   async function fillDiscordAvatars(container){
     const targets = container.querySelectorAll('.contributor-avatar-fallback[data-discord-id]');
     await Promise.all(Array.from(targets).map(async (el) => {
       const id = el.dataset.discordId;
       try {
-        const res = await fetch(`https://dcdn.dstn.ru/profile/${encodeURIComponent(id)}`);
+        const res = await fetch(`/api/discord-avatar?id=${encodeURIComponent(id)}`);
         if (!res.ok) return;
         const data = await res.json();
-        const hash = data && (data.avatar || (data.user && data.user.avatar));
-        if (!hash) return;
-        const ext = hash.startsWith('a_') ? 'gif' : 'png';
+        if (!data || !data.avatar) return;
         const img = new Image();
         img.onload = () => {
           const replacement = document.createElement('img');
@@ -231,11 +234,12 @@
           replacement.src = img.src;
           el.replaceWith(replacement);
         };
-        img.src = `https://cdn.discordapp.com/avatars/${encodeURIComponent(id)}/${hash}.${ext}?size=128`;
+        img.src = data.avatar;
       } catch (err) {
-        // Proxy unreachable/blocked/changed shape -- leave the initial
-        // letter in place, this is a real, expected possibility, not a
-        // bug to surface to the visitor.
+        // Server route unreachable/erroring -- leave the initial letter
+        // in place, this is a real, expected possibility (e.g. before
+        // the bot token env var is set), not a bug to surface to the
+        // visitor.
       }
     }));
   }
