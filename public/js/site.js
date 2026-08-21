@@ -335,17 +335,17 @@
       // Discord-only contributor still gets a real photo in the big
       // slot rather than an empty one.
       const mainAvatar = ghUser
-        ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
-        : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
+        ? `<img class="hud-avatar-main hud-ring-gold" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
+        : `<div class="hud-avatar-main hud-ring-gold hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
       // Mini badge (PSD: "PFP2ProbablyDiscord") is a real second identity
       // when a contributor has both GitHub and Discord -- otherwise
       // there's no second photo to show there, so it falls back to a
       // deterministically-picked Battle Class symbol (gold, matching
       // the frame) on a solid dark-blue fill instead of sitting empty.
       const miniAvatar = hasBoth
-        ? `<div class="hud-avatar-mini hud-avatar-fallback" id="${miniAvatarId}"></div>`
-        : `<div class="hud-avatar-mini hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
-      const elementIcon = `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
+        ? `<div class="hud-avatar-mini hud-ring-gold hud-avatar-fallback" id="${miniAvatarId}"></div>`
+        : `<div class="hud-avatar-mini hud-ring-gold hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
+      const elementIcon = `<img class="hud-element hud-ring-gold" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
       const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
       const coinCount = coinCountFor(r.discord_id, r.name);
       // GitHub first, Discord second -- GitHub is the priority source
@@ -359,19 +359,17 @@
         ghUser ? `<a class="contributor-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}GitHub</a>` : '',
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
-      // The whole HUD graphic (rings/bars/banners) is the contributor's
-      // own hand-made design -- see .hud's own CSS comment for how each
-      // ring PNG and every percentage position below map back to the
-      // original PSD's real layer coordinates and stacking order.
+      // The bars/banners are the contributor's own hand-made background
+      // art; the three rings are real CSS borders now (.hud-ring-gold),
+      // not PNGs -- see .hud's own CSS comment for why. Every percentage
+      // position below still maps back to the original PSD's real layer
+      // coordinates.
       return `<article class="contributor-card" style="--elem-color:${elem.color}">` +
         `<div class="hud">` +
           `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
           mainAvatar +
-          `<img class="hud-ring hud-ring-pfp1" src="/images/contributor-frame-ring-pfp1.png" alt="" aria-hidden="true">` +
           miniAvatar +
-          `<img class="hud-ring hud-ring-pfp2" src="/images/contributor-frame-ring-pfp2.png" alt="" aria-hidden="true">` +
           elementIcon +
-          `<img class="hud-ring hud-ring-element" src="/images/contributor-frame-ring-element.png" alt="" aria-hidden="true">` +
           `<h3 class="hud-name">${escapeHtml(r.name || 'Unknown')}</h3>` +
           `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
           `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
