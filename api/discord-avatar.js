@@ -40,10 +40,13 @@ export default async function handler(req, res) {
       ? `https://cdn.discordapp.com/avatars/${id}/${data.avatar}.${data.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`
       : null;
 
-    // Cached for a day at the CDN edge -- this data changes rarely and
-    // there's no reason to hit Discord's API fresh on every single page
-    // load from every visitor.
-    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800');
+    // Cached for 5 minutes at the CDN edge. The long day-long cache used
+    // before this could serve a stale failure (null avatar) for a full
+    // day if a single lookup got rate-limited or hit a transient Discord
+    // error, which is what caused some icons to just not show. A short
+    // TTL means a bad response self-heals on the next visitor within
+    // minutes instead of sticking around.
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=60');
     res.status(200).json({
       username: data.username || null,
       display_name: data.global_name || null,

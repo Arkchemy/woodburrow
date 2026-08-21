@@ -279,20 +279,38 @@ code {
   padding: 10px 0;
 }
 
-/* Contributors page -- kept scoped to .contributor-* */
+/* Contributors page -- kept scoped to .contributor-*. Centered, vertical
+   "profile card" layout: a longer role line just wraps cleanly under a
+   centered name instead of squeezing awkwardly next to a small avatar. */
+.contributor-list {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
 .contributor-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
+  text-align: center;
+  gap: 4px;
+  padding: 24px 20px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contributor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
 }
 
 .contributor-avatar {
-  width: 56px;
-  height: 56px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   flex-shrink: 0;
   object-fit: cover;
   background: var(--bg);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--border);
+  margin-bottom: 6px;
 }
 
 .contributor-avatar-fallback {
@@ -302,29 +320,36 @@ code {
   background: var(--nav-bg);
   color: var(--nav-fg);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.75rem;
 }
 
 .contributor-info {
   min-width: 0;
+  width: 100%;
 }
 
 .contributor-info h3 {
-  margin: 0 0 2px;
+  margin: 0 0 4px;
+  font-size: 1.05rem;
 }
 
 .contributor-info p {
-  margin: 0 0 4px;
+  margin: 0 0 8px;
   color: var(--fg-muted);
   font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.4;
 }
 
 .contributor-handles {
-  margin: 2px 0 4px;
+  margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .contributor-handle {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--fg-muted);
 }
 
@@ -334,15 +359,18 @@ code {
 
 .contributor-links {
   display: flex;
-  gap: 10px;
-  margin-top: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
 }
 
 .contributor-link {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
   background: var(--bg);
