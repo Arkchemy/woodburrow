@@ -388,11 +388,11 @@
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
       const hasBoth = !!ghUser && hasDiscord;
-      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main');
+      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main hud-ring-gold');
       // Discord fills the mini slot when there's a GitHub avatar
       // already occupying the main one, otherwise it's the only photo
       // this contributor has, so it becomes the main avatar instead.
-      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini' : 'hud-avatar-main');
+      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini hud-ring-gold' : 'hud-avatar-main hud-ring-gold');
     });
 
     fitHudNames(container);
