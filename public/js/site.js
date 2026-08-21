@@ -8,6 +8,7 @@
         <li><a href="/">Home</a></li>
         <li><a href="/projects.html">Projects</a></li>
         <li><a href="/about.html">About</a></li>
+        <li><a href="/contributors.html">Contributors</a></li>
         <li><a href="/license.html">License</a></li>
         <li><a href="#" id="repos-toggle">Repos</a></li>
       </ul>
@@ -29,6 +30,11 @@
     if (location.pathname.endsWith('/license.html') || location.pathname.endsWith('/license')){
       if (!document.getElementById('license-content')) return;
       fetchLicense();
+    }
+
+    // If on the contributors page, fetch and render CONTRIBUTORS.csv
+    if (document.getElementById('contributors-list')) {
+      fetchContributors();
     }
   });
 
@@ -77,6 +83,68 @@
     }catch(err){
       container.textContent = 'Could not load license: ' + err.message;
     }
+  }
+
+  // Fetch and render CONTRIBUTORS.csv from the woodburrow repo -- same
+  // "pull real data from GitHub, don't hardcode it" approach as
+  // fetchRepos/fetchLicense above. No Discord avatar/display-name
+  // lookups yet: Discord has no public, unauthenticated API for
+  // looking up an arbitrary user's profile from client-side JS (that
+  // needs a bot token behind a real server), so this just renders
+  // name/role/contact straight from the CSV for now.
+  async function fetchContributors(){
+    const container = document.getElementById('contributors-list');
+    if (!container) return;
+    container.innerHTML = '<div class="loading">Loading contributors…</div>';
+    const url = 'https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/CONTRIBUTORS.csv';
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+      const text = await res.text();
+      renderContributors(parseCsv(text), container);
+    } catch (err) {
+      container.innerHTML = `<div class="error">Could not load contributors: ${err.message}</div>`;
+    }
+  }
+
+  // Minimal CSV parser: handles quoted fields (contributor names contain
+  // parenthesized nicknames but no embedded commas/quotes today, so this
+  // doesn't need to be more than "good enough" -- still handles a quoted
+  // field defensively in case a future entry needs one).
+  function parseCsv(text){
+    const lines = text.trim().split(/\r?\n/);
+    const header = splitCsvLine(lines[0]);
+    return lines.slice(1).map(line => {
+      const cells = splitCsvLine(line);
+      const row = {};
+      header.forEach((key, i) => { row[key.trim()] = (cells[i] || '').trim(); });
+      return row;
+    });
+  }
+
+  function splitCsvLine(line){
+    const cells = [];
+    let cur = '', inQuotes = false;
+    for (let i = 0; i < line.length; i++){
+      const c = line[i];
+      if (c === '"') { inQuotes = !inQuotes; continue; }
+      if (c === ',' && !inQuotes) { cells.push(cur); cur = ''; continue; }
+      cur += c;
+    }
+    cells.push(cur);
+    return cells;
+  }
+
+  function renderContributors(rows, container){
+    if (!rows.length){
+      container.innerHTML = '<div class="empty">No contributors listed.</div>';
+      return;
+    }
+    const items = rows.map(r => {
+      const contact = r.contact && r.contact !== 'n/a' ? `<div class="meta">${escapeHtml(r.contact)}</div>` : '';
+      return `<article class="project-card"><h3>${escapeHtml(r.name || 'Unknown')}</h3><p>${escapeHtml(r.role || '')}</p>${contact}</article>`;
+    }).join('');
+    container.innerHTML = items;
   }
 
   function renderRepos(repos, container){
