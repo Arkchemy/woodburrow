@@ -93,12 +93,23 @@
     }
   }
 
+  // raw.githubusercontent.com sits behind a real CDN that caches by
+  // URL for several minutes regardless of the page's own fetch cache
+  // mode -- confirmed directly (fetched the same file via the GitHub
+  // API right after a push and got different, newer content than what
+  // the raw URL was still serving). A cache-busting query param makes
+  // every page load a genuinely new URL, so visitors always see
+  // current data instead of whatever was cached at the last CDN pull.
+  function cacheBusted(url){
+    return url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now();
+  }
+
   // Fetch raw LICENSE text from the woodburrow repo and render it
   async function fetchLicense(){
     const container = document.getElementById('license-content');
     if (!container) return;
     container.textContent = 'Loading license…';
-    const url = 'https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/LICENSE';
+    const url = cacheBusted('https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/LICENSE');
     try{
       const res = await fetch(url);
       if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
@@ -121,7 +132,7 @@
     const container = document.getElementById('contributors-list');
     if (!container) return;
     container.innerHTML = '<div class="loading">Loading contributors…</div>';
-    const url = 'https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/CONTRIBUTORS.csv';
+    const url = cacheBusted('https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/CONTRIBUTORS.csv');
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
