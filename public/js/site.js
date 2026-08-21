@@ -238,8 +238,11 @@
       const rows = parseCsv(text);
       const main = rows.filter(r => !isSpecialThanks(r));
       const thanks = rows.filter(r => isSpecialThanks(r));
-      renderContributors(main, container);
-      if (specialThanksContainer) renderSpecialThanks(thanks, specialThanksContainer);
+      renderContributors(main, container, 'main-');
+      // Same exact card as the main list -- just rendered into a
+      // container with a smaller grid column size (see
+      // .contributor-list-compact), not a different, simplified design.
+      if (specialThanksContainer) renderContributors(thanks, specialThanksContainer, 'thanks-');
     } catch (err) {
       container.innerHTML = `<div class="error">Could not load contributors: ${err.message}</div>`;
     }
@@ -302,7 +305,14 @@
     return String(parseInt(slice, 10) || 0);
   }
 
-  function renderContributors(rows, container){
+  // idPrefix keeps element ids unique when this renders more than once
+  // on the same page (the main Contributors grid and the smaller
+  // Special Thanks grid both use this exact same card, just at
+  // different sizes via CSS -- see .contributor-list-compact) --
+  // without it, both calls would generate the same
+  // "contributor-avatar-main-0" etc. ids and collide.
+  function renderContributors(rows, container, idPrefix){
+    idPrefix = idPrefix || '';
     if (!rows.length){
       container.innerHTML = '<div class="empty">No contributors listed.</div>';
       return;
@@ -312,10 +322,10 @@
       const ghUser = githubUsernameFromUrl(r.github_url);
       const hasBoth = !!ghUser && hasDiscord;
       const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
-      const mainAvatarId = `contributor-avatar-main-${i}`;
-      const miniAvatarId = `contributor-avatar-mini-${i}`;
-      const ghLinkId = `contributor-gh-link-${i}`;
-      const dcLinkId = `contributor-dc-link-${i}`;
+      const mainAvatarId = `${idPrefix}contributor-avatar-main-${i}`;
+      const miniAvatarId = `${idPrefix}contributor-avatar-mini-${i}`;
+      const ghLinkId = `${idPrefix}contributor-gh-link-${i}`;
+      const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const elem = elementInfoFor(r.element);
       // Main portrait: GitHub preferred (matches the original PSD layer
       // -- literally named "PFP1ProbablyGithub" -- and GitHub has a
@@ -373,10 +383,10 @@
     container.innerHTML = items;
 
     rows.forEach((r, i) => {
-      const mainAvatarId = `contributor-avatar-main-${i}`;
-      const miniAvatarId = `contributor-avatar-mini-${i}`;
-      const ghLinkId = `contributor-gh-link-${i}`;
-      const dcLinkId = `contributor-dc-link-${i}`;
+      const mainAvatarId = `${idPrefix}contributor-avatar-main-${i}`;
+      const miniAvatarId = `${idPrefix}contributor-avatar-mini-${i}`;
+      const ghLinkId = `${idPrefix}contributor-gh-link-${i}`;
+      const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
       const hasBoth = !!ghUser && hasDiscord;
@@ -390,46 +400,6 @@
     fitHudNames(container);
   }
 
-  // Small standalone cards for "Special Thanks" -- avatar, name, role,
-  // and GitHub/Discord links, same pieces as the big HUD cards above
-  // just at a fraction of the size and with none of the custom PSD
-  // frame art. That treatment doesn't scale to a longer list of people
-  // who mostly just have a name and a link, not a whole HUD's worth of
-  // stats to show off.
-  function renderSpecialThanks(rows, container){
-    if (!rows.length){
-      container.innerHTML = '';
-      return;
-    }
-    const items = rows.map((r, i) => {
-      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
-      const ghUser = githubUsernameFromUrl(r.github_url);
-      const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
-      const avatarId = `special-thanks-avatar-${i}`;
-      const ghLinkId = `special-thanks-gh-${i}`;
-      const dcLinkId = `special-thanks-dc-${i}`;
-      const avatar = ghUser
-        ? `<img class="special-thanks-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
-        : `<div class="special-thanks-avatar special-thanks-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
-      const links = [
-        ghUser ? `<a class="special-thanks-icon-link" id="${ghLinkId}" href="${escapeHtml(r.github_url)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub">${ICON_GITHUB}</a>` : '',
-        hasDiscord ? `<a class="special-thanks-icon-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}</a>` : ''
-      ].filter(Boolean).join('');
-      return `<article class="special-thanks-card">${avatar}<span class="special-thanks-name">${escapeHtml(r.name || 'Unknown')}</span><p class="special-thanks-role">${escapeHtml(r.role || '')}</p><div class="special-thanks-links">${links}</div></article>`;
-    }).join('');
-    container.innerHTML = items;
-
-    rows.forEach((r, i) => {
-      const avatarId = `special-thanks-avatar-${i}`;
-      const ghLinkId = `special-thanks-gh-${i}`;
-      const dcLinkId = `special-thanks-dc-${i}`;
-      const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
-      const ghUser = githubUsernameFromUrl(r.github_url);
-      if (ghUser) fillGithubInfo(ghUser, avatarId, ghLinkId, 'special-thanks-avatar');
-      else if (hasDiscord) fillDiscordInfo(r.discord_id, avatarId, dcLinkId, 'special-thanks-avatar');
-    });
-  }
-
   // The CSS clamp() on .hud-name gets most names to a reasonable size,
   // but names vary too much in length for one static size to fit every
   // one of them in this fairly narrow column -- long ones (e.g.
@@ -438,8 +408,16 @@
   // text's real rendered width regardless of the `overflow: visible`
   // on .hud-name, so this reliably detects overflow and steps the font
   // down until it actually fits, rather than clipping or spilling out.
+  //
+  // Skips names inside .contributor-list-compact (white-space: normal
+  // there, not nowrap) -- at that much smaller card size, shrinking
+  // alone hit the font-size floor and still didn't fit most names (they're
+  // single unbroken words like "NefariousTechSupport", too long for any
+  // reasonably legible single-line size in a ~100px column). Those wrap
+  // instead, per the compact-specific CSS.
   function fitHudNames(container){
     container.querySelectorAll('.hud-name').forEach(el => {
+      if (getComputedStyle(el).whiteSpace !== 'nowrap') return;
       let tries = 0;
       while (el.scrollWidth > el.clientWidth && tries < 24) {
         const current = parseFloat(getComputedStyle(el).fontSize);
