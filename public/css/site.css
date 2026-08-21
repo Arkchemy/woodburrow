@@ -466,14 +466,16 @@ code {
 }
 
 /* Contributors page -- kept scoped to .contributor- and .hud- prefixed
-   classes. The whole HUD graphic (rings, bars, banners) is the user's own hand-made Canva
-   design, extracted from their layered PSD as two flat PNGs:
-   contributor-frame-bg.png (bars/banners, bottom layer) and
-   contributor-frame-fg.png (the crisp gold ring outlines, top layer,
-   painted over the dynamic content). Everything between those two
-   images -- both avatars, the element icon, the name, and the two
-   numbers -- is real, live content positioned to match the PSD's exact
-   layer coordinates.
+   classes. The whole HUD graphic (rings, bars, banners) is the user's
+   own hand-made Canva/PSD design. Rather than one flattened foreground
+   image sitting above everything (which put every ring above both
+   avatars regardless of the PSD's own real stacking), each ring is its
+   own image now, interleaved with the dynamic content in the PSD's
+   literal real layer order (bottom to top): bg -> PFP1 photo ->
+   FrameOfPFP1 ring -> PFP2 photo -> FrameOfPFP2 ring -> element photo
+   -> FrameOfElement ring -> text. That's what makes the mini badge's
+   ring correctly sit on top of the main portrait where they overlap,
+   without the main portrait's own ring bleeding over the mini badge.
 
    Positioning technique: .hud has `aspect-ratio: 317 / 188` (the PSD
    canvas's exact pixel size), and every child is positioned with
@@ -501,7 +503,7 @@ code {
 }
 
 .hud-bg,
-.hud-fg {
+.hud-ring {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -513,8 +515,16 @@ code {
   z-index: 0;
 }
 
-.hud-fg {
-  z-index: 5;
+.hud-ring-pfp1 {
+  z-index: 2;
+}
+
+.hud-ring-pfp2 {
+  z-index: 4;
+}
+
+.hud-ring-element {
+  z-index: 6;
 }
 
 /* FillMaskForPFP1: x=50 y=4 w=132 h=132 -- the big portrait (GitHub,
@@ -551,11 +561,14 @@ code {
 }
 
 /* FillMaskForPFP2: x=162 y=80 w=40 h=40 -- the mini badge (Discord,
-   per "PFP2ProbablyDiscord"). z-index:2, above the main avatar's 1, so
-   it always sits on top where the two would ever overlap. Real second
-   photo when a contributor has one; otherwise a Battle Class symbol
-   fallback (see .hud-avatar-battleclass below) so this slot is never
-   empty. */
+   per "PFP2ProbablyDiscord"). z-index:3, above FrameOfPFP1's ring (2)
+   and the main avatar (1) -- matches the PSD's own real stacking order,
+   so the mini badge's photo genuinely sits on top where it overlaps
+   the main portrait's ring, and FrameOfPFP2 (z:4) then frames this
+   badge specifically without bleeding onto the main portrait. Real
+   second photo when a contributor has one; otherwise a Battle Class
+   symbol fallback (see .hud-avatar-battleclass below) so this slot is
+   never empty. */
 .hud-avatar-mini {
   position: absolute;
   left: 51.10%;
@@ -565,7 +578,7 @@ code {
   border-radius: 50%;
   object-fit: cover;
   background: var(--bg);
-  z-index: 2;
+  z-index: 3;
 }
 
 /* Fallback for contributors without a second avatar identity: a
@@ -585,8 +598,10 @@ code {
   object-fit: contain;
 }
 
-/* FillMaskForElement: x=7 y=129 w=52 h=52. Only rendered when a
-   contributor picked one. */
+/* FillMaskForElement: x=7 y=129 w=52 h=52. z-index:5, below its own
+   FrameOfElement ring (6) but above everything else -- doesn't spatially
+   overlap the PFP1/PFP2 group at all, so this mostly just needs to sit
+   under its own ring. */
 .hud-element {
   position: absolute;
   left: 2.21%;
@@ -595,7 +610,7 @@ code {
   height: 27.66%;
   border-radius: 50%;
   object-fit: contain;
-  z-index: 1;
+  z-index: 5;
 }
 
 /* Name: x=205 y=113 w=107 h=13 in the PSD, but that box is too short
@@ -628,7 +643,7 @@ code {
     0 2px 0 #6b4400,
     0 1px 2px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
-  z-index: 3;
+  z-index: 7;
 }
 
 /* AmountOfReposContributingTo: x=68 y=159 w=20 h=16. */
@@ -645,7 +660,7 @@ code {
   font-size: clamp(0.55rem, 2.4vw, 0.85rem);
   color: #7be0ff;
   text-shadow: 0 1px 0 #04121f, 0 1px 2px rgba(0, 0, 0, 0.6);
-  z-index: 3;
+  z-index: 7;
 }
 
 /* GoldCoinCount: x=229 y=160 w=49 h=19. */
@@ -662,7 +677,7 @@ code {
   font-size: clamp(0.6rem, 2.6vw, 0.95rem);
   color: #ffd54a;
   text-shadow: 0 1px 0 #6b4400, 0 1px 2px rgba(0, 0, 0, 0.6);
-  z-index: 3;
+  z-index: 7;
 }
 
 .contributor-role {

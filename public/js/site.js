@@ -330,17 +330,21 @@
         hasDiscord ? `<a class="contributor-link" id="${dcLinkId}" href="https://discord.com/users/${encodeURIComponent(r.discord_id)}" target="_blank" rel="noopener noreferrer" aria-label="Discord">${ICON_DISCORD}Discord</a>` : ''
       ].filter(Boolean).join(' ');
       // The whole HUD graphic (rings/bars/banners) is the contributor's
-      // own hand-made design -- see .hud's own CSS comment for how the
-      // two PNG layers and every percentage position below map back to
-      // the original PSD's real layer coordinates.
+      // own hand-made design -- see .hud's own CSS comment for how each
+      // ring PNG and every percentage position below map back to the
+      // original PSD's real layer coordinates and stacking order.
       return `<article class="contributor-card" style="--elem-color:${elem.color}">` +
         `<div class="hud">` +
           `<img class="hud-bg" src="/images/contributor-frame-bg.png" alt="" aria-hidden="true">` +
-          mainAvatar + miniAvatar + elementIcon +
+          mainAvatar +
+          `<img class="hud-ring hud-ring-pfp1" src="/images/contributor-frame-ring-pfp1.png" alt="" aria-hidden="true">` +
+          miniAvatar +
+          `<img class="hud-ring hud-ring-pfp2" src="/images/contributor-frame-ring-pfp2.png" alt="" aria-hidden="true">` +
+          elementIcon +
+          `<img class="hud-ring hud-ring-element" src="/images/contributor-frame-ring-element.png" alt="" aria-hidden="true">` +
           `<h3 class="hud-name">${escapeHtml(r.name || 'Unknown')}</h3>` +
           `<span class="hud-repo-count" title="Repos contributed to">${escapeHtml(repoCount)}</span>` +
           `<span class="hud-coin-count">${escapeHtml(coinCount)}</span>` +
-          `<img class="hud-fg" src="/images/contributor-frame-fg.png" alt="" aria-hidden="true">` +
         `</div>` +
         `<p class="contributor-role">${escapeHtml(r.role || '')}</p>` +
         `<div class="contributor-links">${links}</div>` +
