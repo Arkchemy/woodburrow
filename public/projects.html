@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Projects — Arkchemy</title>
+    <link rel="stylesheet" href="/css/site.css">
+  </head>
+  <body>
+    <main class="container">
+      <section class="about">
+        <h1>Projects</h1>
+        <p>Three repositories, each doing one job. They're built to be used independently — <em>blaster</em> in particular is just as useful to anyone modding the game by hand, whether or not they care about the recompiler at all.</p>
+      </section>
+
+      <section class="projects">
+        <div class="project-list">
+          <article class="project-card">
+            <h3><a href="https://github.com/Arkchemy/conquertron">conquertron</a></h3>
+            <p>A PowerPC-750 → C static recompiler, purpose-built against the real Wii U binary rather than a general-purpose target. It disassembles the game's own machine code, recovers real function boundaries where symbols were stripped, and emits portable C per function — condition-register semantics, byte order, and floating-point behavior all translated deliberately rather than approximated, since a physics or gameplay desync would be a real regression, not a cosmetic one.</p>
+            <p>This is the piece that doesn't exist anywhere else for Wii U specifically. Comparable projects (N64: Recompiled, Zelda 64: Recompiled) had an existing decompilation to build on; this one is built directly from the compiled binary.</p>
+          </article>
+
+          <article class="project-card">
+            <h3><a href="https://github.com/Arkchemy/jouster">jouster</a></h3>
+            <p>Everything the recompiled code assumes is already there. Cafe OS's own thread, memory, and file APIs get reimplemented against libnx equivalents; GX2 draw calls get intercepted and reinterpreted rather than passed straight through, since the Switch's own graphics API doesn't speak GX2 natively. A Portal of Power can be read three ways — a real USB portal, a folder of figure dumps, or a Joy-Con's own NFC reader — with the UI built around whichever one's connected.</p>
+            <p>This is also where the actual `.nro` gets packaged for real hardware, and where most of the boot-time debugging work has happened — tracing exactly where the recompiled game's own execution diverges from what real Wii U hardware would do, one hardware test at a time.</p>
+          </article>
+
+          <article class="project-card">
+            <h3><a href="https://github.com/Arkchemy/blaster">blaster</a></h3>
+            <p>A standalone toolkit for the Alchemy engine's own file formats — reading and rewriting <code>.igz</code> object archives (the engine's real "memory image" save format, objects stored roughly as they'd appear in RAM, fixed up on load), extracting field names and types directly out of the compiled reflection data with no running game required, and format-specific utilities like the Wii→Wii U audio transplant pipeline built for the English translation work.</p>
+            <p>Grew out of needing to actually understand these formats to build the recompiler and runtime — kept separate because the format-editing side is useful to modders who have no interest in the recompiler itself.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="about">
+        <h2>Status</h2>
+        <p>Actively in development. The recompiler core and Switch runtime both build and boot the real recompiled binary on real Switch hardware; current work is tracing and fixing the remaining boot-time divergences from real Wii U behavior, one hardware-confirmed bug at a time, before graphics and gameplay work can meaningfully begin.</p>
+      </section>
+    </main>
+
+    <script src="/js/site.js" defer></script>
+  </body>
+</html>

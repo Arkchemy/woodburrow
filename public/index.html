@@ -12,32 +12,35 @@
       <section class="hero">
         <div class="hero-inner">
           <h1>Arkchemy</h1>
-          <p class="tagline">Open-source code, tools, and experiments from the Arkchemy org.</p>
+          <p class="tagline">Bringing Skylands back to life on hardware it was never meant to run on.</p>
           <p><a href="#" id="hero-repos-cta" class="cta">Browse repositories</a></p>
         </div>
       </section>
 
       <section id="about" class="about">
         <h2>About</h2>
-        <p>Arkchemy builds developer tools and experimental projects focused on modern web and blockchain technologies. This site highlights recent work and links to active repositories.</p>
+        <p>Arkchemy is a small organization building open, permission-required tools that reverse-engineer, preserve, and static-recompile older Skylanders titles onto modern hardware — starting with <em>Skylanders: Spyro's Adventure</em> (Wii U) running natively on Nintendo Switch, no emulator involved.</p>
+        <p>The name is a double reference: <strong>Ark</strong> is the real internal engine namespace Toys for Bob's games are built on (<code>igArkCore</code>, <code>arkRegister</code>, and so on throughout the actual compiled code), and <strong>Alchemy</strong> is the real, public name of that same engine. Put together, it's the same move as "Pretendo" borrowing from "Nintendo" — a name that points directly at the real technology underneath it.</p>
+        <p>Everything here runs against a copy of the game you already own. Nothing here hosts, sells, or redistributes Activision's assets or code — see the <a href="/license.html">license</a> for the exact terms.</p>
       </section>
 
       <section id="projects" class="projects">
         <h2>Highlighted Projects</h2>
         <div class="project-list">
           <article class="project-card">
-            <h3>Project Alpha</h3>
-            <p>Short description of an important project. Learn more on the repository page.</p>
+            <h3><a href="https://github.com/Arkchemy/conquertron">conquertron</a></h3>
+            <p>The recompiler core. Translates the game's real PowerPC machine code into portable C, function by function, straight from the original Wii U binary — no interpretation at runtime, just compiled native code.</p>
           </article>
           <article class="project-card">
-            <h3>Tooling Suite</h3>
-            <p>Utilities and scripts for developer workflows and automation.</p>
+            <h3><a href="https://github.com/Arkchemy/jouster">jouster</a></h3>
+            <p>The Switch side of the port: the runtime that hosts the recompiled game, plus a from-scratch reimplementation of the Cafe OS system calls, memory model, and graphics layer the original game expects to find underneath it.</p>
           </article>
           <article class="project-card">
-            <h3>Experimental</h3>
-            <p>Proofs-of-concept and prototypes exploring new ideas.</p>
+            <h3><a href="https://github.com/Arkchemy/blaster">blaster</a></h3>
+            <p>Standalone Python tooling for working with the game's own file formats directly — reading and rewriting <code>.igz</code> object archives, extracting field schemas straight out of the compiled reflection data, and other utilities that grew out of the recompiler work.</p>
           </article>
         </div>
+        <p><a href="/projects.html">More on how each piece fits together →</a></p>
       </section>
 
       <section aria-labelledby="repos-heading">
