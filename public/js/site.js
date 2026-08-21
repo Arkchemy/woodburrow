@@ -17,6 +17,19 @@
   </nav>
   `;
 
+  // Was previously only hardcoded into index.html -- injected on every
+  // page now (same pattern as the navbar) so the Skylanders Wiki credit
+  // for the element symbols and Portal of Power artwork appears
+  // everywhere those assets are actually used, not just the homepage.
+  const footerHTML = `
+  <footer class="site-footer">
+    <div class="container">
+      <div>© Arkchemy — content from public GitHub data.</div>
+      <div class="credits">Elemental symbols and Portal of Power artwork courtesy of the <a href="https://skylanderswiki.com" target="_blank" rel="noopener noreferrer">Skylanders Wiki</a> (CC BY-SA).</div>
+    </div>
+  </footer>
+  `;
+
   // Real brand mark SVGs (Simple Icons' standard single-path versions,
   // the same shapes GitHub/Discord's own brand kits use), inlined
   // rather than fetched from an icon site so there's no extra network
@@ -78,6 +91,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     injectNavbar();
+    injectFooter();
 
     // If on the root page, open repos panel automatically
     if (location.pathname === '/' || location.pathname.endsWith('/index.html')) {
@@ -117,12 +131,20 @@
     if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
   }
 
+  function injectFooter(){
+    const existing = document.querySelector('footer.site-footer');
+    if (existing) existing.remove();
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = footerHTML.trim();
+    document.body.appendChild(wrapper.firstChild);
+  }
+
   async function fetchRepos(user = 'Arkchemy'){
     const container = document.getElementById('github-repos');
     if (!container) return;
     container.innerHTML = '<div class="loading">Loading repositories…</div>';
     try {
-      const res = await fetch(`https://api.github.com/users/${user}/repos?per_page=100&sort=updated`);
+      const res = await fetch(`/api/github-repos?user=${encodeURIComponent(user)}`);
       if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
       const data = await res.json();
       renderRepos(data, container);
@@ -236,11 +258,13 @@
       // Placeholder avatar until the real fetches below resolve --
       // GitHub's own avatar-by-username shortcut (github.com/{u}.png)
       // is used as an immediate first paint (real, public, no fetch
-      // needed), then swapped for the api.github.com response's own
-      // avatar_url once that real lookup completes, so a slow/failed
-      // JSON fetch never leaves a contributor with no image at all.
+      // needed), routed through /api/avatar-image so the browser still
+      // never talks to github.com directly, then swapped for the
+      // /api/github-user response's own avatar_url once that real
+      // lookup completes, so a slow/failed JSON fetch never leaves a
+      // contributor with no image at all.
       const avatar = ghUser
-        ? `<img class="contributor-avatar" id="${avatarId}" src="https://github.com/${encodeURIComponent(ghUser)}.png" alt="" loading="lazy">`
+        ? `<img class="contributor-avatar" id="${avatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="contributor-avatar contributor-avatar-fallback" id="${avatarId}">${escapeHtml(initial)}</div>`;
       const badge = elem
         ? `<img class="contributor-element-badge" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`
@@ -366,22 +390,24 @@
     }
   }
 
-  // Real GitHub username + display name + avatar, straight from
-  // GitHub's own public REST API (api.github.com/users/{username}) --
-  // genuinely public and CORS-enabled, no auth or proxy needed, unlike
-  // Discord's equivalent.
+  // Real GitHub username + display name + avatar, via this site's own
+  // /api/github-user route rather than api.github.com directly -- keeps
+  // the browser talking only to this origin (never github.com or
+  // githubusercontent.com), and moves every visitor's lookups onto one
+  // shared 5-minute edge cache instead of each browser burning its own
+  // share of GitHub's unauthenticated rate limit.
   async function fillGithubInfo(username, avatarId, linkId){
     try {
-      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+      const res = await fetch(`/api/github-user?username=${encodeURIComponent(username)}`);
       if (!res.ok) return;
       const data = await res.json();
       if (!data) return;
       setLinkTitle(linkId, `GitHub: ${pickName(data.name, data.login)}`);
       if (data.avatar_url) swapAvatar(avatarId, data.avatar_url);
     } catch (err) {
-      // GitHub API unreachable/rate-limited -- the github.com/{u}.png
-      // shortcut used for the initial paint stays in place, and no
-      // title tooltip gets added. Not a bug to surface.
+      // /api/github-user unreachable/erroring -- the proxied
+      // github.com/{u}.png shortcut used for the initial paint stays in
+      // place, and no title tooltip gets added. Not a bug to surface.
     }
   }
 

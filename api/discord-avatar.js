@@ -36,9 +36,14 @@ export default async function handler(req, res) {
     }
 
     const data = await discordRes.json();
-    const avatar = data.avatar
+    const cdnUrl = data.avatar
       ? `https://cdn.discordapp.com/avatars/${id}/${data.avatar}.${data.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128`
       : null;
+    // Routed through /api/avatar-image rather than handed back as a raw
+    // cdn.discordapp.com URL -- same reasoning as github-user.js's own
+    // avatar_url rewrite: the browser should only ever talk to this
+    // same origin, never directly to Discord's CDN.
+    const avatar = cdnUrl ? `/api/avatar-image?src=${encodeURIComponent(cdnUrl)}` : null;
 
     // Cached for 5 minutes at the CDN edge. The long day-long cache used
     // before this could serve a stale failure (null avatar) for a full
