@@ -279,38 +279,95 @@ code {
   padding: 10px 0;
 }
 
-/* Contributors page -- kept scoped to .contributor-*. Centered, vertical
-   "profile card" layout: a longer role line just wraps cleanly under a
-   centered name instead of squeezing awkwardly next to a small avatar. */
+/* Contributors page -- kept scoped to .contributor-*. Each card is styled
+   like a Skylanders figure display card: a real 3D pointer-tracked tilt
+   (driven by --tilt-x/--tilt-y/--shine-x/--shine-y, set in site.js'
+   attachTiltEffect), an element-tinted glow (--elem-color, set inline
+   per-card from CONTRIBUTORS.csv's element column), and the name set in
+   the actual Skylanders logo lookalike font so each contributor reads
+   like a character card rather than a plain directory entry. */
 .contributor-list {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  perspective: 1200px;
+  gap: 22px;
 }
 
 .contributor-card {
+  --elem-color: var(--accent);
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border-color: color-mix(in srgb, var(--elem-color) 35%, var(--border));
+  background: var(--card-bg);
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.08),
+    0 0 0 1px color-mix(in srgb, var(--elem-color) 25%, transparent) inset;
+}
+
+.contributor-card:hover {
+  box-shadow:
+    0 18px 30px -12px color-mix(in srgb, var(--elem-color) 45%, rgba(15, 23, 42, 0.35)),
+    0 0 0 1px color-mix(in srgb, var(--elem-color) 55%, transparent) inset;
+}
+
+/* Pointer-tracked shine sweep -- a soft highlight that follows the
+   cursor across the card, reinforcing the tilt as a real light-catching
+   surface rather than just a rotated flat image. */
+.contributor-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--shine-x, 50%) var(--shine-y, 20%),
+    color-mix(in srgb, var(--elem-color) 55%, white) 0%,
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  mix-blend-mode: overlay;
+}
+
+.contributor-card:hover::before {
+  opacity: 0.55;
+}
+
+.contributor-card-inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 4px;
-  padding: 24px 20px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  padding: 26px 20px 22px;
+  background: radial-gradient(
+    circle at 50% -10%,
+    color-mix(in srgb, var(--elem-color) 16%, transparent) 0%,
+    transparent 65%
+  );
 }
 
-.contributor-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+.contributor-avatar-wrap {
+  position: relative;
+  margin-bottom: 10px;
 }
 
 .contributor-avatar {
-  width: 84px;
-  height: 84px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   flex-shrink: 0;
   object-fit: cover;
   background: var(--bg);
-  border: 3px solid var(--bg);
-  box-shadow: 0 0 0 1px var(--border);
-  margin-bottom: 6px;
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--elem-color) 65%, var(--border));
+  display: block;
 }
 
 .contributor-avatar-fallback {
@@ -320,7 +377,22 @@ code {
   background: var(--nav-bg);
   color: var(--nav-fg);
   font-weight: 700;
-  font-size: 1.75rem;
+  font-size: 1.9rem;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+}
+
+.contributor-element-badge {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 2px solid var(--elem-color);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.35);
+  padding: 3px;
+  object-fit: contain;
 }
 
 .contributor-info {
@@ -328,33 +400,27 @@ code {
   width: 100%;
 }
 
-.contributor-info h3 {
-  margin: 0 0 4px;
-  font-size: 1.05rem;
+.contributor-name {
+  margin: 0 0 6px;
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: var(--fg);
+  text-shadow:
+    0 2px 0 color-mix(in srgb, var(--elem-color) 70%, black 30%),
+    0 3px 8px color-mix(in srgb, var(--elem-color) 40%, transparent);
 }
 
 .contributor-info p {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   color: var(--fg-muted);
-  font-weight: 600;
-  font-size: 0.92rem;
+  font-weight: 700;
+  font-size: 0.88rem;
   line-height: 1.4;
-}
-
-.contributor-handles {
-  margin: 0 0 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.contributor-handle {
-  font-size: 0.8rem;
-  color: var(--fg-muted);
-}
-
-.contributor-handle:empty {
-  display: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .contributor-links {
@@ -363,7 +429,6 @@ code {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: auto;
-  padding-top: 4px;
 }
 
 .contributor-link {
@@ -373,18 +438,27 @@ code {
   font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
+  color: var(--fg);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 10px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
 .contributor-link:hover {
-  border-color: var(--accent);
+  border-color: var(--elem-color);
+  transform: translateY(-1px);
 }
 
 .contributor-icon {
   flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contributor-card, .contributor-card::before, .contributor-link {
+    transition: none;
+  }
 }
 
 /* Footer */
