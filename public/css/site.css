@@ -285,10 +285,6 @@ code {
   font-size: 2.2rem;
 }
 
-.hud-avatar-mini.hud-avatar-fallback {
-  font-size: 0.8rem;
-}
-
 /* FillMaskForPFP2: x=162 y=80 w=40 h=40 -- the mini badge (Discord,
    per "PFP2ProbablyDiscord"). z-index:3, above FrameOfPFP1's ring (2)
    and the main avatar (1) -- matches the PSD's own real stacking order,

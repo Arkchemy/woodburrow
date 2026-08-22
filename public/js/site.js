@@ -50,16 +50,25 @@
   }
 
   // Real Imaginators Battle Class symbols (self-hosted, recolored gold to
-  // match the frame) -- used as the mini-badge filler for contributors
-  // who don't have a second avatar identity to show there. Picked
-  // deterministically per contributor (see battleClassFor) rather than
-  // randomly, so it's the same every visit.
+  // match the frame) -- the mini badge (PFP2) is always this, for every
+  // contributor, never a second real avatar photo (see renderContributors'
+  // own miniAvatar comment for why). Picked deterministically per
+  // contributor (see battleClassFor) rather than randomly, so it's the
+  // same every visit -- except the two people who picked their own.
   const BATTLE_CLASSES = [
     'brawler', 'sorcerer', 'smasher', 'bowslinger', 'knight',
     'quickshot', 'sentinel', 'ninja', 'bazooker', 'swashbuckler',
   ];
 
-  function battleClassFor(seed){
+  // Self-picked, not derived -- checked by contributor name before falling
+  // back to the deterministic hash below.
+  const BATTLE_CLASS_OVERRIDES = {
+    'Aaronateataco': 'bazooker',
+    'bonesinmysoup': 'swashbuckler',
+  };
+
+  function battleClassFor(seed, name){
+    if (name && BATTLE_CLASS_OVERRIDES[name]) return BATTLE_CLASS_OVERRIDES[name];
     let h = 11;
     for (const ch of String(seed || '')) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
     return BATTLE_CLASSES[h % BATTLE_CLASSES.length];
@@ -228,10 +237,8 @@
     const items = rows.map((r, i) => {
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
-      const hasBoth = !!ghUser && hasDiscord;
       const initial = (r.name || '?').replace(/[("].*$/, '').trim().charAt(0).toUpperCase() || '?';
       const mainAvatarId = `${idPrefix}contributor-avatar-main-${i}`;
-      const miniAvatarId = `${idPrefix}contributor-avatar-mini-${i}`;
       const ghLinkId = `${idPrefix}contributor-gh-link-${i}`;
       const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const elem = elementInfoFor(r.element);
@@ -245,14 +252,14 @@
       const mainAvatar = ghUser
         ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
-      // Mini badge (PSD: "PFP2ProbablyDiscord") is a real second identity
-      // when a contributor has both GitHub and Discord -- otherwise
-      // there's no second photo to show there, so it falls back to a
-      // deterministically-picked Battle Class symbol (gold, matching
-      // the frame) on a solid dark-blue fill instead of sitting empty.
-      const miniAvatar = hasBoth
-        ? `<div class="hud-avatar-mini hud-avatar-fallback" id="${miniAvatarId}"></div>`
-        : `<div class="hud-avatar-mini hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name)}.png" alt="" loading="lazy"></div>`;
+      // Mini badge (PSD: "PFP2ProbablyDiscord") is always a Battle Class
+      // symbol now, never a second real avatar photo -- was a real
+      // Discord photo here when a contributor had both GitHub and
+      // Discord, but that made the badge's meaning inconsistent
+      // contributor-to-contributor (sometimes an identity photo,
+      // sometimes a class symbol). Battle Class-only everywhere reads as
+      // one consistent "class" slot instead.
+      const miniAvatar = `<div class="hud-avatar-mini hud-avatar-battleclass"><img src="/images/battle-class/${battleClassFor(r.discord_id || r.name, r.name)}.png" alt="" loading="lazy"></div>`;
       const elementIcon = `<img class="hud-element" src="${elementImageUrl(elem.img)}" alt="${escapeHtml(elem.label)} element" title="${escapeHtml(elem.label)} element" loading="lazy">`;
       const repoCount = r.repos && r.repos !== 'n/a' ? r.repos : '0';
       const coinCount = coinCountFor(r.discord_id, r.name);
@@ -304,17 +311,15 @@
 
     rows.forEach((r, i) => {
       const mainAvatarId = `${idPrefix}contributor-avatar-main-${i}`;
-      const miniAvatarId = `${idPrefix}contributor-avatar-mini-${i}`;
       const ghLinkId = `${idPrefix}contributor-gh-link-${i}`;
       const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
-      const hasBoth = !!ghUser && hasDiscord;
       if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main');
-      // Discord fills the mini slot when there's a GitHub avatar
-      // already occupying the main one, otherwise it's the only photo
-      // this contributor has, so it becomes the main avatar instead.
-      if (hasDiscord) fillDiscordInfo(r.discord_id, hasBoth ? miniAvatarId : mainAvatarId, dcLinkId, hasBoth ? 'hud-avatar-mini' : 'hud-avatar-main');
+      // Discord fills the main avatar only when there's no GitHub photo
+      // already there; otherwise just the tooltip title on the Discord
+      // link -- the mini slot is always Battle Class now, never a photo.
+      if (hasDiscord) fillDiscordInfo(r.discord_id, ghUser ? null : mainAvatarId, dcLinkId, 'hud-avatar-main');
     });
 
     fitHudNames(container);
@@ -402,7 +407,10 @@
       if (data.username) {
         setLinkTitle(linkId, `Discord: ${pickName(data.display_name, data.username)}`);
       }
-      if (data.avatar) swapAvatar(avatarId, data.avatar, avatarClassName);
+      // avatarId is null when a GitHub photo already occupies the main
+      // slot and the mini slot no longer accepts a real photo (always
+      // Battle Class now) -- title-only in that case, nothing to swap.
+      if (avatarId && data.avatar) swapAvatar(avatarId, data.avatar, avatarClassName);
     } catch (err) {
       // Server route unreachable/erroring -- leave the initial letter
       // and no Discord handle line, this is a real, expected
