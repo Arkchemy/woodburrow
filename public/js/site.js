@@ -65,6 +65,7 @@
   const BATTLE_CLASS_OVERRIDES = {
     'Aaronateataco': 'bazooker',
     'bonesinmysoup': 'swashbuckler',
+    'Claude': 'sentinel',
   };
 
   function battleClassFor(seed, name){
