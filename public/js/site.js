@@ -1,35 +1,10 @@
-/* Shared site JS: inject a consistent navbar and fetch GitHub repos for Arkchemy */
+/* Arkchemy site JS -- dumbed down 2026-08-22 to just the two pieces of
+   real functionality: fetching/rendering Contributors (from
+   CONTRIBUTORS.csv) and fetching/rendering the Arkchemy org's repos
+   (from /api/github-repos). Everything else (navbar, footer, theme
+   toggle, homepage/about/license content) got stripped -- the rest of
+   the site is being rebuilt from scratch by hand. */
 (function(){
-  const navbarHTML = `
-  <nav class="site-navbar">
-    <div class="nav-inner">
-      <a class="brand" href="/">Arkchemy</a>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/projects.html">Projects</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/contributors.html">Contributors</a></li>
-        <li><a href="/license.html">License</a></li>
-        <li><a href="#" id="repos-toggle">Repos</a></li>
-        <li><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light theme">🌓</button></li>
-      </ul>
-    </div>
-  </nav>
-  `;
-
-  // Was previously only hardcoded into index.html -- injected on every
-  // page now (same pattern as the navbar) so the Skylanders Wiki credit
-  // for the element symbols and Portal of Power artwork appears
-  // everywhere those assets are actually used, not just the homepage.
-  const footerHTML = `
-  <footer class="site-footer">
-    <div class="container">
-      <div>© Arkchemy — content from public GitHub data.</div>
-      <div class="credits">Elemental symbols and Portal of Power artwork courtesy of the <a href="https://skylanderswiki.com" target="_blank" rel="noopener noreferrer">Skylanders Wiki</a> (CC BY-SA).</div>
-    </div>
-  </footer>
-  `;
-
   // Real brand mark SVGs (Simple Icons' standard single-path versions,
   // the same shapes GitHub/Discord's own brand kits use), inlined
   // rather than fetched from an icon site so there's no extra network
@@ -90,75 +65,20 @@
     return BATTLE_CLASSES[h % BATTLE_CLASSES.length];
   }
 
-  const THEME_KEY = 'arkchemy-theme';
-
-  function applyStoredTheme(){
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored === 'dark' || stored === 'light') {
-      document.documentElement.setAttribute('data-theme', stored);
-    }
-  }
-
-  function toggleTheme(){
-    const current = document.documentElement.getAttribute('data-theme')
-      || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem(THEME_KEY, next);
-  }
-
-  // Applied immediately (not waiting for DOMContentLoaded) so the page
-  // doesn't flash the wrong theme for a frame before this script runs.
-  applyStoredTheme();
-
   document.addEventListener('DOMContentLoaded', () => {
-    injectNavbar();
-    injectFooter();
-
-    // If on the root page, open repos panel automatically
-    if (location.pathname === '/' || location.pathname.endsWith('/index.html')) {
-      const container = document.getElementById('github-repos');
-      if (container) container.classList.add('open');
-      if (container && !container.dataset.loaded) { fetchRepos(); container.dataset.loaded = '1'; }
-    }
-
-    // If on the license page, fetch and render the LICENSE file
-    if (location.pathname.endsWith('/license.html') || location.pathname.endsWith('/license')){
-      if (!document.getElementById('license-content')) return;
-      fetchLicense();
-    }
-
-    // If on the contributors page, fetch and render CONTRIBUTORS.csv
-    if (document.getElementById('contributors-list')) {
-      fetchContributors();
-    }
+    if (document.getElementById('contributors-list')) fetchContributors();
+    if (document.getElementById('github-repos')) fetchRepos();
   });
 
-  function injectNavbar(){
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = navbarHTML.trim();
-    const navNode = wrapper.firstChild;
-
-    const existing = document.querySelectorAll('nav, .site-navbar');
-    if (existing.length) {
-      existing.forEach(e => e.replaceWith(navNode.cloneNode(true)));
-    } else {
-      document.body.prepend(navNode);
-    }
-
-    const toggle = document.getElementById('repos-toggle');
-    if (toggle) toggle.addEventListener('click', (ev) => { ev.preventDefault(); toggleRepos(); });
-
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-  }
-
-  function injectFooter(){
-    const existing = document.querySelector('footer.site-footer');
-    if (existing) existing.remove();
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = footerHTML.trim();
-    document.body.appendChild(wrapper.firstChild);
+  // raw.githubusercontent.com sits behind a real CDN that caches by
+  // URL for several minutes regardless of the page's own fetch cache
+  // mode -- confirmed directly (fetched the same file via the GitHub
+  // API right after a push and got different, newer content than what
+  // the raw URL was still serving). A cache-busting query param makes
+  // every page load a genuinely new URL, so visitors always see
+  // current data instead of whatever was cached at the last CDN pull.
+  function cacheBusted(url){
+    return url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now();
   }
 
   async function fetchRepos(user = 'Arkchemy'){
@@ -175,41 +95,29 @@
     }
   }
 
-  // raw.githubusercontent.com sits behind a real CDN that caches by
-  // URL for several minutes regardless of the page's own fetch cache
-  // mode -- confirmed directly (fetched the same file via the GitHub
-  // API right after a push and got different, newer content than what
-  // the raw URL was still serving). A cache-busting query param makes
-  // every page load a genuinely new URL, so visitors always see
-  // current data instead of whatever was cached at the last CDN pull.
-  function cacheBusted(url){
-    return url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now();
-  }
-
-  // Fetch raw LICENSE text from the woodburrow repo and render it
-  async function fetchLicense(){
-    const container = document.getElementById('license-content');
-    if (!container) return;
-    container.textContent = 'Loading license…';
-    const url = cacheBusted('https://raw.githubusercontent.com/Arkchemy/woodburrow/refs/heads/main/LICENSE');
-    try{
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
-      const text = await res.text();
-      // Use textContent to preserve formatting exactly
-      container.textContent = text;
-    }catch(err){
-      container.textContent = 'Could not load license: ' + err.message;
+  function renderRepos(repos, container){
+    if (!Array.isArray(repos) || repos.length === 0){
+      container.innerHTML = '<div class="empty">No repositories found.</div>';
+      return;
     }
+
+    const items = repos.slice(0, 30).map(r => {
+      const desc = r.description ? `<div class="desc">${escapeHtml(r.description)}</div>` : '';
+      const lang = r.language ? `<span class="lang">${r.language}</span>` : '';
+      return `<li class="repo"><a href="${r.html_url}" target="_blank" rel="noopener noreferrer">${r.name}</a>${desc}<div class="meta">⭐ ${r.stargazers_count} ${lang}</div></li>`;
+    }).join('');
+
+    container.innerHTML = `<ul class="repo-list">${items}</ul>`;
   }
 
-  // Fetch and render CONTRIBUTORS.csv from the woodburrow repo -- same
-  // "pull real data from GitHub, don't hardcode it" approach as
-  // fetchRepos/fetchLicense above. No Discord avatar/display-name
-  // lookups yet: Discord has no public, unauthenticated API for
-  // looking up an arbitrary user's profile from client-side JS (that
-  // needs a bot token behind a real server), so this just renders
-  // name/role/contact straight from the CSV for now.
+  // Fetch and render CONTRIBUTORS.csv from the woodburrow repo -- pulls
+  // real data from GitHub rather than hardcoding it. No Discord
+  // avatar/display-name lookups from the client directly: Discord has
+  // no public, unauthenticated API for looking up an arbitrary user's
+  // profile (that needs a bot token behind a real server -- see
+  // fillDiscordInfo/api/discord-avatar), so the initial render uses
+  // name/role/contact straight from the CSV and the real photo/handle
+  // fills in async afterward.
   // Split into the two sections the page actually shows: real named
   // roles at the top (Founder, AI assistant, project direction,
   // specific RE credit, etc.) vs. a smaller, more compact section below
@@ -522,28 +430,6 @@
       // github.com/{u}.png shortcut used for the initial paint stays in
       // place, and no title tooltip gets added. Not a bug to surface.
     }
-  }
-
-  function renderRepos(repos, container){
-    if (!Array.isArray(repos) || repos.length === 0){
-      container.innerHTML = '<div class="empty">No repositories found.</div>';
-      return;
-    }
-
-    const items = repos.slice(0, 30).map(r => {
-      const desc = r.description ? `<div class="desc">${escapeHtml(r.description)}</div>` : '';
-      const lang = r.language ? `<span class="lang">${r.language}</span>` : '';
-      return `<li class="repo"><a href="${r.html_url}" target="_blank" rel="noopener noreferrer">${r.name}</a>${desc}<div class="meta">⭐ ${r.stargazers_count} ${lang}</div></li>`;
-    }).join('');
-
-    container.innerHTML = `<ul class="repo-list">${items}</ul>`;
-  }
-
-  function toggleRepos(){
-    const container = document.getElementById('github-repos');
-    if (!container) return;
-    const open = container.classList.toggle('open');
-    if (open && !container.dataset.loaded){ fetchRepos(); container.dataset.loaded = '1'; }
   }
 
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
