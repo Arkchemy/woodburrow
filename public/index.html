@@ -9,6 +9,19 @@
   </head>
   <body>
     <main class="container">
+      
+      <!-- NEW: Arkchemy Progress Dashboard Section -->
+      <section>
+        <h2>Project Progress</h2>
+        <div id="arkchemy-dashboard">
+          <h3 id="project-headline">Loading...</h3>
+          <p>Current Status: <strong id="project-status"></strong></p>
+          <h4>Active Projects</h4>
+          <ul id="projects-list"></ul>
+        </div>
+      </section>
+
+      <!-- EXISTING SECTIONS -->
       <section>
         <h2>Contributors</h2>
         <div id="contributors-list" class="project-list contributor-list"></div>
@@ -25,6 +38,29 @@
       </section>
     </main>
 
+    <!-- Your existing external script -->
     <script src="/js/site.js" defer></script>
+    
+    <!-- NEW: JSON parsing script -->
+    <script>
+      fetch('progress.json')
+        .then(response => response.json())
+        .then(data => {
+          // Insert the overall headline
+          document.getElementById('project-headline').textContent = data.overall.headline;
+          
+          // Insert the status state
+          document.getElementById('project-status').textContent = data.status.state;
+          
+          // Loop through the projects array and generate list items
+          const projectsList = document.getElementById('projects-list');
+          data.projects.forEach(project => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<strong>${project.name}</strong> (${project.percent}%): ${project.summary}`;
+            projectsList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+    </script>
   </body>
 </html>
