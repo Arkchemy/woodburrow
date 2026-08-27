@@ -94,7 +94,7 @@
 .worktree ul {
   list-style: none;
   margin: 0;
-  padding: 0 0 0 1.15rem;
+  padding: 0 0 0 1.45rem;
 }
 
 .worktree > ul { padding-left: 0; }
@@ -106,20 +106,37 @@
 
 /* Connector lines: a vertical rail down each nested list, and a short
    elbow out to each node. */
+.worktree {
+  --rail: color-mix(in srgb, var(--fg-muted) 34%, transparent);
+}
+
 .worktree li > ul::before {
   content: "";
   position: absolute;
   left: 0.42rem;
   top: 0;
-  bottom: 0.55rem;
+  bottom: 0.7rem;
   width: 1px;
-  background: var(--border);
+  background: var(--rail);
+}
+
+/* Short elbow from the rail to each row, so nesting reads as a tree
+   rather than as indentation alone. */
+.worktree ul ul > li > .worktree-node::before {
+  content: "";
+  position: absolute;
+  left: -0.73rem;
+  top: 1.02rem;
+  width: 0.6rem;
+  height: 1px;
+  background: var(--rail);
 }
 
 .worktree li > ul { position: relative; }
 
 .worktree-node {
-  display: flex;
+  display: inline-flex;
+  max-width: 100%;
   align-items: flex-start;
   gap: 0.55rem;
   padding: 0.4rem 0.6rem;
@@ -140,12 +157,14 @@
   background: none;
   color: var(--fg-muted);
   cursor: pointer;
-  font-size: 0.7rem;
-  line-height: 1;
+  font-size: 0.75rem;
+  line-height: 1.05;
   padding: 0;
-  transition: transform 0.18s ease;
+  opacity: 0.9;
+  transition: transform 0.18s ease, opacity 0.18s ease;
 }
 
+.worktree-toggle:hover { opacity: 1; }
 .worktree-toggle[aria-expanded="false"] { transform: rotate(-90deg); }
 .worktree-toggle.is-leaf { visibility: hidden; cursor: default; }
 
@@ -179,6 +198,23 @@
   white-space: nowrap;
 }
 
+.worktree-now {
+  display: inline-block;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--accent);
+  margin-left: 0.5rem;
+  vertical-align: 0.12em;
+  white-space: nowrap;
+}
+
+.worktree-now::before {
+  content: "◂ ";
+  font-weight: 400;
+}
+
 .worktree-percent {
   font-size: 0.75rem;
   color: var(--fg-muted);
@@ -192,9 +228,16 @@
   font-size: 1rem;
 }
 
-.worktree-item[data-kind="repo"] > .worktree-node,
-.worktree-item[data-kind="gate"] > .worktree-node {
-  margin-top: 0.5rem;
+.worktree-item[data-kind="repo"],
+.worktree-item[data-kind="gate"] {
+  margin-top: 1.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--border);
+}
+
+.worktree > ul > .worktree-item:first-child {
+  margin-top: 0;
+  border-top: 0;
 }
 
 /* ---- status treatments ---- */
@@ -226,6 +269,23 @@
   box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--accent) 55%, transparent),
               var(--shadow);
   transform: translateY(-1px);
+}
+
+/* Active branch (has active work somewhere beneath it): a quiet accent
+   edge and nothing else. It is a signpost, not a destination. */
+.worktree-item[data-status="active"].is-branch > .worktree-node {
+  background: none;
+  border-color: transparent;
+  border-left: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 0 8px 8px 0;
+  box-shadow: none;
+  transform: none;
+}
+
+.worktree-item[data-status="active"].is-branch > .worktree-node .worktree-chip {
+  background: none;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .worktree-item[data-status="active"] > .worktree-node .worktree-name {

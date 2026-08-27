@@ -35,6 +35,7 @@
     var counts = { active: 0, next: 0, blocked: 0, paused: 0, done: 0 };
     var list = buildList(data.tree || [], counts, 0);
     root.appendChild(list);
+    markBranches();
     markFocus(data.focus);
     renderCounts(counts);
     renderFilters();
@@ -183,6 +184,18 @@
   /* Find the node named by focus.path and give it the strongest
      treatment, then make sure every ancestor is expanded so it is
      actually visible without clicking anything. */
+  /* An active node that contains active work below it is a branch, not
+     the thing in hand -- it gets a quieter treatment so the leaves stay
+     legible. Without this every ancestor of the current substep shouts
+     as loudly as the substep itself. */
+  function markBranches() {
+    root.querySelectorAll('.worktree-item[data-status="active"]').forEach(function (item) {
+      if (item.querySelector('.worktree-item[data-status="active"]')) {
+        item.classList.add('is-branch');
+      }
+    });
+  }
+
   function markFocus(focus) {
     if (!focus || !Array.isArray(focus.path) || !focus.path.length) return;
     var target = focus.path[focus.path.length - 1];
@@ -193,6 +206,13 @@
       if (!nameEl) continue;
       if (nameEl.firstChild && nameEl.firstChild.textContent === target) {
         items[i].classList.add('is-focus');
+        // An explicit badge, not just a stronger shadow: with several
+        // active leaves on screen the current one has to be nameable at
+        // a glance, and a shadow alone is not a label.
+        var badge = document.createElement('span');
+        badge.className = 'worktree-now';
+        badge.textContent = 'you are here';
+        nameEl.appendChild(badge);
         focusNode = items[i];
         expandAncestors(items[i]);
         break;
