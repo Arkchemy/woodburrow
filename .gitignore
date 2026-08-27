@@ -1,0 +1,9 @@
+# Local Vercel CLI state and dependency/build output. Nothing in this
+# repo is built ahead of deployment -- public/ is served as-is and api/
+# is bundled by Vercel -- so anything below only ever appears from
+# running the CLI or npm locally.
+.vercel/
+node_modules/
+.env
+.env.*
+!.env.example

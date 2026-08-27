@@ -41,26 +41,9 @@
     <!-- Your existing external script -->
     <script src="/js/site.js" defer></script>
     
-    <!-- NEW: JSON parsing script -->
-    <script>
-      fetch('progress.json')
-        .then(response => response.json())
-        .then(data => {
-          // Insert the overall headline
-          document.getElementById('project-headline').textContent = data.overall.headline;
-          
-          // Insert the status state
-          document.getElementById('project-status').textContent = data.status.state;
-          
-          // Loop through the projects array and generate list items
-          const projectsList = document.getElementById('projects-list');
-          data.projects.forEach(project => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<strong>${project.name}</strong> (${project.percent}%): ${project.summary}`;
-            projectsList.appendChild(listItem);
-          });
-        })
-        .catch(error => console.error('Error loading JSON:', error));
-    </script>
+    <!-- Dashboard: see /js/dashboard.js (kept out of the page so the
+         site's Content-Security-Policy can forbid inline script outright
+         rather than having to allow it) -->
+    <script src="/js/dashboard.js" defer></script>
   </body>
 </html>
