@@ -1,0 +1,310 @@
+{
+  "generated": "2026-08-28",
+  "focus": {
+    "repo": "jouster",
+    "path": [
+      "jouster",
+      "Game bring-up",
+      "Engine entry point (sti_idx=113)",
+      "Rebuild the eight lost boot probes"
+    ],
+    "substep": "Rebuild the eight lost boot probes so the NULL registry table can be traced to the global that should hold it",
+    "why": "The 2026-08-27 run proved the registry table pointer itself is NULL, not an unregistered entry in it. Naming the global that was supposed to write it is the next measurable step.",
+    "blocked_on": "A local copy of the game dump — the generated C cannot be rebuilt without it."
+  },
+  "legend": {
+    "active": "being worked on right now",
+    "next": "queued, nothing blocking it",
+    "blocked": "cannot start until something else lands",
+    "done": "finished and verified",
+    "paused": "deliberately set down"
+  },
+  "tree": [
+    {
+      "name": "conquertron",
+      "kind": "repo",
+      "status": "active",
+      "percent": 72,
+      "note": "PowerPC32 → C static recompiler",
+      "children": [
+        {
+          "name": "Binary translation",
+          "status": "done",
+          "note": "~19,600 functions recovered and emitted from the real RPX",
+          "children": [
+            {
+              "name": "Function boundary recovery",
+              "status": "done"
+            },
+            {
+              "name": "Relocations & rodata addressing",
+              "status": "done",
+              "note": "the rodata-table bug this project found and fixed"
+            },
+            {
+              "name": "Stripped-binary heuristic recovery",
+              "status": "done"
+            }
+          ]
+        },
+        {
+          "name": "Cafe OS runtime shims",
+          "status": "active",
+          "children": [
+            {
+              "name": "coreinit — memory, threads, filesystem",
+              "status": "done"
+            },
+            {
+              "name": "GX2 → deko3d graphics",
+              "status": "active",
+              "note": "state setters and buffers land; no shader translation yet"
+            },
+            {
+              "name": "Audio (snd_core / snd_user)",
+              "status": "next"
+            },
+            {
+              "name": "Shader translation",
+              "status": "blocked",
+              "note": "needs a GX2 shader decoder; nothing draws until then"
+            }
+          ]
+        },
+        {
+          "name": "Guest arena is caller-configurable",
+          "status": "done",
+          "note": "2026-08-28 — PPC_MEM_SIZE is #ifndef-guarded so the test suite can use 4MB against the game's 1GB"
+        }
+      ]
+    },
+    {
+      "name": "jouster",
+      "kind": "repo",
+      "status": "active",
+      "percent": 38,
+      "note": "The Switch side — where the recompiled game actually runs",
+      "children": [
+        {
+          "name": "On-hardware recompiler suite",
+          "status": "active",
+          "children": [
+            {
+              "name": "5 programs",
+              "status": "done",
+              "note": "5/5 on hardware, 2026-08-14"
+            },
+            {
+              "name": "9 programs",
+              "status": "done",
+              "note": "9/9 on hardware, 2026-08-27 — t1–t5 identical after regeneration"
+            },
+            {
+              "name": "23 programs — full parity with verify.sh",
+              "status": "active",
+              "note": "built and 25/25 on host; awaiting its first hardware run"
+            }
+          ]
+        },
+        {
+          "name": "GX2 → deko3d on real hardware",
+          "status": "active",
+          "children": [
+            {
+              "name": "36 state-setter checks",
+              "status": "done",
+              "note": "36/36 on hardware, 2026-08-16"
+            },
+            {
+              "name": "70 checks — the previously unexercised surface",
+              "status": "active",
+              "note": "built; awaiting its first hardware run"
+            },
+            {
+              "name": "Real draw calls",
+              "status": "blocked",
+              "note": "waits on shader translation in conquertron"
+            }
+          ]
+        },
+        {
+          "name": "Game bring-up",
+          "status": "active",
+          "children": [
+            {
+              "name": "114/114 static initialisers complete",
+              "status": "done"
+            },
+            {
+              "name": "Memory context published, assets load",
+              "status": "done"
+            },
+            {
+              "name": "Finding A — static initialiser 87 exhausts the ExpHeap",
+              "status": "next",
+              "note": "~927 unfreed 128KB allocations from one call site fill 116MB. Reproducible today with committed code."
+            },
+            {
+              "name": "Engine entry point (sti_idx=113)",
+              "status": "active",
+              "children": [
+                {
+                  "name": "Finding B — the registry table pointer is NULL",
+                  "status": "done",
+                  "note": "2026-08-28: table=0, index=0. Not an unregistered entry — the pointer was never populated."
+                },
+                {
+                  "name": "Rebuild the eight lost boot probes",
+                  "status": "active",
+                  "note": "hook sites and expected values recovered from the surviving log"
+                },
+                {
+                  "name": "Name the global that should hold the table",
+                  "status": "blocked",
+                  "note": "needs the probes above, and a dump to rebuild against"
+                }
+              ]
+            },
+            {
+              "name": "Rendering",
+              "status": "blocked",
+              "note": "the engine does not reach a draw call yet"
+            },
+            {
+              "name": "Audio",
+              "status": "blocked"
+            }
+          ]
+        },
+        {
+          "name": "Build & tooling",
+          "status": "done",
+          "children": [
+            {
+              "name": "devkitPro installed natively",
+              "status": "done",
+              "note": "2026-08-28 — builds no longer need a container"
+            },
+            {
+              "name": "regenerate.sh runnable from a clean clone",
+              "status": "done",
+              "note": "was the fourth pre-split path bug"
+            },
+            {
+              "name": "Bare-metal build.sh path repaired",
+              "status": "done",
+              "note": "the fifth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "blaster",
+      "kind": "repo",
+      "status": "active",
+      "percent": 70,
+      "note": "Host tooling and the recompiler-correctness suite",
+      "children": [
+        {
+          "name": "verify.sh runs from a clean clone",
+          "status": "done"
+        },
+        {
+          "name": "23 correctness pipelines under QEMU",
+          "status": "done"
+        },
+        {
+          "name": "Hard-float PPC target pinned",
+          "status": "done",
+          "note": "2026-08-28 — newer zig defaulted to soft float and silently removed the instruction one test existed to cover"
+        },
+        {
+          "name": "IGZ archive tooling",
+          "status": "paused"
+        },
+        {
+          "name": "Field schema extraction",
+          "status": "next"
+        }
+      ]
+    },
+    {
+      "name": "woodburrow",
+      "kind": "repo",
+      "status": "active",
+      "percent": 30,
+      "note": "The public site",
+      "children": [
+        {
+          "name": "Progress dashboard",
+          "status": "done",
+          "note": "2026-08-28 — had been 404ing since the JSON landed outside public/"
+        },
+        {
+          "name": "Security headers & avatar proxy hardening",
+          "status": "done",
+          "note": "2026-08-28"
+        },
+        {
+          "name": "This work tree",
+          "status": "active"
+        },
+        {
+          "name": "CSV proxy route",
+          "status": "next",
+          "note": "would let the CSP drop its one third-party allowance"
+        },
+        {
+          "name": "Public pages rebuild",
+          "status": "next"
+        }
+      ]
+    },
+    {
+      "name": "armory",
+      "kind": "repo",
+      "status": "next",
+      "percent": 3,
+      "note": "Locker and account linking",
+      "children": [
+        {
+          "name": "Repository scaffold",
+          "status": "done"
+        },
+        {
+          "name": "On-device locker",
+          "status": "blocked",
+          "note": "waits on the game running at all"
+        },
+        {
+          "name": "Account linking backend",
+          "status": "next"
+        }
+      ]
+    },
+    {
+      "name": "Waiting on a human",
+      "kind": "gate",
+      "status": "blocked",
+      "note": "Not code — these need a decision or an artefact only the owner has",
+      "children": [
+        {
+          "name": "A local copy of the game dump",
+          "status": "blocked",
+          "note": "no .rpx on the laptop; the generated C cannot be rebuilt without it"
+        },
+        {
+          "name": "Push the local commits",
+          "status": "blocked",
+          "note": "several commits sit unpushed across four repos"
+        },
+        {
+          "name": "Set the project status field by hand",
+          "status": "blocked",
+          "note": "currently reads \"paused since 24 Aug, reason unknown\", inferred from silence"
+        }
+      ]
+    }
+  ]
+}
