@@ -3,7 +3,31 @@
    hand-made HUD design) and the org repos list. Everything else (nav,
    hero, about/license page chrome, footer) got stripped -- the rest of
    the site is being rebuilt from scratch by hand. */
-@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+/* Luckiest Guy, self-hosted rather than @import-ed from Google Fonts.
+   Two reasons. The site's stated design goal is that a visitor's browser
+   only ever talks to this origin -- an @import to fonts.googleapis.com
+   broke that for every visitor, and put their IP in a third party's logs
+   for a font. And the Content-Security-Policy added 2026-08-28
+   (default-src 'none') blocks that import outright, which silently cost
+   the contributor cards their display face until this landed.
+   Apache License 2.0 -- see fonts/LICENSE.txt. */
+@font-face {
+  font-family: 'Luckiest Guy';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/luckiest-guy-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Luckiest Guy';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/luckiest-guy-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
 :root {
   --bg: #f6f7fb;

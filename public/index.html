@@ -3,27 +3,54 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Arkchemy</title>
+    <title>Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch</title>
+    <meta name="description" content="Arkchemy statically recompiles a legally-dumped Wii U copy of Skylanders: Spyro's Adventure into C, then builds it as native Switch homebrew. No emulation at runtime.">
     <link rel="icon" href="/favicon.png">
     <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/shell.css">
     <link rel="stylesheet" href="/css/worktree.css">
   </head>
   <body>
-    <main class="container">
-      
-      <!-- NEW: Arkchemy Progress Dashboard Section -->
-      <section>
-        <h2>Project Progress</h2>
-        <div id="arkchemy-dashboard">
-          <h3 id="project-headline">Loading...</h3>
-          <p>Current Status: <strong id="project-status"></strong></p>
-          <h4>Active Projects</h4>
-          <ul id="projects-list"></ul>
+    <header class="masthead">
+      <div class="container masthead-inner">
+        <div class="masthead-text">
+          <h1>Arkchemy</h1>
+          <p class="masthead-tagline">
+            Statically recompiling a legally-dumped Wii U copy of
+            <em>Skylanders: Spyro's Adventure</em> into C, then building it as
+            native Switch homebrew. No PowerPC emulation at runtime.
+          </p>
+          <nav class="masthead-links">
+            <a class="masthead-link" href="https://github.com/Arkchemy" rel="noopener">GitHub</a>
+            <a class="masthead-link" href="#worktree-section">What we're working on</a>
+            <a class="masthead-link" href="#contributors">Contributors</a>
+          </nav>
         </div>
+        <div class="overall">
+          <div class="overall-dial" id="overall-dial">
+            <span class="overall-dial-value" id="overall-value">—</span>
+          </div>
+          <div class="overall-meta" id="overall-meta">
+            <strong>Overall progress</strong>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="progress">
+        <h2>Where each piece has got to</h2>
+        <p class="section-lede" id="project-status"></p>
+        <p class="progress-headline" id="project-headline">Loading…</p>
+        <div id="projects-list" class="progress-grid"></div>
       </section>
 
-      <section>
+      <section id="worktree-section">
         <h2>What we're working on</h2>
+        <p class="section-lede">
+          The live work breakdown. Finished work sits quietly; whatever is in
+          hand right now is raised out of the tree.
+        </p>
         <div id="worktree-focus" class="worktree-focus"></div>
         <div id="worktree-controls" class="worktree-controls">
           <span id="worktree-counts" class="worktree-counts"></span>
@@ -31,8 +58,7 @@
         <div id="worktree" class="worktree"></div>
       </section>
 
-      <!-- EXISTING SECTIONS -->
-      <section>
+      <section id="contributors">
         <h2>Contributors</h2>
         <div id="contributors-list" class="project-list contributor-list"></div>
       </section>
@@ -48,12 +74,29 @@
       </section>
     </main>
 
-    <!-- Your existing external script -->
+    <footer class="site-footer">
+      <div class="container site-footer-inner">
+        <div>
+          <p>
+            Arkchemy contains no game code and no game assets. You supply your
+            own legally-dumped copy.
+          </p>
+          <p>
+            Not affiliated with, endorsed by, or associated with Activision or
+            Toys for Bob.
+          </p>
+        </div>
+        <nav>
+          <a href="https://github.com/Arkchemy" rel="noopener">GitHub org</a>
+          <a href="https://github.com/Arkchemy/conquertron" rel="noopener">conquertron</a>
+          <a href="https://github.com/Arkchemy/jouster" rel="noopener">jouster</a>
+          <a href="https://github.com/Arkchemy/blaster" rel="noopener">blaster</a>
+          <a href="https://github.com/Arkchemy/woodburrow/blob/main/LICENSE" rel="noopener">Licence</a>
+        </nav>
+      </div>
+    </footer>
+
     <script src="/js/site.js" defer></script>
-    
-    <!-- Dashboard: see /js/dashboard.js (kept out of the page so the
-         site's Content-Security-Policy can forbid inline script outright
-         rather than having to allow it) -->
     <script src="/js/dashboard.js" defer></script>
     <script src="/js/worktree.js" defer></script>
   </body>

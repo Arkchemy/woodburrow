@@ -1,0 +1,254 @@
+/* Page shell: masthead, section rhythm, progress cards, footer.
+   Kept separate from site.css so the contributor HUD cards in there --
+   a hand-made design -- are not disturbed by any of this. Every colour
+   comes from site.css's own tokens. */
+
+/* ---- masthead ---- */
+
+.masthead {
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(120% 140% at 15% -20%,
+      color-mix(in srgb, var(--accent) 16%, transparent) 0%,
+      transparent 62%),
+    var(--bg-alt);
+  padding: 3.2rem 0 2.4rem;
+  margin-bottom: 2.6rem;
+}
+
+.masthead-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.masthead-text { flex: 1 1 24rem; min-width: 0; }
+
+.masthead h1 {
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-size: clamp(2.6rem, 7vw, 4.1rem);
+  line-height: 1.02;
+  letter-spacing: 0.012em;
+  margin: 0 0 0.5rem;
+}
+
+.masthead-tagline {
+  font-size: clamp(1rem, 2.1vw, 1.12rem);
+  color: var(--fg-muted);
+  max-width: 46ch;
+  margin: 0 0 1.1rem;
+  line-height: 1.55;
+}
+
+.masthead-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.masthead-link {
+  font-size: 0.83rem;
+  text-decoration: none;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  border-radius: 999px;
+  padding: 0.34rem 0.85rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.masthead-link:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Overall-progress dial. A ring rather than a bar: it is one number
+   about the whole project, not one of a series to be compared. */
+.overall {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.overall-dial {
+  --pct: 0;
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--pct) * 1%), var(--border) 0);
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+.overall-dial::after {
+  content: "";
+  position: absolute;
+  inset: 0.55rem;
+  border-radius: 50%;
+  background: var(--bg-alt);
+}
+
+.overall-dial-value {
+  position: relative;
+  z-index: 1;
+  font-size: 1.6rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.overall-meta { font-size: 0.8rem; color: var(--fg-muted); max-width: 12rem; }
+.overall-meta strong { display: block; color: var(--fg); font-size: 0.92rem; margin-bottom: 0.15rem; }
+
+/* ---- section rhythm ---- */
+
+.container > section { margin-bottom: 3.2rem; }
+
+.container > section > h2 {
+  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
+  font-size: 1.45rem;
+  letter-spacing: 0.015em;
+  margin: 0 0 0.35rem;
+}
+
+.section-lede {
+  color: var(--fg-muted);
+  font-size: 0.92rem;
+  margin: 0 0 1.25rem;
+  max-width: 62ch;
+}
+
+/* ---- progress cards ---- */
+
+.progress-headline {
+  font-size: 1.02rem;
+  line-height: 1.55;
+  margin: 0 0 1.25rem;
+  max-width: 68ch;
+}
+
+.progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.progress-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  padding: 1.05rem 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.progress-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 60%, transparent), var(--shadow);
+}
+
+.progress-card-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.progress-card-name {
+  font-weight: 700;
+  font-size: 1.02rem;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.progress-card-name:hover { color: var(--accent); }
+
+.progress-card-pct {
+  font-size: 1.02rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.progress-card-role {
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  margin-top: 0.1rem;
+  /* Two lines' worth, always: without it a role that wraps pushes its
+     card's progress bar out of line with the cards beside it, and the
+     bars stop reading as a row that can be compared at a glance. */
+  min-height: 2.45em;
+}
+
+.progress-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin: 0.8rem 0 0.85rem;
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--accent) 65%, transparent), var(--accent));
+}
+
+.progress-card[data-state="paused"] .progress-bar span,
+.progress-card[data-state="parked"] .progress-bar span {
+  background: var(--fg-muted);
+}
+
+.progress-card-summary {
+  /* auto top margin, zero elsewhere: pushes the summary to the bottom of
+     the card so cards of different heights still line up. Must be the
+     shorthand -- a later `margin: 0` would silently cancel margin-top. */
+  margin: auto 0 0;
+  font-size: 0.855rem;
+  line-height: 1.55;
+  color: var(--fg-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- footer ---- */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 3.5rem;
+  padding: 2rem 0 2.6rem;
+  color: var(--fg-muted);
+  font-size: 0.85rem;
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.site-footer p { margin: 0 0 0.45rem; max-width: 58ch; line-height: 1.55; }
+.site-footer nav { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-card { transition: none; }
+  .progress-card:hover { transform: none; }
+}
+
+@media (max-width: 640px) {
+  .masthead { padding: 2.2rem 0 1.8rem; margin-bottom: 2rem; }
+  .masthead-inner { align-items: flex-start; }
+  .overall { width: 100%; }
+}
