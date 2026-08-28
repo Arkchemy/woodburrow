@@ -6,11 +6,11 @@
       "jouster",
       "Game bring-up",
       "Engine entry point (sti_idx=113)",
-      "Rebuild the eight lost boot probes"
+      "Prove nothing writes the registry global"
     ],
-    "substep": "Rebuild the eight lost boot probes so the NULL registry table can be traced to the global that should hold it",
-    "why": "The 2026-08-27 run proved the registry table pointer itself is NULL, not an unregistered entry in it. Naming the global that was supposed to write it is the next measurable step.",
-    "blocked_on": "A local copy of the game dump — the generated C cannot be rebuilt without it."
+    "substep": "Re-run with a positive control to confirm the registry global is never written, rather than that the watch is broken",
+    "why": "Two runs from the owner's own dump now reproduce the identical failure state, and the address feeding the registry index appears exactly once in 8.7M lines of generated C. A store-watch on it came back empty -- but that watch has never been seen to fire, so the next run arms a known-written address alongside it.",
+    "blocked_on": "A hardware run of the current build."
   },
   "legend": {
     "active": "being worked on right now",
@@ -154,14 +154,14 @@
                   "note": "2026-08-28: table=0, index=0. Not an unregistered entry — the pointer was never populated."
                 },
                 {
-                  "name": "Rebuild the eight lost boot probes",
+                  "name": "Prove nothing writes the registry global",
                   "status": "active",
-                  "note": "hook sites and expected values recovered from the surviving log"
+                  "note": "store-watch armed on synthetic 435928, plus a positive control on a known-written address; awaiting a hardware run"
                 },
                 {
                   "name": "Name the global that should hold the table",
-                  "status": "blocked",
-                  "note": "needs the probes above, and a dump to rebuild against"
+                  "status": "done",
+                  "note": "2026-08-28: synthetic 435928 (&.bss+321000), the only reference to it in ~8.7M lines is the read in igDataList::setCapacity"
                 }
               ]
             },
@@ -289,11 +289,6 @@
       "status": "blocked",
       "note": "Not code — these need a decision or an artefact only the owner has",
       "children": [
-        {
-          "name": "A local copy of the game dump",
-          "status": "blocked",
-          "note": "no .rpx on the laptop; the generated C cannot be rebuilt without it"
-        },
         {
           "name": "Push the local commits",
           "status": "blocked",
