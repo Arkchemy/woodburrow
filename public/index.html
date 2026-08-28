@@ -23,6 +23,7 @@
           <nav class="masthead-links">
             <a class="masthead-link" href="https://github.com/Arkchemy" rel="noopener">GitHub</a>
             <a class="masthead-link" href="#worktree-section">What we're working on</a>
+            <a class="masthead-link" href="#findings">Findings</a>
             <a class="masthead-link" href="#contributors">Contributors</a>
           </nav>
         </div>
@@ -45,6 +46,12 @@
         <div id="projects-list" class="progress-grid"></div>
       </section>
 
+      <section id="now" hidden>
+        <h2>Right now</h2>
+        <p class="section-lede">The single thing in hand, and what is queued behind it.</p>
+        <div id="now-body"></div>
+      </section>
+
       <section id="worktree-section">
         <h2>What we're working on</h2>
         <p class="section-lede">
@@ -56,6 +63,21 @@
           <span id="worktree-counts" class="worktree-counts"></span>
         </div>
         <div id="worktree" class="worktree"></div>
+      </section>
+
+      <section id="findings" hidden>
+        <h2>Research findings</h2>
+        <div id="findings-body"></div>
+      </section>
+
+      <section id="timeline" hidden>
+        <h2>How long this takes</h2>
+        <div id="timeline-body"></div>
+      </section>
+
+      <section id="roadmap" hidden>
+        <h2>Which games</h2>
+        <div id="roadmap-body"></div>
       </section>
 
       <section id="contributors">
@@ -99,5 +121,6 @@
     <script src="/js/site.js" defer></script>
     <script src="/js/dashboard.js" defer></script>
     <script src="/js/worktree.js" defer></script>
+    <script src="/js/detail.js" defer></script>
   </body>
 </html>

@@ -250,7 +250,13 @@
       // fillDiscordInfo to resolve first) when there's no GitHub, so a
       // Discord-only contributor still gets a real photo in the big
       // slot rather than an empty one.
-      const mainAvatar = ghUser
+      // The `avatar` column overrides that preference per contributor:
+      // "discord" keeps someone's Discord portrait in the big slot even
+      // though they have a GitHub link to show underneath. WinnerNombre
+      // asked for exactly that, and it is a reasonable thing to want --
+      // the link and the face are answering different questions.
+      const preferDiscord = (r.avatar || '').trim().toLowerCase() === 'discord' && hasDiscord;
+      const mainAvatar = (ghUser && !preferDiscord)
         ? `<img class="hud-avatar-main" id="${mainAvatarId}" src="/api/avatar-image?src=${encodeURIComponent('https://github.com/' + ghUser + '.png')}" alt="" loading="lazy">`
         : `<div class="hud-avatar-main hud-avatar-fallback" id="${mainAvatarId}">${escapeHtml(initial)}</div>`;
       // Mini badge (PSD: "PFP2ProbablyDiscord") is always a Battle Class
@@ -316,11 +322,13 @@
       const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
-      if (ghUser) fillGithubInfo(ghUser, mainAvatarId, ghLinkId, 'hud-avatar-main');
+      // Both lookups still run so both link tooltips resolve; only one of
+      // them is allowed to paint the portrait, decided by preferDiscord.
+      if (ghUser) fillGithubInfo(ghUser, preferDiscord ? null : mainAvatarId, ghLinkId, 'hud-avatar-main');
       // Discord fills the main avatar only when there's no GitHub photo
       // already there; otherwise just the tooltip title on the Discord
       // link -- the mini slot is always Battle Class now, never a photo.
-      if (hasDiscord) fillDiscordInfo(r.discord_id, ghUser ? null : mainAvatarId, dcLinkId, 'hud-avatar-main');
+      if (hasDiscord) fillDiscordInfo(r.discord_id, (ghUser && !preferDiscord) ? null : mainAvatarId, dcLinkId, 'hud-avatar-main');
     });
 
     fitHudNames(container);

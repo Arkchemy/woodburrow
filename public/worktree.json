@@ -6,10 +6,10 @@
       "jouster",
       "Game bring-up",
       "Engine entry point (sti_idx=113)",
-      "Find which classes the registration walk reaches"
+      "Find why the metadata file is never read"
     ],
-    "substep": "Registration runs 23 times but never reaches the classes that matter — follow the walk to find where it stops",
-    "why": "The boot ladder came back main=1, igRefAlchemy=1, igArkCore constructor=1, beginArkRegister=23. An earlier reading of 'registration never runs' was wrong; the phase runs and the class list is not being covered.",
+    "substep": "Registration works and is simply tiny — 36 classes self-register, and the rest were supposed to arrive by reading a metadata file that is never opened",
+    "why": "beginArkRegister and endArkRegister both run 23 times and addObjectMeta runs 36, so registration brackets cleanly. The bulk walker is reached only from igIGBFile::readFile, and this engine has never opened a file of its own in any run.",
     "blocked_on": "A hardware run of the current build."
   },
   "legend": {
@@ -154,9 +154,9 @@
                   "note": "2026-08-28: table=0, index=0. Not an unregistered entry — the pointer was never populated."
                 },
                 {
-                  "name": "Find which classes the registration walk reaches",
+                  "name": "Find why the metadata file is never read",
                   "status": "active",
-                  "note": "registration runs 23x; watches now follow callClassRegistrationFunctions, addObjectMeta and endArkRegister"
+                  "note": "36 classes self-register via appendToArkCore; the bulk arrives via igIGBFile::readFile, which never runs"
                 },
                 {
                   "name": "Name the global that should hold the table",
