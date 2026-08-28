@@ -6,10 +6,10 @@
       "jouster",
       "Game bring-up",
       "Engine entry point (sti_idx=113)",
-      "Prove nothing writes the registry global"
+      "Find which classes the registration walk reaches"
     ],
-    "substep": "Re-run with a positive control to confirm the registry global is never written, rather than that the watch is broken",
-    "why": "Two runs from the owner's own dump now reproduce the identical failure state, and the address feeding the registry index appears exactly once in 8.7M lines of generated C. A store-watch on it came back empty -- but that watch has never been seen to fire, so the next run arms a known-written address alongside it.",
+    "substep": "Registration runs 23 times but never reaches the classes that matter — follow the walk to find where it stops",
+    "why": "The boot ladder came back main=1, igRefAlchemy=1, igArkCore constructor=1, beginArkRegister=23. An earlier reading of 'registration never runs' was wrong; the phase runs and the class list is not being covered.",
     "blocked_on": "A hardware run of the current build."
   },
   "legend": {
@@ -154,9 +154,9 @@
                   "note": "2026-08-28: table=0, index=0. Not an unregistered entry — the pointer was never populated."
                 },
                 {
-                  "name": "Prove nothing writes the registry global",
+                  "name": "Find which classes the registration walk reaches",
                   "status": "active",
-                  "note": "store-watch armed on synthetic 435928, plus a positive control on a known-written address; awaiting a hardware run"
+                  "note": "registration runs 23x; watches now follow callClassRegistrationFunctions, addObjectMeta and endArkRegister"
                 },
                 {
                   "name": "Name the global that should hold the table",

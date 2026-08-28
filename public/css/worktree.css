@@ -265,10 +265,8 @@
    findable at a glance in a long tree. */
 .worktree-item[data-status="active"] > .worktree-node {
   background: var(--card-bg);
-  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
-  box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--accent) 55%, transparent),
-              var(--shadow);
-  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+  transform: none;
 }
 
 /* Active branch (has active work somewhere beneath it): a quiet accent
@@ -301,10 +299,9 @@
 /* The single deepest active node -- the actual current substep -- gets
    the strongest treatment, so "active" branches do not all shout equally. */
 .worktree-item.is-focus > .worktree-node {
-  transform: translateY(-2px) scale(1.012);
-  box-shadow: 0 12px 28px -8px color-mix(in srgb, var(--accent) 70%, transparent),
-              0 0 0 1px var(--accent);
-  animation: worktree-breathe 3.2s ease-in-out infinite;
+  background: color-mix(in srgb, var(--accent) 7%, var(--card-bg));
+  box-shadow: 0 0 0 1px var(--accent);
+  transform: none;
 }
 
 @keyframes worktree-breathe {

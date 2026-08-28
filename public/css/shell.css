@@ -7,12 +7,13 @@
 
 .masthead {
   border-bottom: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
   background:
-    radial-gradient(120% 140% at 15% -20%,
-      color-mix(in srgb, var(--accent) 16%, transparent) 0%,
-      transparent 62%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--accent) 6%, transparent) 0%,
+      transparent 70%),
     var(--bg-alt);
-  padding: 3.2rem 0 2.4rem;
+  padding: 2.8rem 0 2.2rem;
   margin-bottom: 2.6rem;
 }
 
@@ -105,10 +106,15 @@
 
 .container > section { margin-bottom: 3.2rem; }
 
+/* Section headings deliberately use the body font, not the display face.
+   Luckiest Guy belongs to the contributor cards -- a hand-made design --
+   and to the wordmark. Spreading it across every heading made the page
+   read as a fan page rather than a project site, and put a second
+   competing display face directly above someone else's work. */
 .container > section > h2 {
-  font-family: 'Luckiest Guy', 'Segoe UI', sans-serif;
-  font-size: 1.45rem;
-  letter-spacing: 0.015em;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
   margin: 0 0 0.35rem;
 }
 
@@ -138,17 +144,14 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--card-bg);
-  box-shadow: var(--shadow);
   padding: 1.05rem 1.1rem 1.15rem;
   display: flex;
   flex-direction: column;
-  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  transition: border-color 0.16s ease;
 }
 
 .progress-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-  box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 60%, transparent), var(--shadow);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
 }
 
 .progress-card-top {
