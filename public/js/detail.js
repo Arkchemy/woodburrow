@@ -31,6 +31,20 @@
     return s;
   }
 
+  /* A nav entry pointing at a section that never rendered is a dead link,
+     so entries start hidden and are revealed with their section. */
+  function hideNavFor(ids) {
+    ids.forEach(function (id) {
+      var a = document.querySelector('.section-nav a[href="#' + id + '"]');
+      if (a) a.hidden = true;
+    });
+  }
+  function showNavFor(id) {
+    var a = document.querySelector('.section-nav a[href="#' + id + '"]');
+    if (a) a.hidden = false;
+  }
+  hideNavFor(['now', 'findings', 'timeline', 'roadmap']);
+
   /* ---- what's happening right now ---- */
   function renderNow(data) {
     var host = document.getElementById('now-body');
@@ -62,6 +76,7 @@
       host.appendChild(ol);
     }
     show('now');
+    showNavFor('now');
   }
 
   /* ---- timeline / honest estimates ---- */
@@ -90,6 +105,7 @@
       host.appendChild(el('p', 'timeline-note', data.max_percent_reason));
     }
     show('timeline');
+    showNavFor('timeline');
   }
 
   /* ---- which games, and where each stands ---- */
@@ -113,6 +129,7 @@
     });
     host.appendChild(grid);
     show('roadmap');
+    showNavFor('roadmap');
   }
 
   /* ---- research findings ---- */
@@ -172,5 +189,50 @@
       host.appendChild(ul);
     }
     show('findings');
+    showNavFor('findings');
   }
+})();
+
+/* Section-nav behaviour and the findings expand/collapse controls.
+   Separate IIFE so a failure in either cannot take the other down --
+   the contributors section went dark today for exactly that reason. */
+(function () {
+  var expand = document.getElementById('findings-expand');
+  var collapse = document.getElementById('findings-collapse');
+  function setAll(open) {
+    document.querySelectorAll('#findings-body .finding').forEach(function (d) { d.open = open; });
+  }
+  if (expand) expand.addEventListener('click', function () { setAll(true); });
+  if (collapse) collapse.addEventListener('click', function () { setAll(false); });
+
+  /* Highlight whichever section is on screen. IntersectionObserver rather
+     than a scroll handler so it costs nothing while idle. */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.section-nav a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  var byId = {};
+  links.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    var target = document.getElementById(id);
+    if (target) byId[id] = a;
+  });
+
+  var visible = {};
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting; });
+    var current = null;
+    Object.keys(byId).forEach(function (id) {
+      if (!current && visible[id]) current = id;
+    });
+    links.forEach(function (a) {
+      var id = a.getAttribute('href').slice(1);
+      if (id === current) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+
+  Object.keys(byId).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) obs.observe(el);
+  });
 })();

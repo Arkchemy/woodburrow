@@ -322,6 +322,13 @@
       const dcLinkId = `${idPrefix}contributor-dc-link-${i}`;
       const hasDiscord = r.discord_id && r.discord_id !== 'n/a';
       const ghUser = githubUsernameFromUrl(r.github_url);
+      // Recomputed here rather than shared with the render loop above:
+      // that one is a separate map() callback, so its local was not in
+      // scope here and reading it threw, taking the whole contributors
+      // section down with it. One line of duplication beats hoisting a
+      // variable across two loops that already recompute r's other
+      // fields the same way.
+      const preferDiscord = (r.avatar || '').trim().toLowerCase() === 'discord' && hasDiscord;
       // Both lookups still run so both link tooltips resolve; only one of
       // them is allowed to paint the portrait, decided by preferDiscord.
       if (ghUser) fillGithubInfo(ghUser, preferDiscord ? null : mainAvatarId, ghLinkId, 'hud-avatar-main');

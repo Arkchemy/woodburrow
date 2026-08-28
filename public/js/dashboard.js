@@ -25,7 +25,10 @@
     renderStatus(data.status);
 
     var headline = document.getElementById('project-headline');
-    if (headline && data.overall) headline.textContent = data.overall.headline || '';
+    if (headline && data.overall) {
+      headline.textContent = data.overall.headline || '';
+      headline.classList.remove('is-loading'); /* stop the spinner once real text lands */
+    }
 
     var grid = document.getElementById('projects-list');
     if (!grid || !Array.isArray(data.projects)) return;

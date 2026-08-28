@@ -6,11 +6,19 @@
     <title>Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch</title>
     <meta name="description" content="Arkchemy statically recompiles a legally-dumped Wii U copy of Skylanders: Spyro's Adventure into C, then builds it as native Switch homebrew. No emulation at runtime.">
     <link rel="icon" href="/favicon.png">
+    <meta property="og:title" content="Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch">
+    <meta property="og:description" content="Statically recompiling a legally-dumped Wii U copy into C, then building it as native Switch homebrew. No emulation at runtime.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arkchemy.vercel.app/">
+    <meta property="og:image" content="https://arkchemy.vercel.app/favicon.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="theme-color" content="#0b1220">
     <link rel="stylesheet" href="/css/site.css">
     <link rel="stylesheet" href="/css/shell.css">
     <link rel="stylesheet" href="/css/worktree.css">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="masthead">
       <div class="container masthead-inner">
         <div class="masthead-text">
@@ -38,11 +46,24 @@
       </div>
     </header>
 
-    <main class="container">
+    <nav class="section-nav" aria-label="Sections">
+      <div class="section-nav-inner">
+        <a href="#progress">Progress</a>
+        <a href="#now">Right now</a>
+        <a href="#worktree-section">Work tree</a>
+        <a href="#findings">Findings</a>
+        <a href="#timeline">Timeline</a>
+        <a href="#roadmap">Games</a>
+        <a href="#contributors">Contributors</a>
+        <a href="#repositories">Repositories</a>
+      </div>
+    </nav>
+
+    <main class="container" id="main">
       <section id="progress">
         <h2>Where each piece has got to</h2>
         <p class="section-lede" id="project-status"></p>
-        <p class="progress-headline" id="project-headline">Loading…</p>
+        <p class="progress-headline is-loading" id="project-headline">Loading project status</p>
         <div id="projects-list" class="progress-grid"></div>
       </section>
 
@@ -67,6 +88,15 @@
 
       <section id="findings" hidden>
         <h2>Research findings</h2>
+        <p class="section-lede">
+          Things established about the Alchemy engine and the Wii U build while
+          doing this port. Each records how it was established and what would
+          disprove it.
+        </p>
+        <div class="findings-controls">
+          <button type="button" id="findings-expand">Expand all</button>
+          <button type="button" id="findings-collapse">Collapse all</button>
+        </div>
         <div id="findings-body"></div>
       </section>
 
@@ -90,7 +120,7 @@
         <div id="contributors-special-thanks" class="project-list contributor-list contributor-list-compact"></div>
       </section>
 
-      <section>
+      <section id="repositories">
         <h2>Repositories</h2>
         <div id="github-repos" class="repos-container open"></div>
       </section>
