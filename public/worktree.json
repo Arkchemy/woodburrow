@@ -6,11 +6,11 @@
       "jouster",
       "Game bring-up",
       "Engine entry point (sti_idx=113)",
-      "Find why the metadata file is never read"
+      "Reach the engine's own file loading"
     ],
-    "substep": "Registration works and is simply tiny — 36 classes self-register, and the rest were supposed to arrive by reading a metadata file that is never opened",
-    "why": "beginArkRegister and endArkRegister both run 23 times and addObjectMeta runs 36, so registration brackets cleanly. The bulk walker is reached only from igIGBFile::readFile, and this engine has never opened a file of its own in any run.",
-    "blocked_on": "A hardware run of the current build."
+    "substep": "Find what opens alchemy.xml in the recompiled code, and why that path is never reached",
+    "why": "The retail game, traced in Cemu, opens alchemy.xml first and then permanent/bootstrap.bld. Ours opens no file at all. Every step around the failure has now been measured as working, so the fault is upstream of all of them.",
+    "blocked_on": null
   },
   "legend": {
     "active": "being worked on right now",
@@ -154,9 +154,9 @@
                   "note": "2026-08-28: table=0, index=0. Not an unregistered entry — the pointer was never populated."
                 },
                 {
-                  "name": "Find why the metadata file is never read",
+                  "name": "Reach the engine's own file loading",
                   "status": "active",
-                  "note": "36 classes self-register via appendToArkCore; the bulk arrives via igIGBFile::readFile, which never runs"
+                  "note": "the real boot order is now known from Cemu: alchemy.xml, then bootstrap.bld; ours opens nothing"
                 },
                 {
                   "name": "Name the global that should hold the table",
@@ -206,6 +206,11 @@
       "percent": 70,
       "note": "Host tooling and the recompiler-correctness suite",
       "children": [
+        {
+          "name": "Cemu as a reference oracle",
+          "status": "done",
+          "note": "2026-08-28 — the retail title runs on this dump, and Cemu's own API logging answers questions about real-game behaviour in minutes rather than a hardware run"
+        },
         {
           "name": "verify.sh runs from a clean clone",
           "status": "done"

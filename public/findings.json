@@ -1,7 +1,7 @@
 {
   "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
   "schema_version": 1,
-  "generated_at": "2026-08-27T06:45:00Z",
+  "generated_at": "2026-08-28",
   "about": {
     "project": "Arkchemy",
     "url": "https://github.com/Arkchemy",
@@ -16,7 +16,6 @@
     },
     "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
   },
-
   "findings": [
     {
       "id": "igmemoryheader-bit-layout",
@@ -123,9 +122,28 @@
       "detail": "GX2's shader input is real AMD R600 / Evergreen-family GPU machine code. That is confirmable without guesswork: GX2CalcFetchShaderSizeEx's reference implementation computes sizes over real VertexFetchInst, AluInst and ControlFlowInst AMD instruction encodings (see decaf-emu's gx2_fetchshader.cpp). deko3d, on the Switch side, consumes separately compiled Nvidia Maxwell shader binaries as .dksh files.",
       "why_it_matters": "These are two unrelated machine-code formats with no runtime translation path. Anyone scoping a Wii U to Switch port should treat shader translation as its own project rather than a step inside the graphics layer. Everything else in GX2 -- render state, surfaces, buffers, texture binding, clear and present, VSync, command submission -- does map onto deko3d and is working here.",
       "note": "This project's current, deliberate choice is to make the shader and draw-call family real linkable no-ops, so recompiled game code runs past them instead of hard-crashing at the first draw call. Nothing renders as a result of them."
+    },
+    {
+      "id": "real-boot-file-sequence",
+      "title": "The engine's boot file order, captured from the real game",
+      "area": "alchemy-boot",
+      "confidence": "hardware_confirmed",
+      "discord_prior_art": "None found. The Skylanders RE Discord exports contain no discussion of the boot-time file order.",
+      "detail": "Running the retail Wii U title in Cemu 2.6 with its own API logging enabled gives the exact order in which the engine opens files: /vol/content/alchemy.xml first, then permanent/bootstrap.arc (fails with -6, absent), permanent/bootstrap.bld, item/legal.arc (-6) and legal.bld, permanent/global.arc and .bld, character/init_setup.bld, and level/title.arc. Two details matter. alchemy.xml is not merely configuration read at some point -- it is the first file the engine touches, before any content. And the .arc-then-.bld pairing is deliberate, with -6 as the expected outcome for the .arc, so a filesystem shim that treats a missing .arc as an error rather than a normal miss will derail the sequence at the first asset.",
+      "why_it_matters": "This port's recompiled engine opens no file at all in a full 120-second run -- the only FSOpenFile in any log is the one the test harness itself performs. Having the real order gives a target to match and a way to tell how far the boot actually gets, rather than inferring it from where it crashes.",
+      "falsifiable_by": "Capture the same trace on a different dump or Cemu version and get a different order, or find the engine opening something before alchemy.xml."
+    },
+    {
+      "id": "cemu-logging-coverage",
+      "title": "Cemu's API logging covers only part of coreinit, so absence proves nothing",
+      "area": "tooling",
+      "confidence": "static_confirmed",
+      "discord_prior_art": "None found.",
+      "detail": "With every log category enabled, a full boot capture contains only 46 distinct coreinit functions and three MEM ones: MEMGetBaseHeapHandle, MEMAllocFromFrmHeapEx and MEMGetAllocatableSizeForFrmHeapEx. MEMAllocFromDefaultHeapEx, MEMAllocFromExpHeapEx and MEMCreateExpHeapEx never appear, because Cemu does not instrument them for logging -- not because the game avoids them.",
+      "why_it_matters": "A trace like this makes it very easy to record a dramatic false finding. Reading the same capture without checking coverage suggests the retail game performs almost no heap allocation during boot while this port consumes 116MB, which is not supported by the data at all. Before concluding anything from an API's absence in a Cemu log, confirm that API is instrumented.",
+      "falsifiable_by": "Find MEMAllocFromDefaultHeapEx in a Cemu log with all categories enabled, which would mean it is instrumented after all and its absence here was behavioural."
     }
   ],
-
   "confirmations": [
     {
       "id": "cxa-guard-magic-statics",
@@ -140,7 +158,6 @@
       "why_recorded": "'Magic Moment' is the real in-engine term for the figure-appear and stats sequence. The model is a tfbSpriteInfo referencing a model with per-element asset lookups. The native portal driver class is tfbPortalDriver_V2, with internalReportIn handling incoming USB HID reports, firmware-version-gated. Relevant to anyone building a figure-display feature: the presentation logic may already exist in shipped game data."
     }
   ],
-
   "open_questions": [
     {
       "id": "rodata-data-mapping",
@@ -161,7 +178,6 @@
       "how_to_settle": "Find the store to offset +8 in the real disassembly and establish whether it is never executed or is fed from something that itself depends on the metaobject."
     }
   ],
-
   "corrections": [
     {
       "was": "The second boot hang is caused by a static initialiser the recompiler failed to recover.",
@@ -179,6 +195,5 @@
       "date": "2026-08-24"
     }
   ],
-
   "method_note": "Six theories died getting to the current position on 2026-08-24, half of them the assistant's own: arena blocks breaking the integrity check (disproved by a byte-identical run), .rodata corruption (a hex misconversion; the write watch then reported n=0), TLSF overlapping pool objects (invented by stale hardcoded addresses in the debug harness itself), a Properties field-offset mistake (both users agree on the layout), and the failed-allocation theory above. Each was cheap to disprove by measuring and expensive to argue about. The two instruments that did the work were a value-filtered write watch and probes that fire only on the anomalous case."
 }

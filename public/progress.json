@@ -5,13 +5,11 @@
   "generated_by": "scheduled progress pass",
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
-
   "overall": {
     "percent": 22,
     "headline": "Phase 1 translates the whole binary; the engine now boots far enough to load assets. Rendering has not started.",
     "summary": "Every function in the Wii U binary translates to C and links, and the recompiled engine now gets through all 114 static initialisers, publishes its memory context and loads real assets -- none of which was true a week ago. What is left is the larger half: proving the ~19,600 translated functions are actually correct, and building a GX2 to deko3d shader and model pipeline that does not exist yet in any form."
   },
-
   "status": {
     "state": "paused",
     "since": "2026-08-24",
@@ -19,37 +17,30 @@
     "break_reason": "Not confirmed. No holiday or time off is recorded on the calendar, and no break was announced. The last commit in any repository and the last Project Log entry are both 2026-08-24, so work has been paused for three days -- reason unknown to this automated pass.",
     "note": "This field should be set by hand when a break is planned, rather than inferred from silence."
   },
-
   "current_work": {
     "repo": "jouster",
-    "title": "Naming the missing type-registry entry behind the memory-pool integrity failure",
-    "detail": "Every symptom chased on 2026-08-24 collapsed into one cause: a NULL entry read out of a global registry table (lwzx r27, r10, r0 at 0x215db94, indexed by r6*4). The NULL object pointer makes a field read land on guest address 9, which produces a garbage igMemory::Properties, which frees a foreign pointer (0x7000000) into pool 0's TLSF free list, which correctly trips the heap walker, which prints 'Memory pool (index %d) failed integrity check.' -- and then hangs inside igStringBuf::append while formatting that very message. The latest build logs the registry table base and index so the entry that was never registered can be named directly.",
-    "blocked_on": "A real Switch hardware run. Static analysis cannot take this further."
+    "title": "Matching the real engine's boot file order, now that it is known",
+    "detail": "The retail title, traced in Cemu, opens alchemy.xml first and then permanent/bootstrap.bld. This port's engine opens no file at all in a full run. Every step around the failure -- class registration, the registration gate byte, field inheritance, object construction, the field-reset loop and its dispatch -- has now been measured as working, so the fault sits upstream of all of it, in never reaching the engine's own file loading.",
+    "blocked_on": "Finding what opens alchemy.xml in the recompiled code, and why that path is never reached."
   },
-
   "next_work": [
     {
-      "repo": "jouster",
-      "title": "Fix the va_list path in the recompiled report formatter",
-      "detail": "igReportHandler::reportVaList hands igStringBuf::append a pointer into garbage, so the engine's own error messages hang the game instead of printing. Worth doing before anything else: it makes every future engine error self-describing rather than silent. PowerPC varargs use a register save-area struct that is easy to translate subtly wrong, so this may be a conquertron codegen bug rather than a data problem."
+      "title": "Find the code that opens alchemy.xml",
+      "detail": "The path string is set up by a static initialiser for tfbCafeApplication that does run; something later reads it and never does."
     },
     {
-      "repo": "jouster",
-      "title": "Give sbrk arena blocks a describable size header",
-      "detail": "The bump arena added on 2026-08-24 fixed malloc contiguity and unblocked the whole boot chain, but its blocks carry no size header, so anything that inspects them (a pool integrity check, MEMGetSizeForMBlockExpHeap) cannot describe them. The risk was written down when the arena landed and has now been hit. Add a header while keeping successive payloads adjacent -- do not revert the arena."
+      "title": "Handle the .arc-then-.bld pattern in the filesystem shim",
+      "detail": "The engine asks for X.arc, expects -6 when absent, then opens X.bld. Treating that miss as an error would derail the sequence."
     },
     {
-      "repo": "conquertron",
-      "title": "Audit .rodata data mapping the way instruction relocation was audited",
-      "detail": "Three real codegen bugs have been found and fixed by measuring against the dumped RPX (LWZU and ADDIC relocation folds, and RA=0 base-register handling). The open question of the same shape is whether .rodata data content -- vtables and constant tables -- is mapped correctly, which is a different bug class from instruction translation and potentially just as widespread."
+      "title": "Give the Cemu gdbstub route a positive control",
+      "detail": "A breakpoint was accepted but never fired, and the stub reported a pc outside the RPX range, so nothing measured through it can be trusted yet."
     },
     {
-      "repo": "woodburrow",
-      "title": "Rebuild the site pages around this file and findings.json",
-      "detail": "The site was deliberately stripped back to a skeleton on 2026-08-22 for a hand rebuild. A progress page and a findings page are the two that now have real data behind them."
+      "title": "Bink video playback as the next milestone",
+      "detail": "The decoder is already recompiled -- 39 Bink functions, no unhandled instructions -- and video needs no shader translation, so it routes around the blocker on everything else graphical."
     }
   ],
-
   "projects": [
     {
       "id": "conquertron",
@@ -197,7 +188,6 @@
       ]
     }
   ],
-
   "timeline": {
     "milestone": "Opening cutscene displaying correctly on real Switch hardware, for Skylanders: Spyro's Adventure",
     "started": "2026-08-13",
@@ -207,27 +197,77 @@
     "basis": "Solo, part-time effort around college. Phase 1 (recompiler) and Phase 2 (GX2 and shaders) are each comparable in scope, and Phase 2 has barely started. Comparable public projects -- N64: Recompiled, Zelda 64: Recompiled -- took multiple contributors several years and had existing decompilation work to build on. This one does not.",
     "caveat": "The cutscene is a late-stage milestone, not an early one. It needs most of the pipeline working, not just booting.",
     "stages": [
-      { "stage": "Phase 0 -- dumping and decryption", "estimate": "days to 1-2 weeks", "state": "done" },
-      { "stage": "Proof-of-concept recompiler", "estimate": "2-6 months", "state": "done" },
-      { "stage": "Phase 1 against the real binary, executing without crashing", "estimate": "6-14 months", "state": "in progress" },
-      { "stage": "Phase 2 minimum viable GX2 and shader rendering", "estimate": "6-18 months", "state": "barely started" },
-      { "stage": "Phase 2a video and audio codec work", "estimate": "1-4 months additional", "state": "not started" },
-      { "stage": "Debugging and integration for this specific cutscene", "estimate": "1-3 months", "state": "not started" }
+      {
+        "stage": "Phase 0 -- dumping and decryption",
+        "estimate": "days to 1-2 weeks",
+        "state": "done"
+      },
+      {
+        "stage": "Proof-of-concept recompiler",
+        "estimate": "2-6 months",
+        "state": "done"
+      },
+      {
+        "stage": "Phase 1 against the real binary, executing without crashing",
+        "estimate": "6-14 months",
+        "state": "in progress"
+      },
+      {
+        "stage": "Phase 2 minimum viable GX2 and shader rendering",
+        "estimate": "6-18 months",
+        "state": "barely started"
+      },
+      {
+        "stage": "Phase 2a video and audio codec work",
+        "estimate": "1-4 months additional",
+        "state": "not started"
+      },
+      {
+        "stage": "Debugging and integration for this specific cutscene",
+        "estimate": "1-3 months",
+        "state": "not started"
+      }
     ]
   },
-
   "roadmap": {
     "note": "Deliberately not release chronology.",
     "games": [
-      { "title": "Spyro's Adventure", "wiiu_port_studio": "Toys for Bob", "state": "in progress" },
-      { "title": "Swap Force", "wiiu_port_studio": "Vicarious Visions", "state": "queued", "why": "The biggest unknown -- new porting studio, new mechanic -- tackled early while the toolchain is still being built." },
-      { "title": "Trap Team", "wiiu_port_studio": "Beenox", "state": "queued", "why": "The third distinct porting studio. Resolve every known authorship lineage while still in toolchain-building mode." },
-      { "title": "Giants", "wiiu_port_studio": "Vicarious Visions", "state": "queued", "why": "First cheap confirmation pass, and by far the easiest of the six to obtain legally." },
-      { "title": "SuperChargers", "wiiu_port_studio": "Vicarious Visions", "state": "queued" },
-      { "title": "Imaginators", "wiiu_port_studio": "Toys for Bob", "state": "queued", "why": "Last -- most content-divergent and the latest engine build, so it gets the most mature toolchain." }
+      {
+        "title": "Spyro's Adventure",
+        "wiiu_port_studio": "Toys for Bob",
+        "state": "in progress"
+      },
+      {
+        "title": "Swap Force",
+        "wiiu_port_studio": "Vicarious Visions",
+        "state": "queued",
+        "why": "The biggest unknown -- new porting studio, new mechanic -- tackled early while the toolchain is still being built."
+      },
+      {
+        "title": "Trap Team",
+        "wiiu_port_studio": "Beenox",
+        "state": "queued",
+        "why": "The third distinct porting studio. Resolve every known authorship lineage while still in toolchain-building mode."
+      },
+      {
+        "title": "Giants",
+        "wiiu_port_studio": "Vicarious Visions",
+        "state": "queued",
+        "why": "First cheap confirmation pass, and by far the easiest of the six to obtain legally."
+      },
+      {
+        "title": "SuperChargers",
+        "wiiu_port_studio": "Vicarious Visions",
+        "state": "queued"
+      },
+      {
+        "title": "Imaginators",
+        "wiiu_port_studio": "Toys for Bob",
+        "state": "queued",
+        "why": "Last -- most content-divergent and the latest engine build, so it gets the most mature toolchain."
+      }
     ]
   },
-
   "links": {
     "org": "https://github.com/Arkchemy",
     "site": "https://arkchemy.vercel.app",
