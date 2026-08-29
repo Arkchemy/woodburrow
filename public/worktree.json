@@ -4,12 +4,12 @@
     "repo": "jouster",
     "path": [
       "jouster",
-      "Video playback",
-      "Bink decode",
-      "Frames truncate after a few macroblock rows"
+      "Engine bring-up",
+      "Pool allocator",
+      "Free list head is null while the bitmap says occupied"
     ],
-    "substep": "Diff the recompiled decoder against ffmpeg's Bink decoder on the same frame",
-    "why": "Video now decodes and displays on hardware, but fills only 32-48 luma rows of 720 before stopping cleanly at a macroblock boundary. The count varies between frames, so it is not a fixed dimension error. The devkitPro ffmpeg already contains a Bink decoder, which makes a direct comparison possible.",
+    "substep": "Break on a healthy TLSF control block in Cemu and compare it against ours",
+    "why": "Registration reached 61 of ~1007 classes and then stopped in tlsf_largest_free_block_size, which walks a free list forever because its head is 0 and the walk has no null check -- guest-memory masking makes address 0 readable, so it spins instead of faulting. The allocator's own bitmaps claim that size class is occupied, so the control block contradicts itself. Cemu can show what a correct one looks like at the same point, which is how the last two blockers were solved.",
     "blocked_on": null
   },
   "legend": {
