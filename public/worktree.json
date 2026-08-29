@@ -1,15 +1,14 @@
 {
   "generated": "2026-08-29",
   "focus": {
-    "repo": "jouster",
+    "repo": "conquertron",
     "path": [
-      "jouster",
-      "Engine bring-up",
-      "Pool allocator",
-      "Free list head is null while the bitmap says occupied"
+      "conquertron",
+      "Address space",
+      "Code is real, data is synthetic"
     ],
-    "substep": "Break on a healthy TLSF control block in Cemu and compare it against ours",
-    "why": "Registration reached 61 of ~1007 classes and then stopped in tlsf_largest_free_block_size, which walks a free list forever because its head is 0 and the walk has no null check -- guest-memory masking makes address 0 readable, so it spins instead of faulting. The allocator's own bitmaps claim that size class is occupied, so the control block contradicts itself. Cemu can show what a correct one looks like at the same point, which is how the last two blockers were solved.",
+    "substep": "Find what real data addresses collide with, between static init and registration",
+    "why": "Functions are emitted at real addresses while data sections are moved into a synthetic space, so guest code comparing two pointers gets a meaningless answer. Mapping .text real fixed a module-range test that was freeing every string literal the engine owned, and cut unresolved indirect calls by 60%. Doing the same for .rodata, .data and .bss took registration from 99 classes to zero, so it was reverted rather than worked around.",
     "blocked_on": null
   },
   "legend": {
