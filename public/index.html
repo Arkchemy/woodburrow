@@ -13,7 +13,7 @@
     <meta property="og:url" content="https://arkchemy.vercel.app/">
     <meta property="og:image" content="https://arkchemy.vercel.app/favicon.png">
     <meta name="twitter:card" content="summary">
-    <link rel="stylesheet" href="/css/app.css?v=202608291426">
+    <link rel="stylesheet" href="/css/app.css?v=202608291458">
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -25,6 +25,7 @@
           <span class="brand-text">Arkchemy</span>
         </a>
         <nav class="topnav" aria-label="Sections">
+          <a href="#activity">Activity</a>
           <a href="#now">Now</a>
           <a href="#projects">Projects</a>
           <a href="#worktree">Work</a>
@@ -46,6 +47,10 @@
             <p class="eyebrow">Wii U → Nintendo Switch · static recompilation</p>
             <h1>Skylanders: Spyro's Adventure,<br>rebuilt as native Switch code.</h1>
             <p class="lede" id="hero-headline">Loading project status…</p>
+            <details class="more" id="hero-more" hidden>
+              <summary>The longer version</summary>
+              <p id="hero-summary"></p>
+            </details>
             <div class="hero-actions">
               <a class="btn btn-primary" href="#projects">See the progress</a>
               <a class="btn" id="hero-discord" href="https://github.com/Arkchemy" rel="noopener">The repositories</a>
@@ -68,7 +73,23 @@
         </div>
       </section>
 
-      <section id="now" class="band">
+      <section class="strip" aria-label="At a glance">
+        <div class="wrap">
+          <dl class="stats" id="stats"></dl>
+        </div>
+      </section>
+
+      <section id="activity" class="band">
+        <div class="wrap">
+          <div class="sec-head compact">
+            <h2>Latest commits</h2>
+            <p>Live from GitHub, newest first.</p>
+          </div>
+          <ol class="feed" id="feed"></ol>
+        </div>
+      </section>
+
+      <section id="now" class="band alt">
         <div class="wrap">
           <div class="sec-head">
             <h2>Right now</h2>
@@ -78,7 +99,7 @@
         </div>
       </section>
 
-      <section id="projects" class="band alt">
+      <section id="projects" class="band">
         <div class="wrap">
           <div class="sec-head">
             <h2>The pieces</h2>
@@ -88,7 +109,7 @@
         </div>
       </section>
 
-      <section id="worktree" class="band">
+      <section id="worktree" class="band alt">
         <div class="wrap">
           <div class="sec-head">
             <h2>What we're working on</h2>
@@ -99,7 +120,7 @@
         </div>
       </section>
 
-      <section id="findings" class="band alt">
+      <section id="findings" class="band">
         <div class="wrap">
           <div class="sec-head">
             <h2>Research findings</h2>
@@ -111,7 +132,7 @@
         </div>
       </section>
 
-      <section id="games" class="band">
+      <section id="games" class="band alt">
         <div class="wrap">
           <div class="sec-head">
             <h2>Which games</h2>
@@ -121,14 +142,14 @@
         </div>
       </section>
 
-      <section id="timeline" class="band alt">
+      <section id="timeline" class="band">
         <div class="wrap">
           <div class="sec-head"><h2>How long this takes</h2></div>
           <div id="timeline-body" class="timeline"></div>
         </div>
       </section>
 
-      <section id="people" class="band">
+      <section id="people" class="band alt">
         <div class="wrap">
           <div class="sec-head">
             <h2>People</h2>
@@ -140,7 +161,7 @@
         </div>
       </section>
 
-      <section id="repos" class="band alt">
+      <section id="repos" class="band">
         <div class="wrap">
           <div class="sec-head"><h2>Repositories</h2></div>
           <div id="repo-list" class="cards tight"></div>
@@ -165,6 +186,6 @@
       </div>
     </footer>
 
-    <script src="/js/app.js?v=202608291426" defer></script>
+    <script src="/js/app.js?v=202608291458" defer></script>
   </body>
 </html>

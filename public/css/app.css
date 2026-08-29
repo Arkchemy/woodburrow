@@ -222,10 +222,10 @@ img { max-width: 100%; display: block; }
 .gauge-note { font-size: var(--step--1); color: var(--ink-3); text-align: center; max-width: 34ch; }
 
 /* --- bands & section heads ---------------------------------------------- */
-.band { padding: clamp(3rem, 6vw, 5.5rem) 0; }
+.band { padding: clamp(2.2rem, 4vw, 3.6rem) 0; }
 .band.alt { background: var(--surface-2); border-block: 1px solid var(--line); }
 
-.sec-head { max-width: 62ch; margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+.sec-head { max-width: 60ch; margin-bottom: clamp(1.1rem, 2vw, 1.6rem); }
 .sec-head h2 { font-size: var(--step-2); font-weight: 760; margin-bottom: .5rem; }
 .sec-head h2::after {
   content: ""; display: block; width: 46px; height: 3px; border-radius: 3px;
@@ -401,3 +401,84 @@ a.card { text-decoration: none; display: block; }
 .foot nav a:hover { color: var(--accent); }
 
 .loading, .empty { color: var(--ink-3); font-size: var(--step--1); }
+
+
+/* ===========================================================================
+   Readability pass, 2026-08-29.
+
+   The first build rendered the source prose verbatim, and that prose is
+   written for a changelog: correct, thorough, and a wall of text on a page.
+   The fixes here are structural rather than cosmetic -- cap what any one block
+   can occupy, and give the reader a way to ask for the rest.
+   =========================================================================== */
+
+/* Long-form detail is opt-in everywhere it appears. */
+.more { margin-top: .9rem; }
+.more > summary {
+  cursor: pointer; font-size: var(--step--1); font-weight: 650;
+  color: var(--accent); list-style: none; display: inline-flex; gap: .35rem; align-items: center;
+}
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary::after { content: "▾"; font-size: .8em; transition: transform .15s; }
+.more[open] > summary::after { transform: rotate(180deg); }
+.more p { margin-top: .6rem; color: var(--ink-2); font-size: var(--step--1); max-width: 68ch; }
+
+/* Card summaries are clamped: four lines is enough to judge relevance, and
+   the card stays a card instead of becoming a paragraph with a border. */
+.card-sum {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.card.is-open .card-sum { -webkit-line-clamp: unset; }
+.card-more {
+  margin-top: .55rem; font-size: var(--step--1); font-weight: 650;
+  color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit;
+}
+.card-more:hover { text-decoration: underline; }
+
+/* --- at-a-glance strip --------------------------------------------------- */
+.strip { background: var(--surface); border-block: 1px solid var(--line); padding: 1.1rem 0; }
+.stats {
+  margin: 0; display: grid; gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+.stats > div { display: grid; gap: .1rem; }
+.stats dt { font-size: var(--step--1); color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.stats dd { margin: 0; font-size: var(--step-1); font-weight: 760; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.stats .sub-note { font-size: var(--step--1); color: var(--ink-3); font-weight: 500; letter-spacing: 0; }
+
+/* --- live commit feed ---------------------------------------------------- */
+.sec-head.compact { margin-bottom: .9rem; }
+.feed { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.feed li {
+  display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: baseline;
+  padding: .6rem .85rem; border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.feed li:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.feed .repo-tag {
+  font-size: .72rem; font-weight: 720; padding: .1rem .5rem; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent); white-space: nowrap;
+}
+.feed .msg {
+  font-size: var(--step--1); color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.feed .msg a { text-decoration: none; }
+.feed .msg a:hover { text-decoration: underline; }
+.feed .when { font-size: var(--step--1); color: var(--ink-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) {
+  .feed li { grid-template-columns: auto 1fr; }
+  .feed .when { grid-column: 2; }
+  .feed .msg { white-space: normal; }
+}
+
+/* Findings and queue items were the densest blocks on the page. */
+.finding > summary { font-size: var(--step--1); }
+.finding-body p { max-width: 74ch; }
+.queue li { padding-block: .7rem; }
+.node-note {
+  display: inline-block; max-width: 52ch; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;
+}

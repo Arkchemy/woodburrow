@@ -31,8 +31,14 @@
     var o = d.overall || {};
     var pct = Math.max(0, Math.min(100, Number(o.percent) || 0));
 
+    /* headline is one sentence; summary is a paragraph written for a
+       changelog. Lead with the sentence and let the reader ask for the rest. */
     var headline = $('hero-headline');
-    if (headline) headline.textContent = o.summary || o.headline || '';
+    if (headline) headline.textContent = o.headline || o.summary || '';
+    if (o.summary && o.summary !== o.headline) {
+      var more = $('hero-more'), sum = $('hero-summary');
+      if (more && sum) { sum.textContent = o.summary; more.hidden = false; }
+    }
 
     var val = $('gauge-value');
     if (val) val.textContent = pct + '%';
@@ -134,7 +140,21 @@
       put(meter, bar);
       put(card, meter);
 
-      if (p.summary) put(card, el('p', 'card-sum', p.summary));
+      if (p.summary) {
+        put(card, el('p', 'card-sum', p.summary));
+        /* Only offer the toggle when there is actually more to show -- a
+           button that expands nothing is worse than no button. */
+        if (p.summary.length > 190) {
+          var btn = el('button', 'card-more', 'Read more');
+          btn.type = 'button';
+          btn.addEventListener('click', function (ev) {
+            ev.preventDefault(); ev.stopPropagation();
+            var open = card.classList.toggle('is-open');
+            btn.textContent = open ? 'Show less' : 'Read more';
+          });
+          put(card, btn);
+        }
+      }
       put(host, card);
     });
   }
@@ -426,6 +446,79 @@
     });
   }
 
+  /* ---- at-a-glance strip + live commit feed ------------------------------
+     The numbers people actually want first: how much is done, how much is
+     known, and whether anyone is still working on it. The last one cannot
+     come from a JSON file that someone has to remember to update, so it comes
+     from GitHub. */
+  function stat(host, label, value, note) {
+    var d = el('div');
+    put(d, el('dt', null, label));
+    put(d, el('dd', null, value));
+    if (note) put(d, el('div', 'sub-note', note));
+    put(host, d);
+  }
+
+  function ago(iso) {
+    var s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (!isFinite(s) || s < 0) return '';
+    var units = [[31536000, 'y'], [2592000, 'mo'], [604800, 'w'], [86400, 'd'], [3600, 'h'], [60, 'm']];
+    for (var i = 0; i < units.length; i++) {
+      if (s >= units[i][0]) return Math.floor(s / units[i][0]) + units[i][1] + ' ago';
+    }
+    return 'just now';
+  }
+
+  function renderStats(prog, findings, activity) {
+    var host = $('stats');
+    if (!host) return;
+    host.textContent = '';
+
+    var pct = Number((prog.overall || {}).percent) || 0;
+    stat(host, 'Overall', pct + '%', prog.max_percent ? ('capped at ' + prog.max_percent + '%') : null);
+
+    if (findings && Array.isArray(findings.findings)) {
+      var open = Array.isArray(findings.open_questions) ? findings.open_questions.length : 0;
+      stat(host, 'Findings', String(findings.findings.length), open ? (open + ' still open') : null);
+    }
+    if (Array.isArray(prog.projects)) {
+      stat(host, 'Repositories', String(prog.projects.length), 'one job each');
+    }
+    if (activity && activity.totals && activity.totals.lastPush) {
+      stat(host, 'Last commit', ago(activity.totals.lastPush), 'across the org');
+    }
+    if (prog.timeline && prog.timeline.started) {
+      stat(host, 'Started', prog.timeline.started, ago(prog.timeline.started).replace(' ago', ' in'));
+    }
+  }
+
+  function renderFeed(activity) {
+    var host = $('feed');
+    if (!host) return;
+    host.textContent = '';
+    var list = (activity && activity.commits) || [];
+    if (!list.length) {
+      put(host, el('li', 'empty', 'No recent commits returned.'));
+      return;
+    }
+    list.forEach(function (c) {
+      var li = el('li');
+      put(li, el('span', 'repo-tag', c.repo || ''));
+      var msg = el('span', 'msg');
+      if (c.url) {
+        var a = el('a', null, c.message || c.sha);
+        a.href = c.url; a.rel = 'noopener';
+        a.title = c.message || '';
+        put(msg, a);
+      } else {
+        msg.textContent = c.message || c.sha || '';
+      }
+      put(li, msg);
+      put(li, el('span', 'when', ago(c.date)));
+      put(host, li);
+    });
+  }
+
   /* ---- nav highlighting -------------------------------------------------- */
   function spy() {
     var links = Array.prototype.slice.call(document.querySelectorAll('.topnav a'));
@@ -459,6 +552,19 @@
 
   getJSON('/worktree.json').then(renderWorktree).catch(function () {});
   getJSON('/findings.json').then(renderFindings).catch(function () {});
+
+  /* The strip needs all three, and a failure in any one of them should still
+     leave the others showing rather than blanking the row. */
+  Promise.all([
+    getJSON('/progress.json').catch(function () { return {}; }),
+    getJSON('/findings.json').catch(function () { return null; }),
+    fetch('/api/github-activity?limit=12')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; })
+  ]).then(function (all) {
+    renderStats(all[0], all[1], all[2]);
+    renderFeed(all[2]);
+  });
   renderPeople();
   renderRepos();
   spy();
