@@ -1,14 +1,15 @@
 {
   "generated": "2026-08-29",
   "focus": {
-    "repo": "conquertron",
+    "repo": "jouster",
     "path": [
-      "conquertron",
-      "Address space",
-      "Code is real, data is synthetic"
+      "jouster",
+      "Engine bring-up",
+      "Object construction",
+      "Null virtual calls"
     ],
-    "substep": "Find what real data addresses collide with, between static init and registration",
-    "why": "Functions are emitted at real addresses while data sections are moved into a synthetic space, so guest code comparing two pointers gets a meaningless answer. Mapping .text real fixed a module-range test that was freeing every string literal the engine owned, and cut unresolved indirect calls by 60%. Doing the same for .rodata, .data and .bss took registration from 99 classes to zero, so it was reverted rather than worked around.",
+    "substep": "Identify which types have empty vtable slots during construction",
+    "why": "Registration reaches 124 classes in exactly the retail order and the engine has moved past it into object construction, running continuously at about 6,500 recompiled calls a second rather than hanging. Around 75,000 indirect calls a run still resolve to address 0. Most vtables are populated now that data relocations are applied, so the remaining nulls most likely belong to types past the registration frontier.",
     "blocked_on": null
   },
   "legend": {

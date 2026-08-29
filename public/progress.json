@@ -6,9 +6,9 @@
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
   "overall": {
-    "percent": 34,
-    "headline": "The recompiler was dropping 48,625 relocations. Applying them removed every failure the boot had been stuck behind, and the engine now reaches real memory allocations.",
-    "summary": "conquertron only ever read .rela.text, so every pointer stored in .rodata and .data -- vtable slots, function tables, string pointers -- was left null. That single missing loader step was behind a long run of symptoms that each looked like a separate bug: null virtual calls, a path formatted as \"(null)/\", 1,335 globals reading as never-written, five filesystem classes that never registered, and a poisoned allocator free list. With the relocations applied all of those read zero, three of the five storage classes now register, and the boot gets far enough to ask for a 172MB pool. What remains is the same larger half as before: proving the 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that still does not exist."
+    "percent": 36,
+    "headline": "Class registration reaches 124 of about 1,007 and the engine is now past it, constructing objects continuously rather than hanging.",
+    "summary": "Six silent recompiler bugs were found and fixed in a day, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null. Registration went 54 -> 124 classes, matching the retail game's own order exactly for every class reached, and the boot now runs continuously through object construction at around 6,500 recompiled calls a second. Video and audio from the game's own files already play, and the filesystem resolves every path form the engine uses. What remains is the same larger half as before: proving the 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
   },
   "status": {
     "state": "active",
@@ -18,23 +18,23 @@
     "note": "Data relocations applied 2026-08-29. Cemu with a gdb stub is the reference for what the game's own values should be."
   },
   "current_work": {
-    "repo": "conquertron",
-    "title": "Code and data still live in different address spaces",
-    "detail": "Functions are emitted at their real addresses while data sections are relocated into a synthetic space, so any pointer comparison across the two is meaningless. Mapping .text real fixed the module-range check and cut unresolved indirect calls by 60%. Extending the same treatment to .rodata, .data and .bss took registration from 99 classes to zero and was reverted; why it collides is not yet understood.",
+    "repo": "jouster",
+    "title": "Null virtual calls during object construction",
+    "detail": "The engine is past registration and building objects -- igMetaObject::createInstanceInPlace into igObject::commission -- without hanging. Roughly 75,000 indirect calls a run still resolve to address 0, so some vtable slots are empty where a virtual method should be. With data relocations applied most vtables are populated, so the remaining nulls point at types whose metaobject has not been built rather than at another missing relocation.",
     "blocked_on": null
   },
   "next_work": [
     {
-      "title": "Understand why real data addresses break registration",
-      "detail": "Static initialisers still complete and the filesystem and video paths still work, so the failure sits specifically between static init and class registration."
+      "title": "Find which types have empty vtable slots",
+      "detail": "The dispatch-miss counter names the caller but not the slot. Identifying the type behind each null should say whether these are classes past the registration frontier or a separate defect."
     },
     {
-      "title": "The last two filesystem classes",
-      "detail": "igFile and igVirtualStorageDevice still never register. Three of the five came back on their own once relocations were applied."
+      "title": "Push registration past 124",
+      "detail": "Our order matches the retail game's exactly for every class reached, so sequencing is right and it is depth that is missing. The movie system registers around #907, so in-game video needs most of the remaining classes."
     },
     {
-      "title": "109,248 unresolved indirect calls",
-      "detail": "Down from 277,834, and they now land inside real .text rather than synthetic space, so the remaining ones are addresses the dispatch table does not know rather than nonsense."
+      "title": "Code and data in one address space",
+      "detail": "Functions use real addresses and data sections a synthetic one, so pointer comparisons across them are meaningless. Mapping .text real fixed the module-range test; extending it to data broke the boot and was reverted, and why it collides is still unknown."
     }
   ],
   "projects": [
@@ -43,7 +43,7 @@
       "name": "Conquertron",
       "role": "PowerPC32 to C static recompiler core",
       "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 81,
+      "percent": 83,
       "state": "active",
       "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
       "categories": [
@@ -72,7 +72,7 @@
       "name": "Jouster",
       "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
       "url": "https://github.com/Arkchemy/jouster",
-      "percent": 52,
+      "percent": 54,
       "state": "active",
       "summary": "The Switch side. Real decoded video frames now reach the panel from the game's own movie files, with no shader translation in the path. The Wii U boot splash and jingle play from meta/. The engine boot itself still stalls in class registration.",
       "categories": [
@@ -85,8 +85,8 @@
         {
           "key": "engine_bootstrap",
           "label": "Engine bring-up",
-          "percent": 52,
-          "note": "Up from 46 on 2026-08-29. Registration reaches ~99 classes with correct type indices, three filesystem classes that never registered now do, and the engine reaches real memory allocations -- a 172MB pool request that now succeeds. Blocker is the split between real code addresses and synthetic data addresses."
+          "percent": 55,
+          "note": "Up from 52. Registration reaches 124 of ~1,007 classes in exactly the retail order, and the engine is past it, constructing objects continuously rather than hanging. Remaining blocker is null virtual calls during construction."
         },
         {
           "key": "graphics",

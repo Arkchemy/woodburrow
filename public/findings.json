@@ -18,6 +18,42 @@
   },
   "findings": [
     {
+      "id": "data-relocations-dropped",
+      "title": "Only .rela.text was read, so 48,625 pointers stored in data were left null",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "The loader had exactly one line matching relocation sections and it named .rela.text. The RPX also carries .rela.rodata and .rela.data, and those were discarded -- 48,625 relocations once decompressed, 33,260 of them function pointers. Those are every pointer STORED IN data: vtable slots, function tables, string pointers, pointers between globals. In a relocatable RPL the file holds zero in the slot and the relocation supplies the address, so dropping them left every such pointer null. This one bug was behind null virtual calls, a path formatted as \"(null)/\" written to address 0, 1,335 globals reading as never-written, filesystem classes that never registered, and an allocator free list poisoned by ASCII read as a block size.",
+      "disproved_by": "A vtable slot reading non-zero on hardware while its relocation section is still unread."
+    },
+    {
+      "id": "bctr-intra-function-tables",
+      "title": "bctr jump tables inside a function were dispatched as calls and did nothing",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "bctr without link is an intra-function computed goto, not a call. It was emitted as ppc_dispatch, which only knows function entry points, so a jump into the middle of a function matched nothing and silently returned. __gh_vsprintf's conversion switch is exactly this shape and was dispatched 110,979 times in two minutes doing nothing. Converting the contiguous run of branches after each bctr into a switch of gotos gave 81 tables and 1,651 cases, and took class registration from 99 to 124.",
+      "disproved_by": "A bctr whose target is outside the current function and is a real entry point; those still fall through to the dispatcher."
+    },
+    {
+      "id": "registration-follows-inheritance",
+      "title": "Class registration walks the inheritance chain, not a flat list",
+      "area": "engine",
+      "confidence": "confirmed",
+      "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #findings",
+      "detail": "Each class has arkRegisterInternal, which calls Core::igArkRegister passing the class name, its metaobject pointer, THE PARENT CLASS'S arkRegisterInternal, the type size, the vtable pointer and a pointer to its own arkRegisterInitialize. Registering a class therefore registers its ancestors first, which is why the retail log shows a dependency appearing hundreds of entries before the class that pulls it in. Every object also has a virtual getMeta returning its igMetaObject. Confirmed independently here by capturing the retail registration order from Cemu: 965 classes, and ours matches it exactly for every class we reach.",
+      "disproved_by": "A class registering without its parent having registered first."
+    },
+    {
+      "id": "type-index-to-vtable",
+      "title": "Type indexes are the engine's handle for vtables",
+      "area": "engine",
+      "confidence": "confirmed",
+      "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #igarchiveextractor",
+      "detail": "Described in the Discord as the game turning type indexes into the corresponding vtables. That is the same lookup igDataList::setCapacity performs: read a metaobject pointer from a global, take its type index at +0xc, and index a table with it. When that global was null the index came from guest address 12 and the lookup returned garbage. Reading the real value off a running retail game under a debugger gave type index 2, and using it roughly doubled the number of classes that register.",
+      "disproved_by": "A metaobject whose +0xc halfword is not used as a table index."
+    },
+    {
       "id": "jump-tables-untranslated",
       "title": "Computed jump tables were not translated at all, so every such switch silently did nothing",
       "area": "recompiler",
@@ -237,6 +273,12 @@
     }
   ],
   "corrections": [
+    {
+      "id": "igfile-not-missing",
+      "was": "igFile is a filesystem class that never registers, the last of five.",
+      "now": "igFile is a dependency of igIGBFile, which is retail #127, and the boot reaches #125. Registration is recursive, so dependencies fire before their owner -- which is why the retail log shows igFile at #80 while its owner appears at #127. It was never skipped, only beyond the frontier.",
+      "why_it_mattered": "It was probed for over several builds and reported as a missing class. The mistake was comparing our numbers against a retail measurement taken at a point in the boot we had not reached, which also produced a second wrong conclusion that our dependency lists were being built short."
+    },
     {
       "was": "The second boot hang is caused by a static initialiser the recompiler failed to recover.",
       "now": "Wrong. The 114-entry constructor table is real embedded binary data, not a heuristic recovery, so a class's absence from it is positive evidence the class has no global-constructor initialiser. Registration for these classes is lazy, on first use.",
