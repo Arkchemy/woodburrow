@@ -6,140 +6,156 @@
     <title>Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch</title>
     <meta name="description" content="Arkchemy statically recompiles a legally-dumped Wii U copy of Skylanders: Spyro's Adventure into C, then builds it as native Switch homebrew. No emulation at runtime.">
     <link rel="icon" href="/favicon.png">
+    <meta name="theme-color" content="#04162e">
     <meta property="og:title" content="Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch">
-    <meta property="og:description" content="Statically recompiling a legally-dumped Wii U copy into C, then building it as native Switch homebrew. No emulation at runtime.">
+    <meta property="og:description" content="Statically recompiling a legally-dumped Wii U copy into C, then building it as native Switch homebrew. No PowerPC emulation at runtime.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://arkchemy.vercel.app/">
     <meta property="og:image" content="https://arkchemy.vercel.app/favicon.png">
     <meta name="twitter:card" content="summary">
-    <meta name="theme-color" content="#002050">
-    <link rel="stylesheet" href="/css/site.css">
-    <link rel="stylesheet" href="/css/shell.css">
-    <link rel="stylesheet" href="/css/worktree.css">
-    <link rel="stylesheet" href="/css/skylands.css">
+    <link rel="stylesheet" href="/css/app.css?v=202608291426">
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="masthead">
-      <div class="container masthead-inner">
-        <div class="masthead-text">
-          <h1>Arkchemy</h1>
-          <p class="masthead-tagline">
-            Statically recompiling a legally-dumped Wii U copy of
-            <em>Skylanders: Spyro's Adventure</em> into C, then building it as
-            native Switch homebrew. No PowerPC emulation at runtime.
-          </p>
-          <nav class="masthead-links">
-            <a class="masthead-link" href="https://github.com/Arkchemy" rel="noopener">GitHub</a>
-            <a class="masthead-link" href="#worktree-section">What we're working on</a>
-            <a class="masthead-link" href="#findings">Findings</a>
-            <a class="masthead-link" href="#contributors">Contributors</a>
-          </nav>
-        </div>
-        <div class="overall">
-          <div class="overall-dial" id="overall-dial">
-            <span class="overall-dial-value" id="overall-value">—</span>
-          </div>
-          <div class="overall-meta" id="overall-meta">
-            <strong>Overall progress</strong>
-          </div>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">Arkchemy</span>
+        </a>
+        <nav class="topnav" aria-label="Sections">
+          <a href="#now">Now</a>
+          <a href="#projects">Projects</a>
+          <a href="#worktree">Work</a>
+          <a href="#findings">Findings</a>
+          <a href="#games">Games</a>
+          <a href="#people">People</a>
+        </nav>
+        <div class="topbar-right">
+          <span class="status" id="status-pill" hidden></span>
+          <a class="ghost" id="link-github" href="https://github.com/Arkchemy" rel="noopener">GitHub</a>
         </div>
       </div>
     </header>
 
-    <nav class="section-nav" aria-label="Sections">
-      <div class="section-nav-inner">
-        <a href="#progress">Progress</a>
-        <a href="#now">Right now</a>
-        <a href="#worktree-section">Work tree</a>
-        <a href="#findings">Findings</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#roadmap">Games</a>
-        <a href="#contributors">Contributors</a>
-        <a href="#repositories">Repositories</a>
-      </div>
-    </nav>
-
-    <main class="container" id="main">
-      <section id="progress">
-        <h2>Where each piece has got to</h2>
-        <p class="section-lede" id="project-status"></p>
-        <p class="progress-headline is-loading" id="project-headline">Loading project status</p>
-        <div id="projects-list" class="progress-grid"></div>
-      </section>
-
-      <section id="now" hidden>
-        <h2>Right now</h2>
-        <p class="section-lede">The single thing in hand, and what is queued behind it.</p>
-        <div id="now-body"></div>
-      </section>
-
-      <section id="worktree-section">
-        <h2>What we're working on</h2>
-        <p class="section-lede">
-          The live work breakdown. Finished work sits quietly; whatever is in
-          hand right now is raised out of the tree.
-        </p>
-        <div id="worktree-focus" class="worktree-focus"></div>
-        <div id="worktree-controls" class="worktree-controls">
-          <span id="worktree-counts" class="worktree-counts"></span>
+    <main id="main">
+      <section class="hero">
+        <div class="wrap hero-in">
+          <div class="hero-copy">
+            <p class="eyebrow">Wii U → Nintendo Switch · static recompilation</p>
+            <h1>Skylanders: Spyro's Adventure,<br>rebuilt as native Switch code.</h1>
+            <p class="lede" id="hero-headline">Loading project status…</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#projects">See the progress</a>
+              <a class="btn" id="hero-discord" href="https://github.com/Arkchemy" rel="noopener">The repositories</a>
+            </div>
+            <p class="fineprint">No game code or assets are distributed. You supply your own legally-dumped copy.</p>
+          </div>
+          <div class="hero-gauge">
+            <div class="gauge" id="gauge" role="img" aria-label="Overall progress">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="gauge-track" cx="60" cy="60" r="52"></circle>
+                <circle class="gauge-fill" id="gauge-fill" cx="60" cy="60" r="52"></circle>
+              </svg>
+              <div class="gauge-mid">
+                <strong id="gauge-value">—</strong>
+                <span>overall</span>
+              </div>
+            </div>
+            <p class="gauge-note" id="gauge-note"></p>
+          </div>
         </div>
-        <div id="worktree" class="worktree"></div>
       </section>
 
-      <section id="findings" hidden>
-        <h2>Research findings</h2>
-        <p class="section-lede">
-          Things established about the Alchemy engine and the Wii U build while
-          doing this port. Each records how it was established and what would
-          disprove it.
-        </p>
-        <div class="findings-controls">
-          <button type="button" id="findings-expand">Expand all</button>
-          <button type="button" id="findings-collapse">Collapse all</button>
+      <section id="now" class="band">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>Right now</h2>
+            <p>The single thing in hand, and what is queued behind it.</p>
+          </div>
+          <div id="now-body" class="now-grid"></div>
         </div>
-        <div id="findings-body"></div>
       </section>
 
-      <section id="timeline" hidden>
-        <h2>How long this takes</h2>
-        <div id="timeline-body"></div>
+      <section id="projects" class="band alt">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>The pieces</h2>
+            <p>Five repositories, each doing one job.</p>
+          </div>
+          <div id="projects-grid" class="cards"></div>
+        </div>
       </section>
 
-      <section id="roadmap" hidden>
-        <h2>Which games</h2>
-        <div id="roadmap-body"></div>
+      <section id="worktree" class="band">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>What we're working on</h2>
+            <p>The live breakdown. Finished work sits quietly; whatever is in hand is raised out of the tree.</p>
+          </div>
+          <div id="worktree-focus" class="focus"></div>
+          <div id="worktree-body" class="tree"></div>
+        </div>
       </section>
 
-      <section id="contributors">
-        <h2>Contributors</h2>
-        <div id="contributors-list" class="project-list contributor-list"></div>
+      <section id="findings" class="band alt">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>Research findings</h2>
+            <p>Things established about the Alchemy engine and the Wii U build while doing this port. Each records how it was established and what would disprove it.</p>
+          </div>
+          <div class="chips" id="findings-filter"></div>
+          <div id="findings-body" class="findings"></div>
+          <div id="open-questions" class="open-q"></div>
+        </div>
       </section>
 
-      <section>
-        <h2>Special Thanks</h2>
-        <div id="contributors-special-thanks" class="project-list contributor-list contributor-list-compact"></div>
+      <section id="games" class="band">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>Which games</h2>
+            <p id="games-note"></p>
+          </div>
+          <div id="games-grid" class="cards tight"></div>
+        </div>
       </section>
 
-      <section id="repositories">
-        <h2>Repositories</h2>
-        <div id="github-repos" class="repos-container open"></div>
+      <section id="timeline" class="band alt">
+        <div class="wrap">
+          <div class="sec-head"><h2>How long this takes</h2></div>
+          <div id="timeline-body" class="timeline"></div>
+        </div>
+      </section>
+
+      <section id="people" class="band">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>People</h2>
+            <p>Everyone who has put work into this, and the community whose research it builds on.</p>
+          </div>
+          <div id="contributors" class="people-grid"></div>
+          <h3 class="sub">Special thanks</h3>
+          <div id="thanks" class="people-grid compact"></div>
+        </div>
+      </section>
+
+      <section id="repos" class="band alt">
+        <div class="wrap">
+          <div class="sec-head"><h2>Repositories</h2></div>
+          <div id="repo-list" class="cards tight"></div>
+        </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container site-footer-inner">
+    <footer class="foot">
+      <div class="wrap foot-in">
         <div>
-          <p>
-            Arkchemy contains no game code and no game assets. You supply your
-            own legally-dumped copy.
-          </p>
-          <p>
-            Not affiliated with, endorsed by, or associated with Activision or
-            Toys for Bob.
-          </p>
+          <p class="foot-brand">Arkchemy</p>
+          <p>Arkchemy contains no game code and no game assets. You supply your own legally-dumped copy.</p>
+          <p>Not affiliated with, endorsed by, or associated with Activision or Toys for Bob.</p>
         </div>
-        <nav>
+        <nav aria-label="Elsewhere">
           <a href="https://github.com/Arkchemy" rel="noopener">GitHub org</a>
           <a href="https://github.com/Arkchemy/conquertron" rel="noopener">conquertron</a>
           <a href="https://github.com/Arkchemy/jouster" rel="noopener">jouster</a>
@@ -149,9 +165,6 @@
       </div>
     </footer>
 
-    <script src="/js/site.js" defer></script>
-    <script src="/js/dashboard.js" defer></script>
-    <script src="/js/worktree.js" defer></script>
-    <script src="/js/detail.js" defer></script>
+    <script src="/js/app.js?v=202608291426" defer></script>
   </body>
 </html>

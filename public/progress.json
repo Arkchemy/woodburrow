@@ -11,11 +11,11 @@
     "summary": "The recompiled Bink decoder produces real moving frames on hardware, converted on the CPU and blitted through deko3d with no shader translation anywhere in the path -- the first pixels this project has ever produced from the game's own data. Getting there uncovered four genuine bugs in the recompiler itself, the largest of which meant every switch statement the original compiler turned into a jump table silently did nothing, in the entire game. What remains is the same larger half as before: proving the ~19,600 translated functions correct, and a GX2-to-deko3d shader pipeline that still does not exist."
   },
   "status": {
-    "state": "paused",
-    "since": "2026-08-24",
+    "state": "active",
+    "since": "2026-08-29",
     "on_break": null,
-    "break_reason": "Not confirmed. No holiday or time off is recorded on the calendar, and no break was announced. The last commit in any repository and the last Project Log entry are both 2026-08-24, so work has been paused for three days -- reason unknown to this automated pass.",
-    "note": "This field should be set by hand when a break is planned, rather than inferred from silence."
+    "break_reason": null,
+    "note": "Corrected 2026-08-29. The field had read 'paused since 2026-08-24, reason unknown', which was inferred from commit silence and is no longer true: four recompiler bugs were found and fixed and video from the game's own files now decodes and plays on hardware."
   },
   "current_work": {
     "repo": "jouster",
