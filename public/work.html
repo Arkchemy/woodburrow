@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Work in progress — Arkchemy</title>
+    <meta name="description" content="The live breakdown of Arkchemy's work: what is finished, what is in hand, and recent commits across the repositories.">
+    <link rel="icon" href="/favicon.png">
+    <meta name="theme-color" content="#04162e">
+    <meta property="og:title" content="Arkchemy — Skylanders: Spyro's Adventure, recompiled for Switch">
+    <meta property="og:description" content="Statically recompiling a legally-dumped Wii U copy into C, then building it as native Switch homebrew. No PowerPC emulation at runtime.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://arkchemy.vercel.app/work">
+    <meta property="og:image" content="https://arkchemy.vercel.app/favicon.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/css/app.css?v=202608291458">
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <div class="wrap topbar-in">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">Arkchemy</span>
+        </a>
+        <nav class="topnav" aria-label="Sections">
+          <a href="/">Overview</a>
+          <a href="/work">Work</a>
+          <a href="/findings">Findings</a>
+          <a href="/about">About</a>
+        </nav>
+        <div class="topbar-right">
+          <span class="status" id="status-pill" hidden></span>
+          <a class="ghost" id="link-github" href="https://github.com/Arkchemy" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section id="worktree" class="band alt">
+        <div class="wrap">
+          <div class="sec-head">
+            <h2>What we're working on</h2>
+            <p>The live breakdown. Finished work sits quietly; whatever is in hand is raised out of the tree.</p>
+          </div>
+          <div id="worktree-focus" class="focus"></div>
+          <div id="worktree-body" class="tree"></div>
+        </div>
+      </section>
+
+      <section id="activity" class="band">
+        <div class="wrap">
+          <div class="sec-head compact">
+            <h2>Latest commits</h2>
+            <p>Live from GitHub, newest first.</p>
+          </div>
+          <ol class="feed" id="feed"></ol>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot-in">
+        <div>
+          <p class="foot-brand">Arkchemy</p>
+          <p>Arkchemy contains no game code and no game assets. You supply your own legally-dumped copy.</p>
+          <p>Not affiliated with, endorsed by, or associated with Activision or Toys for Bob.</p>
+        </div>
+        <nav aria-label="Elsewhere">
+          <a href="https://github.com/Arkchemy" rel="noopener">GitHub org</a>
+          <a href="https://github.com/Arkchemy/conquertron" rel="noopener">conquertron</a>
+          <a href="https://github.com/Arkchemy/jouster" rel="noopener">jouster</a>
+          <a href="https://github.com/Arkchemy/blaster" rel="noopener">blaster</a>
+          <a href="https://github.com/Arkchemy/woodburrow/blob/main/LICENSE" rel="noopener">Licence</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="/js/app.js?v=202608291458" defer></script>
+  </body>
+</html>

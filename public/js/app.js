@@ -520,25 +520,14 @@
   }
 
   /* ---- nav highlighting -------------------------------------------------- */
+  /* The nav used to scroll-spy the home page's sections. The site is split
+     across pages now, so it simply marks the current one. */
   function spy() {
-    var links = Array.prototype.slice.call(document.querySelectorAll('.topnav a'));
-    if (!links.length || !('IntersectionObserver' in window)) return;
-    var seen = {};
-    var obs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
-      var current = null;
-      links.forEach(function (a) {
-        var id = a.getAttribute('href').slice(1);
-        if (!current && seen[id]) current = id;
-      });
-      links.forEach(function (a) {
-        if (a.getAttribute('href').slice(1) === current) a.setAttribute('aria-current', 'true');
-        else a.removeAttribute('aria-current');
-      });
-    }, { rootMargin: '-12% 0px -70% 0px' });
-    links.forEach(function (a) {
-      var t = document.getElementById(a.getAttribute('href').slice(1));
-      if (t) obs.observe(t);
+    var here = location.pathname.replace(/\/$/, '') || '/';
+    Array.prototype.slice.call(document.querySelectorAll('.topnav a')).forEach(function (link) {
+      var href = link.getAttribute('href').replace(/\/$/, '') || '/';
+      if (href === here) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
     });
   }
 
