@@ -1,14 +1,14 @@
 {
   "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
   "schema_version": 2,
-  "generated_at": "2026-08-27T06:45:00Z",
+  "generated_at": "2026-08-29",
   "generated_by": "scheduled progress pass",
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
   "overall": {
-    "percent": 22,
-    "headline": "Phase 1 translates the whole binary; the engine now boots far enough to load assets. Rendering has not started.",
-    "summary": "Every function in the Wii U binary translates to C and links, and the recompiled engine now gets through all 114 static initialisers, publishes its memory context and loads real assets -- none of which was true a week ago. What is left is the larger half: proving the ~19,600 translated functions are actually correct, and building a GX2 to deko3d shader and model pipeline that does not exist yet in any form."
+    "percent": 27,
+    "headline": "Video from the game's own files now decodes and displays on real Switch hardware. Four recompiler bugs found and fixed today; the engine boot is still short of rendering.",
+    "summary": "The recompiled Bink decoder produces real moving frames on hardware, converted on the CPU and blitted through deko3d with no shader translation anywhere in the path -- the first pixels this project has ever produced from the game's own data. Getting there uncovered four genuine bugs in the recompiler itself, the largest of which meant every switch statement the original compiler turned into a jump table silently did nothing, in the entire game. What remains is the same larger half as before: proving the ~19,600 translated functions correct, and a GX2-to-deko3d shader pipeline that still does not exist."
   },
   "status": {
     "state": "paused",
@@ -19,26 +19,22 @@
   },
   "current_work": {
     "repo": "jouster",
-    "title": "Matching the real engine's boot file order, now that it is known",
-    "detail": "The retail title, traced in Cemu, opens alchemy.xml first and then permanent/bootstrap.bld. This port's engine opens no file at all in a full run. Every step around the failure -- class registration, the registration gate byte, field inheritance, object construction, the field-reset loop and its dispatch -- has now been measured as working, so the fault sits upstream of all of it, in never reaching the engine's own file loading.",
-    "blocked_on": "Finding what opens alchemy.xml in the recompiled code, and why that path is never reached."
+    "title": "Bink decode truncates after a few macroblock rows",
+    "detail": "The recompiled decoder now runs properly -- 1,445 to 2,271 guest calls per frame, frame numbers advancing, 240 frames presented -- but fills only 32 to 48 luma rows of 720 before stopping cleanly at a macroblock boundary. The count varies between frames, which rules out a fixed dimension or stride error and points at too few bitstream bundles being refilled per frame.",
+    "blocked_on": null
   },
   "next_work": [
     {
-      "title": "Find the code that opens alchemy.xml",
-      "detail": "The path string is set up by a static initialiser for tfbCafeApplication that does run; something later reads it and never does."
+      "title": "Diff the recompiled decoder against ffmpeg",
+      "detail": "The devkitPro portlibs already ship a Bink decoder and demuxer, so the same frame can be decoded two ways and compared. That turns the truncation from guesswork into a diff, the same way Cemu became the reference for the boot sequence."
     },
     {
-      "title": "Handle the .arc-then-.bld pattern in the filesystem shim",
-      "detail": "The engine asks for X.arc, expects -6 when absent, then opens X.bld. Treating that miss as an error would derail the sequence."
+      "title": "Registry index 540 is never populated",
+      "detail": "The engine boot still stalls here. The registry fills to 799 entries scattered to index 2047 while 540 stays empty, so it is a sparse table with a permanent hole rather than a sequential shortfall."
     },
     {
-      "title": "Give the Cemu gdbstub route a positive control",
-      "detail": "A breakpoint was accepted but never fired, and the stub reported a pc outside the RPX range, so nothing measured through it can be trusted yet."
-    },
-    {
-      "title": "Bink video playback as the next milestone",
-      "detail": "The decoder is already recompiled -- 39 Bink functions, no unhandled instructions -- and video needs no shader translation, so it routes around the blocker on everything else graphical."
+      "title": "Audio path for Bink and the boot jingle",
+      "detail": "bootSound.btsnd is raw PCM after an 8-byte header and needs only byte-swapping; the same audout path is what Bink's own audio will use."
     }
   ],
   "projects": [
@@ -47,9 +43,9 @@
       "name": "Conquertron",
       "role": "PowerPC32 to C static recompiler core",
       "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 72,
+      "percent": 76,
       "state": "active",
-      "summary": "The recompiler reads the real Wii U RPX, recovers function boundaries, and emits portable C for every function in the binary -- roughly 19,600 of them -- which then compiles and links for ARM64. That is a statement about coverage, not correctness: three separate silent codegen bugs have been found by measuring output against the real binary, each after sitting undetected across dozens of files. Treat the output as under active repair.",
+      "summary": "PowerPC32 to C static recompiler. Four correctness bugs fixed today: record-form instructions not updating CR0 (6,745 sites), srawi dropping the carry bit (2,890), division emitting C undefined behaviour (730), and computed jump tables not translated at all (61). The last meant every jump-table switch in the game silently did nothing.",
       "categories": [
         {
           "key": "translation_coverage",
@@ -76,9 +72,9 @@
       "name": "Jouster",
       "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
       "url": "https://github.com/Arkchemy/jouster",
-      "percent": 38,
+      "percent": 44,
       "state": "active",
-      "summary": "This is where the recompiled game actually runs. The Cafe OS shim layer got the engine through its own bring-up on 2026-08-24: four real bugs fixed, all in this project's shims rather than in the recompiled game. Static initialisation went from stalling inside initialiser 87 to completing all 114, allocation failures went from 1,563 to zero, the memory context is published, and real assets load. The engine now fails later and more informatively than it ever has.",
+      "summary": "The Switch side. Real decoded video frames now reach the panel from the game's own movie files, with no shader translation in the path. The Wii U boot splash and jingle play from meta/. The engine boot itself still stalls in class registration.",
       "categories": [
         {
           "key": "cafeos_shims",
@@ -189,7 +185,7 @@
     }
   ],
   "timeline": {
-    "milestone": "Opening cutscene displaying correctly on real Switch hardware, for Skylanders: Spyro's Adventure",
+    "milestone": "Video from the game's own files displaying on hardware -- reached 2026-08-29, partially: frames decode and display, but truncate after a few macroblock rows.",
     "started": "2026-08-13",
     "estimate_fast": "about 18 months from the start, so roughly early 2028",
     "estimate_realistic": "2.5 to 3 years, so roughly mid-2029",

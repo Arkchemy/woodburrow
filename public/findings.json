@@ -1,7 +1,7 @@
 {
   "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
   "schema_version": 1,
-  "generated_at": "2026-08-28",
+  "generated_at": "2026-08-29",
   "about": {
     "project": "Arkchemy",
     "url": "https://github.com/Arkchemy",
@@ -17,6 +17,56 @@
     "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
   },
   "findings": [
+    {
+      "id": "jump-tables-untranslated",
+      "title": "Computed jump tables were not translated at all, so every such switch silently did nothing",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "GHS compiles a dense switch into a jump table: mtctr of a table base, then bctr into a run of branch instructions. conquertron emitted bctr as an indirect call followed by a return, which is right for a function pointer and wrong for a computed goto into the same function. Worse, the table base was folded to a synthetic .text address while the dispatcher is keyed by real guest addresses, and the dispatcher has no default case -- so the lookup matched nothing, returned silently, and the emitted return abandoned the enclosing function. 61 tables in the game.",
+      "why_it_matters": "No stub, no log, no crash: a switch simply did nothing and its caller returned. Bitstream decoders, state machines and message handlers are exactly where dense switches live, so this was not confined to video.",
+      "falsifiable_by": "Rewriting the idiom as a switch over (ctr - base)/4 mapping to the table's own labels made Bink's decoder start producing frames: 75 guest calls per BinkDoFrame became 1,445-2,271. ExpandPlane's table emits exactly ten cases, matching the cmplwi r7, 9 bounds check above it, and the script was never told the length."
+    },
+    {
+      "id": "record-form-cr0",
+      "title": "Ten record-form instruction classes never updated CR0, so branches tested stale flags",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "In PowerPC a trailing dot means the instruction also compares its result against zero into CR0. Ten cases in codegen emitted the result and skipped that update: clrlwi, extsb, extsh, srawi, subfe, addze, rlwimi, rlwnm, adde and addme. 6,745 sites.",
+      "why_it_matters": "Every conditional branch after one of them tested some earlier instruction's comparison. It hung the boot in a string-terminator loop that could not exit even when the terminator byte was forced to zero.",
+      "falsifiable_by": "Attribution is perfectly bimodal: each instruction is either always correct or always wrong, never mixed, which is what separates a codegen gap from a data-dependent fault. Running the old and new recompiler over the retail RPX adds exactly 6,745 lines, removes none, and every added line is a CR0 compare."
+    },
+    {
+      "id": "srawi-carry",
+      "title": "srawi dropped XER[CA], breaking the standard signed divide-by-power-of-two idiom",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "srawi sets the carry bit when the value is negative and any 1 bits are shifted out. srawi followed by addze is how PowerPC divides a signed value by a power of two with rounding toward zero, and this game uses that pair in 304 places. 2,890 srawi sites in total.",
+      "why_it_matters": "Without the carry every negative division rounds toward negative infinity instead -- off by one, silently, and only for negative inputs. That decodes most of a frame correctly and then diverges.",
+      "falsifiable_by": "sraw, the variable-shift form, already modelled the carry correctly; only the immediate form was wrong, which is visible by comparing the two helpers."
+    },
+    {
+      "id": "ffmpeg-has-bink",
+      "title": "The devkitPro ffmpeg already decodes Bink and has hardware H.264, so no forked tree is needed",
+      "area": "tooling",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "Switch media players solve H.264 in different ways -- NXMP is MPV-based, SwitchWave carries a custom Tegra backend with forked ffmpeg and mpv as submodules. Neither is necessary: the installed portlib already contains averne's Tegra work (ff_h264_nvtegra_hwaccel) and also ff_bink_decoder, ff_binkaudio_dct_decoder, ff_binkaudio_rdft_decoder and ff_bink_demuxer.",
+      "why_it_matters": "It gives a reference decoder for the game's own movie format. The recompiled Bink truncates after a few macroblock rows, and a known-good decode of the same frame turns that from guesswork into a diff -- the same role Cemu played for the boot sequence.",
+      "falsifiable_by": "Checked by symbol in the installed libavcodec.a and again in the linked NRO."
+    },
+    {
+      "id": "wiiu-boot-assets",
+      "title": "Two of the three Wii U boot assets need no decoder at all",
+      "area": "assets",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "bootTvTex.tga is uncompressed 24-bit truecolour at exactly 1280x720, the framebuffer size. bootSound.btsnd is an 8-byte header followed by raw 16-bit stereo PCM at 48kHz -- measured format field 0, loop 0, 909,474 frames, 18.9 seconds. Only bootMovie.h264 needs a real decoder.",
+      "why_it_matters": "The Wii U boot splash and jingle can be reproduced exactly, and the audio path they need is the same one Bink's own audio will use.",
+      "falsifiable_by": "Both parsed directly from the files. Two details are silently wrong if guessed: the PCM is big-endian while audout is little-endian, and TGA truecolour is BGR and stored bottom-up unless descriptor bit 5 says otherwise."
+    },
     {
       "id": "igmemoryheader-bit-layout",
       "title": "igMemoryHeader packs the pool id into the top 10 bits of the same word as the block size",
@@ -159,6 +209,14 @@
     }
   ],
   "open_questions": [
+    {
+      "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
+      "detail": "It stops cleanly at a macroblock boundary and the row count varies between frames, which rules out a fixed dimension or stride error. The bitstream pointer overruns its end by exactly 4 bytes, which is normal per-bundle termination, so too few bundles are being refilled per frame."
+    },
+    {
+      "question": "Why is registry index 540 never populated?",
+      "detail": "The table fills to 799 entries scattered up to index 2047 while 540 stays empty, so it is a sparse table with a permanent hole rather than registration stopping early."
+    },
     {
       "id": "rodata-data-mapping",
       "question": "Are constant-folded .rodata data references -- vtables, constant tables -- mapped correctly by static recompilation, as distinct from instruction-level relocation folding?",

@@ -1,15 +1,15 @@
 {
-  "generated": "2026-08-28",
+  "generated": "2026-08-29",
   "focus": {
     "repo": "jouster",
     "path": [
       "jouster",
-      "Game bring-up",
-      "Engine entry point (sti_idx=113)",
-      "Reach the engine's own file loading"
+      "Video playback",
+      "Bink decode",
+      "Frames truncate after a few macroblock rows"
     ],
-    "substep": "Find what opens alchemy.xml in the recompiled code, and why that path is never reached",
-    "why": "The retail game, traced in Cemu, opens alchemy.xml first and then permanent/bootstrap.bld. Ours opens no file at all. Every step around the failure has now been measured as working, so the fault is upstream of all of them.",
+    "substep": "Diff the recompiled decoder against ffmpeg's Bink decoder on the same frame",
+    "why": "Video now decodes and displays on hardware, but fills only 32-48 luma rows of 720 before stopping cleanly at a macroblock boundary. The count varies between frames, so it is not a fixed dimension error. The devkitPro ffmpeg already contains a Bink decoder, which makes a direct comparison possible.",
     "blocked_on": null
   },
   "legend": {
@@ -24,7 +24,7 @@
       "name": "conquertron",
       "kind": "repo",
       "status": "active",
-      "percent": 72,
+      "percent": 76,
       "note": "PowerPC32 → C static recompiler",
       "children": [
         {
@@ -44,6 +44,26 @@
             {
               "name": "Stripped-binary heuristic recovery",
               "status": "done"
+            },
+            {
+              "name": "Record-form instructions update CR0",
+              "status": "done",
+              "note": "2026-08-29 -- 6745 sites; dotted forms were leaving branches on stale flags"
+            },
+            {
+              "name": "srawi sets XER[CA]",
+              "status": "done",
+              "note": "2026-08-29 -- 2890 sites; srawi+addze is the signed divide-by-power-of-two idiom"
+            },
+            {
+              "name": "Division guarded against C undefined behaviour",
+              "status": "done",
+              "note": "2026-08-29 -- 730 sites; PowerPC leaves it undefined but does not trap"
+            },
+            {
+              "name": "Computed jump tables translated",
+              "status": "done",
+              "note": "2026-08-29 -- 61 tables; every jump-table switch previously did nothing at all"
             }
           ]
         },
@@ -82,9 +102,50 @@
       "name": "jouster",
       "kind": "repo",
       "status": "active",
-      "percent": 38,
+      "percent": 44,
       "note": "The Switch side — where the recompiled game actually runs",
       "children": [
+        {
+          "name": "Video playback",
+          "status": "active",
+          "children": [
+            {
+              "name": "deko3d swapchain blit, no shader translation",
+              "status": "done",
+              "note": "proved with animated colour bars on hardware"
+            },
+            {
+              "name": "Recompiled Bink decoder produces frames",
+              "status": "done",
+              "note": "1445-2271 guest calls per frame, 240 frames presented, content changing"
+            },
+            {
+              "name": "Frames truncate after 32-48 of 720 luma rows",
+              "status": "active",
+              "note": "stops cleanly at a macroblock boundary; count varies, so not a fixed dimension"
+            },
+            {
+              "name": "ffmpeg as a reference decoder",
+              "status": "next",
+              "note": "portlib already ships ff_bink_decoder and ff_bink_demuxer"
+            },
+            {
+              "name": "Wii U boot splash and jingle",
+              "status": "done",
+              "note": "bootTvTex.tga is 1280x720 raw; bootSound.btsnd is raw PCM after an 8-byte header"
+            },
+            {
+              "name": "bootMovie.h264",
+              "status": "next",
+              "note": "hardware H.264 is already in the installed ffmpeg (ff_h264_nvtegra_hwaccel)"
+            },
+            {
+              "name": "Audio output path",
+              "status": "active",
+              "note": "audout wired for the boot jingle; the same path serves Bink audio"
+            }
+          ]
+        },
         {
           "name": "On-hardware recompiler suite",
           "status": "active",
