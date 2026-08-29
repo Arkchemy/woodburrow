@@ -2,39 +2,39 @@
   "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
   "schema_version": 2,
   "generated_at": "2026-08-29",
-  "generated_by": "scheduled progress pass",
+  "generated_by": "progress pass after the 54 -> 61 boot advance",
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
   "overall": {
-    "percent": 27,
-    "headline": "Video from the game's own files now decodes and displays on real Switch hardware. Four recompiler bugs found and fixed today; the engine boot is still short of rendering.",
-    "summary": "The recompiled Bink decoder produces real moving frames on hardware, converted on the CPU and blitted through deko3d with no shader translation anywhere in the path -- the first pixels this project has ever produced from the game's own data. Getting there uncovered four genuine bugs in the recompiler itself, the largest of which meant every switch statement the original compiler turned into a jump table silently did nothing, in the entire game. What remains is the same larger half as before: proving the ~19,600 translated functions correct, and a GX2-to-deko3d shader pipeline that still does not exist."
+    "percent": 30,
+    "headline": "The engine boot moved for the first time in days: 61 of roughly 1007 classes register, up from 54, after Cemu was turned into a scriptable reference for what the game's own values should be.",
+    "summary": "Video and audio from the game's own files play start to finish on hardware, and the Wii U boot splash and jingle work. The engine boot, stuck at exactly class 54 for three days, now reaches 61 and runs 4.4x more code, because a debugger attached to Cemu could finally say what a value was supposed to be instead of what it happened to be. Two fixes came straight out of that: a metaobject type index, and a module-range check that was inverted and was freeing every string literal in the game. The new blocker is the pool allocator walking a free list whose head is null. Still no game rendering: the GX2-to-deko3d shader pipeline does not exist yet."
   },
   "status": {
     "state": "active",
     "since": "2026-08-29",
     "on_break": null,
     "break_reason": null,
-    "note": "Corrected 2026-08-29. The field had read 'paused since 2026-08-24, reason unknown', which was inferred from commit silence and is no longer true: four recompiler bugs were found and fixed and video from the game's own files now decodes and plays on hardware."
+    "note": "Boot advanced 54 -> 61 classes on 2026-08-29. Cemu with a gdb stub is now the reference for questions the recompiled output cannot answer about itself."
   },
   "current_work": {
     "repo": "jouster",
-    "title": "Bink decode truncates after a few macroblock rows",
-    "detail": "The recompiled decoder now runs properly -- 1,445 to 2,271 guest calls per frame, frame numbers advancing, 240 frames presented -- but fills only 32 to 48 luma rows of 720 before stopping cleanly at a macroblock boundary. The count varies between frames, which rules out a fixed dimension or stride error and points at too few bitstream bundles being refilled per frame.",
+    "title": "Pool allocator walks a free list whose head is null",
+    "detail": "tlsf_largest_free_block_size, reached from igMemoryPool::reallocCommon, spins forever because the free-list head for a size class is 0 while the allocator's own bitmaps say that class is occupied. The walk has no null check, and guest-memory masking makes address 0 readable, so it loops rather than faults. Third hang of this exact shape -- an unbounded pointer walk kept alive by masking. The size classes involved differ between runs, so it is the control block that is inconsistent, not one poisoned list.",
     "blocked_on": null
   },
   "next_work": [
     {
-      "title": "Diff the recompiled decoder against ffmpeg",
-      "detail": "The devkitPro portlibs already ship a Bink decoder and demuxer, so the same frame can be decoded two ways and compared. That turns the truncation from guesswork into a diff, the same way Cemu became the reference for the boot sequence."
+      "title": "Find who corrupts the TLSF control block",
+      "detail": "The bitmaps and the free lists disagree: a bit is set with no block linked, or a head was cleared without clearing the bit. Cemu can show what a healthy control block looks like at the same point, the way it did for the string pool and the metaobject global."
     },
     {
-      "title": "Registry index 540 is never populated",
-      "detail": "The engine boot still stalls here. The registry fills to 799 entries scattered to index 2047 while 540 stays empty, so it is a sparse table with a permanent hole rather than a sequential shortfall."
+      "title": "Give data sections their real addresses",
+      "detail": "conquertron packs data into a synthetic address space while functions keep real addresses, so pointer comparisons across the two are meaningless -- that is what inverted the module-range check. The 4MB guest memory that justified it is 1GB now. Documented with measurements; it needs a full regeneration and re-verification, so it is a deliberate change rather than a drive-by."
     },
     {
-      "title": "Audio path for Bink and the boot jingle",
-      "detail": "bootSound.btsnd is raw PCM after an 8-byte header and needs only byte-swapping; the same audout path is what Bink's own audio will use."
+      "title": "Check field sizes against the real schema",
+      "detail": "The Alchemy reflection schema for this build is now in hand, including per-platform metafield sizes for the Wii U itself. Those are exactly what the buffer-sizing code the boot keeps failing in computes from, so they can be checked directly rather than inferred."
     }
   ],
   "projects": [
@@ -43,9 +43,9 @@
       "name": "Conquertron",
       "role": "PowerPC32 to C static recompiler core",
       "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 76,
+      "percent": 78,
       "state": "active",
-      "summary": "PowerPC32 to C static recompiler. Four correctness bugs fixed today: record-form instructions not updating CR0 (6,745 sites), srawi dropping the carry bit (2,890), division emitting C undefined behaviour (730), and computed jump tables not translated at all (61). The last meant every jump-table switch in the game silently did nothing.",
+      "summary": "PowerPC32 to C static recompiler. 100.00% of .text translates -- 1,450,489 instructions, 28 bytes unrecovered. Four silent codegen bugs found and fixed: record forms not updating CR0, srawi dropping the carry, division hitting C undefined behaviour, and computed jump tables emitted as indirect calls so every jump-table switch in the game did nothing. A known design defect is now documented: data sections get synthetic addresses while functions keep real ones, so guest code comparing two pointers gets a meaningless answer.",
       "categories": [
         {
           "key": "translation_coverage",
@@ -72,21 +72,21 @@
       "name": "Jouster",
       "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
       "url": "https://github.com/Arkchemy/jouster",
-      "percent": 44,
+      "percent": 48,
       "state": "active",
       "summary": "The Switch side. Real decoded video frames now reach the panel from the game's own movie files, with no shader translation in the path. The Wii U boot splash and jingle play from meta/. The engine boot itself still stalls in class registration.",
       "categories": [
         {
           "key": "cafeos_shims",
           "label": "Cafe OS shim layer",
-          "percent": 55,
-          "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. nsyshid and vpad are wired. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops."
+          "percent": 58,
+          "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. nsyshid and vpad are wired. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops. Video is no longer a no-op: the game's own Bink API is served natively and delivers every luma row of each frame."
         },
         {
           "key": "engine_bootstrap",
           "label": "Engine bring-up",
-          "percent": 40,
-          "note": "Up from 32 on 2026-08-24. All 114 static initialisers complete, memory context published, assets loading. Current blocker is a NULL type-registry entry, traced end to end but not yet named."
+          "percent": 46,
+          "note": "Up from 40 on 2026-08-29. Registration reaches 61 of ~1007 classes, up from 54, and execution rose from 34,487 to 392,874 calls. Two real fixes: the metaobject type index, read off the running retail game, and a module-range check that was inverted and freeing every string literal. Blocker is now the pool allocator, not the reflection system."
         },
         {
           "key": "graphics",
