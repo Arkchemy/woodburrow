@@ -1,317 +1,374 @@
 {
-  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
-  "schema_version": 1,
-  "generated_at": "2026-08-30",
-  "about": {
-    "project": "Arkchemy",
-    "url": "https://github.com/Arkchemy",
-    "site": "https://arkchemy.vercel.app",
-    "discord": "https://discord.gg/KJWyHUczCV",
-    "scope": "Alchemy engine internals and Wii U / Cafe OS format details, established while statically recompiling Skylanders: Spyro's Adventure (Wii U, Toys for Bob) to native ARM64 for Nintendo Switch.",
-    "prior_art_check": "Before publishing, each entry was searched for across a local export of all 19 Skylanders: Reverse Engineering Discord channels. Entries where the community had already covered the ground are excluded from this file, or marked as confirmations rather than new findings.",
-    "how_to_read_confidence": {
-      "hardware_confirmed": "Observed on a real Nintendo Switch run with an instrumented build.",
-      "static_confirmed": "Read directly out of the real dumped RPX, cross-checked against a second source.",
-      "static_single_source": "Read out of the binary once, not yet independently cross-checked. Treat as a lead."
-    },
-    "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
+ "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
+ "schema_version": 1,
+ "generated_at": "2026-08-30",
+ "about": {
+  "project": "Arkchemy",
+  "url": "https://github.com/Arkchemy",
+  "site": "https://arkchemy.vercel.app",
+  "discord": "https://discord.gg/KJWyHUczCV",
+  "scope": "Alchemy engine internals and Wii U / Cafe OS format details, established while statically recompiling Skylanders: Spyro's Adventure (Wii U, Toys for Bob) to native ARM64 for Nintendo Switch.",
+  "prior_art_check": "Before publishing, each entry was searched for across a local export of all 19 Skylanders: Reverse Engineering Discord channels. Entries where the community had already covered the ground are excluded from this file, or marked as confirmations rather than new findings.",
+  "how_to_read_confidence": {
+   "hardware_confirmed": "Observed on a real Nintendo Switch run with an instrumented build.",
+   "static_confirmed": "Read directly out of the real dumped RPX, cross-checked against a second source.",
+   "static_single_source": "Read out of the binary once, not yet independently cross-checked. Treat as a lead."
   },
-  "findings": [
-    {
-      "id": "masking-hides-the-bug",
-      "title": "Guest-memory masking turns every bad pointer into silence",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "Every memory accessor masks its address with (PPC_MEM_SIZE - 1), which is what lets recompiled code use guest addresses directly. The cost is that a null or wild pointer becomes a legal access instead of a fault, so the program never stops where the bug is. Traced in full on 2026-08-30: a null memory pool produced a null allocation, element addresses computed from that null base came out as small integers -- 0xc, 0x34D4, 0x47430 -- used as pointers, and an ordinary flag write four bytes into one of them landed on the engine's memory-context global. Every later read then treated that value as an object and called through it, producing 24,152 silent indirect calls. On real hardware the first bad write would have crashed; here it produced four days of symptoms in unrelated subsystems.",
-      "disproved_by": "A bad pointer that faults at the point of use rather than propagating."
-    },
-    {
-      "id": "entry-pc-names-the-wrong-function",
-      "title": "A probe recording the function-entry PC names the wrong code",
-      "area": "method",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "g_ppc_current_pc is set when a recompiled function is entered and never restored when it returns, so any probe reporting it names the innermost function ENTERED rather than the code responsible. Over one investigation it named _main for a low-memory write, _savegpr_14_l for 277,834 dispatch misses, igMetaField::construct (whose entire body is one blr) for null virtual calls, and a nine-instruction getter for a store that corrupted a global. Every emitted call writes its own return address into ctx->lr on the line above, so lr is exact. The instruments were changed to record lr and the relevant registers by default; inference had been choosing the wrong function and, twice, the wrong argument.",
-      "disproved_by": "A probe whose entry-PC attribution matches an lr-based one on a call made through a leaf helper."
-    },
-    {
-      "id": "data-relocations-dropped",
-      "title": "Only .rela.text was read, so 48,625 pointers stored in data were left null",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "The loader had exactly one line matching relocation sections and it named .rela.text. The RPX also carries .rela.rodata and .rela.data, and those were discarded -- 48,625 relocations once decompressed, 33,260 of them function pointers. Those are every pointer STORED IN data: vtable slots, function tables, string pointers, pointers between globals. In a relocatable RPL the file holds zero in the slot and the relocation supplies the address, so dropping them left every such pointer null. This one bug was behind null virtual calls, a path formatted as \"(null)/\" written to address 0, 1,335 globals reading as never-written, filesystem classes that never registered, and an allocator free list poisoned by ASCII read as a block size.",
-      "disproved_by": "A vtable slot reading non-zero on hardware while its relocation section is still unread."
-    },
-    {
-      "id": "bctr-intra-function-tables",
-      "title": "bctr jump tables inside a function were dispatched as calls and did nothing",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "bctr without link is an intra-function computed goto, not a call. It was emitted as ppc_dispatch, which only knows function entry points, so a jump into the middle of a function matched nothing and silently returned. __gh_vsprintf's conversion switch is exactly this shape and was dispatched 110,979 times in two minutes doing nothing. Converting the contiguous run of branches after each bctr into a switch of gotos gave 81 tables and 1,651 cases, and took class registration from 99 to 124.",
-      "disproved_by": "A bctr whose target is outside the current function and is a real entry point; those still fall through to the dispatcher."
-    },
-    {
-      "id": "registration-follows-inheritance",
-      "title": "Class registration walks the inheritance chain, not a flat list",
-      "area": "engine",
-      "confidence": "confirmed",
-      "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #findings",
-      "detail": "Each class has arkRegisterInternal, which calls Core::igArkRegister passing the class name, its metaobject pointer, THE PARENT CLASS'S arkRegisterInternal, the type size, the vtable pointer and a pointer to its own arkRegisterInitialize. Registering a class therefore registers its ancestors first, which is why the retail log shows a dependency appearing hundreds of entries before the class that pulls it in. Every object also has a virtual getMeta returning its igMetaObject. Confirmed independently here by capturing the retail registration order from Cemu: 965 classes, and ours matches it exactly for every class we reach.",
-      "disproved_by": "A class registering without its parent having registered first."
-    },
-    {
-      "id": "type-index-to-vtable",
-      "title": "Type indexes are the engine's handle for vtables",
-      "area": "engine",
-      "confidence": "confirmed",
-      "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #igarchiveextractor",
-      "detail": "Described in the Discord as the game turning type indexes into the corresponding vtables. That is the same lookup igDataList::setCapacity performs: read a metaobject pointer from a global, take its type index at +0xc, and index a table with it. When that global was null the index came from guest address 12 and the lookup returned garbage. Reading the real value off a running retail game under a debugger gave type index 2, and using it roughly doubled the number of classes that register.",
-      "disproved_by": "A metaobject whose +0xc halfword is not used as a table index."
-    },
-    {
-      "id": "jump-tables-untranslated",
-      "title": "Computed jump tables were not translated at all, so every such switch silently did nothing",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "GHS compiles a dense switch into a jump table: mtctr of a table base, then bctr into a run of branch instructions. conquertron emitted bctr as an indirect call followed by a return, which is right for a function pointer and wrong for a computed goto into the same function. Worse, the table base was folded to a synthetic .text address while the dispatcher is keyed by real guest addresses, and the dispatcher has no default case -- so the lookup matched nothing, returned silently, and the emitted return abandoned the enclosing function. 61 tables in the game.",
-      "why_it_matters": "No stub, no log, no crash: a switch simply did nothing and its caller returned. Bitstream decoders, state machines and message handlers are exactly where dense switches live, so this was not confined to video.",
-      "falsifiable_by": "Rewriting the idiom as a switch over (ctr - base)/4 mapping to the table's own labels made Bink's decoder start producing frames: 75 guest calls per BinkDoFrame became 1,445-2,271. ExpandPlane's table emits exactly ten cases, matching the cmplwi r7, 9 bounds check above it, and the script was never told the length."
-    },
-    {
-      "id": "record-form-cr0",
-      "title": "Ten record-form instruction classes never updated CR0, so branches tested stale flags",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "In PowerPC a trailing dot means the instruction also compares its result against zero into CR0. Ten cases in codegen emitted the result and skipped that update: clrlwi, extsb, extsh, srawi, subfe, addze, rlwimi, rlwnm, adde and addme. 6,745 sites.",
-      "why_it_matters": "Every conditional branch after one of them tested some earlier instruction's comparison. It hung the boot in a string-terminator loop that could not exit even when the terminator byte was forced to zero.",
-      "falsifiable_by": "Attribution is perfectly bimodal: each instruction is either always correct or always wrong, never mixed, which is what separates a codegen gap from a data-dependent fault. Running the old and new recompiler over the retail RPX adds exactly 6,745 lines, removes none, and every added line is a CR0 compare."
-    },
-    {
-      "id": "srawi-carry",
-      "title": "srawi dropped XER[CA], breaking the standard signed divide-by-power-of-two idiom",
-      "area": "recompiler",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "srawi sets the carry bit when the value is negative and any 1 bits are shifted out. srawi followed by addze is how PowerPC divides a signed value by a power of two with rounding toward zero, and this game uses that pair in 304 places. 2,890 srawi sites in total.",
-      "why_it_matters": "Without the carry every negative division rounds toward negative infinity instead -- off by one, silently, and only for negative inputs. That decodes most of a frame correctly and then diverges.",
-      "falsifiable_by": "sraw, the variable-shift form, already modelled the carry correctly; only the immediate form was wrong, which is visible by comparing the two helpers."
-    },
-    {
-      "id": "ffmpeg-has-bink",
-      "title": "The devkitPro ffmpeg already decodes Bink and has hardware H.264, so no forked tree is needed",
-      "area": "tooling",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "Switch media players solve H.264 in different ways -- NXMP is MPV-based, SwitchWave carries a custom Tegra backend with forked ffmpeg and mpv as submodules. Neither is necessary: the installed portlib already contains averne's Tegra work (ff_h264_nvtegra_hwaccel) and also ff_bink_decoder, ff_binkaudio_dct_decoder, ff_binkaudio_rdft_decoder and ff_bink_demuxer.",
-      "why_it_matters": "It gives a reference decoder for the game's own movie format. The recompiled Bink truncates after a few macroblock rows, and a known-good decode of the same frame turns that from guesswork into a diff -- the same role Cemu played for the boot sequence.",
-      "falsifiable_by": "Checked by symbol in the installed libavcodec.a and again in the linked NRO."
-    },
-    {
-      "id": "wiiu-boot-assets",
-      "title": "Two of the three Wii U boot assets need no decoder at all",
-      "area": "assets",
-      "confidence": "confirmed",
-      "discord_prior_art": null,
-      "detail": "bootTvTex.tga is uncompressed 24-bit truecolour at exactly 1280x720, the framebuffer size. bootSound.btsnd is an 8-byte header followed by raw 16-bit stereo PCM at 48kHz -- measured format field 0, loop 0, 909,474 frames, 18.9 seconds. Only bootMovie.h264 needs a real decoder.",
-      "why_it_matters": "The Wii U boot splash and jingle can be reproduced exactly, and the audio path they need is the same one Bink's own audio will use.",
-      "falsifiable_by": "Both parsed directly from the files. Two details are silently wrong if guessed: the PCM is big-endian while audout is little-endian, and TGA truecolour is BGR and stored bottom-up unless descriptor bit 5 says otherwise."
-    },
-    {
-      "id": "igmemoryheader-bit-layout",
-      "title": "igMemoryHeader packs the pool id into the top 10 bits of the same word as the block size",
-      "area": "alchemy-memory",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none -- zero hits for igMemoryHeader, createHeader, TLSF, freeInternal or checkIntegrity across all 19 channel exports",
-      "detail": "Core::igMemoryHeader::createHeader executes rlwimi r0, r8, 0, 0xa, 0x1f -- it inserts the block size into bits 10 through 31 while deliberately preserving the top 10 bits, which hold the pool id. Two independent consumers agree with that reading: igMemoryPool::contains shifts the word right by 23, and getMemoryPool shifts it right by 22.",
-      "why_it_matters": "If you are writing a tool that walks an Alchemy heap, or reasoning about why an object gets freed back to a particular pool, the pool id is already in the header -- you do not need to search for the owning pool.",
-      "falsifiable_by": "Finding a build where contains and getMemoryPool disagree with the rlwimi mask, which would mean the layout is not stable across Alchemy versions."
-    },
-    {
-      "id": "two-free-paths-one-unchecked",
-      "title": "Alchemy has two free paths and only one of them range-checks the pool",
-      "area": "alchemy-memory",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none for the mechanism. One corroborating remark from NefariousTechSupport (2023-12-06): 'Every object has a memory pool... different regions of memory are different pools, you can allocate and free memory from individual pools.' Consistent with, but does not describe, the unchecked path.",
-      "detail": "igFree goes through getContainingMemoryPoolInternal, which asks each pool whether it contains the pointer -- a plain range check over [*(this+0x10), +*(this+0x14)), so a foreign pointer is rejected. igObject::free instead takes the pool index straight out of the object's own header (*(obj+4) >> 22) and calls getMemoryPoolByIndex, with no range check at all. igObject has its own operator new taking a pool, so real engine objects carry correct indices; the global operator new goes to plain malloc.",
-      "why_it_matters": "This is the mechanism by which a pointer that a pool cannot possibly own gets linked into that pool's free list. The pool's own integrity walker then correctly reports the heap inconsistent, and the engine prints 'Memory pool (index %d) failed integrity check.' If you see that message, the useful question is which object carried a wrong pool id in its header, not which pool is corrupt.",
-      "falsifiable_by": "Finding a range check inside getMemoryPoolByIndex or igObject::free in another build."
-    },
-    {
-      "id": "alchemy-uses-tlsf",
-      "title": "Alchemy's heap memory pools are backed by TLSF",
-      "area": "alchemy-memory",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none -- no mention of TLSF anywhere in the exports. Every igMemoryPool discussion found concerns the IGZ file format (chunk descriptors, _memoryPoolNameOffset, igCauldron serialisation), not the runtime heap.",
-      "detail": "igHeapMemoryPool builds its backing allocator with tlsf_create, frees through tlsf_free, and its checkIntegrity implementation is a tlsf_check_heap heap walk.",
-      "why_it_matters": "TLSF is a well-known, publicly documented two-level segregated-fit allocator. Knowing that is what is underneath means its published block and free-list layout can be used directly when inspecting an Alchemy heap in a debugger, rather than reverse-engineering the structure from scratch."
-    },
-    {
-      "id": "rpl-static-init-table-in-rodata",
-      "title": "GHS Wii U builds keep the global-constructor table as plain data in .rodata, with no .init_array or .ctors section",
-      "area": "wiiu-format",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none for the section-level detail. The Discord discusses _GLOBAL__sub_I_* naming and __cxa_guard_acquire/release semantics, but not where the constructor table physically lives in an RPL.",
-      "detail": "This build has no .init_array and no .ctors. The constructor pointer table -- 114 entries in Spyro's Adventure -- is embedded in .rodata as ordinary data, and the real Cafe OS RPL loader walks it at load time. Diffing the real table's order against plain address-ascending order gives zero differences across all 114 entries, so the table is in address order.",
-      "why_it_matters": "If you are recovering static initialisers from a Wii U RPL and looking for the sections a normal ELF toolchain would use, you will find nothing and may conclude the game has no global constructors. It does. Also: because the table is real embedded data rather than something recovered heuristically, a class's absence from it is positive evidence that the class has no global-constructor initialiser -- not evidence that your tool missed one.",
-      "falsifiable_by": "Finding a Wii U RPL built by a non-GHS toolchain that does emit .init_array."
-    },
-    {
-      "id": "igarkregister-writes-meta-unconditionally",
-      "title": "igArkRegister writes the metaobject pointer back even when the allocation it just made returned NULL",
-      "area": "alchemy-reflection",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "partial. NefariousTechSupport's own walkthroughs (2024-03-20, 2024-10-19) establish the call shape: arkRegisterInternal calls Core::igArkRegister(&_Meta, parentArkRegisterInternal, ..., name, size, ..., arkRegisterInitializeFn), with the _Meta field pointer as the first parameter. The unconditional-write behaviour below is this project's own reading of igArkRegister's body and was not found in the exports.",
-      "detail": "igArkRegister (real address 0x215efe0 in this build) writes into *_Meta unconditionally, including on the path where igMetaObject::instantiateFromPool (0x21c1f8c) returns NULL.",
-      "why_it_matters": "A class whose Core::igMetaObject::_Meta reads NULL does not tell you that registration never ran. It may have run and failed at the allocation. Those two cases need different instrumentation to tell apart -- a per-class entry probe on arkRegisterInternal distinguishes them cleanly."
-    },
-    {
-      "id": "lazy-metaobject-registration-chain",
-      "title": "The lazy metaobject registration chain, and the single flag byte that gates it",
-      "area": "alchemy-reflection",
-      "confidence": "hardware_confirmed",
-      "discord_prior_art": "none for the chain as a whole or for the flag byte.",
-      "detail": "igMemoryPoolFrame::instantiateFromPool obtains its metaobject via Core::__internalObjectBase::getClassMetaSafeInternal, a shared lazy get-or-register helper that every reflectable Core:: class goes through. That helper calls igArkCore::beginArkRegister, which reads a flag byte at offset +0x16 on the igArkCore singleton; only if the flag passes does it invoke the class's own arkRegisterInitialize through a function pointer. The igArkCore singleton itself is constructed by Core::igRefAlchemy behind a GHS 'magic statics' reference-count guard.",
-      "why_it_matters": "Registration for a whole family of classes hinges on one byte on one singleton. If reflection appears to be missing wholesale rather than for one class, that byte is the thing to look at first.",
-      "measured": "On real hardware in this project's port, arkRegisterInternal for igMemoryPoolFrame never ran at all (a per-class-unique probe read hits=0), and beginArkRegister's flag read 0 on all 11 hits across a full run -- while the igArkCore singleton was confirmed genuinely constructed with a valid global pointer. Note this is a state observed in a recompiled port, not necessarily how the real Wii U build behaves."
-    },
-    {
-      "id": "bootstrap-heap-real-sizes",
-      "title": "igMemoryContext::bootstrapInitialize needs 8,388,632 bytes of bootstrap heap, not a token amount",
-      "area": "alchemy-memory",
-      "confidence": "hardware_confirmed",
-      "discord_prior_art": "adjacent. The exports document that a separate named 'Bootstrap' pool exists and can run out independently, and record a real 'Bootstrap pool ran out of memory' report. The measured three-consumer breakdown below is this project's own.",
-      "detail": "igMemoryContext's constructor needs a small dedicated heap to allocate itself from -- the chicken-and-egg problem of needing a working pool to construct the object that sets up pools. bootstrapInitialize then drives three real consumers off it, requesting 1,048,584 + 5,242,888 + 2,097,160 = 8,388,632 bytes.",
-      "why_it_matters": "Sizing this from the small allocations visible early in boot gives a wrong answer. This project sized it at 64KB on that basis, which meant no pool ever received a real buffer and the string pool stayed dead -- reproducing exactly the boot spin the bootstrap heap had been added to fix.",
-      "related": "Consistent with the community finding that Alchemy pool sizes are baked into the binary per platform and per build, so an allocation failure is usually a sizing decision rather than a runtime logic bug."
-    },
-    {
-      "id": "ghs-libc-sbrk-adjacency",
-      "title": "Green Hills libc grows its heap through MEMAllocFromDefaultHeapEx and requires successive returns to be adjacent",
-      "area": "cafeos",
-      "confidence": "hardware_confirmed",
-      "discord_prior_art": "none.",
-      "detail": "GHS libc grows the game's entire C heap through MEMAllocFromDefaultHeapEx in an sbrk-style contract: malloc treats its heap as one growing segment, so successive calls must return adjacent memory. A general-purpose ExpHeap implementation that writes a size header and then re-aligns breaks that contract -- measured directly here as a constant 64-byte gap between successive 131,072-byte returns (0x4000040, 0x4020080, 0x40400c0).",
-      "why_it_matters": "The symptom is not an obvious crash. malloc simply never reuses its heap and grows forever, so a pool looks like it needs more memory no matter how much you give it. In this project that produced a months-long false trail: pool sizes were raised 32 to 96 to 320 to 416 to 928 MB and every one was consumed to roughly 100%. Fixing the adjacency took allocation failures from 1,563 to 0 and took static initialisation from stalling at initialiser 87 to completing all 114. Anyone shimming Cafe OS memory for a GHS-built title should check this first.",
-      "also_worth_knowing": "On real hardware MEM1 is the small 32MB fast pool. An application's default heap comes from MEM2, not MEM1."
-    },
-    {
-      "id": "fimport-section-name-suffix",
-      "title": "RPL .fimport_ section names keep the .rpl extension for some libraries and not others",
-      "area": "wiiu-format",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none.",
-      "detail": "A cross-library import's .fimport_<library> section name preserves the shared library's real filename verbatim, including a literal .rpl extension where the library has one. Confirmed against the real Skylanders binary: .fimport_nsyshid.rpl and .fimport_vpad.rpl carry the suffix, while coreinit and gx2 do not.",
-      "why_it_matters": "If you derive symbol or shim names from the section name, the two libraries that carry the suffix will silently not match the rest, and a literal dot is not a valid C identifier character either. Strip it once at the source of the library name rather than sanitising the dot downstream, which would still leave you with nsyshid_rpl against everyone else's nsyshid."
-    },
-    {
-      "id": "ghs-savegpr-zero-sized-symbols",
-      "title": "GHS register-spill helpers are multiple zero-sized symbols sharing one fall-through tail",
-      "area": "wiiu-format",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none.",
-      "detail": "The linker-synthesised _savegpr_N / _restgpr_N / _savefpr_N_l family -- confirmed present by exact name in real Spyro's Adventure code -- appears as several STT_FUNC symbols at different addresses that all fall through into a single shared tail ending in one blr. st_size is left at 0 for all of them, since no single symbol owns a disjoint range.",
-      "why_it_matters": "Function-boundary recovery that trusts st_size will skip every one of these. Scanning forward from each entry point to the first blr (0x4e800020) gives each its own correct self-contained range -- verified here against the real bytes. Cap the scan so a genuinely mis-sized symbol fails safe rather than swallowing unrelated code."
-    },
-    {
-      "id": "gx2-shader-format-gap",
-      "title": "Why GX2 shaders cannot simply be handed to a Switch graphics API",
-      "area": "gx2",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "none -- no GX2 or graphics-pipeline internals in the exports beyond generic texture-swizzle tooling.",
-      "detail": "GX2's shader input is real AMD R600 / Evergreen-family GPU machine code. That is confirmable without guesswork: GX2CalcFetchShaderSizeEx's reference implementation computes sizes over real VertexFetchInst, AluInst and ControlFlowInst AMD instruction encodings (see decaf-emu's gx2_fetchshader.cpp). deko3d, on the Switch side, consumes separately compiled Nvidia Maxwell shader binaries as .dksh files.",
-      "why_it_matters": "These are two unrelated machine-code formats with no runtime translation path. Anyone scoping a Wii U to Switch port should treat shader translation as its own project rather than a step inside the graphics layer. Everything else in GX2 -- render state, surfaces, buffers, texture binding, clear and present, VSync, command submission -- does map onto deko3d and is working here.",
-      "note": "This project's current, deliberate choice is to make the shader and draw-call family real linkable no-ops, so recompiled game code runs past them instead of hard-crashing at the first draw call. Nothing renders as a result of them."
-    },
-    {
-      "id": "real-boot-file-sequence",
-      "title": "The engine's boot file order, captured from the real game",
-      "area": "alchemy-boot",
-      "confidence": "hardware_confirmed",
-      "discord_prior_art": "None found. The Skylanders RE Discord exports contain no discussion of the boot-time file order.",
-      "detail": "Running the retail Wii U title in Cemu 2.6 with its own API logging enabled gives the exact order in which the engine opens files: /vol/content/alchemy.xml first, then permanent/bootstrap.arc (fails with -6, absent), permanent/bootstrap.bld, item/legal.arc (-6) and legal.bld, permanent/global.arc and .bld, character/init_setup.bld, and level/title.arc. Two details matter. alchemy.xml is not merely configuration read at some point -- it is the first file the engine touches, before any content. And the .arc-then-.bld pairing is deliberate, with -6 as the expected outcome for the .arc, so a filesystem shim that treats a missing .arc as an error rather than a normal miss will derail the sequence at the first asset.",
-      "why_it_matters": "This port's recompiled engine opens no file at all in a full 120-second run -- the only FSOpenFile in any log is the one the test harness itself performs. Having the real order gives a target to match and a way to tell how far the boot actually gets, rather than inferring it from where it crashes.",
-      "falsifiable_by": "Capture the same trace on a different dump or Cemu version and get a different order, or find the engine opening something before alchemy.xml."
-    },
-    {
-      "id": "cemu-logging-coverage",
-      "title": "Cemu's API logging covers only part of coreinit, so absence proves nothing",
-      "area": "tooling",
-      "confidence": "static_confirmed",
-      "discord_prior_art": "None found.",
-      "detail": "With every log category enabled, a full boot capture contains only 46 distinct coreinit functions and three MEM ones: MEMGetBaseHeapHandle, MEMAllocFromFrmHeapEx and MEMGetAllocatableSizeForFrmHeapEx. MEMAllocFromDefaultHeapEx, MEMAllocFromExpHeapEx and MEMCreateExpHeapEx never appear, because Cemu does not instrument them for logging -- not because the game avoids them.",
-      "why_it_matters": "A trace like this makes it very easy to record a dramatic false finding. Reading the same capture without checking coverage suggests the retail game performs almost no heap allocation during boot while this port consumes 116MB, which is not supported by the data at all. Before concluding anything from an API's absence in a Cemu log, confirm that API is instrumented.",
-      "falsifiable_by": "Find MEMAllocFromDefaultHeapEx in a Cemu log with all categories enabled, which would mean it is instrumented after all and its absence here was behavioural."
-    }
-  ],
-  "confirmations": [
-    {
-      "id": "cxa-guard-magic-statics",
-      "title": "Confirmed from the Discord, then used here: __cxa_guard_acquire/release means a function-local static, not a global constructor",
-      "credit": "NefariousTechSupport, alchemy channel, 2024-12-26",
-      "why_recorded": "This is what makes the .rodata constructor-table finding above actionable. A class missing from the 114-entry table may be initialising through a function-local static guard instead, which is invisible to any global-constructor list by design."
-    },
-    {
-      "id": "magic-moment-in-tfbscript",
-      "title": "Confirmed from the Discord: the figure-summon sequence is implemented in tfbscript, not in the executable",
-      "credit": "Skylanders RE Discord, portal discussion",
-      "why_recorded": "'Magic Moment' is the real in-engine term for the figure-appear and stats sequence. The model is a tfbSpriteInfo referencing a model with per-element asset lookups. The native portal driver class is tfbPortalDriver_V2, with internalReportIn handling incoming USB HID reports, firmware-version-gated. Relevant to anyone building a figure-display feature: the presentation logic may already exist in shipped game data."
-    }
-  ],
-  "open_questions": [
-    {
-      "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
-      "detail": "It stops cleanly at a macroblock boundary and the row count varies between frames, which rules out a fixed dimension or stride error. The bitstream pointer overruns its end by exactly 4 bytes, which is normal per-bundle termination, so too few bundles are being refilled per frame."
-    },
-    {
-      "question": "Why is registry index 540 never populated?",
-      "detail": "The table fills to 799 entries scattered up to index 2047 while 540 stays empty, so it is a sparse table with a permanent hole rather than registration stopping early."
-    },
-    {
-      "id": "rodata-data-mapping",
-      "question": "Are constant-folded .rodata data references -- vtables, constant tables -- mapped correctly by static recompilation, as distinct from instruction-level relocation folding?",
-      "why_open": "Three instruction-level relocation bugs have been found and fixed here by measuring against the real RPX. Data-side mapping is a different bug class and has not had the same audit. If it is wrong it could be just as widespread.",
-      "how_to_settle": "Compare a known vtable's contents in the real dumped RPX against what the recompiled output resolves at runtime, for a class whose layout is independently known."
-    },
-    {
-      "id": "placeholder-vtables",
-      "question": "Does the real Wii U binary genuinely ship minimal placeholder vtables for pools that start deliberately unbacked, and if so what upgrades them on first use?",
-      "why_open": "Two pool objects here resolve to a vtable with only resetByReference, construct and destruct populated. The address computation that produces it was checked by hand against the real relocations and is faithful -- the game's own compiled code deliberately computes that address. So this looks like intentional lazy initialisation rather than a translation error, but what triggers the upgrade has not been found.",
-      "how_to_settle": "Read the same vtable slot contents out of the real RPX .rodata and confirm they are unpopulated there too."
-    },
-    {
-      "id": "frame-plus-8",
-      "question": "Where is offset +8 on an igMemoryPoolFrame supposed to be written?",
-      "why_open": "It reads as 0x100000 -- a suspiciously round garbage value -- rather than NULL or a real pointer, and drives a roughly 131,000-iteration teardown loop inside igObjectList::setCount. Searching the exports for handleTable, aliasTable, igMemoryPoolFrameManager, setDefaultFrame and pushFrame found no relevant community discussion at all.",
-      "how_to_settle": "Find the store to offset +8 in the real disassembly and establish whether it is never executed or is fed from something that itself depends on the metaobject."
-    }
-  ],
-  "corrections": [
-    {
-      "id": "igfile-not-missing",
-      "was": "igFile is a filesystem class that never registers, the last of five.",
-      "now": "igFile is a dependency of igIGBFile, which is retail #127, and the boot reaches #125. Registration is recursive, so dependencies fire before their owner -- which is why the retail log shows igFile at #80 while its owner appears at #127. It was never skipped, only beyond the frontier.",
-      "why_it_mattered": "It was probed for over several builds and reported as a missing class. The mistake was comparing our numbers against a retail measurement taken at a point in the boot we had not reached, which also produced a second wrong conclusion that our dependency lists were being built short."
-    },
-    {
-      "was": "The second boot hang is caused by a static initialiser the recompiler failed to recover.",
-      "now": "Wrong. The 114-entry constructor table is real embedded binary data, not a heuristic recovery, so a class's absence from it is positive evidence the class has no global-constructor initialiser. Registration for these classes is lazy, on first use.",
-      "date": "2026-08-21"
-    },
-    {
-      "was": "The pool integrity failure is caused by memory exhaustion -- a failed allocation produced a NULL object.",
-      "now": "Wrong. The object pointer is not allocated at all; it is loaded from a global registry table and the entry is NULL. That points at type registration, not the heap. Allocation health in the same run was healthy (frees and block reuse both happening).",
-      "date": "2026-08-24"
-    },
-    {
-      "was": "Guest .rodata is being corrupted at runtime.",
-      "now": "Superseded. The apparent corruption was a downstream effect of the NULL registry entry above, not an independent write into read-only data.",
-      "date": "2026-08-24"
-    }
-  ],
-  "method_note": "Six theories died getting to the current position on 2026-08-24, half of them the assistant's own: arena blocks breaking the integrity check (disproved by a byte-identical run), .rodata corruption (a hex misconversion; the write watch then reported n=0), TLSF overlapping pool objects (invented by stale hardcoded addresses in the debug harness itself), a Properties field-offset mistake (both users agree on the layout), and the failed-allocation theory above. Each was cheap to disprove by measuring and expensive to argue about. The two instruments that did the work were a value-filtered write watch and probes that fire only on the anomalous case."
+  "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
+ },
+ "findings": [
+  {
+   "id": "masking-hides-the-bug",
+   "title": "Guest-memory masking turns every bad pointer into silence",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "Every memory accessor masks its address with (PPC_MEM_SIZE - 1), which is what lets recompiled code use guest addresses directly. The cost is that a null or wild pointer becomes a legal access instead of a fault, so the program never stops where the bug is. Traced in full on 2026-08-30: a null memory pool produced a null allocation, element addresses computed from that null base came out as small integers -- 0xc, 0x34D4, 0x47430 -- used as pointers, and an ordinary flag write four bytes into one of them landed on the engine's memory-context global. Every later read then treated that value as an object and called through it, producing 24,152 silent indirect calls. On real hardware the first bad write would have crashed; here it produced four days of symptoms in unrelated subsystems.",
+   "disproved_by": "A bad pointer that faults at the point of use rather than propagating."
+  },
+  {
+   "id": "entry-pc-names-the-wrong-function",
+   "title": "A probe recording the function-entry PC names the wrong code",
+   "area": "method",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "g_ppc_current_pc is set when a recompiled function is entered and never restored when it returns, so any probe reporting it names the innermost function ENTERED rather than the code responsible. Over one investigation it named _main for a low-memory write, _savegpr_14_l for 277,834 dispatch misses, igMetaField::construct (whose entire body is one blr) for null virtual calls, and a nine-instruction getter for a store that corrupted a global. Every emitted call writes its own return address into ctx->lr on the line above, so lr is exact. The instruments were changed to record lr and the relevant registers by default; inference had been choosing the wrong function and, twice, the wrong argument.",
+   "disproved_by": "A probe whose entry-PC attribution matches an lr-based one on a call made through a leaf helper."
+  },
+  {
+   "id": "data-relocations-dropped",
+   "title": "Only .rela.text was read, so 48,625 pointers stored in data were left null",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "The loader had exactly one line matching relocation sections and it named .rela.text. The RPX also carries .rela.rodata and .rela.data, and those were discarded -- 48,625 relocations once decompressed, 33,260 of them function pointers. Those are every pointer STORED IN data: vtable slots, function tables, string pointers, pointers between globals. In a relocatable RPL the file holds zero in the slot and the relocation supplies the address, so dropping them left every such pointer null. This one bug was behind null virtual calls, a path formatted as \"(null)/\" written to address 0, 1,335 globals reading as never-written, filesystem classes that never registered, and an allocator free list poisoned by ASCII read as a block size.",
+   "disproved_by": "A vtable slot reading non-zero on hardware while its relocation section is still unread."
+  },
+  {
+   "id": "bctr-intra-function-tables",
+   "title": "bctr jump tables inside a function were dispatched as calls and did nothing",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "bctr without link is an intra-function computed goto, not a call. It was emitted as ppc_dispatch, which only knows function entry points, so a jump into the middle of a function matched nothing and silently returned. __gh_vsprintf's conversion switch is exactly this shape and was dispatched 110,979 times in two minutes doing nothing. Converting the contiguous run of branches after each bctr into a switch of gotos gave 81 tables and 1,651 cases, and took class registration from 99 to 124.",
+   "disproved_by": "A bctr whose target is outside the current function and is a real entry point; those still fall through to the dispatcher."
+  },
+  {
+   "id": "registration-follows-inheritance",
+   "title": "Class registration walks the inheritance chain, not a flat list",
+   "area": "engine",
+   "confidence": "confirmed",
+   "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #findings",
+   "detail": "Each class has arkRegisterInternal, which calls Core::igArkRegister passing the class name, its metaobject pointer, THE PARENT CLASS'S arkRegisterInternal, the type size, the vtable pointer and a pointer to its own arkRegisterInitialize. Registering a class therefore registers its ancestors first, which is why the retail log shows a dependency appearing hundreds of entries before the class that pulls it in. Every object also has a virtual getMeta returning its igMetaObject. Confirmed independently here by capturing the retail registration order from Cemu: 965 classes, and ours matches it exactly for every class we reach.",
+   "disproved_by": "A class registering without its parent having registered first."
+  },
+  {
+   "id": "type-index-to-vtable",
+   "title": "Type indexes are the engine's handle for vtables",
+   "area": "engine",
+   "confidence": "confirmed",
+   "discord_prior_art": "NefariousTechSupport, Skylanders Reverse Engineering #igarchiveextractor",
+   "detail": "Described in the Discord as the game turning type indexes into the corresponding vtables. That is the same lookup igDataList::setCapacity performs: read a metaobject pointer from a global, take its type index at +0xc, and index a table with it. When that global was null the index came from guest address 12 and the lookup returned garbage. Reading the real value off a running retail game under a debugger gave type index 2, and using it roughly doubled the number of classes that register.",
+   "disproved_by": "A metaobject whose +0xc halfword is not used as a table index."
+  },
+  {
+   "id": "jump-tables-untranslated",
+   "title": "Computed jump tables were not translated at all, so every such switch silently did nothing",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "GHS compiles a dense switch into a jump table: mtctr of a table base, then bctr into a run of branch instructions. conquertron emitted bctr as an indirect call followed by a return, which is right for a function pointer and wrong for a computed goto into the same function. Worse, the table base was folded to a synthetic .text address while the dispatcher is keyed by real guest addresses, and the dispatcher has no default case -- so the lookup matched nothing, returned silently, and the emitted return abandoned the enclosing function. 61 tables in the game.",
+   "why_it_matters": "No stub, no log, no crash: a switch simply did nothing and its caller returned. Bitstream decoders, state machines and message handlers are exactly where dense switches live, so this was not confined to video.",
+   "falsifiable_by": "Rewriting the idiom as a switch over (ctr - base)/4 mapping to the table's own labels made Bink's decoder start producing frames: 75 guest calls per BinkDoFrame became 1,445-2,271. ExpandPlane's table emits exactly ten cases, matching the cmplwi r7, 9 bounds check above it, and the script was never told the length."
+  },
+  {
+   "id": "record-form-cr0",
+   "title": "Ten record-form instruction classes never updated CR0, so branches tested stale flags",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "In PowerPC a trailing dot means the instruction also compares its result against zero into CR0. Ten cases in codegen emitted the result and skipped that update: clrlwi, extsb, extsh, srawi, subfe, addze, rlwimi, rlwnm, adde and addme. 6,745 sites.",
+   "why_it_matters": "Every conditional branch after one of them tested some earlier instruction's comparison. It hung the boot in a string-terminator loop that could not exit even when the terminator byte was forced to zero.",
+   "falsifiable_by": "Attribution is perfectly bimodal: each instruction is either always correct or always wrong, never mixed, which is what separates a codegen gap from a data-dependent fault. Running the old and new recompiler over the retail RPX adds exactly 6,745 lines, removes none, and every added line is a CR0 compare."
+  },
+  {
+   "id": "srawi-carry",
+   "title": "srawi dropped XER[CA], breaking the standard signed divide-by-power-of-two idiom",
+   "area": "recompiler",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "srawi sets the carry bit when the value is negative and any 1 bits are shifted out. srawi followed by addze is how PowerPC divides a signed value by a power of two with rounding toward zero, and this game uses that pair in 304 places. 2,890 srawi sites in total.",
+   "why_it_matters": "Without the carry every negative division rounds toward negative infinity instead -- off by one, silently, and only for negative inputs. That decodes most of a frame correctly and then diverges.",
+   "falsifiable_by": "sraw, the variable-shift form, already modelled the carry correctly; only the immediate form was wrong, which is visible by comparing the two helpers."
+  },
+  {
+   "id": "ffmpeg-has-bink",
+   "title": "The devkitPro ffmpeg already decodes Bink and has hardware H.264, so no forked tree is needed",
+   "area": "tooling",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "Switch media players solve H.264 in different ways -- NXMP is MPV-based, SwitchWave carries a custom Tegra backend with forked ffmpeg and mpv as submodules. Neither is necessary: the installed portlib already contains averne's Tegra work (ff_h264_nvtegra_hwaccel) and also ff_bink_decoder, ff_binkaudio_dct_decoder, ff_binkaudio_rdft_decoder and ff_bink_demuxer.",
+   "why_it_matters": "It gives a reference decoder for the game's own movie format. The recompiled Bink truncates after a few macroblock rows, and a known-good decode of the same frame turns that from guesswork into a diff -- the same role Cemu played for the boot sequence.",
+   "falsifiable_by": "Checked by symbol in the installed libavcodec.a and again in the linked NRO."
+  },
+  {
+   "id": "wiiu-boot-assets",
+   "title": "Two of the three Wii U boot assets need no decoder at all",
+   "area": "assets",
+   "confidence": "confirmed",
+   "discord_prior_art": null,
+   "detail": "bootTvTex.tga is uncompressed 24-bit truecolour at exactly 1280x720, the framebuffer size. bootSound.btsnd is an 8-byte header followed by raw 16-bit stereo PCM at 48kHz -- measured format field 0, loop 0, 909,474 frames, 18.9 seconds. Only bootMovie.h264 needs a real decoder.",
+   "why_it_matters": "The Wii U boot splash and jingle can be reproduced exactly, and the audio path they need is the same one Bink's own audio will use.",
+   "falsifiable_by": "Both parsed directly from the files. Two details are silently wrong if guessed: the PCM is big-endian while audout is little-endian, and TGA truecolour is BGR and stored bottom-up unless descriptor bit 5 says otherwise."
+  },
+  {
+   "id": "igmemoryheader-bit-layout",
+   "title": "igMemoryHeader packs the pool id into the top 10 bits of the same word as the block size",
+   "area": "alchemy-memory",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none -- zero hits for igMemoryHeader, createHeader, TLSF, freeInternal or checkIntegrity across all 19 channel exports",
+   "detail": "Core::igMemoryHeader::createHeader executes rlwimi r0, r8, 0, 0xa, 0x1f -- it inserts the block size into bits 10 through 31 while deliberately preserving the top 10 bits, which hold the pool id. Two independent consumers agree with that reading: igMemoryPool::contains shifts the word right by 23, and getMemoryPool shifts it right by 22.",
+   "why_it_matters": "If you are writing a tool that walks an Alchemy heap, or reasoning about why an object gets freed back to a particular pool, the pool id is already in the header -- you do not need to search for the owning pool.",
+   "falsifiable_by": "Finding a build where contains and getMemoryPool disagree with the rlwimi mask, which would mean the layout is not stable across Alchemy versions."
+  },
+  {
+   "id": "two-free-paths-one-unchecked",
+   "title": "Alchemy has two free paths and only one of them range-checks the pool",
+   "area": "alchemy-memory",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none for the mechanism. One corroborating remark from NefariousTechSupport (2023-12-06): 'Every object has a memory pool... different regions of memory are different pools, you can allocate and free memory from individual pools.' Consistent with, but does not describe, the unchecked path.",
+   "detail": "igFree goes through getContainingMemoryPoolInternal, which asks each pool whether it contains the pointer -- a plain range check over [*(this+0x10), +*(this+0x14)), so a foreign pointer is rejected. igObject::free instead takes the pool index straight out of the object's own header (*(obj+4) >> 22) and calls getMemoryPoolByIndex, with no range check at all. igObject has its own operator new taking a pool, so real engine objects carry correct indices; the global operator new goes to plain malloc.",
+   "why_it_matters": "This is the mechanism by which a pointer that a pool cannot possibly own gets linked into that pool's free list. The pool's own integrity walker then correctly reports the heap inconsistent, and the engine prints 'Memory pool (index %d) failed integrity check.' If you see that message, the useful question is which object carried a wrong pool id in its header, not which pool is corrupt.",
+   "falsifiable_by": "Finding a range check inside getMemoryPoolByIndex or igObject::free in another build."
+  },
+  {
+   "id": "alchemy-uses-tlsf",
+   "title": "Alchemy's heap memory pools are backed by TLSF",
+   "area": "alchemy-memory",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none -- no mention of TLSF anywhere in the exports. Every igMemoryPool discussion found concerns the IGZ file format (chunk descriptors, _memoryPoolNameOffset, igCauldron serialisation), not the runtime heap.",
+   "detail": "igHeapMemoryPool builds its backing allocator with tlsf_create, frees through tlsf_free, and its checkIntegrity implementation is a tlsf_check_heap heap walk.",
+   "why_it_matters": "TLSF is a well-known, publicly documented two-level segregated-fit allocator. Knowing that is what is underneath means its published block and free-list layout can be used directly when inspecting an Alchemy heap in a debugger, rather than reverse-engineering the structure from scratch."
+  },
+  {
+   "id": "rpl-static-init-table-in-rodata",
+   "title": "GHS Wii U builds keep the global-constructor table as plain data in .rodata, with no .init_array or .ctors section",
+   "area": "wiiu-format",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none for the section-level detail. The Discord discusses _GLOBAL__sub_I_* naming and __cxa_guard_acquire/release semantics, but not where the constructor table physically lives in an RPL.",
+   "detail": "This build has no .init_array and no .ctors. The constructor pointer table -- 114 entries in Spyro's Adventure -- is embedded in .rodata as ordinary data, and the real Cafe OS RPL loader walks it at load time. Diffing the real table's order against plain address-ascending order gives zero differences across all 114 entries, so the table is in address order.",
+   "why_it_matters": "If you are recovering static initialisers from a Wii U RPL and looking for the sections a normal ELF toolchain would use, you will find nothing and may conclude the game has no global constructors. It does. Also: because the table is real embedded data rather than something recovered heuristically, a class's absence from it is positive evidence that the class has no global-constructor initialiser -- not evidence that your tool missed one.",
+   "falsifiable_by": "Finding a Wii U RPL built by a non-GHS toolchain that does emit .init_array."
+  },
+  {
+   "id": "igarkregister-writes-meta-unconditionally",
+   "title": "igArkRegister writes the metaobject pointer back even when the allocation it just made returned NULL",
+   "area": "alchemy-reflection",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "partial. NefariousTechSupport's own walkthroughs (2024-03-20, 2024-10-19) establish the call shape: arkRegisterInternal calls Core::igArkRegister(&_Meta, parentArkRegisterInternal, ..., name, size, ..., arkRegisterInitializeFn), with the _Meta field pointer as the first parameter. The unconditional-write behaviour below is this project's own reading of igArkRegister's body and was not found in the exports.",
+   "detail": "igArkRegister (real address 0x215efe0 in this build) writes into *_Meta unconditionally, including on the path where igMetaObject::instantiateFromPool (0x21c1f8c) returns NULL.",
+   "why_it_matters": "A class whose Core::igMetaObject::_Meta reads NULL does not tell you that registration never ran. It may have run and failed at the allocation. Those two cases need different instrumentation to tell apart -- a per-class entry probe on arkRegisterInternal distinguishes them cleanly."
+  },
+  {
+   "id": "lazy-metaobject-registration-chain",
+   "title": "The lazy metaobject registration chain, and the single flag byte that gates it",
+   "area": "alchemy-reflection",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "none for the chain as a whole or for the flag byte.",
+   "detail": "igMemoryPoolFrame::instantiateFromPool obtains its metaobject via Core::__internalObjectBase::getClassMetaSafeInternal, a shared lazy get-or-register helper that every reflectable Core:: class goes through. That helper calls igArkCore::beginArkRegister, which reads a flag byte at offset +0x16 on the igArkCore singleton; only if the flag passes does it invoke the class's own arkRegisterInitialize through a function pointer. The igArkCore singleton itself is constructed by Core::igRefAlchemy behind a GHS 'magic statics' reference-count guard.",
+   "why_it_matters": "Registration for a whole family of classes hinges on one byte on one singleton. If reflection appears to be missing wholesale rather than for one class, that byte is the thing to look at first.",
+   "measured": "On real hardware in this project's port, arkRegisterInternal for igMemoryPoolFrame never ran at all (a per-class-unique probe read hits=0), and beginArkRegister's flag read 0 on all 11 hits across a full run -- while the igArkCore singleton was confirmed genuinely constructed with a valid global pointer. Note this is a state observed in a recompiled port, not necessarily how the real Wii U build behaves."
+  },
+  {
+   "id": "bootstrap-heap-real-sizes",
+   "title": "igMemoryContext::bootstrapInitialize needs 8,388,632 bytes of bootstrap heap, not a token amount",
+   "area": "alchemy-memory",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "adjacent. The exports document that a separate named 'Bootstrap' pool exists and can run out independently, and record a real 'Bootstrap pool ran out of memory' report. The measured three-consumer breakdown below is this project's own.",
+   "detail": "igMemoryContext's constructor needs a small dedicated heap to allocate itself from -- the chicken-and-egg problem of needing a working pool to construct the object that sets up pools. bootstrapInitialize then drives three real consumers off it, requesting 1,048,584 + 5,242,888 + 2,097,160 = 8,388,632 bytes.",
+   "why_it_matters": "Sizing this from the small allocations visible early in boot gives a wrong answer. This project sized it at 64KB on that basis, which meant no pool ever received a real buffer and the string pool stayed dead -- reproducing exactly the boot spin the bootstrap heap had been added to fix.",
+   "related": "Consistent with the community finding that Alchemy pool sizes are baked into the binary per platform and per build, so an allocation failure is usually a sizing decision rather than a runtime logic bug."
+  },
+  {
+   "id": "ghs-libc-sbrk-adjacency",
+   "title": "Green Hills libc grows its heap through MEMAllocFromDefaultHeapEx and requires successive returns to be adjacent",
+   "area": "cafeos",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "none.",
+   "detail": "GHS libc grows the game's entire C heap through MEMAllocFromDefaultHeapEx in an sbrk-style contract: malloc treats its heap as one growing segment, so successive calls must return adjacent memory. A general-purpose ExpHeap implementation that writes a size header and then re-aligns breaks that contract -- measured directly here as a constant 64-byte gap between successive 131,072-byte returns (0x4000040, 0x4020080, 0x40400c0).",
+   "why_it_matters": "The symptom is not an obvious crash. malloc simply never reuses its heap and grows forever, so a pool looks like it needs more memory no matter how much you give it. In this project that produced a months-long false trail: pool sizes were raised 32 to 96 to 320 to 416 to 928 MB and every one was consumed to roughly 100%. Fixing the adjacency took allocation failures from 1,563 to 0 and took static initialisation from stalling at initialiser 87 to completing all 114. Anyone shimming Cafe OS memory for a GHS-built title should check this first.",
+   "also_worth_knowing": "On real hardware MEM1 is the small 32MB fast pool. An application's default heap comes from MEM2, not MEM1."
+  },
+  {
+   "id": "fimport-section-name-suffix",
+   "title": "RPL .fimport_ section names keep the .rpl extension for some libraries and not others",
+   "area": "wiiu-format",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none.",
+   "detail": "A cross-library import's .fimport_<library> section name preserves the shared library's real filename verbatim, including a literal .rpl extension where the library has one. Confirmed against the real Skylanders binary: .fimport_nsyshid.rpl and .fimport_vpad.rpl carry the suffix, while coreinit and gx2 do not.",
+   "why_it_matters": "If you derive symbol or shim names from the section name, the two libraries that carry the suffix will silently not match the rest, and a literal dot is not a valid C identifier character either. Strip it once at the source of the library name rather than sanitising the dot downstream, which would still leave you with nsyshid_rpl against everyone else's nsyshid."
+  },
+  {
+   "id": "ghs-savegpr-zero-sized-symbols",
+   "title": "GHS register-spill helpers are multiple zero-sized symbols sharing one fall-through tail",
+   "area": "wiiu-format",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none.",
+   "detail": "The linker-synthesised _savegpr_N / _restgpr_N / _savefpr_N_l family -- confirmed present by exact name in real Spyro's Adventure code -- appears as several STT_FUNC symbols at different addresses that all fall through into a single shared tail ending in one blr. st_size is left at 0 for all of them, since no single symbol owns a disjoint range.",
+   "why_it_matters": "Function-boundary recovery that trusts st_size will skip every one of these. Scanning forward from each entry point to the first blr (0x4e800020) gives each its own correct self-contained range -- verified here against the real bytes. Cap the scan so a genuinely mis-sized symbol fails safe rather than swallowing unrelated code."
+  },
+  {
+   "id": "gx2-shader-format-gap",
+   "title": "Why GX2 shaders cannot simply be handed to a Switch graphics API",
+   "area": "gx2",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "none -- no GX2 or graphics-pipeline internals in the exports beyond generic texture-swizzle tooling.",
+   "detail": "GX2's shader input is real AMD R600 / Evergreen-family GPU machine code. That is confirmable without guesswork: GX2CalcFetchShaderSizeEx's reference implementation computes sizes over real VertexFetchInst, AluInst and ControlFlowInst AMD instruction encodings (see decaf-emu's gx2_fetchshader.cpp). deko3d, on the Switch side, consumes separately compiled Nvidia Maxwell shader binaries as .dksh files.",
+   "why_it_matters": "These are two unrelated machine-code formats with no runtime translation path. Anyone scoping a Wii U to Switch port should treat shader translation as its own project rather than a step inside the graphics layer. Everything else in GX2 -- render state, surfaces, buffers, texture binding, clear and present, VSync, command submission -- does map onto deko3d and is working here.",
+   "note": "This project's current, deliberate choice is to make the shader and draw-call family real linkable no-ops, so recompiled game code runs past them instead of hard-crashing at the first draw call. Nothing renders as a result of them."
+  },
+  {
+   "id": "real-boot-file-sequence",
+   "title": "The engine's boot file order, captured from the real game",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "None found. The Skylanders RE Discord exports contain no discussion of the boot-time file order.",
+   "detail": "Running the retail Wii U title in Cemu 2.6 with its own API logging enabled gives the exact order in which the engine opens files: /vol/content/alchemy.xml first, then permanent/bootstrap.arc (fails with -6, absent), permanent/bootstrap.bld, item/legal.arc (-6) and legal.bld, permanent/global.arc and .bld, character/init_setup.bld, and level/title.arc. Two details matter. alchemy.xml is not merely configuration read at some point -- it is the first file the engine touches, before any content. And the .arc-then-.bld pairing is deliberate, with -6 as the expected outcome for the .arc, so a filesystem shim that treats a missing .arc as an error rather than a normal miss will derail the sequence at the first asset.",
+   "why_it_matters": "This port's recompiled engine opens no file at all in a full 120-second run -- the only FSOpenFile in any log is the one the test harness itself performs. Having the real order gives a target to match and a way to tell how far the boot actually gets, rather than inferring it from where it crashes.",
+   "falsifiable_by": "Capture the same trace on a different dump or Cemu version and get a different order, or find the engine opening something before alchemy.xml."
+  },
+  {
+   "id": "cemu-logging-coverage",
+   "title": "Cemu's API logging covers only part of coreinit, so absence proves nothing",
+   "area": "tooling",
+   "confidence": "static_confirmed",
+   "discord_prior_art": "None found.",
+   "detail": "With every log category enabled, a full boot capture contains only 46 distinct coreinit functions and three MEM ones: MEMGetBaseHeapHandle, MEMAllocFromFrmHeapEx and MEMGetAllocatableSizeForFrmHeapEx. MEMAllocFromDefaultHeapEx, MEMAllocFromExpHeapEx and MEMCreateExpHeapEx never appear, because Cemu does not instrument them for logging -- not because the game avoids them.",
+   "why_it_matters": "A trace like this makes it very easy to record a dramatic false finding. Reading the same capture without checking coverage suggests the retail game performs almost no heap allocation during boot while this port consumes 116MB, which is not supported by the data at all. Before concluding anything from an API's absence in a Cemu log, confirm that API is instrumented.",
+   "falsifiable_by": "Find MEMAllocFromDefaultHeapEx in a Cemu log with all categories enabled, which would mean it is instrumented after all and its absence here was behavioural."
+  },
+  {
+   "id": "store-watch-blind-to-direct-writes",
+   "title": "A store watch that hooks the store helper cannot answer ordering questions",
+   "confidence": "hardware_confirmed",
+   "detail": "A watchpoint implemented inside the recompiler's store helper sees only writes routed through that helper. Anything writing the guest memory array directly -- a memset shim, a memcpy, a block-copy intrinsic -- never touches it. It also reports only the most recent write, which is right for catching a corrupting store and useless for asking when a value changed. Polling the watched address at every function entry has neither limitation: it records each transition whoever caused it, with the function running at the time, and keeps the earliest as well as the latest.",
+   "how_established": "A global was written correctly at call 3,625 and read back as zero at call 414,746, while the store watch reported four writes whose latest arrived at 428,352 -- after the null had already been read. The polled watch produced the full history and named the write that zeroed it.",
+   "what_would_disprove": "A recompiler where every write to guest memory, including shim and intrinsic paths, provably goes through one helper.",
+   "applies_to": "static recompilation harnesses generally, not Alchemy"
+  },
+  {
+   "id": "unchecked-null-allocation-under-masking",
+   "title": "An unchecked null allocation becomes a silent data-section wipe, not a crash",
+   "confidence": "hardware_confirmed",
+   "detail": "igPool::allocateBucket allocates a bucket buffer and calls the virtual element constructor on every element from it without checking the buffer. When the allocation fails the buffer is null, and the constructor runs over elements at 0, 24, 48, and so on. Under guest-memory masking every one of those writes is legal, so instead of faulting at the failed allocation the run quietly overwrites low memory and fails much later somewhere unrelated.",
+   "how_established": "6,625 elements of 24 bytes from a null base: the element covering the memory-context global at 0x34D8 is 13528/24 = 563, and 407,945 + 563 = 408,508 against the 408,510 a polled watch recorded for that global being zeroed. Skipping the loop when the buffer is null took execution from 710,046 to 1,337,074 calls and dispatch misses from 73,308 to 53.",
+   "what_would_disprove": "A run where the buffer is null and the memory-context global survives the construct loop.",
+   "applies_to": "Alchemy igPool, and any recompilation that masks guest addresses"
+  },
+  {
+   "id": "registration-is-demand-driven",
+   "title": "Class registration is demand-driven, so a registration count measures boot progress",
+   "confidence": "hardware_confirmed",
+   "detail": "Alchemy does not register its classes from a list at startup. __internalObjectBase::getClassMetaSafeInternal builds a class's metaobject the first time something asks for it, and igArkCore::endArkRegister consumes one class per call. Retail calls the former 13,567 times and the latter 846-plus during boot, from many different sites. A recompilation that registers fewer classes is therefore not necessarily failing at registration -- it may simply not be reaching the code that asks.",
+   "how_established": "Breakpoint counts on the retail Wii U binary under Cemu's gdb stub, compared against an instrumented build that registers 124 classes in exactly the retail order and calls getClassMetaSafeInternal 105 times.",
+   "what_would_disprove": "A retail run where the registration count advances while no new call sites request metaobjects.",
+   "applies_to": "Alchemy engine"
+  },
+  {
+   "id": "endarkregister-high-water-mark",
+   "title": "endArkRegister runs deferred callbacks once using a high-water mark, not a flag",
+   "confidence": "hardware_confirmed",
+   "detail": "When the class list drains, igArkCore::endArkRegister decrements a nesting depth at this+0x18 and proceeds only at depth 1. It then compares a high-water mark at this+0x44 against the deferred-callback table's count, runs only the entries between them, and sets the mark to the count. Draining is the ordinary rhythm of registration rather than a terminal state -- it happens repeatedly as classes are appended -- and the mark is what keeps one-time work one-time across all of them.",
+   "how_established": "Instrumented build: 35 drains, all at depth 1, table count 1, mark moving 0 to 1 on the second drain and every later drain a no-op.",
+   "what_would_disprove": "A drain at depth 1 where the mark is already equal to the count and the callbacks run anyway.",
+   "applies_to": "Alchemy engine"
+  }
+ ],
+ "confirmations": [
+  {
+   "id": "cxa-guard-magic-statics",
+   "title": "Confirmed from the Discord, then used here: __cxa_guard_acquire/release means a function-local static, not a global constructor",
+   "credit": "NefariousTechSupport, alchemy channel, 2024-12-26",
+   "why_recorded": "This is what makes the .rodata constructor-table finding above actionable. A class missing from the 114-entry table may be initialising through a function-local static guard instead, which is invisible to any global-constructor list by design."
+  },
+  {
+   "id": "magic-moment-in-tfbscript",
+   "title": "Confirmed from the Discord: the figure-summon sequence is implemented in tfbscript, not in the executable",
+   "credit": "Skylanders RE Discord, portal discussion",
+   "why_recorded": "'Magic Moment' is the real in-engine term for the figure-appear and stats sequence. The model is a tfbSpriteInfo referencing a model with per-element asset lookups. The native portal driver class is tfbPortalDriver_V2, with internalReportIn handling incoming USB HID reports, firmware-version-gated. Relevant to anyone building a figure-display feature: the presentation logic may already exist in shipped game data."
+  }
+ ],
+ "open_questions": [
+  {
+   "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
+   "detail": "It stops cleanly at a macroblock boundary and the row count varies between frames, which rules out a fixed dimension or stride error. The bitstream pointer overruns its end by exactly 4 bytes, which is normal per-bundle termination, so too few bundles are being refilled per frame."
+  },
+  {
+   "question": "Why is registry index 540 never populated?",
+   "detail": "The table fills to 799 entries scattered up to index 2047 while 540 stays empty, so it is a sparse table with a permanent hole rather than registration stopping early."
+  },
+  {
+   "id": "rodata-data-mapping",
+   "question": "Are constant-folded .rodata data references -- vtables, constant tables -- mapped correctly by static recompilation, as distinct from instruction-level relocation folding?",
+   "why_open": "Three instruction-level relocation bugs have been found and fixed here by measuring against the real RPX. Data-side mapping is a different bug class and has not had the same audit. If it is wrong it could be just as widespread.",
+   "how_to_settle": "Compare a known vtable's contents in the real dumped RPX against what the recompiled output resolves at runtime, for a class whose layout is independently known."
+  },
+  {
+   "id": "placeholder-vtables",
+   "question": "Does the real Wii U binary genuinely ship minimal placeholder vtables for pools that start deliberately unbacked, and if so what upgrades them on first use?",
+   "why_open": "Two pool objects here resolve to a vtable with only resetByReference, construct and destruct populated. The address computation that produces it was checked by hand against the real relocations and is faithful -- the game's own compiled code deliberately computes that address. So this looks like intentional lazy initialisation rather than a translation error, but what triggers the upgrade has not been found.",
+   "how_to_settle": "Read the same vtable slot contents out of the real RPX .rodata and confirm they are unpopulated there too."
+  },
+  {
+   "id": "frame-plus-8",
+   "question": "Where is offset +8 on an igMemoryPoolFrame supposed to be written?",
+   "why_open": "It reads as 0x100000 -- a suspiciously round garbage value -- rather than NULL or a real pointer, and drives a roughly 131,000-iteration teardown loop inside igObjectList::setCount. Searching the exports for handleTable, aliasTable, igMemoryPoolFrameManager, setDefaultFrame and pushFrame found no relevant community discussion at all.",
+   "how_to_settle": "Find the store to offset +8 in the real disassembly and establish whether it is never executed or is fed from something that itself depends on the metaobject."
+  }
+ ],
+ "corrections": [
+  {
+   "id": "null-pool-was-downstream",
+   "was": "The boot failure is a single null memory pool, and the open question is which path reaches the allocator without one.",
+   "now": "The null pool is a consequence roughly 6,200 calls downstream. A bucket allocation returns null and is not checked; the element constructor then writes through a null base until it erases the memory-context global, and the null pool is what the next read of that global produces. Containing the construct loop removed the null pool, the null context, 24,602 bad buffers and 73,255 of 73,308 dispatch misses at once.",
+   "why_it_mattered": "Several days went into the null pool as though it were the origin. It was one of four faces of one bug, and only suppressing the corrupting loop showed that they moved together.",
+   "date": "2026-08-30"
+  },
+  {
+   "id": "context-cleared-not-late",
+   "was": "The memory-context global has not been published yet when a pool is activated, so the fix is sequencing.",
+   "now": "It is published correctly and early, at call 3,625, and read as zero at 414,746. It is cleared in between. Publishing it sooner would have fixed a problem that does not exist.",
+   "why_it_mattered": "The instruments reported only latest values, which cannot answer a question about order. Recording the first write as well as the latest turned it into a measurement.",
+   "date": "2026-08-30"
+  },
+  {
+   "id": "registration-frontier-not-a-cause",
+   "was": "Registration stops at 124 classes, and the class at the frontier is what needs fixing.",
+   "now": "Registration is demand-driven. Nothing is wrong with class 125. The boot stalls, so nothing asks for further metaobjects, and 124 is simply how far a stalled boot gets. Retail asks 13,567 times; we ask 105.",
+   "why_it_mattered": "The frontier class was treated as a target for several builds.",
+   "date": "2026-08-30"
+  },
+  {
+   "id": "igfile-not-missing",
+   "was": "igFile is a filesystem class that never registers, the last of five.",
+   "now": "igFile is a dependency of igIGBFile, which is retail #127, and the boot reaches #125. Registration is recursive, so dependencies fire before their owner -- which is why the retail log shows igFile at #80 while its owner appears at #127. It was never skipped, only beyond the frontier.",
+   "why_it_mattered": "It was probed for over several builds and reported as a missing class. The mistake was comparing our numbers against a retail measurement taken at a point in the boot we had not reached, which also produced a second wrong conclusion that our dependency lists were being built short."
+  },
+  {
+   "was": "The second boot hang is caused by a static initialiser the recompiler failed to recover.",
+   "now": "Wrong. The 114-entry constructor table is real embedded binary data, not a heuristic recovery, so a class's absence from it is positive evidence the class has no global-constructor initialiser. Registration for these classes is lazy, on first use.",
+   "date": "2026-08-21"
+  },
+  {
+   "was": "The pool integrity failure is caused by memory exhaustion -- a failed allocation produced a NULL object.",
+   "now": "Wrong. The object pointer is not allocated at all; it is loaded from a global registry table and the entry is NULL. That points at type registration, not the heap. Allocation health in the same run was healthy (frees and block reuse both happening).",
+   "date": "2026-08-24"
+  },
+  {
+   "was": "Guest .rodata is being corrupted at runtime.",
+   "now": "Superseded. The apparent corruption was a downstream effect of the NULL registry entry above, not an independent write into read-only data.",
+   "date": "2026-08-24"
+  }
+ ],
+ "method_note": "Six theories died getting to the current position on 2026-08-24, half of them the assistant's own: arena blocks breaking the integrity check (disproved by a byte-identical run), .rodata corruption (a hex misconversion; the write watch then reported n=0), TLSF overlapping pool objects (invented by stale hardcoded addresses in the debug harness itself), a Properties field-offset mistake (both users agree on the layout), and the failed-allocation theory above. Each was cheap to disprove by measuring and expensive to argue about. The two instruments that did the work were a value-filtered write watch and probes that fire only on the anomalous case."
 }
