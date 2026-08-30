@@ -1,7 +1,7 @@
 {
   "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
   "schema_version": 1,
-  "generated_at": "2026-08-29",
+  "generated_at": "2026-08-30",
   "about": {
     "project": "Arkchemy",
     "url": "https://github.com/Arkchemy",
@@ -17,6 +17,24 @@
     "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
   },
   "findings": [
+    {
+      "id": "masking-hides-the-bug",
+      "title": "Guest-memory masking turns every bad pointer into silence",
+      "area": "recompiler",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "Every memory accessor masks its address with (PPC_MEM_SIZE - 1), which is what lets recompiled code use guest addresses directly. The cost is that a null or wild pointer becomes a legal access instead of a fault, so the program never stops where the bug is. Traced in full on 2026-08-30: a null memory pool produced a null allocation, element addresses computed from that null base came out as small integers -- 0xc, 0x34D4, 0x47430 -- used as pointers, and an ordinary flag write four bytes into one of them landed on the engine's memory-context global. Every later read then treated that value as an object and called through it, producing 24,152 silent indirect calls. On real hardware the first bad write would have crashed; here it produced four days of symptoms in unrelated subsystems.",
+      "disproved_by": "A bad pointer that faults at the point of use rather than propagating."
+    },
+    {
+      "id": "entry-pc-names-the-wrong-function",
+      "title": "A probe recording the function-entry PC names the wrong code",
+      "area": "method",
+      "confidence": "confirmed",
+      "discord_prior_art": null,
+      "detail": "g_ppc_current_pc is set when a recompiled function is entered and never restored when it returns, so any probe reporting it names the innermost function ENTERED rather than the code responsible. Over one investigation it named _main for a low-memory write, _savegpr_14_l for 277,834 dispatch misses, igMetaField::construct (whose entire body is one blr) for null virtual calls, and a nine-instruction getter for a store that corrupted a global. Every emitted call writes its own return address into ctx->lr on the line above, so lr is exact. The instruments were changed to record lr and the relevant registers by default; inference had been choosing the wrong function and, twice, the wrong argument.",
+      "disproved_by": "A probe whose entry-PC attribution matches an lr-based one on a call made through a leaf helper."
+    },
     {
       "id": "data-relocations-dropped",
       "title": "Only .rela.text was read, so 48,625 pointers stored in data were left null",

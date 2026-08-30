@@ -1,40 +1,40 @@
 {
   "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
   "schema_version": 2,
-  "generated_at": "2026-08-29",
-  "generated_by": "progress pass after the data-relocation fix",
+  "generated_at": "2026-08-30",
+  "generated_by": "progress pass after tracing the boot failure to a single null pool",
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
   "overall": {
-    "percent": 36,
-    "headline": "Class registration reaches 124 of about 1,007 and the engine is now past it, constructing objects continuously rather than hanging.",
-    "summary": "Six silent recompiler bugs were found and fixed in a day, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null. Registration went 54 -> 124 classes, matching the retail game's own order exactly for every class reached, and the boot now runs continuously through object construction at around 6,500 recompiled calls a second. Video and audio from the game's own files already play, and the filesystem resolves every path form the engine uses. What remains is the same larger half as before: proving the 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
+    "percent": 37,
+    "headline": "The remaining boot failure is traced end to end to a single null pool, with every instruction along the way verified correct against the retail game.",
+    "summary": "Six silent recompiler bugs were found and fixed, the largest being that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Registration reaches 124 of about 1,007 classes in exactly the retail order and the engine runs continuously past it. The current failure is now understood in full: a null memory pool yields a null allocation, element addresses computed from that null base come out as small integers used as pointers, and writing an ordinary flag four bytes into one of them corrupts the engine's memory-context global -- after which every later read treats that value as an object. Each step was checked against the retail game under a debugger and each translates correctly. Video and audio from the game's own files play, and the filesystem resolves every path form the engine uses. The larger half of the project is untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
   },
   "status": {
     "state": "active",
-    "since": "2026-08-29",
+    "since": "2026-08-30",
     "on_break": null,
     "break_reason": null,
-    "note": "Data relocations applied 2026-08-29. Cemu with a gdb stub is the reference for what the game's own values should be."
+    "note": "Boot failure traced to a single null pool on 2026-08-30. Cemu with a gdb stub is the reference for every step."
   },
   "current_work": {
     "repo": "jouster",
-    "title": "Null virtual calls during object construction",
-    "detail": "The engine is past registration and building objects -- igMetaObject::createInstanceInPlace into igObject::commission -- without hanging. Roughly 75,000 indirect calls a run still resolve to address 0, so some vtable slots are empty where a virtual method should be. With data relocations applied most vtables are populated, so the remaining nulls point at types whose metaobject has not been built rather than at another missing relocation.",
+    "title": "One path reaches the allocator without a resolved pool",
+    "detail": "igPool::activate resolves a default pool successfully 16 times out of 17 and stores it on the pool object, and the retail game reaches the same allocation with a real pool. Ours arrives with null, so either the failing path skips that fallback or reads the stored pool before it is written. Everything downstream is understood and correctly translated -- the null simply propagates through code that does exactly what the original does.",
     "blocked_on": null
   },
   "next_work": [
     {
-      "title": "Find which types have empty vtable slots",
-      "detail": "The dispatch-miss counter names the caller but not the slot. Identifying the type behind each null should say whether these are classes past the registration frontier or a separate defect."
+      "title": "Find the path that skips the pool fallback",
+      "detail": "The last question in this chain. A probe on the pool member itself rather than another counter downstream."
     },
     {
       "title": "Push registration past 124",
-      "detail": "Our order matches the retail game's exactly for every class reached, so sequencing is right and it is depth that is missing. The movie system registers around #907, so in-game video needs most of the remaining classes."
+      "detail": "Our order matches the retail game exactly for every class reached, so sequencing is right and depth is what is missing. The movie system registers around #907, so in-game video needs most of the remainder."
     },
     {
       "title": "Code and data in one address space",
-      "detail": "Functions use real addresses and data sections a synthetic one, so pointer comparisons across them are meaningless. Mapping .text real fixed the module-range test; extending it to data broke the boot and was reverted, and why it collides is still unknown."
+      "detail": "Functions use real addresses and data a synthetic one. Mapping .text real fixed the module-range test; extending it to data broke the boot and was reverted, and why it collides is still unknown."
     }
   ],
   "projects": [
@@ -43,7 +43,7 @@
       "name": "Conquertron",
       "role": "PowerPC32 to C static recompiler core",
       "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 83,
+      "percent": 84,
       "state": "active",
       "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
       "categories": [
@@ -72,7 +72,7 @@
       "name": "Jouster",
       "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
       "url": "https://github.com/Arkchemy/jouster",
-      "percent": 54,
+      "percent": 55,
       "state": "active",
       "summary": "The Switch side. Real decoded video frames now reach the panel from the game's own movie files, with no shader translation in the path. The Wii U boot splash and jingle play from meta/. The engine boot itself still stalls in class registration.",
       "categories": [

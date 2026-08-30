@@ -1,15 +1,15 @@
 {
-  "generated": "2026-08-29",
+  "generated": "2026-08-30",
   "focus": {
     "repo": "jouster",
     "path": [
       "jouster",
       "Engine bring-up",
-      "Object construction",
-      "Null virtual calls"
+      "Memory pools",
+      "A path that skips the pool fallback"
     ],
-    "substep": "Identify which types have empty vtable slots during construction",
-    "why": "Registration reaches 124 classes in exactly the retail order and the engine has moved past it into object construction, running continuously at about 6,500 recompiled calls a second rather than hanging. Around 75,000 indirect calls a run still resolve to address 0. Most vtables are populated now that data relocations are applied, so the remaining nulls most likely belong to types past the registration frontier.",
+    "substep": "Probe the pool member on igPool rather than counting failures downstream",
+    "why": "The whole failure is traced: a null pool yields a null allocation, element addresses computed from that null base become small integers used as pointers, and an ordinary flag write four bytes into one corrupts the memory-context global. Every instruction involved was checked against the retail game and translates correctly. Retail reaches the same allocation with a real pool; activate resolves one successfully 16 times out of 17, so one path is skipping that fallback.",
     "blocked_on": null
   },
   "legend": {
