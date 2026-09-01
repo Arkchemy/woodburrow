@@ -2,12 +2,12 @@
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
  "generated_at": "2026-09-01",
- "generated_by": "progress pass after the job queue was shown to be starved rather than mis-signalled",
+ "generated_by": "progress pass after the file-read completion was found to run one instruction too early",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The engine opens its own data file, reads 128 KB of it once, and then asks for nothing more. The stall is now a single unanswered branch wide.",
+  "headline": "The engine's first data read is correct in every respect -- valid archive header, right status, right callback. The completion simply ran before the function that issued it had finished.",
   "summary": "Nine silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Two fell on 2026-08-30: static initializers running twice, which closed a linked list into a ring so one traversal visited 38,154 nodes instead of five, and a PPC EABI error where 64-bit arguments were read one register short so a compare-and-swap could never match. Registration then completed at 965 classes -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. A third of the same shape fell on 2026-09-01: the OSWaitEventWithTimeout shim read its 64-bit timeout from the wrong register pair, and separately overflowed a 64-bit multiply, so the deadline landed in the past and every sleep returned instantly. That turned a worker thread's sleep into a busy spin at 149,000 system calls per second. Fixed and measured on hardware: 54 million calls over a 420-second run became 665,000, with the game's own execution rate unchanged. It did not advance the boot by a single class, which is worth stating plainly -- necessary, not sufficient. What it did do is make visible where the boot actually sits: the file-loading pump, polling its storage devices and asking the archive system to start new tasks every frame while two job-queue worker threads stay asleep and nothing completes. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
  },
  "status": {
@@ -19,22 +19,22 @@
  },
  "current_work": {
   "repo": "jouster",
-  "title": "One 128 KB read, and then the engine never asks again",
-  "detail": "Measured on hardware: two file opens, zero synchronous reads, one asynchronous read of 128 KB from position 0 of bootstrap.bld, and nothing after it. The job queue is signalled exactly twice in 420 seconds, both times as the files open, and both signals do wake a worker -- so signalling works and targets the right event. Nothing is producing work. The remaining question is the async completion path: the shim delivers a callback pointer and silently returns for the message-queue shape, a gap documented since it was written and never known to be reached. The next build records which shape the game actually uses.",
+  "title": "The completion callback ran one instruction too early",
+  "detail": "Measured on hardware: the read returns a valid igArchive header -- IGA magic, version 8, 106 files -- correctly in guest memory, the status is exactly the value the callback tests for, and the callback runs and takes its success path. The fault is ordering. Cafe OS delivers a file completion later, on its own I/O thread, after the call returns; the shim invoked it inline. So the completion marked the work item done and freed the async block one instruction before igCafeStorageDevice::read wrote its own state over the top, storing a pointer to just-freed memory. The scheduler then polled that work item forever. Completions are now queued and delivered at the next safe point. Built, not yet run.",
   "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Determine which async completion shape the game uses",
-   "detail": "One 128 KB read then silence is equally consistent with a completion that was never delivered and one that was delivered and mishandled. The instrumented build separates them and needs a hardware run."
+   "title": "Confirm the deferred completion advances the loader",
+   "detail": "bootstrap.bld is 198,695 bytes and only 131,072 were read, so a second read is owed. If the loader asks for the rest, the ordering was the whole fault. If it does not, the fault is inside the work-item state machine instead."
   },
   {
    "title": "Follow the known .bld load order",
-   "detail": "Community research on the same engine records the boot order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld -- with the language archive loading nothing further until a language is chosen. That is the map of what should happen once the first file is read, and a way to tell progress from a plausible-looking dead end."
+   "detail": "Community research on the same engine records the boot order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld -- with the language archive loading nothing further until a language is chosen. global.bld and global.arc are both present on the card, so progress past the first file is directly checkable."
   },
   {
-   "title": "Code and data in one address space",
-   "detail": "Functions use real addresses and data a synthetic one. Mapping .text real fixed the module-range test; extending it to data broke the boot and was reverted, and why it collides is still unknown."
+   "title": "Deliver completions the way the console does",
+   "detail": "They are now pumped from the mutex path, which is closer to correct than inline delivery but is not the same as correct -- real Cafe OS uses a dedicated I/O thread. If a work item turns out to expect completion on a specific thread, this needs revisiting."
   }
  ],
  "projects": [
@@ -72,7 +72,7 @@
    "name": "Jouster",
    "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
    "url": "https://github.com/Arkchemy/jouster",
-   "percent": 64,
+   "percent": 66,
    "state": "active",
    "summary": "The Switch side. Class registration is complete at 965 of 965 in the retail order, and igArkCore::init has reached file loading and opened the engine's own bootstrap.bld. Real decoded video frames reach the panel from the game's own movie files with no shader translation in the path, and the Wii U boot splash and jingle play from meta/. The boot now waits in the job queue rather than failing.",
    "categories": [
@@ -85,8 +85,8 @@
     {
      "key": "engine_bootstrap",
      "label": "Engine bring-up",
-     "percent": 74,
-     "note": "Registration is complete at 965 of 965 in the retail order and the engine has opened its own bootstrap.bld and read 128 KB of it. It then asks for nothing further: the job queue is signalled twice in a 420-second run and its two workers sleep through the rest. The file loading machinery runs; nothing feeds it."
+     "percent": 76,
+     "note": "Registration is complete at 965 of 965 in the retail order, the engine has opened its own bootstrap.bld, and the first 128 KB read back a valid igArchive header into guest memory. The loader then stalled because the read completion was delivered inline instead of after the issuing call returned -- fixed, and awaiting a hardware run."
     },
     {
      "key": "graphics",

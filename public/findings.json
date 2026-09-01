@@ -18,6 +18,16 @@
  },
  "findings": [
   {
+   "id": "async-completion-delivered-inline",
+   "title": "A file-read completion delivered inline finished the work item before its own caller had finished creating it",
+   "area": "cafeos",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "Cafe OS delivers an FS async completion later, on its own I/O thread, after the initiating call has returned. The shim invoked it inline. igCafeStorageDevice::read issues the read at 0x2155cd0 and writes its own state at 0x2155cd4, the very next instruction -- so the completion ran first, calling igFileWorkItem::setStatus to mark the item complete and igMemoryPool::free to release the async block, and the caller then wrote over that state with a pointer to the freed block. The file scheduler polled the result every frame for the rest of the run.",
+   "why_it_matters": "Everything else about the read was correct, which is what made it hard to see: a valid igArchive header (IGA magic, version 8, 106 files) in the right place in guest memory, a status equal to the value the callback explicitly tests for, and a callback that ran to completion down its success path. No counter that measured correctness would have found this, because nothing was incorrect -- only early. Completions are now queued and delivered at the next import call, after the issuing function has returned.",
+   "measured": "cb ok=1 skip=0 lastcb=0x2155b48 lastmsgq=0x0; rdq sz=131072 cnt=1 res=1 fsz=198695 head=[0x4947411a,...] cbwork=15"
+  },
+  {
    "id": "oswaiteventwithtimeout-never-waited",
    "title": "A sleep that never slept: wrong register pair, plus a 64-bit overflow, turned a worker wait into a busy spin",
    "area": "cafeos",
@@ -347,8 +357,8 @@
  ],
  "open_questions": [
   {
-   "question": "Is no work ever handed to the job queue, or is work handed over and the wrong event signalled?",
-   "detail": "The boot polls igFileScheduler::update and igArchive::startNewTasks every frame while two worker threads sleep. Signals climbing beside flat wakes means the wrong event; both flat means nothing is producing work. Opposite fixes, identical from outside, and the instrumented build that separates them has not yet been run."
+   "question": "Is delivering completions from the mutex path close enough, or does the work item expect a specific thread?",
+   "detail": "Real Cafe OS delivers FS completions on a dedicated I/O thread. They are now pumped at the next import call, which is after the issuing function has returned and is therefore correct in ordering, but lands on whichever guest thread next takes a mutex. That is closer to correct than inline delivery and is not the same as correct."
   },
   {
    "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
