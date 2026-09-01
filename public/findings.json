@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-08-30",
+ "generated_at": "2026-09-01",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -17,6 +17,34 @@
   "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
  },
  "findings": [
+  {
+   "id": "shims-advance-no-counter",
+   "title": "A spin built from Cafe OS shims is invisible to every recompiled-code counter",
+   "area": "method",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "A shim is not a recompiled function: it sets no current-PC global and increments no call counter. A loop made of shims and inline code therefore advances nothing, and looks exactly like a hang inside the last recompiled function that was entered -- in this case __gh_memclr32, which clears 1,542 words in 192 bounded iterations and could not spin at all. Adding a counter at all 6,865 import call sites, recording the return address of each, made the loop visible immediately: imports climbing 1,390,000 per 60 frames with the call counter frozen at 204,131, and the last return address naming the exact shim.",
+   "why_it_matters": "Two builds were spent reading a frozen call counter as a hang in the wrong function. Any instrumentation that covers only translated code will misattribute time spent outside it, and the misattribution is confident and specific rather than obviously missing. The counter now emits from the recompiler's codegen, so regenerated trees carry it."
+  },
+  {
+   "id": "eabi-64bit-pairs-start-odd",
+   "title": "PPC EABI passes 64-bit arguments in register pairs that start on an ODD register",
+   "area": "cafeos",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "With a pointer in r3, the first 64-bit argument does not follow in r4 -- it skips to r5:r6, and the second lands in r7:r8. Every Atomic64 shim read r4:r5 and r6:r7, one register short. The retail call site shows the pairing plainly: the current value's low word is loaded into r6 and its high word into r8, then moved to r5, making r5:r6 the comparand. Reading r4:r5 made that comparand garbage, so OSCompareAndSwapAtomic64 could never match and its lock-free retry loop spun forever inside Core::igJobQueue::init. Four shims were wrong: OSAddAtomic64, OSAndAtomic64, OSOrAtomic64, OSCompareAndSwapAtomic64. GX2WaitTimeStamp was checked and is correct, since its u64 is the first argument and therefore genuinely in (r3,r4). Return values in r3:r4 were always right.",
+   "why_it_matters": "The semantics of all four shims were correct and the carry idioms that read their results were correct. Only the register assignment was wrong, which no amount of reasoning about the function body would have caught. The file's own header comment asserted the wrong pairing and rated the CAS high confidence -- and every function in it had been written to match the comment rather than the ABI."
+  },
+  {
+   "id": "static-initializers-run-twice",
+   "title": "The harness and the game's own runtime both walk the constructor table, so static initializers run twice",
+   "area": "recompiler",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "ppc_run_static_initializers is called once by the harness, but the generated C holds a second reference to the same initializer as a ppc_dispatch case -- the game's GHS runtime walking the identical constructor table after the harness has walked it. Neither caller is wrong; the work is simply one-time and was done twice. Measured directly as driver=1 ctor=2, with the head each pass read recorded: pass 0 saw 0x0 and prepended correctly, pass 1 saw a node already in the list and stored it, closing a five-node singleton descriptor list into a ring. One traversal then visited 38,154 nodes instead of five.",
+   "why_it_matters": "The tempting fix -- drop the harness call -- is wrong, and measurably so: guards recorded distinct=114 blocked=113, meaning one initializer runs only once across the whole boot, so the two passes are not equivalent. The harness call is also deliberately sequenced before the bootstrap heap init that depends on it. Guarding each initializer to run at most once is faithful to C++ semantics, where static initialization is once per translation unit on any real target.",
+   "measured": "singlist n 37,285 -> 5 terminating; allocbucket 18 -> 3 (retail's exact count); nullbucket 2 -> 0; dispatchmiss 73,308 -> 0; registration 124 -> 157"
+  },
   {
    "id": "masking-hides-the-bug",
    "title": "Guest-memory masking turns every bad pointer into silence",
@@ -300,6 +328,10 @@
  ],
  "open_questions": [
   {
+   "question": "Does the job queue have idle workers, or were no workers ever created?",
+   "detail": "From frame 9,180 the boot polls jqWorkerSleep -> OSWaitEventWithTimeout at roughly 146,000 imports per 60 frames with no allocations for 2.2 million calls. An empty worker pool and a fully idle one produce identical output from outside, and need opposite fixes. The build that counts threads created and started has not yet been run."
+  },
+  {
    "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
    "detail": "It stops cleanly at a macroblock boundary and the row count varies between frames, which rules out a fixed dimension or stride error. The bitstream pointer overruns its end by exactly 4 bytes, which is normal per-bundle termination, so too few bundles are being refilled per frame."
   },
@@ -327,6 +359,13 @@
   }
  ],
  "corrections": [
+  {
+   "id": "memclr-was-not-the-hang",
+   "date": "2026-08-30",
+   "was": "The boot hangs inside __gh_memclr32, called from Core::igJobQueue::init.",
+   "now": "Nothing was hanging. memclr32 is bounded, unrolled and faithfully translated. Execution was spinning in a lock-free retry loop built from Cafe OS shims, which advance no counter, so the last recompiled function entered was mistaken for the current one.",
+   "why_it_mattered": "It named a function that could not possibly be at fault, and it named it with twenty consistent samples. The fix was not to the suspect but to the instrument."
+  },
   {
    "id": "null-pool-was-downstream",
    "was": "The boot failure is a single null memory pool, and the open question is which path reaches the allocator without one.",
