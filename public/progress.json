@@ -2,35 +2,35 @@
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
  "generated_at": "2026-09-01",
- "generated_by": "progress pass after class registration completed at 965 and the engine opened bootstrap.bld",
+ "generated_by": "progress pass after the jqWorkerSleep spin was fixed and confirmed on hardware",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
-  "percent": 44,
-  "headline": "Class registration is complete. All 965 classes the retail game registers during boot now register here, in the retail order, and the engine has opened its own data files for the first time.",
-  "summary": "Seven silent bugs have been found and fixed, the largest being that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Two more fell on 2026-08-30. The singleton descriptor list was closing into a ring because static initializers ran twice -- the harness walks the constructor table and the game's own GHS runtime walks it again -- so one traversal visited 38,154 nodes instead of five; guarding each initializer to run once fixed it and took bucket allocations from 18 to retail's exact 3. Then a job-queue spin turned out to be an ABI error: PPC EABI passes 64-bit arguments in register pairs starting on an ODD register, and every Atomic64 shim read one register short, so a compare-and-swap could never match. With both fixed, registration went 124 to 157 to 722 to 965 -- the exact line count of the retail Cemu capture -- and igArkCore::init reached the file loading it exists to start, opening bootstrap.bld after the engine's own bootstrap.arc miss. The boot now stalls waiting in the job queue rather than failing: jqWorkerSleep polls OSWaitEventWithTimeout steadily with no allocations for 2.2 million calls. Whether the queue has idle workers or no workers at all is the open question, and the instrumented build that answers it has not yet been run on hardware. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
+  "percent": 46,
+  "headline": "The busy spin that dominated the boot is fixed and confirmed on hardware -- 81 times fewer system calls over the same run -- and the stall has moved forward into the engine's file loading.",
+  "summary": "Nine silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Two fell on 2026-08-30: static initializers running twice, which closed a linked list into a ring so one traversal visited 38,154 nodes instead of five, and a PPC EABI error where 64-bit arguments were read one register short so a compare-and-swap could never match. Registration then completed at 965 classes -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. A third of the same shape fell on 2026-09-01: the OSWaitEventWithTimeout shim read its 64-bit timeout from the wrong register pair, and separately overflowed a 64-bit multiply, so the deadline landed in the past and every sleep returned instantly. That turned a worker thread's sleep into a busy spin at 149,000 system calls per second. Fixed and measured on hardware: 54 million calls over a 420-second run became 665,000, with the game's own execution rate unchanged. It did not advance the boot by a single class, which is worth stating plainly -- necessary, not sufficient. What it did do is make visible where the boot actually sits: the file-loading pump, polling its storage devices and asking the archive system to start new tasks every frame while two job-queue worker threads stay asleep and nothing completes. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
  },
  "status": {
   "state": "active",
   "since": "2026-09-01",
   "on_break": null,
   "break_reason": null,
-  "note": "Registration completed on 2026-08-30 across eight hardware builds. A symbolized, unstripped Wii U build of a later game on the same engine was obtained on 2026-09-01, giving names for engine internals that have until now only been reachable by probe."
+  "note": "The 2026-09-01 build was the first compiled outside a container, and reproduces the previous container build to 48 bytes -- two build IDs and a timestamp -- so the toolchain is not a variable in any of these measurements."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "The job queue waits, and nothing arrives",
-  "detail": "From frame 9,180 the boot runs at a steady 8,260 calls and 146,000 imports per 60 frames and nothing else happens -- no further file opens, no further registrations, and no allocations at all for 2.2 million calls. The imports are jqWorkerSleep calling OSWaitEventWithTimeout. Polling at that rate reads identically whether the queue has idle workers or no workers were ever created, and those need completely different fixes, so the next build simply counts threads created and started. One real defect was found while looking: the Cafe OS atomics were unsynchronised read-modify-writes, which stopped being safe once OSResumeThread began calling pthread_create and guest threads became real host threads sharing one address space. Fixed, but not yet shown to be the stall.",
-  "blocked_on": "a hardware run of the 2026-08-30 17:59 build"
+  "title": "The file scheduler asks for work every frame and nothing ever finishes",
+  "detail": "With the spin gone, the sampled program counters resolve to the file-loading pump: igFileScheduler::update, igVirtualStorageDevice::update, igPhysicalStorageDevice::update, igFileContext::update and igArchive::startNewTasks, under a scope lock. The engine opened bootstrap.bld on 2026-08-30 and this is the machinery meant to read it. Two job-queue worker threads exist and are asleep. Either no work is ever handed to the queue, or work is handed over and the wrong event is signalled so no worker wakes -- opposite fixes, and identical from outside. The next build counts every OSSignalEvent and OSSignalEventAll against every wake and timeout, which separates them.",
+  "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Run the thread-counter build",
-   "detail": "176,420,217 bytes, links clean, test-seconds.txt on the card set to 420. It reports threads created and started, which separates an empty worker pool from an idle one. Nothing else can be concluded until it runs."
+   "title": "Count signals against wakes",
+   "detail": "Signals climbing beside flat wakes means the wrong event is being signalled. Both flat means nothing is producing work at all. The instrumented build is ready and needs a hardware run."
   },
   {
-   "title": "Read the job queue by name instead of by probe",
-   "detail": "The symbolized Imaginators ELF names the whole module -- jqInit, jqWorkerThread, jqEnableWorkers, jqWorkersMask, jqGetNumWorkers -- for the same engine built by the same studio five years later. It is a strong guide to what worker startup requires, though any offset taken from it stays a hypothesis until confirmed against the actual target, which is a different build."
+   "title": "Read the job queue by name",
+   "detail": "A symbolized, unstripped build of a later game on the same engine names the whole module -- jqInit, jqWorkerThread, jqEnableWorkers, jqWorkersMask, jqGetNumWorkers. It is a strong guide to what worker startup requires, though it is a different build and any offset taken from it stays a hypothesis until confirmed against the real target."
   },
   {
    "title": "Code and data in one address space",
@@ -43,7 +43,7 @@
    "name": "Conquertron",
    "role": "PowerPC32 to C static recompiler core",
    "url": "https://github.com/Arkchemy/conquertron",
-   "percent": 85,
+   "percent": 86,
    "state": "active",
    "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
    "categories": [
@@ -72,21 +72,21 @@
    "name": "Jouster",
    "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
    "url": "https://github.com/Arkchemy/jouster",
-   "percent": 62,
+   "percent": 64,
    "state": "active",
    "summary": "The Switch side. Class registration is complete at 965 of 965 in the retail order, and igArkCore::init has reached file loading and opened the engine's own bootstrap.bld. Real decoded video frames reach the panel from the game's own movie files with no shader translation in the path, and the Wii U boot splash and jingle play from meta/. The boot now waits in the job queue rather than failing.",
    "categories": [
     {
      "key": "cafeos_shims",
      "label": "Cafe OS shim layer",
-     "percent": 62,
-     "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. The 64-bit atomics were corrected twice on 2026-08-30: their argument registers were one short of the PPC EABI odd-register pairing, and they were unsynchronised read-modify-writes on memory that real host threads now share. nsyshid and vpad are wired. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops. Video is no longer a no-op: the game's own Bink API is served natively and delivers every luma row of each frame."
+     "percent": 66,
+     "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. Three separate 64-bit argument and overflow bugs were fixed across the atomics and event shims on 2026-08-30 and 2026-09-01. The mutex/event/semaphore tables no longer turn exhaustion into a null dereference, and now report their own high-water marks. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops. Video is served natively from the game's own Bink API."
     },
     {
      "key": "engine_bootstrap",
      "label": "Engine bring-up",
-     "percent": 72,
-     "note": "Up from 55. Registration reaches 965 of 965 classes in exactly the retail order -- the exact line count of the Cemu capture -- and the engine is past it, into the file loading igArkCore::init exists to start. bootstrap.arc misses and bootstrap.bld opens, which is the engine's own fallback order, not an error. Remaining blocker is a wait in the job queue."
+     "percent": 74,
+     "note": "Registration is complete at 965 of 965 in the retail order and the engine has opened its own bootstrap.bld. The boot now runs the file-loading pump rather than failing or spinning, and waits there for file work that never completes."
     },
     {
      "key": "graphics",

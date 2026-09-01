@@ -18,6 +18,25 @@
  },
  "findings": [
   {
+   "id": "oswaiteventwithtimeout-never-waited",
+   "title": "A sleep that never slept: wrong register pair, plus a 64-bit overflow, turned a worker wait into a busy spin",
+   "area": "cafeos",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "OSWaitEventWithTimeout takes an OSEvent* and a 64-bit OSTime. PPC EABI starts a 64-bit argument on an odd register, so with the pointer in r3 the timeout is in r5:r6; the shim read r4:r5, and r4 is never written by the caller. Underneath that, the tick-to-nanosecond conversion multiplied by 1e9 before dividing, which overflows int64 above about 9.2e9 ticks -- roughly 148 seconds at this clock, well inside the range real timeouts use. The garbage value wrapped negative, the deadline landed in the past, and every wait returned instantly. The caller looped, producing 149,000 system calls per second.",
+   "why_it_matters": "The correct registers do not save it on their own: the real timeout also overflows, wrapping positive. Both had to be fixed. And OSTicksToCalendarTime, twenty lines below in the same file, had always divided first -- the safe pattern was present the whole time. Fixing it cut a 420-second run from 54,044,213 system calls to 665,085 with the game's own execution rate unchanged, and advanced the boot by zero classes.",
+   "measured": "imports 54,044,213 -> 665,085; per 60 frames 149,465 -> 1,884; dominant call site moved off jqWorkerSleep entirely"
+  },
+  {
+   "id": "sync-tables-null-on-exhaustion",
+   "title": "The synchronisation shims turned table exhaustion into a null dereference",
+   "area": "cafeos",
+   "confidence": "static_confirmed",
+   "discord_prior_art": null,
+   "detail": "The OSMutex, OSEvent and OSSemaphore shims each kept a fixed 64-entry table keyed by guest address, and their lookups returned NULL once it filled. None of the 18 call sites checked -- OSLockMutex passed the result straight to pthread_mutex_lock. Exhausting any table was a null dereference with nothing to point at the cause.",
+   "why_it_matters": "It had not fired, which is the only reason it had not cost a day. 64 was never a considered limit, just one the boot had not reached, and igCafeMutex is constructed freely. The table is now larger, which only postpones it; what stops it being a crash is that exhaustion falls back to a shared aliasing entry and increments a counter reported every frame. Aliasing unrelated mutexes onto one lock is wrong on purpose -- a wrong answer that announces itself beats an undiagnosable crash."
+  },
+  {
    "id": "shims-advance-no-counter",
    "title": "A spin built from Cafe OS shims is invisible to every recompiled-code counter",
    "area": "method",
@@ -328,8 +347,8 @@
  ],
  "open_questions": [
   {
-   "question": "Does the job queue have idle workers, or were no workers ever created?",
-   "detail": "From frame 9,180 the boot polls jqWorkerSleep -> OSWaitEventWithTimeout at roughly 146,000 imports per 60 frames with no allocations for 2.2 million calls. An empty worker pool and a fully idle one produce identical output from outside, and need opposite fixes. The build that counts threads created and started has not yet been run."
+   "question": "Is no work ever handed to the job queue, or is work handed over and the wrong event signalled?",
+   "detail": "The boot polls igFileScheduler::update and igArchive::startNewTasks every frame while two worker threads sleep. Signals climbing beside flat wakes means the wrong event; both flat means nothing is producing work. Opposite fixes, identical from outside, and the instrumented build that separates them has not yet been run."
   },
   {
    "question": "Why does the recompiled Bink decoder stop after 32-48 luma rows of 720?",
@@ -359,6 +378,13 @@
   }
  ],
  "corrections": [
+  {
+   "id": "eabi-sweep-was-not-exhaustive",
+   "date": "2026-09-01",
+   "was": "The 2026-08-30 fix for 64-bit register pairs checked the rest of the shims, and GX2WaitTimeStamp was the only other 64-bit argument assembled from registers.",
+   "now": "That sweep only searched one header. OSWaitEventWithTimeout, in the synchronisation shims, had exactly the same defect and was written in an earlier commit. A search for the pattern across every shim header finds it in seconds, and confirms it is the last one.",
+   "why_it_mattered": "The claim was confident and specific, and it closed the question. The bug it missed then cost a further hardware round to find."
+  },
   {
    "id": "memclr-was-not-the-hang",
    "date": "2026-08-30",
