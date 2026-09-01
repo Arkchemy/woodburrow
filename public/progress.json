@@ -2,12 +2,12 @@
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
  "generated_at": "2026-09-01",
- "generated_by": "progress pass after the jqWorkerSleep spin was fixed and confirmed on hardware",
+ "generated_by": "progress pass after the job queue was shown to be starved rather than mis-signalled",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The busy spin that dominated the boot is fixed and confirmed on hardware -- 81 times fewer system calls over the same run -- and the stall has moved forward into the engine's file loading.",
+  "headline": "The engine opens its own data file, reads 128 KB of it once, and then asks for nothing more. The stall is now a single unanswered branch wide.",
   "summary": "Nine silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Two fell on 2026-08-30: static initializers running twice, which closed a linked list into a ring so one traversal visited 38,154 nodes instead of five, and a PPC EABI error where 64-bit arguments were read one register short so a compare-and-swap could never match. Registration then completed at 965 classes -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. A third of the same shape fell on 2026-09-01: the OSWaitEventWithTimeout shim read its 64-bit timeout from the wrong register pair, and separately overflowed a 64-bit multiply, so the deadline landed in the past and every sleep returned instantly. That turned a worker thread's sleep into a busy spin at 149,000 system calls per second. Fixed and measured on hardware: 54 million calls over a 420-second run became 665,000, with the game's own execution rate unchanged. It did not advance the boot by a single class, which is worth stating plainly -- necessary, not sufficient. What it did do is make visible where the boot actually sits: the file-loading pump, polling its storage devices and asking the archive system to start new tasks every frame while two job-queue worker threads stay asleep and nothing completes. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
  },
  "status": {
@@ -19,18 +19,18 @@
  },
  "current_work": {
   "repo": "jouster",
-  "title": "The file scheduler asks for work every frame and nothing ever finishes",
-  "detail": "With the spin gone, the sampled program counters resolve to the file-loading pump: igFileScheduler::update, igVirtualStorageDevice::update, igPhysicalStorageDevice::update, igFileContext::update and igArchive::startNewTasks, under a scope lock. The engine opened bootstrap.bld on 2026-08-30 and this is the machinery meant to read it. Two job-queue worker threads exist and are asleep. Either no work is ever handed to the queue, or work is handed over and the wrong event is signalled so no worker wakes -- opposite fixes, and identical from outside. The next build counts every OSSignalEvent and OSSignalEventAll against every wake and timeout, which separates them.",
+  "title": "One 128 KB read, and then the engine never asks again",
+  "detail": "Measured on hardware: two file opens, zero synchronous reads, one asynchronous read of 128 KB from position 0 of bootstrap.bld, and nothing after it. The job queue is signalled exactly twice in 420 seconds, both times as the files open, and both signals do wake a worker -- so signalling works and targets the right event. Nothing is producing work. The remaining question is the async completion path: the shim delivers a callback pointer and silently returns for the message-queue shape, a gap documented since it was written and never known to be reached. The next build records which shape the game actually uses.",
   "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Count signals against wakes",
-   "detail": "Signals climbing beside flat wakes means the wrong event is being signalled. Both flat means nothing is producing work at all. The instrumented build is ready and needs a hardware run."
+   "title": "Determine which async completion shape the game uses",
+   "detail": "One 128 KB read then silence is equally consistent with a completion that was never delivered and one that was delivered and mishandled. The instrumented build separates them and needs a hardware run."
   },
   {
-   "title": "Read the job queue by name",
-   "detail": "A symbolized, unstripped build of a later game on the same engine names the whole module -- jqInit, jqWorkerThread, jqEnableWorkers, jqWorkersMask, jqGetNumWorkers. It is a strong guide to what worker startup requires, though it is a different build and any offset taken from it stays a hypothesis until confirmed against the real target."
+   "title": "Follow the known .bld load order",
+   "detail": "Community research on the same engine records the boot order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld -- with the language archive loading nothing further until a language is chosen. That is the map of what should happen once the first file is read, and a way to tell progress from a plausible-looking dead end."
   },
   {
    "title": "Code and data in one address space",
@@ -86,7 +86,7 @@
      "key": "engine_bootstrap",
      "label": "Engine bring-up",
      "percent": 74,
-     "note": "Registration is complete at 965 of 965 in the retail order and the engine has opened its own bootstrap.bld. The boot now runs the file-loading pump rather than failing or spinning, and waits there for file work that never completes."
+     "note": "Registration is complete at 965 of 965 in the retail order and the engine has opened its own bootstrap.bld and read 128 KB of it. It then asks for nothing further: the job queue is signalled twice in a 420-second run and its two workers sleep through the rest. The file loading machinery runs; nothing feeds it."
     },
     {
      "key": "graphics",
@@ -98,7 +98,7 @@
      "key": "figure_reading",
      "label": "Figure reading (portal, dumps, Joy-Con NFC)",
      "percent": 35,
-     "note": "skylanders_figure.c and skylanders_mifare_keys.c are compiled and passing on the host -- MIFARE Key A derivation matches all 80 known-good test vectors. skylanders_portal.c (USB HID) and skylanders_nfc.c (Joy-Con) need libnx and real hardware and are entirely unverified. No character select UI yet."
+     "note": "skylanders_figure.c and skylanders_mifare_keys.c are compiled and passing on the host -- MIFARE Key A derivation matches all 80 known-good test vectors. skylanders_portal.c (USB HID) and skylanders_nfc.c (Joy-Con) need libnx and real hardware and are entirely unverified. No character select UI yet. Public prior art now identified for the parts this does not have: figure and variant ID tables, portal identification IDs, and CC0-licensed .sky dumps for this exact game to test against without physical toys."
     }
    ]
   },
