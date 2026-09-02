@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-09-01",
+ "generated_at": "2026-09-02",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -388,6 +388,13 @@
   }
  ],
  "corrections": [
+  {
+   "id": "deferred-completion-delivery-point",
+   "date": "2026-09-02",
+   "was": "Queueing the file-read completion and pumping it from the mutex path would deliver it within a frame.",
+   "now": "It deadlocked the boot. The mutex path only runs while something is awake; the game thread blocked waiting for the completion, both workers parked, nothing took a mutex again, and the completion was never delivered. Guest execution froze entirely for 15,600 frames. Pumping from the waiting primitives fixed it -- those still run when everything else is stopped, which the deadlocked run itself proved.",
+   "why_it_mattered": "The ordering diagnosis was right and the delivery point was wrong, and they shipped together. Writing the expected numbers down before the run is what separated them in one line instead of an afternoon."
+  },
   {
    "id": "eabi-sweep-was-not-exhaustive",
    "date": "2026-09-01",

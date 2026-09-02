@@ -482,3 +482,24 @@ a.card { text-decoration: none; display: block; }
   display: inline-block; max-width: 52ch; overflow: hidden;
   text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;
 }
+
+/* ── Contributor badges ────────────────────────────────────────────────
+   Element and Battle Class, both carried in CONTRIBUTORS.csv and unused
+   since the strip-down. Sized to sit under the role without competing
+   with the name, and legible against the card in either theme. */
+.person-badges {
+  display: flex; gap: .35rem; justify-content: center;
+  flex-wrap: wrap; margin-top: .55rem;
+}
+.badge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .15rem .45rem .15rem .25rem;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  font-size: var(--step--2, .78rem); font-weight: 650; color: var(--ink-3);
+  line-height: 1.5;
+}
+.badge img { width: 16px; height: 16px; object-fit: contain; border-radius: 0; }
+.badge-text { white-space: nowrap; }
+.badge-element { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+@media (max-width: 480px) { .badge-text { display: none; } .badge { padding: .2rem; } }

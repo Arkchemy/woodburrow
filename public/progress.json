@@ -1,40 +1,40 @@
 {
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
- "generated_at": "2026-09-01",
- "generated_by": "progress pass after the file-read completion was found to run one instruction too early",
+ "generated_at": "2026-09-02",
+ "generated_by": "progress pass after two hardware runs: the deferred completion deadlocked, then delivered",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The engine's first data read is correct in every respect -- valid archive header, right status, right callback. The completion simply ran before the function that issued it had finished.",
-  "summary": "Nine silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Two fell on 2026-08-30: static initializers running twice, which closed a linked list into a ring so one traversal visited 38,154 nodes instead of five, and a PPC EABI error where 64-bit arguments were read one register short so a compare-and-swap could never match. Registration then completed at 965 classes -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. A third of the same shape fell on 2026-09-01: the OSWaitEventWithTimeout shim read its 64-bit timeout from the wrong register pair, and separately overflowed a 64-bit multiply, so the deadline landed in the past and every sleep returned instantly. That turned a worker thread's sleep into a busy spin at 149,000 system calls per second. Fixed and measured on hardware: 54 million calls over a 420-second run became 665,000, with the game's own execution rate unchanged. It did not advance the boot by a single class, which is worth stating plainly -- necessary, not sufficient. What it did do is make visible where the boot actually sits: the file-loading pump, polling its storage devices and asking the archive system to start new tasks every frame while two job-queue worker threads stay asleep and nothing completes. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
+  "headline": "The read completion now arrives correctly, and the loader still will not ask for the rest of the file. Five separate explanations have been ruled out by measurement.",
+  "summary": "Eleven silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Registration completed at 965 classes on 2026-08-30 -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. Three separate 64-bit argument and overflow faults were then fixed across the atomics and event shims, one of which had turned a worker thread's sleep into a busy spin at 149,000 system calls per second; removing it cut a 420-second run from 54 million system calls to 665,000. On 2026-09-01 the first data read was proven correct in every respect: a valid igArchive header, version 8, 106 files, landing correctly in guest memory, with the status the callback explicitly tests for. The fault was ordering -- the completion was delivered inline, one instruction before the function that issued the read wrote its own state, so the work item was completed and its buffer freed before it had finished being created. Deferring the completion was right; delivering it from the mutex path was not, and deadlocked the boot outright until it was moved to the waiting primitives. It now arrives correctly, and the loader still does not request the remaining 67,623 bytes. What that rules out is worth as much as what it shows: not delivery, not the completion shape, not the read, not the data, and not the ordering. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
  },
  "status": {
   "state": "active",
-  "since": "2026-09-01",
+  "since": "2026-09-02",
   "on_break": null,
   "break_reason": null,
-  "note": "The 2026-09-01 build was the first compiled outside a container, and reproduces the previous container build to 48 bytes -- two build IDs and a timestamp -- so the toolchain is not a variable in any of these measurements."
+  "note": "Two hardware runs on 2026-09-02. The first showed a deadlock introduced by the previous fix's delivery point; the second confirmed the corrected one. Both were predicted in writing beforehand, which is what made each answer readable from a single line of the frame dump."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "The completion callback ran one instruction too early",
-  "detail": "Measured on hardware: the read returns a valid igArchive header -- IGA magic, version 8, 106 files -- correctly in guest memory, the status is exactly the value the callback tests for, and the callback runs and takes its success path. The fault is ordering. Cafe OS delivers a file completion later, on its own I/O thread, after the call returns; the shim invoked it inline. So the completion marked the work item done and freed the async block one instruction before igCafeStorageDevice::read wrote its own state over the top, storing a pointer to just-freed memory. The scheduler then polled that work item forever. Completions are now queued and delivered at the next safe point. Built, not yet run.",
+  "title": "The completion arrives; the loader still will not continue",
+  "detail": "bootstrap.bld is 198,695 bytes. The engine reads the first 131,072, the completion is now delivered correctly and on time, the callback runs its success path -- and it never asks for the remaining 67,623 bytes, nor opens the next archive. Execution is back in a steady file-scheduler poll. Five explanations are now excluded by measurement rather than argument: the completion is delivered, the shape is right, the read succeeded, the data reached guest memory, and the ordering no longer clobbers anything. What is left is what the scheduler does with a work item once it has been completed, which the next build watches directly.",
   "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Confirm the deferred completion advances the loader",
-   "detail": "bootstrap.bld is 198,695 bytes and only 131,072 were read, so a second read is owed. If the loader asks for the rest, the ordering was the whole fault. If it does not, the fault is inside the work-item state machine instead."
+   "title": "Watch the work item itself",
+   "detail": "Three watch slots that had reported a constant 1 for several runs now sit on igFileWorkItem::setStatus, igCafeStorageDevice::read and igArchive::startNewTasks. Those four counts separate an archive that is asked repeatedly and declines to read, from a work item that is completed once and never looked at again."
   },
   {
    "title": "Follow the known .bld load order",
-   "detail": "Community research on the same engine records the boot order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld -- with the language archive loading nothing further until a language is chosen. global.bld and global.arc are both present on the card, so progress past the first file is directly checkable."
+   "detail": "Community research on the same engine records the order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld, with the language archive loading nothing further until a language is chosen. global.bld and global.arc are both present on the card, so progress past the first file is directly checkable."
   },
   {
    "title": "Deliver completions the way the console does",
-   "detail": "They are now pumped from the mutex path, which is closer to correct than inline delivery but is not the same as correct -- real Cafe OS uses a dedicated I/O thread. If a work item turns out to expect completion on a specific thread, this needs revisiting."
+   "detail": "They are pumped from the waiting primitives, which is correct in ordering and reliable in liveness, but still lands on whichever guest thread next waits. Real Cafe OS uses a dedicated I/O thread."
   }
  ],
  "projects": [
@@ -136,15 +136,15 @@
    "name": "Woodburrow",
    "role": "The project website",
    "url": "https://github.com/Arkchemy/woodburrow",
-   "percent": 30,
+   "percent": 46,
    "state": "rebuilding",
-   "summary": "Deliberately stripped back to a skeleton on 2026-08-22 so the design could be rebuilt by hand. What works today: the contributor cards (a hand-made HUD design, element symbols, battle classes) and the org repository list, both fed from live data. Every visitor lookup goes through this site's own serverless routes rather than the visitor's browser talking to GitHub or Discord directly.",
+   "summary": "The project website. Rebuilt by hand after the 2026-08-22 strip-down and now carrying four real pages -- overview, work, findings and about -- all fed from live data. Every visitor lookup goes through this site's own serverless routes rather than the visitor's browser talking to GitHub or Discord directly.",
    "categories": [
     {
      "key": "contributors",
      "label": "Contributors and credits",
-     "percent": 80,
-     "note": "Live from CONTRIBUTORS.csv, with element symbols, battle classes, avatars and a Special Thanks section."
+     "percent": 85,
+     "note": "Live from CONTRIBUTORS.csv. Element and Battle Class badges render again as of 2026-09-02 -- both columns had been carried in the CSV since before the strip-down with the art sitting unused in the repo. A class with no class art falls back to the elements folder, so a deliberately non-standard pick still renders rather than showing a broken image."
     },
     {
      "key": "serverless_routes",
@@ -155,8 +155,8 @@
     {
      "key": "public_pages",
      "label": "Public pages (progress, findings, about, licence)",
-     "percent": 10,
-     "note": "Not rebuilt yet after the strip-down. This file and findings.json are the data those pages need."
+     "percent": 55,
+     "note": "Up from 10. All four pages are rebuilt and rendering from progress.json, findings.json and the contributor data: an overview with a live gauge, a work page, a findings page with filtering, and an about page with the roadmap and timeline. Still to do: the pages carry no images or diagrams, and nothing yet visualises the boot progress the log describes."
     }
    ]
   },

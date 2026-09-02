@@ -369,6 +369,39 @@
     });
   }
 
+  /* One badge. kind 'element' looks in /images/elements (.webp); kind 'class'
+     tries /images/battle-class (.png) and falls back to the elements folder,
+     since some picks only have art there. A missing image hides the badge
+     rather than leaving a broken-image box. */
+  function addBadge(host, value, kind) {
+    if (!value || value.toLowerCase() === 'n/a') return;
+    var slug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    var wrap = el('span', 'badge badge-' + kind);
+    var img = el('img');
+    img.alt = '';
+    /* Deliberately NOT lazy. These are 16px icons, at most two per card, so
+       deferring them saves nothing measurable -- and a lazy image that never
+       enters a viewport never fires its error handler either, which would
+       leave the battle-class fallback below permanently un-triggered. */
+    img.decoding = 'async';
+    img.src = (kind === 'element')
+      ? '/images/elements/' + slug + '.webp'
+      : '/images/battle-class/' + slug + '.png';
+    if (kind === 'class') {
+      img.addEventListener('error', function onerr() {
+        img.removeEventListener('error', onerr);
+        img.src = '/images/elements/' + slug + '.webp';
+        img.addEventListener('error', function () { wrap.remove(); });
+      });
+    } else {
+      img.addEventListener('error', function () { wrap.remove(); });
+    }
+    put(wrap, img);
+    put(wrap, el('span', 'badge-text', value));
+    wrap.title = (kind === 'element' ? 'Element: ' : 'Battle Class: ') + value;
+    put(host, wrap);
+  }
+
   function personCard(r, idx) {
     var name = (r[idx.name] || '').trim();
     var role = (r[idx.role] || '').trim();
@@ -407,6 +440,20 @@
 
     put(card, el('div', 'person-name', name));
     if (role && role !== 'n/a') put(card, el('div', 'person-role', role));
+
+    /* Element and Battle Class badges. Both columns have been carried in
+       CONTRIBUTORS.csv since before the 2026-08-22 strip-down but nothing has
+       rendered them since; the art was already in the repo, unused.
+
+       Battle Class art lives in /images/battle-class as the ten real
+       Imaginators classes. "Kaos" is not one of them -- he is a character --
+       but /images/elements/kaos.webp exists, so a class with no class art
+       falls back to the elements folder rather than 404ing. That is what lets
+       a deliberately non-standard pick still render. */
+    var badges = el('div', 'person-badges');
+    addBadge(badges, (r[idx.element] || '').trim(), 'element');
+    addBadge(badges, (r[idx.battle_class] || '').trim(), 'class');
+    if (badges.childNodes.length) put(card, badges);
 
     var links = el('div', 'person-links');
     if (gh && gh !== 'n/a') {
