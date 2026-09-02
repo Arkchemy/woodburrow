@@ -1,40 +1,40 @@
 {
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
- "generated_at": "2026-09-02",
- "generated_by": "progress pass after two hardware runs: the deferred completion deadlocked, then delivered",
+ "generated_at": "2026-09-03",
+ "generated_by": "progress pass after the store watch named what zeroes the field that stops the boot",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The read completion now arrives correctly, and the loader still will not ask for the rest of the file. Five separate explanations have been ruled out by measurement.",
+  "headline": "The field that stops the boot is set to zero when the work item is built, and nothing ever sets it again. Eleven explanations have now been excluded by measurement.",
   "summary": "Eleven silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Registration completed at 965 classes on 2026-08-30 -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. Three separate 64-bit argument and overflow faults were then fixed across the atomics and event shims, one of which had turned a worker thread's sleep into a busy spin at 149,000 system calls per second; removing it cut a 420-second run from 54 million system calls to 665,000. On 2026-09-01 the first data read was proven correct in every respect: a valid igArchive header, version 8, 106 files, landing correctly in guest memory, with the status the callback explicitly tests for. The fault was ordering -- the completion was delivered inline, one instruction before the function that issued the read wrote its own state, so the work item was completed and its buffer freed before it had finished being created. Deferring the completion was right; delivering it from the mutex path was not, and deadlocked the boot outright until it was moved to the waiting primitives. It now arrives correctly, and the loader still does not request the remaining 67,623 bytes. What that rules out is worth as much as what it shows: not delivery, not the completion shape, not the read, not the data, and not the ordering. The larger half of the project is still untouched: proving 19,623 translated functions correct, and a GX2-to-deko3d shader pipeline that does not exist yet."
  },
  "status": {
   "state": "active",
-  "since": "2026-09-02",
+  "since": "2026-09-03",
   "on_break": null,
   "break_reason": null,
-  "note": "Two hardware runs on 2026-09-02. The first showed a deadlock introduced by the previous fix's delivery point; the second confirmed the corrected one. Both were predicted in writing beforehand, which is what made each answer readable from a single line of the frame dump."
+  "note": "A memory watch on the exact field settled it. Three writes, all while the work item is constructed, the last one zero, none afterwards. Every earlier theory assumed something set the field and something else undid it; nothing undoes it."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "The completion arrives; the loader still will not continue",
-  "detail": "bootstrap.bld is 198,695 bytes. The engine reads the first 131,072, the completion is now delivered correctly and on time, the callback runs its success path -- and it never asks for the remaining 67,623 bytes, nor opens the next archive. Execution is back in a steady file-scheduler poll. Five explanations are now excluded by measurement rather than argument: the completion is delivered, the shape is right, the read succeeded, the data reached guest memory, and the ordering no longer clobbers anything. What is left is what the scheduler does with a work item once it has been completed, which the next build watches directly.",
+  "title": "Nothing ever sets the field the archive checks before starting work",
+  "detail": "igArchive::startNewTasks refuses its one queued item 58,000 times because a cursor of 1 is greater than a limit of 0. A store watch on that limit fired three times, all during igArchive::addWork, inside igArchiveWorkItem::instantiateFromPool -- the work item's own construction -- and the last write was zero. Nothing writes it again. The field is not corrupted, not cleared by a completion, and not lost to ordering: it is simply never given a value. What it should hold on a working boot is the one question that cannot be answered from this side, and is what the emulator comparison exists for.",
   "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Watch the work item itself",
-   "detail": "Three watch slots that had reported a constant 1 for several runs now sit on igFileWorkItem::setStatus, igCafeStorageDevice::read and igArchive::startNewTasks. Those four counts separate an archive that is asked repeatedly and declines to read, from a work item that is completed once and never looked at again."
+   "title": "Ask the retail game what the limit should be",
+   "detail": "Break on igArchive::addWork in Cemu and read the same field on the constructed work item. If the real game also leaves it zero, something later sets it and that is the missing call; if it is non-zero, construction differs and the recompiled constructor is at fault."
   },
   {
-   "title": "Follow the known .bld load order",
-   "detail": "Community research on the same engine records the order as bootstrap.bld, bootstrap_lang.bld, legal.bld, global.bld, init_setup.bld, title.bld, with the language archive loading nothing further until a language is chosen. global.bld and global.arc are both present on the card, so progress past the first file is directly checkable."
+   "title": "Make the Switch emulator loop usable",
+   "detail": "Jouster loads and runs in Ryujinx and writes the same log to a directory that can be read directly, which would make each test round nearly free. It currently starves: Ryujinx has to translate 176 MB of generated ARM64, grows its JIT cache to 1.75 GB, and does not persist translations for homebrew, so the harness frame budget expires before the game thread gets going."
   },
   {
-   "title": "Deliver completions the way the console does",
-   "detail": "They are pumped from the waiting primitives, which is correct in ordering and reliable in liveness, but still lands on whichever guest thread next waits. Real Cafe OS uses a dedicated I/O thread."
+   "title": "Code and data in one address space",
+   "detail": "Functions use real addresses and data a synthetic one. Mapping .text real fixed the module-range test; extending it to data broke the boot and was reverted, and why it collides is still unknown."
   }
  ],
  "projects": [

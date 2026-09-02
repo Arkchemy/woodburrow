@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-09-02",
+ "generated_at": "2026-09-03",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -17,6 +17,16 @@
   "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
  },
  "findings": [
+  {
+   "id": "gate-field-never-set",
+   "title": "The field that halts the boot is zeroed at construction and never written again",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "igArchive::startNewTasks walks its task list and skips any entry whose cursor exceeds its limit. The single queued entry has a cursor of 1 and a limit of 0, so it is skipped roughly 58,000 times per run. A memory watch armed on that limit recorded exactly three writes, all during igArchive::addWork with the work item in r3, inside igArchiveWorkItem::instantiateFromPool -- the item's own construction. The last wrote zero, and nothing wrote it again for the remaining 16,000 frames.",
+   "why_it_matters": "Every earlier theory shared a shape: something set the field and something else undid it -- an unparsed header, a completion delivered too early, a cursor never decremented. Each was excluded by measurement. The truth is simpler and was invisible until the field itself was watched: nothing ever sets it. Watching the memory rather than reasoning about the code is what distinguished 'cleared' from 'never written', and those need completely different fixes.",
+   "measured": "storewatch hits=3, last value 0x0, lr=0x216b008 in igArchive::addWork, r3=0x4503700"
+  },
   {
    "id": "async-completion-delivered-inline",
    "title": "A file-read completion delivered inline finished the work item before its own caller had finished creating it",
@@ -388,6 +398,13 @@
   }
  ],
  "corrections": [
+  {
+   "id": "writer-pc-is-not-the-writer",
+   "date": "2026-09-03",
+   "was": "storewatch_writer_pc identifies the instruction that wrote a watched address.",
+   "now": "It does not. It reports 0x215f5cc, a blr inside userInstantiate, which cannot store anything. g_ppc_current_pc is written at function entry, so any field derived from it names the last function entered rather than the executing instruction. The link register does not have that problem and is what correctly identified addWork.",
+   "why_it_mattered": "A reader trusting writer_pc would conclude userInstantiate writes this field. It does not."
+  },
   {
    "id": "deferred-completion-delivery-point",
    "date": "2026-09-02",
