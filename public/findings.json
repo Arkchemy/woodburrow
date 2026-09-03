@@ -18,6 +18,30 @@
  },
  "findings": [
   {
+   "id": "header-read-stuck-active",
+   "title": "The archive is waiting on its own header read, which is never marked finished",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "igRewrite8 (NefariousTechSupport, Apache-2.0) named the status values that had been read as raw numbers.",
+   "detail": "Two file requests exist for the archive. One is a 2,048-byte read at offset 0 -- the archive header -- and it sits at kStatusActive for a whole run with zero bytes recorded as processed. The other is a 6,144-byte read at offset 4,096 and it completed cleanly, with bytes-processed equal to its size, which is the exact signature of the engine's completion routine. So the completion routine works and has already run once; the first request simply never reaches it. The filesystem layer shows the header data itself was read correctly, with the archive's magic bytes at the head of the buffer, so nothing is wrong with the read -- only with the record that it finished."
+  },
+  {
+   "id": "updatetasks-was-correct",
+   "title": "The function suspected for a day was behaving correctly throughout",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "igArchive::updateTasks was assumed to be failing to clean up finished work. It runs exactly as often as the function it feeds -- 56,659 times each, from the same caller -- and it keeps its entry every single time because the work item attached to it is still marked active. That is precisely what it is supposed to do. The bug was never in this function; it was in the request it is waiting on. Reading the status enum from a reference implementation turned an opaque byte into a name and dissolved a day of suspicion."
+  },
+  {
+   "id": "workitem-layout-from-initialiser",
+   "title": "The file-request layout, read from the code that fills it in",
+   "area": "alchemy-boot",
+   "confidence": "static_confirmed",
+   "discord_prior_art": null,
+   "detail": "Rather than infer field offsets by analogy with a reimplementation of a different engine version, the layout was taken from the routine that builds the request and fills it in directly. It writes the type as the byte 4 and the priority as the byte 1 -- exactly the reference implementation's numbering for a read at normal priority -- alongside the offset, the size and the path. That is the binary describing itself, which is a better source than a comparison, and it corrected an earlier explanation that had reached the right answer by the wrong route."
+  },
+  {
    "id": "gate-field-never-set",
    "title": "The field that halts the boot is zeroed at construction and never written again",
    "area": "alchemy-boot",
@@ -367,6 +391,14 @@
  ],
  "open_questions": [
   {
+   "question": "What should mark the archive header read as finished?",
+   "detail": "Everything else follows from this one request never completing. A memory watch is armed on the word that gates the completion route, with writer history, which will say whether it is ever written and from where."
+  },
+  {
+   "question": "Does the filesystem completion callback notify the requester correctly?",
+   "detail": "The callback makes a virtual call to notify whoever asked for the data before it records the status. Our delivery of that callback is confirmed working, because it completed the other read correctly, so this notify step is the most likely place where the archive should learn a block arrived and does not."
+  },
+  {
    "question": "Is delivering completions from the mutex path close enough, or does the work item expect a specific thread?",
    "detail": "Real Cafe OS delivers FS completions on a dedicated I/O thread. They are now pumped at the next import call, which is after the issuing function has returned and is therefore correct in ordering, but lands on whichever guest thread next takes a mutex. That is closer to correct than inline delivery and is not the same as correct."
   },
@@ -398,6 +430,34 @@
   }
  ],
  "corrections": [
+  {
+   "id": "removal-path-does-not-release-cursor",
+   "date": "2026-09-03",
+   "was": "The cleanup path inside igArchive::updateTasks releases the cursor that blocks further work.",
+   "now": "It does not. Its two writes land on two other objects entirely, neither of which is the entry whose cursor is checked. Both of those objects happen to hold the value 1 at the same offset, which is what made the coincidence convincing.",
+   "why_it_mattered": "It looked like a complete explanation and would have sent the next fix into a function that has nothing to do with the fault. The underlying error was treating one offset as meaning the same thing across different object types."
+  },
+  {
+   "id": "updatetasks-empty-list",
+   "date": "2026-09-03",
+   "was": "igArchive::updateTasks does nothing because the list it walks is empty, so it returns immediately.",
+   "now": "The list holds one element and the loop runs every time. Predicted before the run and refuted by it.",
+   "why_it_mattered": "It explained the evidence available at the time perfectly, including a call count that looked like activity. A function-entry counter proves a call happened, not that any work was done."
+  },
+  {
+   "id": "status-byte-endianness",
+   "date": "2026-09-03",
+   "was": "The status byte is the low byte of a four-byte field, reachable at that offset because the processor is big-endian.",
+   "now": "The small values are adjacent one-byte fields in their own right. The conclusion drawn was correct but the reasoning was not, and the neighbouring offset means something different from what was claimed.",
+   "why_it_mattered": "A right answer for a wrong reason is not safe to build on. The correct layout came from the engine code that writes those fields."
+  },
+  {
+   "id": "reachability-half-region",
+   "date": "2026-09-03",
+   "was": "A counter is never decremented because every route to the decrement is unreachable.",
+   "now": "One route was enumerated and the other was not. The counter was written eleven times early in the run, then a flag was set that permanently closed that route. The mechanism is a latch, not unreachability.",
+   "why_it_mattered": "The conclusion survived, but only because the prediction was written down and checked. The explanation that replaced it accounts for the eleven writes instead of contradicting them."
+  },
   {
    "id": "writer-pc-is-not-the-writer",
    "date": "2026-09-03",
