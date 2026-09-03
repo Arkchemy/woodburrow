@@ -18,6 +18,14 @@
  },
  "findings": [
   {
+   "id": "stall-is-decompression",
+   "title": "The stall is decompression, not file reading",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "The engine stores its own field names and enum names in its reflection data, and the recompiler emits that data faithfully. Reconstructing it named every field of the object that had been read as raw offsets for days. It says the compressed block was read successfully, that the task is in its decompressing state, and that it is waiting on a decompression-job flag which is still clear. Two sizes in the object match measured values byte for byte, which is what makes the reading safe rather than plausible. The job is submitted to the engine's job queue exactly once and never executed."
+  },
+  {
    "id": "header-read-stuck-active",
    "title": "The archive is waiting on its own header read, which is never marked finished",
    "area": "alchemy-boot",
@@ -430,6 +438,20 @@
   }
  ],
  "corrections": [
+  {
+   "id": "header-read-was-symptom-not-cause",
+   "date": "2026-09-03",
+   "was": "The archive is waiting on a read of its own header that is never marked finished.",
+   "now": "The read finished. What never finished was decompressing what had been read. The unfinished request was the outer one, which cannot complete until the decompressed bytes exist.",
+   "why_it_mattered": "Right symptom, wrong cause, and it pointed the search at the filesystem layer for most of a day. Recovering the real field names ended it immediately."
+  },
+  {
+   "id": "job-workers-never-created",
+   "date": "2026-09-03",
+   "was": "The job queue never started, so no worker threads exist to run the decompression.",
+   "now": "The queue did start, early in the boot. Predicted before the run and refuted by it. The job is submitted; nothing executes it.",
+   "why_it_mattered": "It was a clean story that fit the thread count, and it was wrong. The measurement replaced it with a sharper question about who is supposed to pump the queue."
+  },
   {
    "id": "removal-path-does-not-release-cursor",
    "date": "2026-09-03",

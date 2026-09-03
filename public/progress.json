@@ -2,12 +2,12 @@
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
  "generated_at": "2026-09-03",
- "generated_by": "progress pass after the work item was found stuck at kStatusActive and three theories were retracted",
+ "generated_by": "progress pass after the stall was traced to decompression, not file I/O",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The archive is waiting on a 2,048-byte read of its own header that never gets marked finished. The engine code is correct; three of our explanations for it were not, and have been withdrawn.",
+  "headline": "The archive read its data fine. It is stuck waiting for the block to be decompressed, and the decompression job is submitted but never executed.",
   "summary": "Eleven silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Registration completed at 965 classes on 2026-08-30 -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. Three separate 64-bit argument and overflow faults were then fixed across the atomics and event shims, one of which had turned a worker thread's sleep into a busy spin at 149,000 system calls per second; removing it cut a 420-second run from 54 million system calls to 665,000. On 2026-09-01 the first data read was proven correct in every respect: a valid igArchive header, version 8, 106 files, landing correctly in guest memory. On 2026-09-03 the failure was finally traced end to end. igArchive::updateTasks was suspected for a day and turns out to be behaving correctly the whole time: it keeps its entry because the work item is still marked active, which is exactly what it should do. The blocked request is a 2,048-byte read at offset 0 -- the archive's own header -- which sits at kStatusActive forever, while a second read of 6,144 bytes at offset 4,096 completed cleanly. Because that first item never completes, a counter the completion path checks never reaches zero, and a cursor is never released, so the archive declines to start further work roughly 57,000 times per run. Three explanations were retracted along the way, each killed by its own measurement rather than quietly rewritten. The decisive help came from igRewrite8, a C# reimplementation of the Alchemy runtime, which named the status values that had been read as raw numbers for days."
  },
  "status": {
@@ -15,22 +15,22 @@
   "since": "2026-09-03",
   "on_break": null,
   "break_reason": null,
-  "note": "The engine is not misbehaving. It is waiting for a file request that is never marked finished, and the remaining question is which of our own layers should have marked it."
+  "note": "Traced to a queued decompression job that nothing runs. The engine's own field names, recovered from its reflection data, ended a week of reading raw offsets."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "A file request that is never marked finished",
-  "detail": "The archive's own header read -- 2,048 bytes at offset 0 -- stays at status kStatusActive for an entire run, while a second read of 6,144 bytes at offset 4,096 completes normally and shows the expected bytes-processed equal to its size. Everything downstream follows from that one stuck request: a counter the completion path tests never reaches zero, so the completion never runs, so the item stays active, so the archive keeps it, so a cursor is never released, so no further work is ever started. The filesystem layer separately shows the header data was read correctly, with the archive's magic bytes at the head of the buffer, so this is bookkeeping rather than a failed read.",
+  "title": "A decompression job that is submitted and never runs",
+  "detail": "The archive's compressed block was read successfully -- 6,144 bytes, confirmed complete. The task then moved to its decompressing state and is waiting on a flag that the decompression job sets when it finishes. Measurement shows the job is handed to the engine's job queue exactly once, and then nothing ever executes it. On this platform the queue is configured to run jobs on the calling thread, which requires something to pump it; in our build nothing does. Everything previously described as a stuck file read was downstream of this.",
   "blocked_on": null
  },
  "next_work": [
   {
-   "title": "Find what should mark the header read as finished",
-   "detail": "A memory watch is armed on the one word that gates the completion route, with writer history. It is the same instrument that previously identified where a field was being zeroed, and it answers whether the word is ever written at all, with what, and from which caller."
+   "title": "Name the two threads the game creates",
+   "detail": "The engine names its job workers when it creates them. Capturing that name distinguishes the two remaining explanations at a glance: either a worker exists and is parked waiting on a wake-up our compatibility layer never delivers, or no worker exists and the real console reaches a pump we do not."
   },
   {
-   "title": "Check the notify hook in the filesystem completion callback",
-   "detail": "The Cafe OS completion callback makes a virtual call to notify the requester before it sets the status. Our callback delivery is confirmed working -- it completed the other read correctly -- so that notify call is the most likely place where the archive should learn a block arrived and does not."
+   "title": "Watch the inline worker routine",
+   "detail": "The queue has a routine that runs one unit of pending work on whichever thread calls it. Confirming whether it ever runs separates 'nothing is pumping the queue' from 'the queue is pumped but the job is not being picked up'."
   },
   {
    "title": "Make the Switch emulator loop usable",
