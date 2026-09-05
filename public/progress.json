@@ -1,40 +1,35 @@
 {
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
- "generated_at": "2026-09-03",
- "generated_by": "progress pass after the stall was traced to decompression, not file I/O",
+ "generated_at": "2026-09-05",
+ "generated_by": "overnight pass after the stall was traced to refused object construction",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
   "percent": 46,
-  "headline": "The archive read its data fine. It is stuck waiting for the block to be decompressed, and the decompression job is submitted but never executed.",
-  "summary": "Eleven silent bugs have now been found and fixed. The largest remains that only .rela.text was ever read, leaving 48,625 pointers stored in data null. Registration completed at 965 classes on 2026-08-30 -- the exact line count of the retail capture -- and the engine opened its own bootstrap.bld. Three separate 64-bit argument and overflow faults were then fixed across the atomics and event shims, one of which had turned a worker thread's sleep into a busy spin at 149,000 system calls per second; removing it cut a 420-second run from 54 million system calls to 665,000. On 2026-09-01 the first data read was proven correct in every respect: a valid igArchive header, version 8, 106 files, landing correctly in guest memory. On 2026-09-03 the failure was finally traced end to end. igArchive::updateTasks was suspected for a day and turns out to be behaving correctly the whole time: it keeps its entry because the work item is still marked active, which is exactly what it should do. The blocked request is a 2,048-byte read at offset 0 -- the archive's own header -- which sits at kStatusActive forever, while a second read of 6,144 bytes at offset 4,096 completed cleanly. Because that first item never completes, a counter the completion path checks never reaches zero, and a cursor is never released, so the archive declines to start further work roughly 57,000 times per run. Three explanations were retracted along the way, each killed by its own measurement rather than quietly rewritten. The decisive help came from igRewrite8, a C# reimplementation of the Alchemy runtime, which named the status values that had been read as raw numbers for days."
+  "headline": "The boot stall is not a memory shortage: the engine is refusing to build an object because its own class description says not to.",
+  "summary": "The archive stalls because a decompression step never gets the working memory it needs. That looked like a memory-management problem for most of a day, and it is not. The failing call asks the engine to build an object from its class description, and the description carries a flag meaning do not build this -- so it refuses, 123 times, while the pool it would have used is 16 megabytes large and nearly empty. The retail game has that flag clear and builds normally. Separately, the build makes over two thousand null-pointer writes that real hardware would fault on; they are safely discarded rather than applied, but they show the code repeatedly walking paths the real game never takes."
  },
  "status": {
   "state": "active",
-  "since": "2026-09-03",
+  "since": "2026-09-05",
   "on_break": null,
   "break_reason": null,
-  "note": "Traced to a queued decompression job that nothing runs. The engine's own field names, recovered from its reflection data, ended a week of reading raw offsets."
+  "note": "Traced to refused object construction rather than memory. Reading our own copy of the class description is the next step."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "A decompression job that is submitted and never runs",
-  "detail": "The archive's compressed block was read successfully -- 6,144 bytes, confirmed complete. The task then moved to its decompressing state and is waiting on a flag that the decompression job sets when it finishes. Measurement shows the job is handed to the engine's job queue exactly once, and then nothing ever executes it. On this platform the queue is configured to run jobs on the calling thread, which requires something to pump it; in our build nothing does. Everything previously described as a stuck file read was downstream of this.",
-  "blocked_on": null
+  "title": "An object the engine refuses to build",
+  "detail": "Construction goes through each class's own description, and a flag in it can veto building the object entirely. Ours is vetoing; the retail game's is not. The memory pool involved is large and mostly free, so nothing here is about running out of space. The next step is to read our copy of that description and compare it field by field against the working game's."
  },
  "next_work": [
   {
-   "title": "Name the two threads the game creates",
-   "detail": "The engine names its job workers when it creates them. Capturing that name distinguishes the two remaining explanations at a glance: either a worker exists and is parked waiting on a wake-up our compatibility layer never delivers, or no worker exists and the real console reaches a pump we do not."
+   "title": "Read our class description and compare it to the working game",
+   "detail": "The retail record is already captured. Ours is queued to be dumped on the next run, and the harness can now be retargeted with a small text file instead of a full rebuild, so this costs one run rather than an hour."
   },
   {
-   "title": "Watch the inline worker routine",
-   "detail": "The queue has a routine that runs one unit of pending work on whichever thread calls it. Confirming whether it ever runs separates 'nothing is pumping the queue' from 'the queue is pumped but the job is not being picked up'."
-  },
-  {
-   "title": "Make the Switch emulator loop usable",
-   "detail": "Jouster loads and runs in Ryujinx and writes the same log to a directory that can be read directly, which would make each test round nearly free. It currently starves: Ryujinx has to translate 176 MB of generated ARM64, grows its JIT cache to 1.75 GB, and does not persist translations for homebrew, so the harness frame budget expires before the game thread gets going."
+   "title": "Find why the flag differs",
+   "detail": "Class descriptions are built during startup. If ours is left in a do-not-build state, the fault is in that startup step rather than anywhere in memory management."
   }
  ],
  "projects": [

@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-09-03",
+ "generated_at": "2026-09-05",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -18,12 +18,22 @@
  },
  "findings": [
   {
+   "id": "construction-refused",
+   "title": "The boot stall: the engine refuses to build an object, and it is not a memory shortage",
+   "area": "alchemy-boot",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": null,
+   "detail": "The archive cannot finish decompressing because a piece of working memory it needs is never produced. Following that back, the failing step turned out not to be an allocation at all. The engine builds many of its objects through their own class description -- a small record saying how big the object is and how to construct it -- and that description carries a flag meaning 'do not build this'. In our build that flag is set, so construction refuses outright and hands back nothing, 123 times in a row, while the memory pool it would have used sits 16 megabytes large and barely a tenth full. The retail game, read live under an emulator, has the same flag clear and builds the object normally. The caller then uses the empty result as though it were real, which is how the damage spreads.",
+   "why_it_matters": "It moves the search away from memory management entirely. Hours went into pool lifetimes, reference counts and allocator behaviour, and all of it was downstream of a single refusal to construct. It also means the fix is likely to be about how class descriptions are set up during startup, which is a different and better-understood part of the engine.",
+   "method_note": "Around fourteen explanations were proposed and discarded in one session. Every one was an inference drawn from two measurements rather than a measurement of the thing itself, and every one fell to a direct reading. Two write-ups had to be corrected outright, including a comparison against the retail game that turned out to be reading the wrong structure. What consistently worked was reading the exact value at the exact moment, and comparing it against the same address in the working game."
+  },
+  {
    "id": "stall-is-decompression",
    "title": "The stall is decompression, not file reading",
    "area": "alchemy-boot",
    "confidence": "hardware_confirmed",
    "discord_prior_art": null,
-   "detail": "The engine stores its own field names and enum names in its reflection data, and the recompiler emits that data faithfully. Reconstructing it named every field of the object that had been read as raw offsets for days. It says the compressed block was read successfully, that the task is in its decompressing state, and that it is waiting on a decompression-job flag which is still clear. Two sizes in the object match measured values byte for byte, which is what makes the reading safe rather than plausible. The job is submitted to the engine's job queue exactly once and never executed."
+   "detail": "The engine stores its own field names and enum names in its reflection data, and the recompiler emits that data faithfully. Reconstructing it named every field of the object that had been read as raw offsets for days. It says the compressed block was read successfully, that the task is in its decompressing state, and that it is waiting on a decompression-job flag which is still clear. Two sizes in the object match measured values byte for byte, which is what makes the reading safe rather than plausible. The job is submitted to the engine's job queue exactly once and never executed. SUPERSEDED IN PART (2026-09-04): the waiting-on-a-clear-flag reading was wrong. The retail game, running correctly under an emulator, holds that same flag clear on every sample. The real difference is one field further out -- see block-count-never-computed."
   },
   {
    "id": "header-read-stuck-active",
