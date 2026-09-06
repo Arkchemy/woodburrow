@@ -91,6 +91,12 @@ class H(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers(); self.wfile.write(body); return
+
+        # vercel.json sets cleanUrls, so /legal serves legal.html. Without this
+        # the sub-pages 404 locally and only ever get tested at the wrong URL.
+        clean = self.path.split("?")[0].split("#")[0].strip("/")
+        if clean and "." not in clean and (PUB / (clean + ".html")).exists():
+            self.path = "/" + clean + ".html"
         super().do_GET()
     def end_headers(self):
         for k, v in HEADERS:

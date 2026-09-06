@@ -109,11 +109,92 @@ h2 {
 }
 .stat { font: 600 13px/1.5 "Segoe UI", sans-serif; color: #6a6376; margin-top: 6px; }
 
+/* --- footer -------------------------------------------------------------
+   Four columns over a legal bar. The plum ground is lifted with a faint
+   radial so the block does not read as a flat slab under a colourful page. */
 footer {
-    background: var(--plum); color: #cbb8d4; text-align: center;
-    padding: 22px 20px; font-size: 13px;
+    position: relative; overflow: hidden;
+    background: var(--plum-lo); color: #cbb8d4;
+    padding: 40px 20px 22px; font-size: 13px;
+    background-image:
+        radial-gradient(120% 90% at 12% -20%, rgba(122,31,78,.75), transparent 60%),
+        radial-gradient(90% 80% at 92% 0%, rgba(89,194,240,.13), transparent 62%);
 }
 footer a { color: var(--gold); }
+
+.foot-grid {
+    max-width: 980px; margin: 0 auto; display: grid; gap: 28px 32px;
+    grid-template-columns: 1.6fr 1fr 1fr 1.4fr; align-items: start;
+}
+.foot-brand { max-width: 34ch; }
+/* a button, not an image: it is the Easter-egg trigger, so it must be
+   reachable by keyboard like any other control */
+.foot-mark {
+    display: block; padding: 0; margin: 0 0 12px; border: 0; background: none;
+    cursor: pointer; line-height: 0;
+}
+.foot-mark img {
+    width: 58px; height: 58px;
+    filter: drop-shadow(0 3px 8px rgba(0,0,0,.4));
+    transition: transform .35s var(--ease);
+}
+.foot-mark:hover img { transform: translateY(-3px) rotate(-4deg); }
+.foot-mark:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 8px; }
+.foot-tag { margin: 0; line-height: 1.6; color: #bda8c8; }
+.foot-tag i { color: #d9c8e2; }
+.foot-egg {
+    margin: 10px 0 0; padding: 8px 11px; border-radius: 9px;
+    background: rgba(243,195,78,.12); border: 1px solid rgba(243,195,78,.3);
+    color: #f0dca6; font-size: 12px; line-height: 1.5;
+}
+
+.foot-col { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
+.foot-h {
+    margin: 0 0 3px; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-weight: 400; font-size: 12px; letter-spacing: .13em;
+    text-transform: uppercase; color: #8f7d9c;
+}
+.foot-col a {
+    text-decoration: none; color: #d5c4dd; font-size: 13.5px;
+    padding: 1px 0; border-bottom: 1px solid transparent;
+    transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.foot-col a:hover { color: var(--gold); border-bottom-color: rgba(243,195,78,.5); }
+.foot-col a[aria-current="page"] { color: var(--gold); }
+.foot-note { margin: 0; line-height: 1.6; color: #bda8c8; font-size: 12.5px; }
+.foot-cta {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 4px;
+    color: var(--gold) !important; border-bottom: 0 !important;
+}
+.foot-cta svg { transition: transform var(--fast) var(--ease); }
+.foot-cta:hover svg { transform: translateX(3px); }
+
+.foot-bar {
+    max-width: 980px; margin: 30px auto 0; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,.10);
+    display: flex; gap: 16px; align-items: baseline; justify-content: space-between;
+}
+.foot-bar p { margin: 0; font-size: 11.5px; line-height: 1.6; color: #a493ae; max-width: 78ch; }
+.foot-bar b { color: #cbb8d4; }
+.foot-built {
+    flex: none; font-family: "Luckiest Guy", Impact, sans-serif;
+    letter-spacing: .05em; color: #8f7d9c !important; white-space: nowrap;
+}
+.foot-built span { color: var(--gold); }
+
+@media (max-width: 860px) {
+    .foot-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .foot-brand { grid-column: 1 / -1; max-width: none; }
+}
+@media (max-width: 480px) {
+    footer { padding: 28px 18px 20px; }
+    .foot-grid { grid-template-columns: 1fr; gap: 20px; }
+    .foot-bar { flex-direction: column; gap: 10px; margin-top: 22px; }
+    .foot-mark img { width: 48px; height: 48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .foot-mark:hover img, .foot-cta:hover svg { transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
     #site-nav, .roster figure { animation: none; }
@@ -362,45 +443,6 @@ footer a { color: var(--gold); }
 .contrib-rail:focus-within .contrib-track { animation-play-state: paused; }
 @keyframes contribScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-.contrib-card {
-    flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
-    width: 268px; min-height: 92px; padding: 12px 14px;
-    background: #fff; color: var(--ink); text-align: left; text-decoration: none;
-    border: 1px solid #e6dfec; border-top: 3px solid var(--el);
-    border-radius: 12px; box-shadow: 0 3px 10px rgba(60,30,80,.10);
-    transition: transform .15s ease, box-shadow .15s ease;
-}
-a.contrib-card:hover { transform: translateY(-3px); box-shadow: 0 7px 18px rgba(60,30,80,.18); }
-
-.contrib-card .face { position: relative; flex: 0 0 auto; }
-.contrib-card .pfp {
-    display: block; width: 58px; height: 58px; border-radius: 50%;
-    object-fit: cover; background: #efe9f3;
-    box-shadow: 0 0 0 3px var(--el);
-}
-.contrib-card .elicon {
-    position: absolute; right: -5px; bottom: -5px;
-    width: 24px; height: 24px; object-fit: contain;
-    background: #fff; border-radius: 50%; padding: 2px;
-    box-shadow: 0 1px 4px rgba(60,30,80,.28);
-}
-.contrib-card .body { min-width: 0; }
-.contrib-card .cname {
-    display: block;
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 15px; letter-spacing: .03em; line-height: 1.15; color: var(--plum);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.contrib-card .crole {
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow: hidden; font-size: 11.5px; line-height: 1.35; color: #5c5268; margin-top: 2px;
-}
-.contrib-card .tag {
-    display: inline-block; margin-top: 4px;
-    font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
-    color: #1b0f22; background: var(--gold); border-radius: 20px; padding: 1px 7px;
-}
-.contrib-note { font-size: 13px; color: #6a6376; margin: -6px 0 14px; }
 
 @media (prefers-reduced-motion: reduce) {
     .contrib-track { animation: none; flex-wrap: wrap; width: auto; }
@@ -507,12 +549,6 @@ h2 { margin: 26px 0 6px; }
 }
 .lic-tabs button:hover { border-color: var(--gold); }
 .lic-tabs button[aria-pressed="true"] { background: var(--plum); color: var(--gold); border-color: var(--plum); }
-.lic-body {
-    max-height: 340px; overflow: auto; margin: 0 0 26px;
-    background: #fff; border: 1px solid #e6dfec; border-radius: 10px;
-    padding: 12px 14px; font: 12px/1.6 ui-monospace, monospace;
-    color: #40384c; white-space: pre-wrap; word-break: break-word;
-}
 
 /* --- motion ------------------------------------------------------------
    One reveal used everywhere, staggered by --i, driven by an
@@ -590,11 +626,7 @@ h2 { view-transition-name: none; }
        against the track's own intrinsic width, so `width: 100%` made a single
        card 7139px wide and the Special thanks rail looked empty. Rail cards
        keep a fixed width; only the wrapping contributor list goes full width. */
-    .contrib-card { width: 240px; min-height: 78px; }
-    .contrib-list .contrib-card { width: 100%; }
-    .lic-body { max-height: 240px; font-size: 11px; }
     .post .body, .qa-body { font-size: 13.5px; }
-    h3.sub { font-size: 18px; }
 }
 @media (max-width: 400px) {
     .chip { flex: 0 0 56px; width: 56px; }
@@ -629,14 +661,6 @@ h2 { view-transition-name: none; }
     .tester .tname { font-size: 11.5px; }
 }
 
-/* --- contributors vs special thanks ------------------------------------- */
-h3.sub {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 20px; letter-spacing: .04em; color: var(--plum);
-    margin: 20px 0 4px;
-}
-.contrib-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 6px; }
-.contrib-list .contrib-card { width: 300px; }
 
 /* --- mobile menu --------------------------------------------------------
    Hidden entirely on desktop; below 760px the nav becomes a slide-in panel. */
@@ -698,8 +722,6 @@ h3.sub {
     #navScrim[hidden] { display: none; }
     @keyframes scrimIn { from { opacity: 0 } to { opacity: 1 } }
 
-    .contrib-list .contrib-card { width: 100%; }
-    h3.sub { font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
     #site-nav { transition: none; }
@@ -794,7 +816,7 @@ h2 { display: flex; align-items: center; gap: 0; }
 }
 
 /* interactive lift, used by every card-like surface */
-.qa, .post, .tester, .contrib-card, .lic-tabs button, .game-tabs button {
+.qa, .post, .tester, .person, .p-chip, .lic-tabs button, .game-tabs button {
     transition: transform var(--fast) var(--ease),
                 box-shadow var(--fast) var(--ease),
                 border-color var(--fast) var(--ease);
@@ -853,3 +875,390 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .spoiler:focus-vis
 /* the lockup is the page h1 but must keep the header layout */
 h1#site-lockup { margin: 0; font-size: inherit; line-height: 1; }
 .game { margin: 0; }
+
+/* =======================================================================
+   The sub-pages: /legal and /contributors.
+   Shared shell (header, nav, footer) comes from the rules above; what
+   follows is only what those two pages add.
+   ======================================================================= */
+
+/* the current page is marked in the nav rather than linking to itself */
+#site-nav a[aria-current="page"] { color: var(--gold); }
+#site-nav a[aria-current="page"]::after { transform: scaleX(1); }
+
+/* --- the people rail on the front page ---------------------------------
+   A glance at the names, linking through to the full page. Deliberately
+   small: it is a pointer, not the list. */
+.p-chip {
+    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 9px;
+    padding: 5px 15px 5px 5px;
+    background: #fff; border: 1px solid #e6dfec; border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(60,30,80,.08);
+}
+.p-chip img {
+    width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+    background: #efe9f3; box-shadow: 0 0 0 2px var(--el);
+}
+.p-chip span { font-size: 13px; color: var(--ink); white-space: nowrap; }
+
+.more-link { margin: -12px 0 30px; }
+.more-link a {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
+    letter-spacing: .04em; color: var(--berry); text-decoration: none;
+}
+.more-link a svg { transition: transform var(--fast) var(--ease); }
+.more-link a:hover { color: var(--plum); }
+.more-link a:hover svg { transform: translateX(4px); }
+
+/* --- the numbers on /contributors --------------------------------------
+   Three facts, stated once, before any of the cards. */
+.stat-row {
+    list-style: none; display: grid; gap: 12px; margin: 0 0 30px; padding: 0;
+    grid-template-columns: repeat(3, 1fr);
+}
+.stat-row li {
+    position: relative; overflow: hidden;
+    padding: 16px 18px; border-radius: 14px;
+    background: linear-gradient(160deg, #fff, #faf7fc);
+    border: 1px solid #e6dfec;
+    box-shadow: 0 3px 12px rgba(60,30,80,.07);
+}
+/* a soft gold wash in the corner, so the row is not three plain boxes */
+.stat-row li::after {
+    content: ""; position: absolute; inset: auto -30px -40px auto;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(243,195,78,.30), transparent 70%);
+    pointer-events: none;
+}
+.stat-row b {
+    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-weight: 400; font-size: 38px; line-height: 1; color: var(--plum);
+    letter-spacing: .02em;
+}
+.stat-row span { display: block; margin-top: 4px; font-size: 13px; color: #6a6376; }
+
+/* --- a person -----------------------------------------------------------
+   One card shape for both grids; --el is the element colour, or a neutral
+   for the people with no element assigned. */
+.person {
+    position: relative; display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px; text-decoration: none; color: var(--ink);
+    background: #fff; border: 1px solid #e6dfec; border-top: 3px solid var(--el);
+    border-radius: 14px; box-shadow: 0 3px 11px rgba(60,30,80,.09);
+}
+a.person:hover { transform: translateY(-3px); box-shadow: 0 9px 22px rgba(60,30,80,.17); }
+a.person:hover .p-go { opacity: 1; transform: none; }
+
+.person .face { position: relative; flex: 0 0 auto; }
+.person .pfp {
+    display: block; width: 56px; height: 56px; border-radius: 50%;
+    object-fit: cover; background: #efe9f3; box-shadow: 0 0 0 3px var(--el);
+}
+.person .elicon {
+    position: absolute; right: -5px; bottom: -5px;
+    width: 24px; height: 24px; object-fit: contain;
+    background: #fff; border-radius: 50%; padding: 2px;
+    box-shadow: 0 1px 4px rgba(60,30,80,.28);
+}
+.person .body { min-width: 0; }
+.person .p-name {
+    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-size: 16px; letter-spacing: .03em; line-height: 1.15; color: var(--plum);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.person .p-role {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; font-size: 12px; line-height: 1.4; color: #5c5268; margin-top: 3px;
+}
+/* the GitHub mark only resolves on hover, so it never competes with the name */
+.person .p-go {
+    position: absolute; top: 12px; right: 12px; color: #b3a6bf;
+    opacity: 0; transform: translateX(-3px);
+    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+/* The lead card is the person who writes the code; it gets the full width
+   and an element-tinted wash rather than being one tile among many. */
+.person-lead-grid { display: grid; gap: 12px; margin: 0 0 12px; }
+.person-lead {
+    gap: 20px; padding: 22px 24px; border-top-width: 4px;
+    background:
+        radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--el) 13%, #fff), #fff 62%);
+}
+.person-lead .pfp { width: 84px; height: 84px; box-shadow: 0 0 0 4px var(--el); }
+.person-lead .elicon { width: 30px; height: 30px; right: -6px; bottom: -6px; }
+.person-lead .p-name { font-size: 24px; }
+.person-lead .p-role { font-size: 14px; -webkit-line-clamp: 3; }
+
+.person-grid {
+    display: grid; gap: 12px; margin: 0 0 26px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* --- the closing card on both pages ------------------------------------ */
+.callout {
+    margin: 34px 0 8px; padding: 22px 24px; border-radius: 16px;
+    background: linear-gradient(150deg, var(--plum), var(--berry));
+    color: #f4ecf6; box-shadow: 0 8px 24px rgba(61,17,64,.24);
+}
+.callout h3 {
+    margin: 0 0 6px; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-weight: 400; font-size: 21px; letter-spacing: .04em; color: var(--gold);
+}
+.callout p { margin: 0; font-size: 14.5px; max-width: 66ch; }
+.callout a { color: #fff; text-decoration-color: rgba(255,255,255,.5); }
+.callout a:hover { text-decoration-color: var(--gold); }
+
+/* --- /legal: the three-fact summary ------------------------------------ */
+.gist {
+    list-style: none; display: grid; gap: 12px; margin: 0 0 32px; padding: 0;
+    grid-template-columns: repeat(3, 1fr);
+}
+.gist li {
+    padding: 18px 18px 16px; border-radius: 14px; background: #fff;
+    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.07);
+}
+.gist svg { width: 26px; height: 26px; color: var(--berry); display: block; }
+.gist h3 {
+    margin: 9px 0 5px; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-weight: 400; font-size: 16px; letter-spacing: .03em; color: var(--plum);
+}
+.gist p { margin: 0; font-size: 13px; line-height: 1.55; color: #5c5268; }
+
+/* --- /legal: the document and its sidebar ------------------------------
+   Two columns on desktop; the sidebar sticks so the document switcher and
+   the section list stay reachable through a long licence. */
+.doc-shell { display: grid; grid-template-columns: 226px 1fr; gap: 26px; align-items: start; }
+/* clears the sticky nav, whose height JS publishes as --nav-h */
+.doc-side { position: sticky; top: calc(var(--nav-h, 66px) + 16px); }
+.side-h, .toc-h {
+    margin: 0 0 8px; font-size: 10.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: #8a7f96;
+}
+/* the switcher is a vertical list here, not the pill row it was inline */
+.doc-shell .lic-tabs { display: block; margin: 0 0 22px; }
+.doc-shell .lic-tabs button {
+    display: block; width: 100%; text-align: left; border-radius: 10px;
+    border: 1px solid transparent; background: transparent;
+    padding: 7px 11px; margin-bottom: 2px; font-family: inherit; letter-spacing: 0;
+}
+.doc-shell .lic-tabs button:hover { background: #fff; border-color: #e6dfec; transform: none; }
+.doc-shell .lic-tabs button[aria-pressed="true"] {
+    background: #fff; border-color: #e0d4e8; box-shadow: 0 2px 9px rgba(60,30,80,.09);
+}
+.doc-shell .lic-tabs .t-name {
+    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-size: 13.5px; letter-spacing: .035em; color: var(--plum);
+}
+.doc-shell .lic-tabs .t-note { display: block; font-size: 11px; color: #7d7288; margin-top: 1px; }
+.doc-shell .lic-tabs button[aria-pressed="true"] .t-name { color: var(--berry); }
+
+.doc-toc { border-left: 2px solid #e6dfec; padding-left: 12px; }
+.doc-toc a {
+    display: block; padding: 3px 0; font-size: 12.5px; line-height: 1.4;
+    color: #6a6376; text-decoration: none;
+    border-left: 2px solid transparent; margin-left: -14px; padding-left: 12px;
+    transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
+}
+.doc-toc a:hover { color: var(--plum); }
+.doc-toc a.here { color: var(--berry); border-left-color: var(--gold); font-weight: 600; }
+
+.doc-main {
+    background: #fff; border: 1px solid #e6dfec; border-radius: 16px;
+    padding: 30px 34px; box-shadow: 0 4px 18px rgba(60,30,80,.08);
+    min-width: 0;   /* let long lines wrap instead of widening the grid track */
+}
+.doc-body { color: #3f3849; font-size: 15px; line-height: 1.75; }
+.doc-body > :first-child { margin-top: 0; }
+.doc-body > :last-child { margin-bottom: 0; }
+.doc-title {
+    font-size: 27px; margin: 0 0 4px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
+    padding-bottom: 12px; border-bottom: 2px solid #f0e9f4;
+}
+.doc-body h2:not(.doc-title) {
+    font-size: 20px; margin: 32px 0 8px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
+}
+.doc-body h3 {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 16px; letter-spacing: .03em; color: var(--berry);
+    margin: 22px 0 6px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
+}
+.doc-body h4 { font-size: 14px; margin: 18px 0 4px; color: var(--plum); }
+.doc-body p { margin: 0 0 14px; max-width: 68ch; }
+.doc-body ul, .doc-body ol { margin: 0 0 14px; padding-left: 20px; max-width: 68ch; }
+.doc-body li { margin-bottom: 7px; }
+.doc-body li::marker { color: var(--berry); }
+.doc-body a { color: var(--berry); text-underline-offset: 2px; word-break: break-word; }
+.doc-body code {
+    background: #f4eff7; border-radius: 4px; padding: 1px 5px;
+    font: 12.5px/1.5 ui-monospace, monospace; color: var(--plum);
+}
+.doc-body pre {
+    background: #f7f4fa; border: 1px solid #ece4f1; border-radius: 10px;
+    padding: 12px 14px; overflow-x: auto;
+    font: 12.5px/1.6 ui-monospace, monospace; margin: 0 0 16px;
+}
+.doc-body pre code { background: none; padding: 0; font-size: inherit; }
+.doc-body blockquote {
+    margin: 0 0 16px; padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--gold); color: #5c5268;
+}
+.doc-body hr { border: 0; border-top: 1px solid #ece4f1; margin: 26px 0; }
+
+/* the personal-data table: a real table, and it must be able to scroll
+   rather than force the page sideways */
+.doc-table { overflow-x: auto; margin: 0 0 18px; }
+.doc-table table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+.doc-table th {
+    text-align: left; padding: 9px 12px; background: var(--plum); color: var(--gold);
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    letter-spacing: .04em; font-size: 12px; white-space: nowrap;
+}
+.doc-table th:first-child { border-radius: 8px 0 0 0; }
+.doc-table th:last-child  { border-radius: 0 8px 0 0; }
+.doc-table td { padding: 9px 12px; border-bottom: 1px solid #ece4f1; vertical-align: top; }
+.doc-table tbody tr:nth-child(even) { background: #faf7fc; }
+
+/* A LICENSE is not prose -- its numbered clauses carry their own layout, so
+   it keeps the original line breaks instead of being reflowed. */
+.lic-plain {
+    margin: 0; white-space: pre-wrap; word-break: break-word;
+    font: 12.5px/1.65 ui-monospace, monospace; color: #40384c;
+}
+.doc-loading { color: #8a7f96; font-size: 14px; }
+.doc-meta {
+    margin: 20px 0 0; padding-top: 14px; border-top: 1px solid #f0e9f4;
+    font-size: 12px; color: #8a7f96;
+}
+.doc-meta a { color: #6a6376; }
+
+@media (max-width: 900px) {
+    .doc-shell { grid-template-columns: 1fr; gap: 16px; }
+    /* the sidebar stops sticking once it is a header rather than a column */
+    .doc-side { position: static; }
+    .doc-shell .lic-tabs {
+        display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+    }
+    .doc-shell .lic-tabs button {
+        width: auto; padding: 6px 13px; border-radius: 999px;
+        border-color: #e6dfec; background: #fff;
+    }
+    /* As a row of pills the selected one needs to read at a glance, so it
+       takes the same filled treatment as the game tabs rather than the
+       sidebar's quieter highlight. */
+    .doc-shell .lic-tabs button[aria-pressed="true"] {
+        background: var(--plum); border-color: var(--plum); box-shadow: none;
+    }
+    .doc-shell .lic-tabs button[aria-pressed="true"] .t-name { color: var(--gold); }
+    .doc-shell .lic-tabs .t-note { display: none; }
+    .doc-toc { display: none; }   /* the document is one scroll on mobile */
+    .doc-main { padding: 22px 20px; border-radius: 14px; }
+}
+
+@media (max-width: 760px) {
+    .stat-row, .gist { grid-template-columns: 1fr 1fr; gap: 9px; }
+    .gist li:last-child { grid-column: 1 / -1; }
+    .stat-row li { padding: 13px 14px; }
+    .stat-row b { font-size: 30px; }
+    .person-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 9px; }
+    .person { padding: 11px 13px; gap: 15px; }   /* clears the element badge */
+    .person .pfp { width: 46px; height: 46px; }
+    .person-lead { padding: 16px 17px; gap: 15px; }
+    .person-lead .pfp { width: 66px; height: 66px; }
+    .person-lead .p-name { font-size: 20px; }
+    .callout { padding: 18px 19px; border-radius: 14px; }
+    .callout h3 { font-size: 18px; }
+    .doc-body { font-size: 14.5px; }
+    .doc-title { font-size: 23px; }
+    .doc-body h2:not(.doc-title) { font-size: 18px; margin-top: 26px; }
+}
+
+@media (max-width: 520px) {
+    .stat-row { grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+
+    /* Three stacked cards of padding would push the documents themselves a
+       whole screen down. Same three facts, laid out as rows. */
+    .gist li {
+        display: grid; grid-template-columns: 24px 1fr; gap: 1px 12px;
+        padding: 13px 15px; align-items: center;
+    }
+    .gist svg { width: 22px; height: 22px; grid-row: span 2; align-self: start; margin-top: 2px; }
+    .gist h3 { margin: 0; font-size: 15px; }
+    .gist p { font-size: 12.5px; }
+    .stat-row li { padding: 11px 9px; text-align: center; }
+    .stat-row li::after { display: none; }
+    .stat-row b { font-size: 25px; }
+    .stat-row span { font-size: 11px; line-height: 1.3; }
+    .gist { grid-template-columns: 1fr; }
+    .person-grid { grid-template-columns: 1fr; }
+
+    /* the table stacks: each row becomes a small card with its column names
+       carried down as labels, since a 3-column table cannot fit here */
+    .doc-table table, .doc-table tbody, .doc-table tr, .doc-table td { display: block; width: 100%; }
+    .doc-table thead { display: none; }
+    .doc-table tr {
+        margin-bottom: 10px; border: 1px solid #ece4f1; border-radius: 10px;
+        overflow: hidden; background: #fff;
+    }
+    .doc-table tbody tr:nth-child(even) { background: #fff; }
+    .doc-table td { border-bottom: 1px solid #f4eff7; padding: 8px 12px; }
+    .doc-table tr td:last-child { border-bottom: 0; }
+    .doc-table td::before {
+        content: attr(data-label); display: block;
+        font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+        color: #9a8fa6; margin-bottom: 2px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    a.person:hover { transform: none; }
+    .more-link a:hover svg { transform: none; }
+    .person .p-go { opacity: 1; transform: none; }
+}
+
+/* --- Easter eggs and site emoji ---------------------------------------- */
+
+/* the unicode stand-in for an emoji whose Discord id is not filled in yet;
+   sized to sit on the text baseline like the real custom emoji do */
+.demoji-uni { font-size: 1.15em; line-height: 1; vertical-align: -.12em; }
+
+.egg-toast {
+    position: fixed; left: 50%; bottom: 22px; z-index: 60;
+    transform: translate(-50%, 14px); opacity: 0; pointer-events: none;
+    max-width: min(92vw, 400px); padding: 12px 18px; border-radius: 13px;
+    background: var(--plum); color: #efe2f3; font-size: 13.5px; line-height: 1.55;
+    box-shadow: 0 12px 34px rgba(30,8,36,.42);
+    border: 1px solid rgba(243,195,78,.35);
+    transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+.egg-toast.on { opacity: 1; transform: translate(-50%, 0); }
+.egg-toast b { color: var(--gold); font-family: "Luckiest Guy", Impact, sans-serif;
+               font-weight: 400; letter-spacing: .04em; }
+.egg-toast kbd {
+    font: 11px/1 ui-monospace, monospace; background: rgba(255,255,255,.14);
+    border-radius: 4px; padding: 2px 5px;
+}
+
+/* Portal of Power: --portal is swapped every 1.4s from JS, and everything
+   here is a colour change on top of the normal design -- no layout moves, so
+   nothing can break while it is on. */
+.portal { --portal: #a763d8; }
+.portal body { transition: none; }
+.portal h2,
+.portal .doc-body h2,
+.portal .p-name,
+.portal .stat-row b { color: var(--portal); transition: color 1.4s linear; }
+.portal #cloud-header::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(70% 130% at 50% 100%, var(--portal), transparent 62%);
+    opacity: .38; mix-blend-mode: screen; transition: background 1.4s linear;
+}
+.portal footer { box-shadow: inset 0 4px 0 var(--portal); transition: box-shadow 1.4s linear; }
+.portal .person, .portal .qa, .portal .post { border-top-color: var(--portal); transition: border-color 1.4s linear; }
+
+@media (prefers-reduced-motion: reduce) {
+    .egg-toast { transition: opacity .01s; }
+    .portal h2, .portal .p-name, .portal .stat-row b,
+    .portal #cloud-header::after, .portal footer, .portal .person { transition: none; }
+}

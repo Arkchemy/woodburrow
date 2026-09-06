@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Arkchemy is porting Skylanders: Spyro's Adventure to the Nintendo Switch with a static recompiler. A fan preservation project, not affiliated with Activision.">
+<meta name="description" content="The people who build Arkchemy, the research the port leans on, and the beta-tester waiting list.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkchemy</title>
+<title>Contributors · Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
@@ -88,106 +88,42 @@
         <a href="/#roster">Skylanders</a>
         <a href="/#progress">Progress</a>
         <a href="/#faq">FAQ</a>
-        <a href="/contributors">Contributors</a>
+        <a href="/contributors" aria-current="page">Contributors</a>
         <a href="/legal">Legal</a>
         <a href="https://github.com/Arkchemy">GitHub</a>
     </nav>
     <div id="navScrim" hidden></div>
 
     <main id="main" tabindex="-1">
-        <h2 id="project"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>What this is</h2>
-        <p class="lede">Arkchemy is porting <strong>Skylanders: Spyro's Adventure</strong>
-        to the Nintendo Switch. The console it shipped on is out of production, the
-        online services behind the series are gone, and the discs will not read
-        forever. This is an attempt to keep the game playable.</p>
-        <p class="lede">The work is a static recompiler: the game's PowerPC code
-        is translated to C, then rebuilt for ARM64. Nothing is emulated at runtime.</p>
+        <h2 id="contributors"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>Contributors</h2>
+        <p class="lede" id="contribLede">Arkchemy is written by one person.
+        Everything below it exists because other people gave their time to it.</p>
 
-        <h2 id="games"><svg class="h-ico" aria-hidden="true"><use href="#i-controller"/></svg>The games</h2>
-        <p class="lede">All six run on the same engine, so most of what the first port needs the
-        others need too.</p>
-        <div class="games">
-            <figure class="game now" title="Spyro's Adventure"><img src="images/games/Spyro-logo.png" alt="Spyro's Adventure" loading="lazy"></figure>
-            <figure class="game" title="Giants"><img src="images/games/Giants-logo.png" alt="Giants" loading="lazy"></figure>
-            <figure class="game" title="Swap Force"><img src="images/games/SwapForce-logo.png" alt="Swap Force" loading="lazy"></figure>
-            <figure class="game" title="Trap Team"><img src="images/games/tt-logo.png" alt="Trap Team" loading="lazy"></figure>
-            <figure class="game" title="SuperChargers"><img src="images/games/Superchargers-logo.png" alt="SuperChargers" loading="lazy"></figure>
-            <figure class="game" title="Imaginators"><img src="images/games/Imaginators-logo.png" alt="Imaginators" loading="lazy"></figure>
+        <ul class="stat-row">
+            <li class="reveal" style="--i:0"><b id="statCore">&mdash;</b><span>writing the code</span></li>
+            <li class="reveal" style="--i:1"><b id="statThanks">&mdash;</b><span>research &amp; direction</span></li>
+            <li class="reveal" style="--i:2"><b id="statTesters">&mdash;</b><span>waiting to test</span></li>
+        </ul>
+
+        <div id="contribGrid" class="person-lead-grid"></div>
+
+        <h2 id="thanks"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>Special thanks</h2>
+        <p class="lede" id="thanksLede">Research, direction and help the port
+        leans on. A lot of this would have taken far longer without them.</p>
+        <div id="thanksGrid" class="person-grid"></div>
+
+        <h2 id="testers"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>Beta testers</h2>
+        <p class="lede" id="testerLede">Signed up to test as soon as a build is
+        ready. Builds are not released publicly.</p>
+        <div id="testerGrid" class="tester-grid"></div>
+
+        <div class="callout reveal">
+            <h3>Want to be on this page?</h3>
+            <p>The project takes help with research, asset tooling, testing and
+            documentation &mdash; not just C. The work happens in the open on
+            <a href="https://github.com/Arkchemy">GitHub</a>, and the fastest way
+            in is to turn up in the Discord and say what you are interested in.</p>
         </div>
-
-        <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
-        <p class="lede">Every Skylander, by game and element.</p>
-
-        <div class="game-tabs" id="gameTabs"></div>
-
-        <div class="roster-tools">
-            <button id="randomPick" type="button">&#8635; Random Skylander</button>
-            <span id="voiceNote"></span>
-        </div>
-
-
-        <section class="showcase" id="showcase" hidden>
-            <button class="stage-nav prev" type="button" aria-label="Previous Skylander">&#10094;</button>
-            <button class="stage-nav next" type="button" aria-label="Next Skylander">&#10095;</button>
-            <div class="stage" id="stage">
-                <div class="loadouts left">
-                    <div class="loadout">
-                        <p class="lo-label">Element</p>
-                        <img class="emblem" id="s-emblem" alt=""
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                    </div>
-                    <div class="loadout">
-                        <p class="lo-label">Portrait</p>
-                        <img class="face" id="s-face" alt=""
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                    </div>
-                </div>
-
-                <div class="hero-slot">
-                    <img class="hero-img" id="s-hero" alt=""
-                         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                </div>
-
-                <div class="loadouts right">
-                    <div class="loadout">
-                        <p class="lo-label">Catchphrase</p>
-                        <blockquote id="s-catch"></blockquote>
-                        <button class="play-line" id="s-play" type="button">&#9654; Play</button>
-                    </div>
-                    <div class="loadout">
-                        <p class="lo-label">Profile</p>
-                        <dl id="s-facts"></dl>
-                    </div>
-                    <div class="loadout" id="s-moves-card" hidden>
-                        <p class="lo-label">Moves</p>
-                        <ul id="s-moves"></ul>
-                    </div>
-                </div>
-
-                <div class="plate">
-                    <span class="el-tag" id="s-el"></span>
-                    <h3 id="s-name"></h3>
-                </div>
-            </div>
-        </section>
-
-        <div id="elements"></div>
-
-
-        <h2 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h2>
-        <p class="lede">Live from the Discord progress channel.</p>
-        <div id="progressFeed" class="feed"></div>
-
-        <h2 id="faq"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>FAQ</h2>
-        <p class="lede">Live from the Discord FAQ channel, so it stays current.</p>
-        <div id="faqList" class="faq"></div>
-
-        <h2 id="people"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>The people</h2>
-        <p class="lede">One person writes the code. A lot of others have put
-        research, direction and patience into it.</p>
-        <div id="peopleRail" class="contrib-rail" aria-hidden="true"></div>
-        <p class="more-link"><a href="/contributors">Everyone who has helped
-            <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path fill="currentColor" d="M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z"/></svg></a></p>
 
     </main>
 
@@ -213,7 +149,7 @@
 
             <nav class="foot-col" aria-label="The project">
                 <p class="foot-h">The project</p>
-                <a href="/contributors">Contributors</a>
+                <a href="/contributors" aria-current="page">Contributors</a>
                 <a href="/legal">Legal &amp; privacy</a>
                 <a href="https://github.com/Arkchemy">GitHub</a>
                 <a href="#" id="footDiscord" hidden>Discord</a>
@@ -239,6 +175,6 @@
     </footer>
 
     <script src="js/common.js?v=1788708752"></script>
-    <script src="js/home.js?v=1788708428"></script>
+    <script src="js/contributors.js?v=1788708403"></script>
 </body>
 </html>
