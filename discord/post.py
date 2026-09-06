@@ -2,7 +2,13 @@
 """Post the embeds in rules.json to a channel.
 
 Usage:
-    DISCORD_BOT_TOKEN=... python3 post.py <channel_id> [--dry-run]
+    DISCORD_BOT_TOKEN=... python3 post.py --list
+    DISCORD_BOT_TOKEN=... python3 post.py rules [--dry-run]
+    DISCORD_BOT_TOKEN=... python3 post.py 1540514996704780380
+
+The channel can be given by name or by id; a name is resolved against the
+guild, so there is no id to go and find. --list prints every text channel the
+bot can see, with its id.
 
 This script only ever POSTs. It does not delete, edit or move anything, so the
 worst it can do is add messages you then remove by hand. Clearing the old
@@ -23,6 +29,34 @@ import urllib.request
 
 API = "https://discord.com/api/v10"
 HERE = pathlib.Path(__file__).resolve().parent
+GUILD = "1536813901491216414"          # the Arkchemy server
+
+
+def get(token: str, path: str):
+    req = urllib.request.Request(
+        API + path,
+        headers={"Authorization": f"Bot {token}",
+                 "User-Agent": "arkchemy-rules (https://github.com/Arkchemy, 1.0)"},
+    )
+    with urllib.request.urlopen(req) as r:
+        return json.load(r)
+
+
+def channels(token: str):
+    """Text channels only -- type 0 is a guild text channel, 5 an announcement
+    channel. Both accept messages; voice and category entries do not."""
+    return [c for c in get(token, f"/guilds/{GUILD}/channels") if c.get("type") in (0, 5)]
+
+
+def resolve(token: str, wanted: str) -> str:
+    if wanted.isdigit():
+        return wanted
+    found = [c for c in channels(token) if c["name"] == wanted.lstrip("#")]
+    if not found:
+        raise SystemExit(f"No text channel named #{wanted}. Run --list to see them.")
+    if len(found) > 1:
+        raise SystemExit(f"More than one channel is called #{wanted}; use its id.")
+    return found[0]["id"]
 
 
 def post(token: str, channel: str, payload: dict) -> dict:
@@ -43,17 +77,24 @@ def post(token: str, channel: str, payload: dict) -> dict:
 def main() -> int:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     dry = "--dry-run" in sys.argv
+    listing = "--list" in sys.argv
 
-    if len(args) != 1:
+    if not listing and len(args) != 1:
         print(__doc__, file=sys.stderr)
         return 2
-    channel = args[0]
 
     token = os.environ.get("DISCORD_BOT_TOKEN")
     if not token and not dry:
         print("DISCORD_BOT_TOKEN is not set. It is the same token the site uses;\n"
               "copy it out of the Vercel project's environment variables.", file=sys.stderr)
         return 2
+
+    if listing:
+        for c in sorted(channels(token), key=lambda c: c.get("position", 0)):
+            print(f"  {c['id']}  #{c['name']}")
+        return 0
+
+    channel = resolve(token, args[0]) if not dry else args[0]
 
     messages = json.loads((HERE / "rules.json").read_text())["messages"]
 
