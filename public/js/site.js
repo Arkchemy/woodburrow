@@ -93,7 +93,7 @@
                 c.element = c.element || el;
                 const idx = VISIBLE.push(c) - 1;
                 const b = document.createElement("button");
-                b.className = "chip";
+                b.className = "chip reveal";
                 b.style.animationDelay = Math.min(i * 0.04, 0.4) + "s";
                 b.innerHTML =
                     `<img src="images/roster/${c.icon}.png" alt="" loading="lazy">` +
@@ -108,6 +108,7 @@
 
         showcase(0);
         updateNote();
+        watchReveal();
     }
 
     /* How many of the Skylanders currently on screen have their catchphrase. */
@@ -245,7 +246,7 @@
            the pieces overlapped the nameplate and buried the name. */
         const card = c => {
             const el = c.github ? document.createElement("a") : document.createElement("div");
-            el.className = "contrib-card";
+            el.className = "contrib-card reveal";
             if (c.github) { el.href = c.github; el.target = "_blank"; el.rel = "noopener"; }
             el.style.setProperty("--el", ELEMENT_COLOUR[c.element] || "#b9a9c6");
             const elFile = ELEMENT_FILE[c.element];
@@ -269,6 +270,138 @@
         [...core, ...thanks, ...core, ...thanks].forEach(c => track.appendChild(card(c)));
         grid.appendChild(track);
     }).catch(() => {});
+
+
+    /* --- live from Discord ------------------------------------------------
+       Both come through /api/discord-channel, which holds the bot token
+       server-side and only accepts the two channel names. */
+    const timeAgo = iso => {
+        const secs = (Date.now() - new Date(iso)) / 1000;
+        const steps = [[31536000,"y"],[2592000,"mo"],[604800,"w"],[86400,"d"],[3600,"h"],[60,"m"]];
+        for (const [n, unit] of steps) if (secs >= n) return Math.floor(secs / n) + unit + " ago";
+        return "just now";
+    };
+    const esc = t => { const d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
+    /* Discord markdown, only the parts that actually appear in these channels. */
+    const mdLite = t => esc(t)
+        .replace(/```([\s\S]*?)```/g, (_, c) => `<pre>${c.trim()}</pre>`)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+        .replace(/^&gt; ?(.*)$/gm, "<blockquote>$1</blockquote>")
+        .replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`)
+        .replace(/\n/g, "<br>");
+
+    fetch("/api/discord-channel?channel=progress").then(r => r.json()).then(d => {
+        const host = document.getElementById("progressFeed");
+        if (!d.messages || !d.messages.length) { host.innerHTML =
+            '<p class="feed-empty">No updates to show right now.</p>'; return; }
+        d.messages.slice().reverse().forEach((m, i) => {
+            const el = document.createElement("article");
+            el.className = "post reveal";
+            el.style.setProperty("--i", i);
+            el.innerHTML =
+                `<header>` +
+                  (m.author.avatar ? `<img src="${m.author.avatar}" alt="" loading="lazy">` : `<span class="noav"></span>`) +
+                  `<b>${esc(m.author.name)}</b><time datetime="${m.timestamp}">${timeAgo(m.timestamp)}</time>` +
+                `</header><div class="body">${mdLite(m.content)}</div>` +
+                m.attachments.map(a => `<img class="shot" src="${a.url}" alt="" loading="lazy">`).join("");
+            host.appendChild(el);
+        });
+        watchReveal();
+    }).catch(() => { document.getElementById("progressFeed").innerHTML =
+        '<p class="feed-empty">Progress feed is unavailable.</p>'; });
+
+    fetch("/api/discord-channel?channel=faq").then(r => r.json()).then(d => {
+        const host = document.getElementById("faqList");
+        if (!d.messages || !d.messages.length) { host.innerHTML =
+            '<p class="feed-empty">No questions posted yet.</p>'; return; }
+        d.messages.forEach((m, i) => {
+            /* "**Question?** answer" is how these are written in the channel;
+               fall back to the first line when they are not. */
+            const bold = m.content.match(/^\*\*(.+?)\*\*\s*([\s\S]*)$/);
+            const q = bold ? bold[1] : m.content.split("\n")[0];
+            const a = bold ? bold[2] : m.content.split("\n").slice(1).join("\n");
+            const el = document.createElement("details");
+            el.className = "qa reveal";
+            el.style.setProperty("--i", i);
+            el.innerHTML = `<summary>${esc(q)}</summary><div class="qa-body">${mdLite(a || "")}</div>`;
+            host.appendChild(el);
+        });
+        watchReveal();
+    }).catch(() => { document.getElementById("faqList").innerHTML =
+        '<p class="feed-empty">FAQ is unavailable.</p>'; });
+
+    /* --- licence, straight from the repository --------------------------- */
+    const LIC_REPOS = ["woodburrow", "conquertron", "jouster", "blaster", "armory"];
+    {
+        const tabs = document.getElementById("licTabs");
+        const body = document.getElementById("licBody");
+        const load = repo => {
+            tabs.querySelectorAll("button").forEach(b =>
+                b.setAttribute("aria-pressed", b.dataset.repo === repo ? "true" : "false"));
+            body.textContent = "Loading\u2026";
+            fetch(`/api/license?repo=${repo}`).then(r => r.json())
+                .then(d => { body.textContent = d.text || "Unavailable."; })
+                .catch(() => { body.textContent = "Licence is unavailable right now."; });
+        };
+        LIC_REPOS.forEach(repo => {
+            const b = document.createElement("button");
+            b.type = "button"; b.dataset.repo = repo; b.textContent = repo;
+            b.addEventListener("click", () => load(repo));
+            tabs.appendChild(b);
+        });
+        load("woodburrow");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("main > h2, main > .lede").forEach((el, i) => {
+            el.classList.add("reveal"); el.style.setProperty("--i", i % 4);
+        });
+        watchReveal();
+    });
+
+    /* --- reveal-on-scroll -------------------------------------------------
+       One observer for everything marked .reveal. Anything already on screen
+       is revealed immediately, so nothing is invisible without scrolling, and
+       it is a no-op when the visitor has asked for reduced motion. */
+    let revealObserver = null;
+    /* The hidden state only applies once this class is on <html>, so with no
+       JavaScript -- or if this file fails to load -- everything is simply
+       visible rather than an empty page. */
+    document.documentElement.classList.add("js-reveal");
+
+    /* Failsafe: anything still unrevealed shortly after load is shown
+       regardless. IntersectionObserver does not fire while a tab is in the
+       background, and a page that renders blank until it happens to be
+       observed is worse than one that simply does not animate. */
+    function revealAllNow() {
+        /* Remove the class rather than adding .shown: .shown still depends on a
+           transition completing, and a transition that never advances (a
+           background tab, a throttled compositor) would leave the content at
+           opacity 0. Dropping .reveal makes the element plainly visible with no
+           animation involved. */
+        document.querySelectorAll(".reveal").forEach(el => el.classList.remove("reveal"));
+    }
+    addEventListener("load", () => setTimeout(revealAllNow, 1500));
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") watchReveal();
+    });
+
+    function watchReveal() {
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            document.querySelectorAll(".reveal").forEach(el => el.classList.add("shown"));
+            return;
+        }
+        if (!revealObserver) {
+            revealObserver = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) { e.target.classList.add("shown"); revealObserver.unobserve(e.target); }
+                });
+            }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+        }
+        document.querySelectorAll(".reveal:not(.shown)").forEach(el => revealObserver.observe(el));
+    }
 
     function play(c) {
         if (!c.audio) return;

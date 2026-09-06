@@ -434,3 +434,124 @@ a.contrib-card:hover { transform: translateY(-3px); box-shadow: 0 7px 18px rgba(
     opacity: .55;
     border-radius: 2px;
 }
+
+/* --- tighter rhythm ----------------------------------------------------
+   Headings and ledes were carrying a lot of air; pulling them in fits more
+   on a screen without crowding. */
+main { padding-bottom: 40px; }
+h2 { margin: 26px 0 6px; }
+.lede { margin: 0 0 12px; max-width: 68ch; }
+.roster-tools { margin: 0 0 12px; }
+.game-tabs { margin: 0 0 10px; }
+.el-group { margin: 0 0 4px; }
+.stage { min-height: 0; padding: 14px 16px 18px; gap: 10px; }
+.contrib-rail { margin: 0 0 20px; }
+
+/* --- live feeds --------------------------------------------------------- */
+.feed { display: grid; gap: 10px; margin: 0 0 22px; }
+.post {
+    background: #fff; border: 1px solid #e6dfec; border-left: 3px solid var(--berry);
+    border-radius: 10px; padding: 11px 14px;
+    box-shadow: 0 2px 8px rgba(60,30,80,.07);
+}
+.post header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.post header img, .post header .noav {
+    width: 26px; height: 26px; border-radius: 50%; background: #e6dfec; flex: none;
+}
+.post header b {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 14px; letter-spacing: .03em; color: var(--plum);
+}
+.post header time { margin-left: auto; font-size: 11px; color: #8a8098; }
+.post .body { font-size: 14px; line-height: 1.55; }
+.post .body pre, .qa-body pre {
+    background: #f2eef6; border-radius: 7px; padding: 8px 10px; overflow-x: auto;
+    font: 12px/1.5 ui-monospace, monospace; margin: 6px 0;
+}
+.post .body code, .qa-body code {
+    background: #f2eef6; border-radius: 4px; padding: 1px 5px; font: 12.5px ui-monospace, monospace;
+}
+.post .body blockquote, .qa-body blockquote {
+    margin: 5px 0; padding-left: 10px; border-left: 3px solid #ddd3e6; color: #5c5268;
+}
+.post .shot { display: block; width: 100%; border-radius: 8px; margin-top: 8px; }
+.feed-empty { color: #7d7288; font-size: 14px; }
+
+/* --- FAQ ---------------------------------------------------------------- */
+.faq { display: grid; gap: 7px; margin: 0 0 22px; }
+.qa {
+    background: #fff; border: 1px solid #e6dfec; border-radius: 10px;
+    padding: 9px 13px; box-shadow: 0 2px 8px rgba(60,30,80,.06);
+}
+.qa summary {
+    cursor: pointer; list-style: none;
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 15px; letter-spacing: .02em; color: var(--plum);
+    display: flex; align-items: center; gap: 8px;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::before {
+    content: "+"; flex: none; width: 17px; height: 17px; border-radius: 50%;
+    background: var(--gold); color: #2a1030; font-size: 13px; line-height: 17px;
+    text-align: center; transition: transform .2s ease;
+}
+.qa[open] summary::before { content: "\2212"; transform: rotate(180deg); }
+.qa-body { font-size: 14px; line-height: 1.55; margin: 7px 0 2px 25px; color: #40384c; }
+
+/* --- licence ------------------------------------------------------------ */
+.lic-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; }
+.lic-tabs button {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 12px; letter-spacing: .04em;
+    background: #fff; color: var(--plum); border: 2px solid #e0d8e6; border-radius: 999px;
+    padding: 3px 11px; cursor: pointer; transition: background .15s ease, border-color .15s ease;
+}
+.lic-tabs button:hover { border-color: var(--gold); }
+.lic-tabs button[aria-pressed="true"] { background: var(--plum); color: var(--gold); border-color: var(--plum); }
+.lic-body {
+    max-height: 340px; overflow: auto; margin: 0 0 26px;
+    background: #fff; border: 1px solid #e6dfec; border-radius: 10px;
+    padding: 12px 14px; font: 12px/1.6 ui-monospace, monospace;
+    color: #40384c; white-space: pre-wrap; word-break: break-word;
+}
+
+/* --- motion ------------------------------------------------------------
+   One reveal used everywhere, staggered by --i, driven by an
+   IntersectionObserver so nothing animates off-screen. */
+/* scoped to .js-reveal: without JavaScript nothing is ever hidden */
+.js-reveal .reveal { opacity: 0; transform: translateY(10px); }
+.js-reveal .reveal.shown {
+    opacity: 1; transform: none;
+    transition: opacity .45s ease, transform .45s cubic-bezier(.22,1,.36,1);
+    transition-delay: calc(var(--i, 0) * 45ms);
+}
+h2 { view-transition-name: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal, .js-reveal .reveal.shown { opacity: 1; transform: none; transition: none; }
+    .qa summary::before { transition: none; }
+}
+
+/* --- mobile ------------------------------------------------------------- */
+@media (max-width: 700px) {
+    main { padding: 0 14px 32px; }
+    h2 { font-size: 26px; margin: 20px 0 5px; }
+    .lede { font-size: 15px; }
+    .stage { grid-template-columns: 1fr; padding: 10px 8px 14px; }
+    .loadouts.left, .loadouts.right { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .loadout { width: 100%; padding: 9px 11px; }
+    .hero-img { max-height: 200px; }
+    .plate h3 { font-size: 27px; }
+    .stage-nav { width: 36px; height: 36px; font-size: 18px; }
+    .chip { flex: 0 0 62px; width: 62px; }
+    .chip img { width: 46px; height: 46px; }
+    .chip span { font-size: 9px; }
+    .el-mark img { width: 24px; height: 24px; }
+    .contrib-card { width: 232px; min-height: 84px; }
+    .lic-body { max-height: 260px; font-size: 11px; }
+    .post .body, .qa-body { font-size: 13.5px; }
+    .game-tabs button { font-size: 12px; padding: 4px 10px; }
+}
+@media (max-width: 400px) {
+    .chip { flex: 0 0 56px; width: 56px; }
+    .chip img { width: 42px; height: 42px; }
+}

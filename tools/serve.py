@@ -15,8 +15,52 @@ for rule in cfg.get("headers", []):
     if rule.get("source") in ("/(.*)", "/(.*)/"):
         HEADERS += [(h["key"], h["value"]) for h in rule["headers"]]
 
+_LOCAL_DISCORD = {
+    "progress": {"messages": [
+        {"id": "1", "content": "**Boot** reached static-init 113/114; the stall is a freed frame manager.",
+         "timestamp": "2026-09-06T09:00:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []},
+        {"id": "2", "content": "Roster now covers all six games. `rosters.json` rebuilt.",
+         "timestamp": "2026-09-06T11:30:00+00:00",
+         "author": {"name": "Claude", "id": "2", "avatar": None, "bot": True},
+         "attachments": []}]},
+    "faq": {"messages": [
+        {"id": "3", "content": "**Is this legal?** Arkchemy ships no game content. You supply your own copy.",
+         "timestamp": "2026-09-01T10:00:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []},
+        {"id": "4", "content": "**Does it run yet?** Not yet -- boot stops while decompressing the first archive.",
+         "timestamp": "2026-09-02T10:00:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []}]},
+}
+
 class H(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw): super().__init__(*a, directory=str(PUB), **kw)
+
+    def do_GET(self):
+        # Vercel serves /api/* from serverless functions that are not running
+        # here. Answer them locally so the page can be exercised end to end;
+        # DISCORD_BOT_TOKEN and the live channels only exist in production.
+        if self.path.startswith("/api/"):
+            import json as _j, urllib.parse as _u
+            q = _u.urlparse(self.path)
+            args = dict(_u.parse_qsl(q.query))
+            if q.path == "/api/discord-channel":
+                which = args.get("channel", "")
+                body = _j.dumps(_LOCAL_DISCORD.get(which, {"messages": []})).encode()
+            elif q.path == "/api/license":
+                lic = ROOT / "LICENSE"
+                body = _j.dumps({"repo": args.get("repo", "woodburrow"),
+                                 "text": lic.read_text() if lic.exists() else ""}).encode()
+            else:
+                self.send_error(404); return
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers(); self.wfile.write(body); return
+        super().do_GET()
     def end_headers(self):
         for k, v in HEADERS:
             if k.lower() != "strict-transport-security":   # pointless over http
