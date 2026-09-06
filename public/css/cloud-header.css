@@ -80,13 +80,23 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 20;                       /* above the drifting islands */
-    display: flex;
-    align-items: center;
-    gap: 6px;                          /* the balloon's basket already reads as a gap */
+    max-width: calc(100% - 20px);
+    margin: 0;
     /* Lifts the lockup off a busy sky without reading as a drop shadow. */
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .35));
 }
-#site-lockup .mark     { height: 124px; width: auto; }
+/* The flex row lives on the link, not the h1: the whole lockup is a link
+   home, and an inline <a> would lay the balloon and the wordmark out as text
+   -- which put them on two lines the moment either became a block, making the
+   lockup taller than the header and clipping both ends against its
+   overflow: hidden. */
+#site-lockup > a {
+    display: flex;
+    align-items: center;
+    gap: 6px;                          /* the balloon's basket already reads as a gap */
+    text-decoration: none;
+}
+#site-lockup .mark     { height: 124px; width: auto; flex: none; }
 /* The drawn wordmark as outlined paths. It is wider than the old live-text
    version (tracking 15, condensed 102%), so it is set shorter to keep the
    lockup the same overall width and not crowd the balloon. */
@@ -100,15 +110,23 @@
    wordmark rather than let it squeeze the balloon into nothing. */
 @media (max-width: 720px) {
     #cloud-header          { height: 112px; }
-    #site-lockup           { gap: 5px; }
+    #site-lockup > a       { gap: 5px; }
     #site-lockup .mark     { height: 74px; }
     #site-lockup .wordmark { height: 44px; }
 }
 @media (max-width: 440px) {
     #cloud-header          { height: 92px; }
-    #site-lockup .mark     { height: 58px; }
+    #site-lockup .mark     { height: 62px; }
     /* the wordmark stays: it is the site's name, and at this size the balloon
        alone does not identify the page. It just gets small. */
-    #site-lockup .wordmark { height: 34px; display: block; }
-    #site-lockup           { gap: 4px; }
+    #site-lockup .wordmark { height: 36px; }
+    #site-lockup > a       { gap: 5px; }
+}
+/* Below ~380px the row would start crowding the edges, so both halves come
+   down together rather than one squeezing the other. */
+@media (max-width: 380px) {
+    #cloud-header          { height: 84px; }
+    #site-lockup .mark     { height: 54px; }
+    #site-lockup .wordmark { height: 30px; }
+    #site-lockup > a       { gap: 4px; }
 }

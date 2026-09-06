@@ -38,8 +38,12 @@ h2 {
     font-weight: 400;
     font-size: 34px;
     letter-spacing: .06em;
+    /* Explicit, and tight: a display face inheriting the body's 1.7 gives a
+       heading a line box twice the height of its own letters, which both
+       looks loose and makes the icon's offset unpredictable. */
+    line-height: 1.22;
     color: var(--plum);
-    margin: 46px 0 6px;
+    margin: 46px 0 10px;
 }
 .lede { margin: 0 0 26px; color: #5b5566; max-width: 62ch; }
 
@@ -578,7 +582,7 @@ h2 { view-transition-name: none; }
    compact card instead of a three-column stage ------------------------- */
 @media (max-width: 700px) {
     main { padding: 0 13px 28px; }
-    h2 { font-size: 25px; margin: 18px 0 4px; }
+    h2 { font-size: 25px; margin: 18px 0 6px; }
     .lede { font-size: 14.5px; margin: 0 0 10px; }
 
     /* hero and its two side columns become one flowing card */
@@ -799,7 +803,11 @@ h2 { view-transition-name: none; }
         margin: 6px 10px -38px auto;
     }
     main { padding-top: 4px; }
-    main > h2:first-of-type { margin-top: 44px; }
+    /* The toggle is 44px tall in a 6px slot, which used to push the first
+       heading a full button-height down and leave a wide empty strip beside
+       it. The heading now sits on the same line instead, with just enough
+       padding that its text can never run under the button. */
+    main > h2:first-of-type { margin-top: 2px; padding-right: 58px; }
 }
 
 /* --- section icons ------------------------------------------------------
@@ -810,7 +818,10 @@ h2 { view-transition-name: none; }
     vertical-align: -0.04em; color: var(--gold);
     filter: drop-shadow(0 1px 0 rgba(61,17,64,.35));
 }
-h2 { display: flex; align-items: center; gap: 0; }
+h2 { display: flex; align-items: flex-start; gap: 0; }
+.h-ico { flex: none; align-self: flex-start; margin-top: .17em; }
+/* single-line headings, which is nearly all of them, still read as centred */
+h2 > .h-ico { margin-top: calc((1.22em - .78em) / 2); }
 
 /* --- motion ------------------------------------------------------------
    Everything shares one easing and one duration scale, so the page moves as
@@ -1188,6 +1199,11 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .doc-body { font-size: 14.5px; }
     .doc-title { font-size: 23px; }
     .doc-body h2:not(.doc-title) { font-size: 18px; margin-top: 26px; }
+}
+
+@media (max-width: 380px) {
+    h2 { font-size: 21px; }
+    main > h2:first-of-type { padding-right: 54px; }
 }
 
 @media (max-width: 520px) {
