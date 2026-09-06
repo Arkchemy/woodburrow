@@ -27,6 +27,15 @@ def stamp_css(m):
                               f"{href}?v={int(os.path.getmtime(f))}")
 
 s = re.sub(r'<link[^>]*href="([^"?]+\.css)(?:\?v=\d+)?"', stamp_css, s)
+
+def stamp_js(m):
+    src = m.group(1)
+    f = pub / src
+    if not f.exists():
+        return m.group(0)
+    return f'<script src="{src}?v={int(os.path.getmtime(f))}"></script>'
+
+s = re.sub(r'<script src="([^"?]+\.js)(?:\?v=\d+)?"></script>', stamp_js, s)
 p.write_text(s)
 print(f"DATA_V = {newest}")
 for m in re.finditer(r'href="([^"]+\.css\?v=\d+)"', s):

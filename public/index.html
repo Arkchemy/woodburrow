@@ -8,8 +8,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
 <link rel="apple-touch-icon" href="images/logo/arkchemy-icon-256.png">
-<link rel="stylesheet" href="css/cloud-header.css?v=1788656047">
-<link rel="stylesheet" href="css/site.css?v=1788657274">
+<link rel="stylesheet" href="css/cloud-header.css?v=1788686141">
+<link rel="stylesheet" href="css/site.css?v=1788686141">
 </head>
 <body>
     <div id="cloud-header">
@@ -70,7 +70,6 @@
         <a href="#project">The Project</a>
         <a href="#games">The Games</a>
         <a href="#roster">Skylanders</a>
-        <a href="#intro">Intro</a>
         <a href="#contributors">Contributors</a>
         <a href="https://github.com/Arkchemy">GitHub</a>
     </nav>
@@ -155,11 +154,6 @@
         <div id="elements"></div>
 
 
-        <h2 id="intro">The intro</h2>
-        <p class="lede">Plays before the game, once boot gets that far.</p>
-        <video class="sting" src="media/arkchemy-intro.mp4" controls preload="metadata"
-               playsinline poster="images/logo/arkchemy-icon-512.png"></video>
-
         <h2 id="contributors">Contributors</h2>
         <p class="lede" id="contribLede"></p>
         <div id="contribGrid" class="contrib-rail"></div>
@@ -173,259 +167,6 @@
         effort and is not affiliated with or endorsed by Activision.
     </footer>
 
-    <script>
-    /* Data files change more often than the page; without a version the
-       browser serves a stale copy and new fields silently go missing. The
-       stamp is the newest data-file mtime -- a date alone does not bust the
-       cache when the data is regenerated the same day. Refresh it with
-       tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1788656736";
-
-    /* Data files change more often than the page; without a version the
-       browser serves a stale copy and new fields silently go missing. The
-       stamp is the newest data-file mtime -- a date alone does not bust the
-       cache when the data is regenerated the same day. Refresh it with
-       tools/stamp.py after changing any .json here. */
-
-/* --- the roster, per game ------------------------------------------- */
-    const ELEMENT_COLOUR = {
-        Magic:"#a763d8", Tech:"#e8942e", Fire:"#e34a2c", Water:"#2b9fd8",
-        Earth:"#b07b3e", Air:"#7fc9e8", Life:"#63b64a", Undead:"#8d8ab8",
-        Light:"#f0d264", Dark:"#5b5470"
-    };
-    const ELEMENT_FILE = { Magic:"magic", Tech:"tech", Fire:"fire", Water:"water",
-                           Earth:"earth", Air:"air", Life:"life", Undead:"undead",
-                           Light:"light", Dark:"dark" };
-    const ORDER = ["Magic","Tech","Fire","Water","Earth","Air","Life","Undead","Light","Dark"];
-    const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-    let DATA = null;        /* rosters.json */
-    let GAME = "ssa";       /* selected game */
-    let VISIBLE = [];       /* flat list of the selected game's characters */
-    let scIndex = 0;
-    const audioEl = new Audio();
-    const SC = document.getElementById("showcase");
-
-    fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
-        DATA = d;
-        const tabs = document.getElementById("gameTabs");
-        d.order.forEach(g => {
-            const b = document.createElement("button");
-            b.type = "button";
-            b.dataset.game = g;
-            b.innerHTML = d.games[g].title + "<small>" + d.games[g].count + " Skylanders</small>";
-            b.addEventListener("click", () => selectGame(g));
-            tabs.appendChild(b);
-        });
-        selectGame("ssa");
-
-        document.getElementById("randomPick").addEventListener("click", () => {
-            if (!VISIBLE.length) return;
-            showcase(Math.floor(Math.random() * VISIBLE.length), true);
-        });
-    });
-
-    function selectGame(g) {
-        GAME = g;
-        document.querySelectorAll("#gameTabs button").forEach(b =>
-            b.setAttribute("aria-pressed", b.dataset.game === g ? "true" : "false"));
-
-        const game = DATA.games[g];
-        VISIBLE = [];
-        const host = document.getElementById("elements");
-        host.innerHTML = "";
-
-        ORDER.filter(el => game.roster[el]).forEach(el => {
-            const colour = ELEMENT_COLOUR[el] || "#888";
-            const group = document.createElement("section");
-            group.className = "el-group";
-            group.style.setProperty("--el", colour);
-            group.innerHTML =
-                `<div class="el-row"></div>` +
-                `<div class="el-mark">` +
-                `<img src="images/elements/${ELEMENT_FILE[el] || "magic"}.webp" alt="">` +
-                `<span>${el}</span></div>`;
-            const row = group.querySelector(".el-row");
-            game.roster[el].forEach((c, i) => {
-                c.element = c.element || el;
-                const idx = VISIBLE.push(c) - 1;
-                const b = document.createElement("button");
-                b.className = "chip";
-                b.style.animationDelay = Math.min(i * 0.04, 0.4) + "s";
-                b.innerHTML =
-                    `<img src="images/roster/${c.icon}.png" alt="" loading="lazy">` +
-                    `<span class="${c.audio ? "has-audio" : ""}">${c.name}</span>`;
-                b.dataset.cat = c.category || "Core";
-                if (c.category && c.category !== "Core") b.classList.add("special");
-                b.addEventListener("click", () => showcase(idx, true));
-                row.appendChild(b);
-            });
-            host.appendChild(group);
-        });
-
-        showcase(0);
-        updateNote();
-    }
-
-    /* How many of the Skylanders currently on screen have their catchphrase. */
-    function updateNote() {
-        const withAudio = VISIBLE.filter(c => c.audio).length;
-        const detail = VISIBLE.filter(c => c.detail).length;
-        document.getElementById("voiceNote").textContent =
-            GAME === "ssa"
-                ? withAudio + " of " + VISIBLE.length + " have their catchphrase — " +
-                  VISIBLE.filter(c => c.voTier === "reduced").length +
-                  " others shipped combat barks only."
-                : VISIBLE.length + " Skylanders — " + detail +
-                  " carried over from Spyro’s Adventure, which is the game we have data for.";
-    }
-
-    /* --- the showcase carousel ----------------------------------------
-       Hero centre stage with the loadout cards flying in from the sides,
-       the Fortnite battle-pass treatment. */
-    function showcase(i, autoplay) {
-        if (!VISIBLE.length) return;
-        scIndex = (i + VISIBLE.length) % VISIBLE.length;
-        const c = VISIBLE[scIndex];
-        const colour = ELEMENT_COLOUR[c.element] || "#888";
-        const crest = "images/elements/" + (ELEMENT_FILE[c.element] || "magic") + ".webp";
-
-        SC.hidden = false;
-        SC.style.setProperty("--el", colour);
-
-        /* Re-trigger the fly-in on every change. Reading offsetWidth flushes
-           the "from" state, so the class can go straight back on -- doing this
-           in rAF would never fire while the tab is in the background. */
-        SC.classList.remove("ready");
-        void SC.offsetWidth;
-        SC.classList.add("ready");
-
-        /* Only Spyro's Adventure has the big promotional renders; everyone
-           else falls back to their roster portrait. */
-        const hero = document.getElementById("s-hero");
-        hero.classList.add("swap");
-        const next = new Image();
-        /* transparent render first, then the Spyro's Adventure promo art,
-           then the roster portrait */
-        const wanted = c.render ? "images/renders/" + c.render + ".png"
-                     : c.detail ? "images/characters/" + c.slug + ".png"
-                                : "images/roster/" + c.icon + ".png";
-        next.onload  = () => { hero.src = next.src; hero.alt = c.name; hero.classList.remove("swap"); };
-        next.onerror = () => { hero.src = "images/roster/" + c.icon + ".png";
-                               hero.classList.remove("swap"); };
-        next.src = wanted;
-        hero.classList.toggle("portrait-only", !c.render && !c.detail);
-
-        document.getElementById("s-emblem").src = crest;
-        document.getElementById("s-emblem").alt = c.element + " emblem";
-        document.getElementById("s-face").src = "images/roster/" + c.icon + ".png";
-        document.getElementById("s-face").alt = c.name;
-        document.getElementById("s-el").textContent = c.element;
-        document.getElementById("s-name").textContent = c.name;
-        document.getElementById("s-catch").textContent =
-            c.catchphrase ? "“" + c.catchphrase + "”" : "—";
-
-        /* Play the catchphrase on arrival, but only when the move came from a
-           click or key -- autoplay before any interaction is blocked, and it
-           would be rude on first paint. */
-        if (autoplay && c.audio) play(c);
-
-        const facts = document.getElementById("s-facts");
-        facts.innerHTML = "";
-        [["Species", c.species], ["Gender", c.gender], ["Role", c.role]]
-            .filter(([, v]) => v)
-            .forEach(([k, v]) => facts.insertAdjacentHTML("beforeend",
-                `<dt>${k}</dt><dd>${v}</dd>`));
-        if (!c.detail) facts.innerHTML = "";
-        if (c.category) facts.insertAdjacentHTML("afterbegin",
-            `<dt>Type</dt><dd>${c.category}</dd>`);
-        if (c.variantOf) facts.insertAdjacentHTML("beforeend",
-            `<dt>Variant of</dt><dd>${c.variantOf}</dd>`);
-        if (!c.detail && !facts.querySelector("dd"))
-            facts.innerHTML = `<dt>Debut</dt><dd>${DATA.games[GAME].title}</dd>`;
-
-        /* Attacks, soul gem and Wow Pow, straight off the character's
-           ability box. Variants inherit their base character's moveset. */
-        const mv = document.getElementById("s-moves");
-        const mvCard = document.getElementById("s-moves-card");
-        mv.innerHTML = "";
-        if (c.moves && c.moves.length) {
-            mvCard.hidden = false;
-            c.moves.forEach(m => {
-                const li = document.createElement("li");
-                li.innerHTML = `<b>${m.name}</b><i>${m.kind}</i>` +
-                               (m.desc ? `<span>${m.desc}</span>` : "");
-                mv.appendChild(li);
-            });
-        } else { mvCard.hidden = true; }
-
-        const pb = document.getElementById("s-play");
-        pb.disabled = !c.audio;
-        /* 20 of the 32 ship combat barks only (27-44 clips vs 78-113 for the
-           full-voice cast); their catchphrase was never in the Wii data, so
-           say that rather than implying a recording is merely pending. */
-        pb.textContent = c.audio ? "▶ Play"
-            : (c.voTier === "reduced" ? "Not in the Wii data"
-               : c.detail ? "No recording yet" : "No audio ripped yet");
-        pb.title = c.audio ? "" : (c.voTier === "reduced"
-            ? `Only ${c.voClips} combat barks shipped for this Skylander — no catchphrase recording exists on the disc.`
-            : "");
-        pb.onclick = () => play(c);
-    }
-
-    SC.querySelector(".prev").addEventListener("click", () => showcase(scIndex - 1, true));
-    SC.querySelector(".next").addEventListener("click", () => showcase(scIndex + 1, true));
-    document.addEventListener("keydown", e => {
-        if (SC.hidden) return;
-        if (e.key === "ArrowLeft")  showcase(scIndex - 1, true);
-        if (e.key === "ArrowRight") showcase(scIndex + 1, true);
-    });
-
-
-    /* --- contributors ---------------------------------------------------
-       Built from CONTRIBUTORS.csv (exported to contributors.json). The rail
-       duplicates the list once so the marquee loops without a seam. */
-    fetch("contributors.json" + DATA_V).then(r => r.json()).then(list => {
-        const grid = document.getElementById("contribGrid");
-        const lede = document.getElementById("contribLede");
-        if (!list.length) { grid.innerHTML = ""; return; }
-
-        const core = list.filter(c => c.section !== "special-thanks");
-        const thanks = list.filter(c => c.section === "special-thanks");
-        lede.textContent = list.length + " people have put work into Arkchemy" +
-            (thanks.length ? ", including " + thanks.length +
-             " whose reverse-engineering of the Alchemy engine the port leans on." : ".");
-
-        const card = c => {
-            const el = c.github ? document.createElement("a") : document.createElement("div");
-            el.className = "contrib-card";
-            if (c.github) { el.href = c.github; el.target = "_blank"; el.rel = "noopener"; }
-            const colour = ELEMENT_COLOUR[c.element] || "#b9a9c6";
-            el.style.setProperty("--el", colour);
-            /* the two ring overlays are the same art as the Skylanders cards */
-            el.innerHTML =
-                `<span class="ring" style="background-image:url('images/contributor-frame-ring-pfp1.png')"></span>` +
-                (c.element ? `<span class="ring" style="background-image:url('images/contributor-frame-ring-element.png')"></span>` : "") +
-                `<span class="body"><span class="cname">${c.name}</span>` +
-                `<span class="crole">${c.role}</span></span>` +
-                (c.element ? `<span class="cel">${c.element}</span>` : "");
-            return el;
-        };
-
-        const track = document.createElement("div");
-        track.className = "contrib-track";
-        /* twice through: the animation translates by -50%, so the second copy
-           is exactly where the first was when it wraps */
-        [...core, ...thanks, ...core, ...thanks].forEach(c => track.appendChild(card(c)));
-        grid.appendChild(track);
-    }).catch(() => {});
-
-    function play(c) {
-        if (!c.audio) return;
-        audioEl.src = c.audio;
-        audioEl.play().catch(() => {});   /* autoplay policies: fail quietly */
-    }
-
-</script>
+    <script src="js/site.js?v=1788686395"></script>
 </body>
 </html>
