@@ -63,7 +63,7 @@ class H(http.server.SimpleHTTPRequestHandler):
                 body = _j.dumps({"username": "stub", "display_name": None,
                                  "avatar": None}).encode()
             elif q.path == "/api/license":
-                lic = ROOT / "LICENSE"
+                lic = ROOT / ("LEGAL.md" if args.get("repo") == "legal" else "LICENSE")
                 body = _j.dumps({"repo": args.get("repo", "woodburrow"),
                                  "text": lic.read_text() if lic.exists() else ""}).encode()
             else:

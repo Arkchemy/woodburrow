@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="description" content="Arkchemy is porting Skylanders: Spyro's Adventure to the Nintendo Switch with a static recompiler. A fan preservation project, not affiliated with Activision.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -9,9 +10,10 @@
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
 <link rel="apple-touch-icon" href="images/logo/arkchemy-icon-256.png">
 <link rel="stylesheet" href="css/cloud-header.css?v=1788686141">
-<link rel="stylesheet" href="css/site.css?v=1788702663">
+<link rel="stylesheet" href="css/site.css?v=1788704057">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <svg id="icons" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
     <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></symbol>
@@ -33,7 +35,7 @@
             <div id="cBalloon" class="atvi-image"><img src="images/cloud-header/balloon.png" alt=""></div>
             <div id="cCloud"   class="atvi-image"><img src="images/cloud-header/cloud.png" alt=""></div>
         </div>
-        <div id="site-lockup">
+        <h1 id="site-lockup">
             <img class="mark" src="images/logo/arkchemy-icon-512.png" alt="" width="512" height="512">
             <!-- The wordmark is the drawn mark from branding/wordmark:
                  outlined paths, not live text, so it renders identically
@@ -76,7 +78,7 @@
                 </g>
                 </g>
             </svg>
-        </div>
+        </h1>
     </div>
     <button id="navToggle" type="button" aria-expanded="false" aria-controls="site-nav"
             aria-label="Menu"><span></span><span></span><span></span></button>
@@ -88,12 +90,12 @@
         <a href="#faq">FAQ</a>
         <a href="#contributors">Contributors</a>
         <a href="#testers">Beta testers</a>
-        <a href="#licence">Licence</a>
+        <a href="#licence">Legal</a>
         <a href="https://github.com/Arkchemy">GitHub</a>
     </nav>
     <div id="navScrim" hidden></div>
 
-    <main>
+    <main id="main" tabindex="-1">
         <h2 id="project"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>What this is</h2>
         <p class="lede">Arkchemy is porting <strong>Skylanders: Spyro's Adventure</strong>
         to the Nintendo Switch. The console it shipped on is out of production, the
@@ -106,12 +108,12 @@
         <p class="lede">All six run on the same engine, so most of what the first port needs the
         others need too.</p>
         <div class="games">
-            <a class="now" title="Spyro's Adventure"><img src="images/games/Spyro-logo.png" alt="Spyro's Adventure" loading="lazy"></a>
-            <a class="" title="Giants"><img src="images/games/Giants-logo.png" alt="Giants" loading="lazy"></a>
-            <a class="" title="Swap Force"><img src="images/games/SwapForce-logo.png" alt="Swap Force" loading="lazy"></a>
-            <a class="" title="Trap Team"><img src="images/games/tt-logo.png" alt="Trap Team" loading="lazy"></a>
-            <a class="" title="SuperChargers"><img src="images/games/Superchargers-logo.png" alt="SuperChargers" loading="lazy"></a>
-            <a class="" title="Imaginators"><img src="images/games/Imaginators-logo.png" alt="Imaginators" loading="lazy"></a>
+            <figure class="game now" title="Spyro's Adventure"><img src="images/games/Spyro-logo.png" alt="Spyro's Adventure" loading="lazy"></figure>
+            <figure class="game" title="Giants"><img src="images/games/Giants-logo.png" alt="Giants" loading="lazy"></figure>
+            <figure class="game" title="Swap Force"><img src="images/games/SwapForce-logo.png" alt="Swap Force" loading="lazy"></figure>
+            <figure class="game" title="Trap Team"><img src="images/games/tt-logo.png" alt="Trap Team" loading="lazy"></figure>
+            <figure class="game" title="SuperChargers"><img src="images/games/Superchargers-logo.png" alt="SuperChargers" loading="lazy"></figure>
+            <figure class="game" title="Imaginators"><img src="images/games/Imaginators-logo.png" alt="Imaginators" loading="lazy"></figure>
         </div>
 
         <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
@@ -131,12 +133,12 @@
             <div class="stage" id="stage">
                 <div class="loadouts left">
                     <div class="loadout">
-                        <h4>Element</h4>
+                        <p class="lo-label">Element</p>
                         <img class="emblem" id="s-emblem" alt=""
                              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                     </div>
                     <div class="loadout">
-                        <h4>Portrait</h4>
+                        <p class="lo-label">Portrait</p>
                         <img class="face" id="s-face" alt=""
                              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
                     </div>
@@ -149,16 +151,16 @@
 
                 <div class="loadouts right">
                     <div class="loadout">
-                        <h4>Catchphrase</h4>
+                        <p class="lo-label">Catchphrase</p>
                         <blockquote id="s-catch"></blockquote>
                         <button class="play-line" id="s-play" type="button">&#9654; Play</button>
                     </div>
                     <div class="loadout">
-                        <h4>Profile</h4>
+                        <p class="lo-label">Profile</p>
                         <dl id="s-facts"></dl>
                     </div>
                     <div class="loadout" id="s-moves-card" hidden>
-                        <h4>Moves</h4>
+                        <p class="lo-label">Moves</p>
                         <ul id="s-moves"></ul>
                     </div>
                 </div>
@@ -196,9 +198,9 @@
         <div id="testerGrid" class="tester-grid"></div>
 
 
-        <h2 id="licence"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Licence</h2>
-        <p class="lede">Pulled from the repository, so it always matches what the
-        code ships under.</p>
+        <h2 id="licence"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Legal</h2>
+        <p class="lede">Privacy, takedown and the licence, pulled from the
+        repository so the site always matches what the code ships under.</p>
         <div class="lic-tabs" id="licTabs"></div>
         <pre class="lic-body" id="licBody">Loading&hellip;</pre>
 
@@ -211,6 +213,6 @@
         effort and is not affiliated with or endorsed by Activision.
     </footer>
 
-    <script src="js/site.js?v=1788702265"></script>
+    <script src="js/site.js?v=1788704152"></script>
 </body>
 </html>

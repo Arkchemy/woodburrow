@@ -8,17 +8,22 @@
 // it keeps working if that CSP is ever tightened.
 
 const REPOS = ['conquertron', 'jouster', 'woodburrow', 'blaster', 'armory'];
+// 'legal' serves LEGAL.md instead of LICENSE, from the same place, so the
+// privacy notice on the site cannot drift from the one in the repository.
+const DOCS = { legal: ['woodburrow', 'LEGAL.md'] };
 
 export default async function handler(req, res) {
   const repo = String(req.query.repo || 'woodburrow');
-  if (!REPOS.includes(repo)) {
+  const doc = DOCS[repo];
+  if (!doc && !REPOS.includes(repo)) {
     res.status(400).json({ error: 'unknown repo' });
     return;
   }
+  const [ghRepo, file] = doc || [repo, 'LICENSE'];
 
   try {
     const r = await fetch(
-      `https://raw.githubusercontent.com/Arkchemy/${repo}/main/LICENSE`,
+      `https://raw.githubusercontent.com/Arkchemy/${ghRepo}/main/${file}`,
       { headers: { 'User-Agent': 'arkchemy-site' } }
     );
     if (!r.ok) {

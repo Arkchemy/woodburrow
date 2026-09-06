@@ -438,7 +438,9 @@
         '<p class="feed-empty">FAQ is unavailable.</p>'; });
 
     /* --- licence, straight from the repository --------------------------- */
-    const LIC_REPOS = ["woodburrow", "conquertron", "jouster", "blaster", "armory"];
+    /* "legal" is the privacy/takedown notice, served from LEGAL.md by the
+   same route so the page cannot drift from the repository. */
+    const LIC_REPOS = ["legal", "woodburrow", "conquertron", "jouster", "blaster", "armory"];
     {
         const tabs = document.getElementById("licTabs");
         const body = document.getElementById("licBody");
@@ -452,11 +454,12 @@
         };
         LIC_REPOS.forEach(repo => {
             const b = document.createElement("button");
-            b.type = "button"; b.dataset.repo = repo; b.textContent = repo;
+            b.type = "button"; b.dataset.repo = repo;
+            b.textContent = repo === "legal" ? "Legal & privacy" : repo;
             b.addEventListener("click", () => load(repo));
             tabs.appendChild(b);
         });
-        load("woodburrow");
+        load("legal");
     }
 
     document.addEventListener("DOMContentLoaded", () => {

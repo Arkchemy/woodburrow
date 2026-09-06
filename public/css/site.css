@@ -240,7 +240,7 @@ footer a { color: var(--gold); }
 .showcase.ready .loadout { opacity: 1; transform: translateX(0) scale(1); }
 .showcase.ready .loadouts .loadout:nth-child(2) { transition-delay: .09s; }
 
-.loadout h4 {
+.loadout .lo-label, .loadout h4 {
     margin: 0 0 6px;
     font: 13px/1.2 "Luckiest Guy", Impact, sans-serif;
     letter-spacing: .1em; text-transform: uppercase;
@@ -561,7 +561,7 @@ h2 { view-transition-name: none; }
         align-content: start;
     }
     .loadout { width: 100%; padding: 8px 10px; border-top-width: 2px; }
-    .loadout h4 { font-size: 11px; margin-bottom: 4px; }
+    .loadout .lo-label, .loadout .lo-label, .loadout h4 { font-size: 11px; margin-bottom: 4px; }
     .loadout blockquote { font-size: 16px; }
     .loadout dl { font-size: 12px; gap: 1px 8px; }
     /* moves run full width under the two cards and scroll if long */
@@ -835,3 +835,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible, .spoiler:focus-vis
     /* no hover on touch, and the underline would sit under a tapped link */
     #site-nav a::after { display: none; }
 }
+
+/* --- accessibility ------------------------------------------------------ */
+.skip-link {
+    position: absolute; left: -9999px; top: 0; z-index: 100;
+    background: var(--plum); color: var(--gold);
+    padding: 10px 16px; border-radius: 0 0 10px 0;
+    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .04em;
+}
+.skip-link:focus { left: 0; }
+#main:focus { outline: none; }
+/* the lockup is the page h1 but must keep the header layout */
+h1#site-lockup { margin: 0; font-size: inherit; line-height: 1; }
+.game { margin: 0; }
