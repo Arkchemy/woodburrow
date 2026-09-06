@@ -631,11 +631,16 @@ h3.sub {
     }
     #site-nav a:last-child { border-bottom: 0; }
 
-    #navScrim {
+    /* Only when the menu is open. `display: block` here used to override the
+       UA stylesheet's rule for the [hidden] attribute, so the scrim covered
+       the whole page as a purple tint even with the menu closed. Gating on
+       .nav-open means the attribute and the class cannot disagree. */
+    .nav-open #navScrim {
         display: block; position: fixed; inset: 0; z-index: 50;
         background: rgba(20,8,30,.55); backdrop-filter: blur(2px);
         animation: scrimIn .2s ease both;
     }
+    #navScrim[hidden] { display: none; }
     @keyframes scrimIn { from { opacity: 0 } to { opacity: 1 } }
 
     .contrib-list .contrib-card { width: 100%; }
