@@ -1,0 +1,11250 @@
+{
+ "bash": {
+  "catchphrase": "Rock and Roll!",
+  "ranked": [
+   {
+    "clip": "009.wav",
+    "text": "rock",
+    "conf": 0.0,
+    "score": 0.468
+   },
+   {
+    "clip": "024.wav",
+    "text": "rock",
+    "conf": 0.0,
+    "score": 0.468
+   },
+   {
+    "clip": "025.wav",
+    "text": "rock",
+    "conf": 0.0,
+    "score": 0.468
+   },
+   {
+    "clip": "026.wav",
+    "text": "rock",
+    "conf": 0.0,
+    "score": 0.468
+   },
+   {
+    "clip": "023.wav",
+    "text": "the rock",
+    "conf": 0.0,
+    "score": 0.458
+   },
+   {
+    "clip": "027.wav",
+    "text": "the rock",
+    "conf": 0.0,
+    "score": 0.458
+   },
+   {
+    "clip": "017.wav",
+    "text": "the abroad",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "029.wav",
+    "text": "le grand",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "032.wav",
+    "text": "rod",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "016.wav",
+    "text": "go go go that will welcome to",
+    "conf": 0.0,
+    "score": 0.173
+   },
+   {
+    "clip": "014.wav",
+    "text": "the grip of preble pebble",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "018.wav",
+    "text": "the book",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "004.wav",
+    "text": "rog",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "031.wav",
+    "text": "rog",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "015.wav",
+    "text": "they'll grab her of bourbon",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "019.wav",
+    "text": "the ugh",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "030.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "005.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "008.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "012.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "020.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "028.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "033.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "034.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "035.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "010.wav",
+    "text": "ugh",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "011.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "021.wav",
+    "text": "ugh",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "boomer": {
+  "catchphrase": "Bring the Boom!",
+  "ranked": [
+   {
+    "clip": "012.wav",
+    "text": "com boom boom",
+    "conf": 0.0,
+    "score": 0.485
+   },
+   {
+    "clip": "024.wav",
+    "text": "they don't want but a bump begin to put out but don't",
+    "conf": 0.0,
+    "score": 0.345
+   },
+   {
+    "clip": "013.wav",
+    "text": "is there",
+    "conf": 0.0,
+    "score": 0.262
+   },
+   {
+    "clip": "014.wav",
+    "text": "oh well but oh",
+    "conf": 0.0,
+    "score": 0.261
+   },
+   {
+    "clip": "021.wav",
+    "text": "the he there a",
+    "conf": 0.0,
+    "score": 0.261
+   },
+   {
+    "clip": "025.wav",
+    "text": "no oh wow",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "001.wav",
+    "text": "there that the here",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "015.wav",
+    "text": "they do with the app",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "019.wav",
+    "text": "the blue he there who",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "020.wav",
+    "text": "oh there",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "000.wav",
+    "text": "but don't we don't bubble bo bo bo bo",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "032.wav",
+    "text": "no get know he killed a don't",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "003.wav",
+    "text": "this app he",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "002.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "008.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "018.wav",
+    "text": "oh look",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "027.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "004.wav",
+    "text": "oh very dull",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh oh",
+    "conf": 0.0,
+    "score": 0.13
+   },
+   {
+    "clip": "011.wav",
+    "text": "blow",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "016.wav",
+    "text": "bo",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "023.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "010.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.074
+   },
+   {
+    "clip": "005.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "006.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "009.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "022.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "026.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "028.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "029.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "031.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "017.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "030.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "camo": {
+  "catchphrase": "Fruit Punch!",
+  "ranked": [
+   {
+    "clip": "023.wav",
+    "text": "great guy",
+    "conf": 0.0,
+    "score": 0.262
+   },
+   {
+    "clip": "021.wav",
+    "text": "three car",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "026.wav",
+    "text": "i don't i",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "018.wav",
+    "text": "the heightened",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "022.wav",
+    "text": "that's great",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "020.wav",
+    "text": "i'm not",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "025.wav",
+    "text": "yes ah",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "004.wav",
+    "text": "i do your doggy",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah like",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "005.wav",
+    "text": "a year",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "017.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "015.wav",
+    "text": "you",
+    "conf": 0.0,
+    "score": 0.092
+   },
+   {
+    "clip": "016.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.092
+   },
+   {
+    "clip": "019.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.092
+   },
+   {
+    "clip": "001.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "012.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "014.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "027.wav",
+    "text": "he",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "028.wav",
+    "text": "he",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "002.wav",
+    "text": "lol",
+    "conf": 0.0,
+    "score": 0.027
+   },
+   {
+    "clip": "003.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.027
+   },
+   {
+    "clip": "009.wav",
+    "text": "mom",
+    "conf": 0.0,
+    "score": 0.027
+   },
+   {
+    "clip": "000.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "chop-chop": {
+  "catchphrase": "Slice and Dice!",
+  "ranked": [
+   {
+    "clip": "038.wav",
+    "text": "slice and dice",
+    "conf": 0.0,
+    "score": 1.0
+   },
+   {
+    "clip": "048.wav",
+    "text": "worse or sell about die yeah",
+    "conf": 0.0,
+    "score": 0.446
+   },
+   {
+    "clip": "012.wav",
+    "text": "they pay most sell be on",
+    "conf": 0.0,
+    "score": 0.402
+   },
+   {
+    "clip": "003.wav",
+    "text": "strict tango",
+    "conf": 0.0,
+    "score": 0.293
+   },
+   {
+    "clip": "056.wav",
+    "text": "guy and my it",
+    "conf": 0.0,
+    "score": 0.293
+   },
+   {
+    "clip": "063.wav",
+    "text": "oakley a lovely",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "037.wav",
+    "text": "cox a boat cheers",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "081.wav",
+    "text": "la victoire my patio",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "040.wav",
+    "text": "like sen al intact and",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "055.wav",
+    "text": "they to man spot",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "085.wav",
+    "text": "main bouncer a superior",
+    "conf": 0.0,
+    "score": 0.231
+   },
+   {
+    "clip": "044.wav",
+    "text": "bonus to baton",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "074.wav",
+    "text": "the blade is my ally",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "086.wav",
+    "text": "my arm is supreme",
+    "conf": 0.0,
+    "score": 0.228
+   },
+   {
+    "clip": "071.wav",
+    "text": "the or said it beats you",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "064.wav",
+    "text": "huge behind",
+    "conf": 0.0,
+    "score": 0.223
+   },
+   {
+    "clip": "046.wav",
+    "text": "no hangs on cabins",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "075.wav",
+    "text": "la la a more value",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "083.wav",
+    "text": "laboratory i media",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "068.wav",
+    "text": "in your service",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "077.wav",
+    "text": "the lama m yeah are",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "043.wav",
+    "text": "the ball to show",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "080.wav",
+    "text": "the jury is mine",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "042.wav",
+    "text": "are a because each your",
+    "conf": 0.0,
+    "score": 0.207
+   },
+   {
+    "clip": "073.wav",
+    "text": "the spot eastman marker",
+    "conf": 0.0,
+    "score": 0.207
+   },
+   {
+    "clip": "076.wav",
+    "text": "killing ace nine have been nato",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "060.wav",
+    "text": "they are nice bother",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "072.wav",
+    "text": "the daughter we feel",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "082.wav",
+    "text": "the as he guess mine",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "092.wav",
+    "text": "another foe fracture",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "006.wav",
+    "text": "oh why you love push and fifteen",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "065.wav",
+    "text": "school without live auto",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "050.wav",
+    "text": "my sword is yours",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "070.wav",
+    "text": "day it's audience",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "062.wav",
+    "text": "she'll that the ready",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "051.wav",
+    "text": "home they pay",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "057.wav",
+    "text": "de monet pay",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "058.wav",
+    "text": "field am i smacked",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "069.wav",
+    "text": "to save face",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "078.wav",
+    "text": "lol by me or leona",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "041.wav",
+    "text": "the yeah they are free",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "010.wav",
+    "text": "the inspired the to go home",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "084.wav",
+    "text": "la victoria push me",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "045.wav",
+    "text": "the i don't see to loss",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "035.wav",
+    "text": "the long",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "019.wav",
+    "text": "the day",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "009.wav",
+    "text": "hi or last week in the big demand",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "052.wav",
+    "text": "in that get the idea",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "061.wav",
+    "text": "the to start by that",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "066.wav",
+    "text": "schools operate but i thought",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "088.wav",
+    "text": "my know my strongest half lock and",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "089.wav",
+    "text": "lamine kone corazza a spoon yeah been a",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "067.wav",
+    "text": "the or tier teams",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "094.wav",
+    "text": "no fine fine to me that extract",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "047.wav",
+    "text": "chop which are put in campo",
+    "conf": 0.0,
+    "score": 0.162
+   },
+   {
+    "clip": "096.wav",
+    "text": "the hot i know me god or outdoor",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "008.wav",
+    "text": "the of until up and seem to be the man",
+    "conf": 0.0,
+    "score": 0.158
+   },
+   {
+    "clip": "011.wav",
+    "text": "my sword serves me well",
+    "conf": 0.0,
+    "score": 0.158
+   },
+   {
+    "clip": "039.wav",
+    "text": "cook to put see more so",
+    "conf": 0.0,
+    "score": 0.158
+   },
+   {
+    "clip": "054.wav",
+    "text": "the issue by that push toward yeah",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "091.wav",
+    "text": "the villain fail to fat the attack",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "059.wav",
+    "text": "going to allow me as par that",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "053.wav",
+    "text": "la mia sparta to",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "079.wav",
+    "text": "the overfeeding isn't may",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "087.wav",
+    "text": "no not me i feel they are",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "033.wav",
+    "text": "oh trauma",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "049.wav",
+    "text": "they fight is fun yeah",
+    "conf": 0.0,
+    "score": 0.139
+   },
+   {
+    "clip": "007.wav",
+    "text": "though is that next to up far",
+    "conf": 0.0,
+    "score": 0.132
+   },
+   {
+    "clip": "021.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.13
+   },
+   {
+    "clip": "004.wav",
+    "text": "though on the slot offer",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "005.wav",
+    "text": "bring on the next victim",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "090.wav",
+    "text": "the outer mother all right now",
+    "conf": 0.0,
+    "score": 0.128
+   },
+   {
+    "clip": "095.wav",
+    "text": "i'll a because complete though",
+    "conf": 0.0,
+    "score": 0.128
+   },
+   {
+    "clip": "013.wav",
+    "text": "mine's were to i stay cool take the instead",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "014.wav",
+    "text": "the last part that me at ease a one set of it's you",
+    "conf": 0.0,
+    "score": 0.124
+   },
+   {
+    "clip": "015.wav",
+    "text": "me fearless bother me up of by now",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "093.wav",
+    "text": "the you know me like to the police",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "029.wav",
+    "text": "oh hello",
+    "conf": 0.0,
+    "score": 0.098
+   },
+   {
+    "clip": "034.wav",
+    "text": "yum yum",
+    "conf": 0.0,
+    "score": 0.093
+   },
+   {
+    "clip": "032.wav",
+    "text": "doll",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "002.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "016.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "018.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "020.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "025.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "027.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "028.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "031.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "036.wav",
+    "text": "me",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "023.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "030.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.014
+   }
+  ]
+ },
+ "cynder": {
+  "catchphrase": "Volts and Lightning!",
+  "ranked": [
+   {
+    "clip": "050.wav",
+    "text": "that you to light up aim",
+    "conf": 0.0,
+    "score": 0.493
+   },
+   {
+    "clip": "078.wav",
+    "text": "that's that magic night",
+    "conf": 0.0,
+    "score": 0.275
+   },
+   {
+    "clip": "043.wav",
+    "text": "but i get mine",
+    "conf": 0.0,
+    "score": 0.265
+   },
+   {
+    "clip": "082.wav",
+    "text": "there to try again",
+    "conf": 0.0,
+    "score": 0.265
+   },
+   {
+    "clip": "067.wav",
+    "text": "vv spirit and say",
+    "conf": 0.0,
+    "score": 0.264
+   },
+   {
+    "clip": "076.wav",
+    "text": "now that's was a blast",
+    "conf": 0.0,
+    "score": 0.262
+   },
+   {
+    "clip": "075.wav",
+    "text": "that's what's nice little",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "057.wav",
+    "text": "leading the charge",
+    "conf": 0.0,
+    "score": 0.241
+   },
+   {
+    "clip": "039.wav",
+    "text": "the aren't scorch",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "054.wav",
+    "text": "that can i",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "071.wav",
+    "text": "three bad movie",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "007.wav",
+    "text": "that's a bad as for her",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "025.wav",
+    "text": "style you gotta lie though",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "065.wav",
+    "text": "the navy pilot channels",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "038.wav",
+    "text": "oh and that wouldn't that be mackinac",
+    "conf": 0.0,
+    "score": 0.228
+   },
+   {
+    "clip": "091.wav",
+    "text": "that the eva and see know",
+    "conf": 0.0,
+    "score": 0.219
+   },
+   {
+    "clip": "030.wav",
+    "text": "can you can see now",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "086.wav",
+    "text": "the it as i bet the",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "044.wav",
+    "text": "then klaus now and",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "046.wav",
+    "text": "she may sound yeah",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "049.wav",
+    "text": "so you model a day",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "070.wav",
+    "text": "i have to die for",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "084.wav",
+    "text": "has to do not now",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "085.wav",
+    "text": "those that i read about it",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "064.wav",
+    "text": "never stood a chance",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "022.wav",
+    "text": "last saturday",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "060.wav",
+    "text": "go that i can",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "023.wav",
+    "text": "you get lot",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "058.wav",
+    "text": "men shouting",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "037.wav",
+    "text": "why this so but a man",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "041.wav",
+    "text": "been some blend into a ball game",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "073.wav",
+    "text": "so no ban lab that mildly way",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "032.wav",
+    "text": "reached twelve thousand deep less",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "096.wav",
+    "text": "the half half that",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "055.wav",
+    "text": "yes probably mass",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "006.wav",
+    "text": "the how vast i've had ah ha",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "080.wav",
+    "text": "see guess this brought data",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "034.wav",
+    "text": "the op on a slow day",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "069.wav",
+    "text": "i had their land",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "029.wav",
+    "text": "that means of the madden",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "066.wav",
+    "text": "at this guy knew some us",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "045.wav",
+    "text": "wicked so what",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "009.wav",
+    "text": "the hit earth",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "021.wav",
+    "text": "fully charged",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "027.wav",
+    "text": "ah charged up",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "024.wav",
+    "text": "had a gecko",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "074.wav",
+    "text": "you gotta love what a day",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "026.wav",
+    "text": "eight",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "004.wav",
+    "text": "love ah",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "035.wav",
+    "text": "the basic income and meet the away",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "093.wav",
+    "text": "that ah",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "033.wav",
+    "text": "no rest for the wicked",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "042.wav",
+    "text": "that there weren't any",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "047.wav",
+    "text": "he's been built my own",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "053.wav",
+    "text": "say that so matter",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "079.wav",
+    "text": "man less fillers yeah money",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "083.wav",
+    "text": "what don't data show us",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "087.wav",
+    "text": "they'll be used to add it was neat little soups",
+    "conf": 0.0,
+    "score": 0.163
+   },
+   {
+    "clip": "059.wav",
+    "text": "they send did he learn to and",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "031.wav",
+    "text": "the guy though",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "063.wav",
+    "text": "say tiger cubs",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "092.wav",
+    "text": "that he lied nora why know but i'm not mad at this",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "052.wav",
+    "text": "yeah wow this",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "090.wav",
+    "text": "videos that and that's that good men as that's me i",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "068.wav",
+    "text": "no got to leave the know that get said",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "014.wav",
+    "text": "that gaba",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "005.wav",
+    "text": "china ah",
+    "conf": 0.0,
+    "score": 0.142
+   },
+   {
+    "clip": "020.wav",
+    "text": "the lab",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "051.wav",
+    "text": "the time for trouble",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "088.wav",
+    "text": "i tell you nice try that it wasn't",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "089.wav",
+    "text": "they gonna say yet are far from romo",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "072.wav",
+    "text": "they've been some stab him gold",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "048.wav",
+    "text": "so now captiva pay conquest",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "056.wav",
+    "text": "lay down wow",
+    "conf": 0.0,
+    "score": 0.121
+   },
+   {
+    "clip": "077.wav",
+    "text": "the fact that said they why mommy's on",
+    "conf": 0.0,
+    "score": 0.113
+   },
+   {
+    "clip": "081.wav",
+    "text": "a few key",
+    "conf": 0.0,
+    "score": 0.112
+   },
+   {
+    "clip": "019.wav",
+    "text": "the moon",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "036.wav",
+    "text": "chip pat tiberi cat tv",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "010.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "028.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "012.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.098
+   },
+   {
+    "clip": "003.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "017.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "018.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "061.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "094.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "095.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "097.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "098.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "100.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "101.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "016.wav",
+    "text": "but now",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "008.wav",
+    "text": "hi",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "000.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "040.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "062.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "099.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "dino-rang": {
+  "catchphrase": "Come 'Rang or Shine!",
+  "ranked": [
+   {
+    "clip": "001.wav",
+    "text": "oh man on",
+    "conf": 0.0,
+    "score": 0.283
+   },
+   {
+    "clip": "009.wav",
+    "text": "the half an hour",
+    "conf": 0.0,
+    "score": 0.274
+   },
+   {
+    "clip": "017.wav",
+    "text": "you getting a while iam him",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "020.wav",
+    "text": "while a gang",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "000.wav",
+    "text": "that mcgowan",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "032.wav",
+    "text": "on a while i",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "008.wav",
+    "text": "ah or",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "029.wav",
+    "text": "don't know",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "016.wav",
+    "text": "want bank",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "028.wav",
+    "text": "though i go like i am",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "018.wav",
+    "text": "army who told me",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "019.wav",
+    "text": "abu ali guy",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "005.wav",
+    "text": "i removed out by rep maru record i remember or",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "027.wav",
+    "text": "early guy",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "007.wav",
+    "text": "if ah",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "026.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "006.wav",
+    "text": "elderly wally willingly while loop have a world",
+    "conf": 0.0,
+    "score": 0.121
+   },
+   {
+    "clip": "013.wav",
+    "text": "i wrote",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "011.wav",
+    "text": "oh are",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "002.wav",
+    "text": "ah ha",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "004.wav",
+    "text": "however her higher are about a room hello",
+    "conf": 0.0,
+    "score": 0.105
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "023.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "025.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "030.wav",
+    "text": "they know",
+    "conf": 0.0,
+    "score": 0.083
+   },
+   {
+    "clip": "014.wav",
+    "text": "alberto",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "003.wav",
+    "text": "age",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "012.wav",
+    "text": "are",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "022.wav",
+    "text": "my",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "021.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "024.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "031.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "double-trouble": {
+  "catchphrase": "Boom Shock-A-Laka!",
+  "ranked": [
+   {
+    "clip": "033.wav",
+    "text": "the baby boom boom boom made a man who",
+    "conf": 0.0,
+    "score": 0.358
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh boo boo to be",
+    "conf": 0.0,
+    "score": 0.285
+   },
+   {
+    "clip": "016.wav",
+    "text": "good good good",
+    "conf": 0.0,
+    "score": 0.228
+   },
+   {
+    "clip": "012.wav",
+    "text": "the league",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "007.wav",
+    "text": "the aga",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "030.wav",
+    "text": "do do do",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "010.wav",
+    "text": "the gonna do",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "037.wav",
+    "text": "the job in the mood",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "036.wav",
+    "text": "the gonna be a bubble that i gonna do",
+    "conf": 0.0,
+    "score": 0.163
+   },
+   {
+    "clip": "027.wav",
+    "text": "me the",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "009.wav",
+    "text": "okay",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "001.wav",
+    "text": "the minimum a big big big rebel big me",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "004.wav",
+    "text": "together",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "013.wav",
+    "text": "bill bill bill bill bill negative now they're big",
+    "conf": 0.0,
+    "score": 0.117
+   },
+   {
+    "clip": "032.wav",
+    "text": "is it needed to be removed a big big big big blue",
+    "conf": 0.0,
+    "score": 0.117
+   },
+   {
+    "clip": "023.wav",
+    "text": "the flu",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "024.wav",
+    "text": "they didn't do",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "000.wav",
+    "text": "good",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "014.wav",
+    "text": "food",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "017.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "019.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "022.wav",
+    "text": "the bigger",
+    "conf": 0.0,
+    "score": 0.092
+   },
+   {
+    "clip": "031.wav",
+    "text": "the given me a bill bill bill bill bill the big business",
+    "conf": 0.0,
+    "score": 0.092
+   },
+   {
+    "clip": "038.wav",
+    "text": "did he do",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "021.wav",
+    "text": "the dog",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "026.wav",
+    "text": "me know",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "025.wav",
+    "text": "murder",
+    "conf": 0.0,
+    "score": 0.074
+   },
+   {
+    "clip": "028.wav",
+    "text": "the to",
+    "conf": 0.0,
+    "score": 0.074
+   },
+   {
+    "clip": "020.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.07
+   },
+   {
+    "clip": "011.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "015.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "008.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "035.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "003.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "018.wav",
+    "text": "so",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "029.wav",
+    "text": "do",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "034.wav",
+    "text": "do",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "drill-sergeant": {
+  "catchphrase": "Licensed to Drill!",
+  "ranked": [
+   {
+    "clip": "026.wav",
+    "text": "that and it out",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "008.wav",
+    "text": "me me me me me",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "025.wav",
+    "text": "whoever a out",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "002.wav",
+    "text": "ah that bad",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "023.wav",
+    "text": "then i know",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "005.wav",
+    "text": "wow wow wow why",
+    "conf": 0.0,
+    "score": 0.173
+   },
+   {
+    "clip": "006.wav",
+    "text": "the national labor who",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "019.wav",
+    "text": "how beard and a minute",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "021.wav",
+    "text": "the daddy",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "024.wav",
+    "text": "the a out",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "020.wav",
+    "text": "now the",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "022.wav",
+    "text": "ill",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "003.wav",
+    "text": "the eight",
+    "conf": 0.0,
+    "score": 0.122
+   },
+   {
+    "clip": "004.wav",
+    "text": "the a be",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah no",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "028.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "017.wav",
+    "text": "do",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "018.wav",
+    "text": "how badly",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "012.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "009.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "011.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "015.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "027.wav",
+    "text": "bow",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "029.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "016.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "007.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "010.wav",
+    "text": "a",
+    "conf": 0.0,
+    "score": 0.006
+   },
+   {
+    "clip": "013.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "drobot": {
+  "catchphrase": "Blink and Destroy!",
+  "ranked": [
+   {
+    "clip": "031.wav",
+    "text": "well well oh man",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "001.wav",
+    "text": "the as man",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "016.wav",
+    "text": "the though",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "004.wav",
+    "text": "right now",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "006.wav",
+    "text": "no gerber",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "019.wav",
+    "text": "ha ha ha",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "023.wav",
+    "text": "they are",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "021.wav",
+    "text": "oh okay",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "020.wav",
+    "text": "ah now",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "005.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "028.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "029.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "003.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "013.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "032.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "018.wav",
+    "text": "via web",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "009.wav",
+    "text": "why",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "017.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "026.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "027.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "008.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "011.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "012.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "014.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "025.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "030.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "007.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "eruptor": {
+  "catchphrase": "Born to Burn!",
+  "ranked": [
+   {
+    "clip": "072.wav",
+    "text": "they didn't bring any a a",
+    "conf": 0.0,
+    "score": 0.668
+   },
+   {
+    "clip": "063.wav",
+    "text": "for an hour law and",
+    "conf": 0.0,
+    "score": 0.295
+   },
+   {
+    "clip": "068.wav",
+    "text": "the borderline to",
+    "conf": 0.0,
+    "score": 0.288
+   },
+   {
+    "clip": "010.wav",
+    "text": "hard for you",
+    "conf": 0.0,
+    "score": 0.287
+   },
+   {
+    "clip": "038.wav",
+    "text": "you i to boy day",
+    "conf": 0.0,
+    "score": 0.268
+   },
+   {
+    "clip": "084.wav",
+    "text": "who wants to and fro",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "091.wav",
+    "text": "no fly zone",
+    "conf": 0.0,
+    "score": 0.248
+   },
+   {
+    "clip": "039.wav",
+    "text": "for them",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "104.wav",
+    "text": "don't have gone all",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "020.wav",
+    "text": "they didn't care",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "029.wav",
+    "text": "you get a day",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "065.wav",
+    "text": "one day one goal",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "054.wav",
+    "text": "a botched gosh",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "008.wav",
+    "text": "that's movie to be it",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "053.wav",
+    "text": "gone girl whom all",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "083.wav",
+    "text": "the show so",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "094.wav",
+    "text": "i saw arbor",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "066.wav",
+    "text": "see bomb",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "071.wav",
+    "text": "lord all",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "093.wav",
+    "text": "then show role model",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "011.wav",
+    "text": "see take also bought wow",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "040.wav",
+    "text": "sorry",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "076.wav",
+    "text": "sorry",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "097.wav",
+    "text": "i try",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "027.wav",
+    "text": "what they earlier",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "050.wav",
+    "text": "rather three shaw",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "074.wav",
+    "text": "didn't a big as a damn it",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "041.wav",
+    "text": "now see the board outgrew ball",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "016.wav",
+    "text": "get a book anything able to the roof",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "077.wav",
+    "text": "lol shallow little but dark blue",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "052.wav",
+    "text": "the role model show",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "087.wav",
+    "text": "that's welsh labour",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "102.wav",
+    "text": "those father",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "004.wav",
+    "text": "the president player",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "035.wav",
+    "text": "they didn't get good",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "092.wav",
+    "text": "cause noted for goal",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "056.wav",
+    "text": "eight pros your him a lot",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "086.wav",
+    "text": "the gosh curveball go",
+    "conf": 0.0,
+    "score": 0.166
+   },
+   {
+    "clip": "047.wav",
+    "text": "oh come on",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "069.wav",
+    "text": "that followed",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "019.wav",
+    "text": "this is a",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "026.wav",
+    "text": "the money",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "030.wav",
+    "text": "like that",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "061.wav",
+    "text": "fire good",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "085.wav",
+    "text": "so what's the scoop to",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "101.wav",
+    "text": "shaw from see show",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "095.wav",
+    "text": "the sleeve we're going to all day",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "001.wav",
+    "text": "earlier",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "064.wav",
+    "text": "smoking",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "080.wav",
+    "text": "an order issued by the window",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "000.wav",
+    "text": "better",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "015.wav",
+    "text": "the it",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "059.wav",
+    "text": "the golden lawler flawed",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "081.wav",
+    "text": "gotcha",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "088.wav",
+    "text": "the on",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "025.wav",
+    "text": "blue",
+    "conf": 0.0,
+    "score": 0.146
+   },
+   {
+    "clip": "070.wav",
+    "text": "true",
+    "conf": 0.0,
+    "score": 0.146
+   },
+   {
+    "clip": "042.wav",
+    "text": "for",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "021.wav",
+    "text": "this is here",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "090.wav",
+    "text": "smells homes",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "073.wav",
+    "text": "they did a really let me be able to be a",
+    "conf": 0.0,
+    "score": 0.134
+   },
+   {
+    "clip": "007.wav",
+    "text": "they they didn't immediately",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "096.wav",
+    "text": "this it really so i spoke to",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "062.wav",
+    "text": "la la mold",
+    "conf": 0.0,
+    "score": 0.124
+   },
+   {
+    "clip": "028.wav",
+    "text": "the live later",
+    "conf": 0.0,
+    "score": 0.12
+   },
+   {
+    "clip": "022.wav",
+    "text": "what here",
+    "conf": 0.0,
+    "score": 0.118
+   },
+   {
+    "clip": "012.wav",
+    "text": "this year old always",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "079.wav",
+    "text": "they're all both cold water",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "103.wav",
+    "text": "supreme court will scold po",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "006.wav",
+    "text": "the will have a little bit bigger than a day",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "017.wav",
+    "text": "the new",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "036.wav",
+    "text": "hey dad",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "055.wav",
+    "text": "the law",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "067.wav",
+    "text": "i a dog",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "075.wav",
+    "text": "they do",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "031.wav",
+    "text": "mobile",
+    "conf": 0.0,
+    "score": 0.1
+   },
+   {
+    "clip": "043.wav",
+    "text": "at all",
+    "conf": 0.0,
+    "score": 0.1
+   },
+   {
+    "clip": "032.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.095
+   },
+   {
+    "clip": "037.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.095
+   },
+   {
+    "clip": "045.wav",
+    "text": "know",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "058.wav",
+    "text": "nope",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "089.wav",
+    "text": "frog",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "013.wav",
+    "text": "god",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "082.wav",
+    "text": "god",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "014.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "044.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "046.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "049.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "057.wav",
+    "text": "this waste large holes",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "078.wav",
+    "text": "the hotel installed softball",
+    "conf": 0.0,
+    "score": 0.065
+   },
+   {
+    "clip": "100.wav",
+    "text": "well",
+    "conf": 0.0,
+    "score": 0.033
+   },
+   {
+    "clip": "009.wav",
+    "text": "say",
+    "conf": 0.0,
+    "score": 0.025
+   },
+   {
+    "clip": "023.wav",
+    "text": "yea",
+    "conf": 0.0,
+    "score": 0.025
+   },
+   {
+    "clip": "099.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.025
+   },
+   {
+    "clip": "002.wav",
+    "text": "a",
+    "conf": 0.0,
+    "score": 0.008
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "018.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "024.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "033.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "034.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "048.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "051.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "060.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "098.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "flameslinger": {
+  "catchphrase": "Let the Flames Begin!",
+  "ranked": [
+   {
+    "clip": "045.wav",
+    "text": "the frames begin",
+    "conf": 0.0,
+    "score": 0.755
+   },
+   {
+    "clip": "008.wav",
+    "text": "time the flame ah",
+    "conf": 0.0,
+    "score": 0.527
+   },
+   {
+    "clip": "063.wav",
+    "text": "created the flame",
+    "conf": 0.0,
+    "score": 0.527
+   },
+   {
+    "clip": "059.wav",
+    "text": "then borden for my name bogan",
+    "conf": 0.0,
+    "score": 0.439
+   },
+   {
+    "clip": "058.wav",
+    "text": "lock in a flash",
+    "conf": 0.0,
+    "score": 0.405
+   },
+   {
+    "clip": "106.wav",
+    "text": "the a vehicle gonna bite or know",
+    "conf": 0.0,
+    "score": 0.386
+   },
+   {
+    "clip": "089.wav",
+    "text": "at least but made during of us",
+    "conf": 0.0,
+    "score": 0.379
+   },
+   {
+    "clip": "072.wav",
+    "text": "so many another for gone",
+    "conf": 0.0,
+    "score": 0.377
+   },
+   {
+    "clip": "043.wav",
+    "text": "but are those least those vital",
+    "conf": 0.0,
+    "score": 0.373
+   },
+   {
+    "clip": "107.wav",
+    "text": "main bailout file a new egil",
+    "conf": 0.0,
+    "score": 0.371
+   },
+   {
+    "clip": "074.wav",
+    "text": "the video vocal been free i'm all",
+    "conf": 0.0,
+    "score": 0.363
+   },
+   {
+    "clip": "049.wav",
+    "text": "bf and last job us",
+    "conf": 0.0,
+    "score": 0.358
+   },
+   {
+    "clip": "110.wav",
+    "text": "my in a pilot's ref and emma",
+    "conf": 0.0,
+    "score": 0.353
+   },
+   {
+    "clip": "035.wav",
+    "text": "a lot on now",
+    "conf": 0.0,
+    "score": 0.351
+   },
+   {
+    "clip": "050.wav",
+    "text": "the lama dubailand",
+    "conf": 0.0,
+    "score": 0.351
+   },
+   {
+    "clip": "018.wav",
+    "text": "there's gonna lock them up order",
+    "conf": 0.0,
+    "score": 0.334
+   },
+   {
+    "clip": "105.wav",
+    "text": "kabul was you better party big data",
+    "conf": 0.0,
+    "score": 0.322
+   },
+   {
+    "clip": "013.wav",
+    "text": "there have been dead on the barn the hall",
+    "conf": 0.0,
+    "score": 0.302
+   },
+   {
+    "clip": "112.wav",
+    "text": "these franchises new guy john",
+    "conf": 0.0,
+    "score": 0.289
+   },
+   {
+    "clip": "019.wav",
+    "text": "there are yeah",
+    "conf": 0.0,
+    "score": 0.282
+   },
+   {
+    "clip": "004.wav",
+    "text": "there's a digital",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "081.wav",
+    "text": "the or my fiery rain",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "015.wav",
+    "text": "the ac fraud see my up",
+    "conf": 0.0,
+    "score": 0.262
+   },
+   {
+    "clip": "080.wav",
+    "text": "the ways main via a whole",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "087.wav",
+    "text": "the this i",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "066.wav",
+    "text": "jack eichel flacco",
+    "conf": 0.0,
+    "score": 0.256
+   },
+   {
+    "clip": "095.wav",
+    "text": "the yell out there",
+    "conf": 0.0,
+    "score": 0.256
+   },
+   {
+    "clip": "053.wav",
+    "text": "while i'm so do",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "056.wav",
+    "text": "though for a bow",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "069.wav",
+    "text": "the line of fire",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "078.wav",
+    "text": "family another me a block all",
+    "conf": 0.0,
+    "score": 0.253
+   },
+   {
+    "clip": "102.wav",
+    "text": "the almost did you win but no",
+    "conf": 0.0,
+    "score": 0.253
+   },
+   {
+    "clip": "075.wav",
+    "text": "the line of fire mine",
+    "conf": 0.0,
+    "score": 0.249
+   },
+   {
+    "clip": "083.wav",
+    "text": "village there might in fire reagan",
+    "conf": 0.0,
+    "score": 0.242
+   },
+   {
+    "clip": "014.wav",
+    "text": "looks like you earn the burn",
+    "conf": 0.0,
+    "score": 0.24
+   },
+   {
+    "clip": "079.wav",
+    "text": "the other for a whole meal",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "024.wav",
+    "text": "local number the number and to be oh",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "055.wav",
+    "text": "three told me i do",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "065.wav",
+    "text": "this long a fuckin",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "073.wav",
+    "text": "the any other foil",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "096.wav",
+    "text": "so you're like wow",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "068.wav",
+    "text": "and what am i do",
+    "conf": 0.0,
+    "score": 0.23
+   },
+   {
+    "clip": "020.wav",
+    "text": "these are life",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "023.wav",
+    "text": "the ah ah ah",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "047.wav",
+    "text": "fleming laws",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "098.wav",
+    "text": "this way into",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "109.wav",
+    "text": "than our job i",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "044.wav",
+    "text": "the state of develop all",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "060.wav",
+    "text": "do not debbie i'm me on car",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "064.wav",
+    "text": "gervais is a job for lab",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "091.wav",
+    "text": "so like gold bars matty ice",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "094.wav",
+    "text": "no they all they needed a perennial",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "101.wav",
+    "text": "luckily kobe not be no money",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "092.wav",
+    "text": "hb i didn't see them ogre",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "067.wav",
+    "text": "story london job was",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "097.wav",
+    "text": "those are my my that",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "108.wav",
+    "text": "my arrows never fail",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "111.wav",
+    "text": "fi channel police by",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "017.wav",
+    "text": "that's gotten three thirty below dire",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "070.wav",
+    "text": "those your good for",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "084.wav",
+    "text": "yeah drive for that",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "090.wav",
+    "text": "that's my eyes on the prize",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "012.wav",
+    "text": "no they might as well as yamaha",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "042.wav",
+    "text": "that's not a guy",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "077.wav",
+    "text": "in fire alenia my now",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "033.wav",
+    "text": "that's now that",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "039.wav",
+    "text": "ready aim fire",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "054.wav",
+    "text": "tae bo chatter",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "037.wav",
+    "text": "this see",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "046.wav",
+    "text": "that lab",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "052.wav",
+    "text": "for all fresh",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "057.wav",
+    "text": "wow do my bow",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "026.wav",
+    "text": "the early better to turn put down on",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "041.wav",
+    "text": "tom a fiat",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "062.wav",
+    "text": "live on different i'm all",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "099.wav",
+    "text": "see red and",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "011.wav",
+    "text": "point about and i'm yeah yeah man",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "016.wav",
+    "text": "yet space oh god showed up good brand",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "009.wav",
+    "text": "there's really that bad but ah",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "086.wav",
+    "text": "there's there's there's all those that",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "088.wav",
+    "text": "that's there there's a faggot style ah",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "085.wav",
+    "text": "may i need all the other for at all",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "093.wav",
+    "text": "tangled to wrap it in fact that",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "103.wav",
+    "text": "if i literally suggest you may know",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "076.wav",
+    "text": "job i got back yard",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "025.wav",
+    "text": "the desire to dollars or her laugh at and from oh",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "038.wav",
+    "text": "they hadn't yet issue",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "007.wav",
+    "text": "hey done every i'm all ha",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "071.wav",
+    "text": "under fire eileen yeah",
+    "conf": 0.0,
+    "score": 0.177
+   },
+   {
+    "clip": "104.wav",
+    "text": "fast tasty give it a lesson and off me",
+    "conf": 0.0,
+    "score": 0.177
+   },
+   {
+    "clip": "048.wav",
+    "text": "if your mercy levied on",
+    "conf": 0.0,
+    "score": 0.171
+   },
+   {
+    "clip": "036.wav",
+    "text": "you mean",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "040.wav",
+    "text": "all do so",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "100.wav",
+    "text": "nos vamos",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "032.wav",
+    "text": "this ah",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "034.wav",
+    "text": "this ah",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "010.wav",
+    "text": "me and kind of mine if lemon salmon",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "061.wav",
+    "text": "sunny miata go",
+    "conf": 0.0,
+    "score": 0.149
+   },
+   {
+    "clip": "051.wav",
+    "text": "though ignite",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "082.wav",
+    "text": "sony fly",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "030.wav",
+    "text": "though",
+    "conf": 0.0,
+    "score": 0.134
+   },
+   {
+    "clip": "000.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "022.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.095
+   },
+   {
+    "clip": "027.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.093
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "003.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "021.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "028.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "031.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.051
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "ghost-roaster": {
+  "catchphrase": "No Chain, No Gain!",
+  "ranked": [
+   {
+    "clip": "000.wav",
+    "text": "so that i can i",
+    "conf": 0.0,
+    "score": 0.439
+   },
+   {
+    "clip": "012.wav",
+    "text": "the boy and he met his and now tiny tiny have i",
+    "conf": 0.0,
+    "score": 0.416
+   },
+   {
+    "clip": "004.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.338
+   },
+   {
+    "clip": "023.wav",
+    "text": "yeah my carolina in your i'm going to manhattan late",
+    "conf": 0.0,
+    "score": 0.289
+   },
+   {
+    "clip": "018.wav",
+    "text": "ah i have you ever wondered you're going to get",
+    "conf": 0.0,
+    "score": 0.275
+   },
+   {
+    "clip": "030.wav",
+    "text": "the that ah",
+    "conf": 0.0,
+    "score": 0.235
+   },
+   {
+    "clip": "006.wav",
+    "text": "we believe it",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "011.wav",
+    "text": "what color like i teach them like a",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "031.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.07
+   },
+   {
+    "clip": "022.wav",
+    "text": "how",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "007.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.062
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "009.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "010.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "013.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "015.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "017.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "019.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "020.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "021.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "024.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "025.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "026.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "027.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "028.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "029.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "gill-grunt": {
+  "catchphrase": "Fear the Fish!",
+  "ranked": [
+   {
+    "clip": "024.wav",
+    "text": "and on friday",
+    "conf": 0.0,
+    "score": 0.498
+   },
+   {
+    "clip": "027.wav",
+    "text": "flash know",
+    "conf": 0.0,
+    "score": 0.458
+   },
+   {
+    "clip": "010.wav",
+    "text": "map offering free liberal and yeah",
+    "conf": 0.0,
+    "score": 0.416
+   },
+   {
+    "clip": "068.wav",
+    "text": "yeah the",
+    "conf": 0.0,
+    "score": 0.319
+   },
+   {
+    "clip": "036.wav",
+    "text": "lucian bute i",
+    "conf": 0.0,
+    "score": 0.308
+   },
+   {
+    "clip": "000.wav",
+    "text": "the raise the press",
+    "conf": 0.0,
+    "score": 0.293
+   },
+   {
+    "clip": "037.wav",
+    "text": "get a be there",
+    "conf": 0.0,
+    "score": 0.293
+   },
+   {
+    "clip": "007.wav",
+    "text": "stir up to the gills",
+    "conf": 0.0,
+    "score": 0.283
+   },
+   {
+    "clip": "078.wav",
+    "text": "then he",
+    "conf": 0.0,
+    "score": 0.279
+   },
+   {
+    "clip": "013.wav",
+    "text": "in for a win",
+    "conf": 0.0,
+    "score": 0.272
+   },
+   {
+    "clip": "079.wav",
+    "text": "they were ah",
+    "conf": 0.0,
+    "score": 0.272
+   },
+   {
+    "clip": "015.wav",
+    "text": "then there i get there",
+    "conf": 0.0,
+    "score": 0.265
+   },
+   {
+    "clip": "003.wav",
+    "text": "steady and face",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "019.wav",
+    "text": "read a part of bats",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "044.wav",
+    "text": "that it's of",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "094.wav",
+    "text": "man game now",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "009.wav",
+    "text": "the key man",
+    "conf": 0.0,
+    "score": 0.235
+   },
+   {
+    "clip": "041.wav",
+    "text": "the guy",
+    "conf": 0.0,
+    "score": 0.234
+   },
+   {
+    "clip": "050.wav",
+    "text": "yeah ah",
+    "conf": 0.0,
+    "score": 0.234
+   },
+   {
+    "clip": "038.wav",
+    "text": "scary ah",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "067.wav",
+    "text": "this guy",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "072.wav",
+    "text": "the meta",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "022.wav",
+    "text": "don't come back that it",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "030.wav",
+    "text": "the lot of there's done",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "005.wav",
+    "text": "same mad bears",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "032.wav",
+    "text": "yeah did i get",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "004.wav",
+    "text": "car that router they married",
+    "conf": 0.0,
+    "score": 0.222
+   },
+   {
+    "clip": "008.wav",
+    "text": "judge me sit there but i see",
+    "conf": 0.0,
+    "score": 0.222
+   },
+   {
+    "clip": "075.wav",
+    "text": "there are a lot of big as why",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "028.wav",
+    "text": "yeah well up have been",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "001.wav",
+    "text": "he had enough he is",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "086.wav",
+    "text": "we and that gets their been",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "002.wav",
+    "text": "this bag a plaza",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "020.wav",
+    "text": "rail car back",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "025.wav",
+    "text": "he ends up your a",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "006.wav",
+    "text": "the up on topic demon",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "087.wav",
+    "text": "a good man not ah the",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "058.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "063.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "035.wav",
+    "text": "the raised eyebrow these but added",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "069.wav",
+    "text": "then",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "084.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "080.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "082.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "083.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "011.wav",
+    "text": "they receive dns i got gas",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "012.wav",
+    "text": "then in combat veteran",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "018.wav",
+    "text": "a lot of lot of this that a day",
+    "conf": 0.0,
+    "score": 0.185
+   },
+   {
+    "clip": "073.wav",
+    "text": "the i didn't get it off",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "077.wav",
+    "text": "there are very body",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "029.wav",
+    "text": "the letters than floaty yeah",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "014.wav",
+    "text": "that's where i remember the clara",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "033.wav",
+    "text": "lab out and say chat",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "031.wav",
+    "text": "the locked and loaded",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "091.wav",
+    "text": "man in haven night up",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "093.wav",
+    "text": "they kill nine the never done zappei",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "023.wav",
+    "text": "the days that banana my dad yeah",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "055.wav",
+    "text": "your lap a grant get ventura",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "089.wav",
+    "text": "jail granted venture be like",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "060.wav",
+    "text": "the honey over there noticed bath animal got there",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "096.wav",
+    "text": "the was gay men know settling then",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "034.wav",
+    "text": "are you call point guard that",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "070.wav",
+    "text": "last mean",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "088.wav",
+    "text": "the last kind of trials game if last and",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "095.wav",
+    "text": "totally totally not yet land or am i",
+    "conf": 0.0,
+    "score": 0.146
+   },
+   {
+    "clip": "090.wav",
+    "text": "the point according i laid back",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "061.wav",
+    "text": "had a that that manning the but a bar",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "085.wav",
+    "text": "the a good bit better and better",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "026.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "021.wav",
+    "text": "five",
+    "conf": 0.0,
+    "score": 0.137
+   },
+   {
+    "clip": "043.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.137
+   },
+   {
+    "clip": "092.wav",
+    "text": "men det out of you bob",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "045.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "046.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "048.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "064.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "074.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "081.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "052.wav",
+    "text": "they swim out of thin gil grant will win",
+    "conf": 0.0,
+    "score": 0.134
+   },
+   {
+    "clip": "053.wav",
+    "text": "the coagulate a good grand gang ah",
+    "conf": 0.0,
+    "score": 0.134
+   },
+   {
+    "clip": "054.wav",
+    "text": "the first not sure i meant again grand good and",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "016.wav",
+    "text": "not particularly bad yeah",
+    "conf": 0.0,
+    "score": 0.123
+   },
+   {
+    "clip": "039.wav",
+    "text": "he like how much gold like came back ah",
+    "conf": 0.0,
+    "score": 0.12
+   },
+   {
+    "clip": "056.wav",
+    "text": "and are going on now easily but i'm going on now",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "051.wav",
+    "text": "give it and finance or girl grabbed vet and",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "076.wav",
+    "text": "metcalf",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "059.wav",
+    "text": "mobile",
+    "conf": 0.0,
+    "score": 0.094
+   },
+   {
+    "clip": "017.wav",
+    "text": "diana",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "042.wav",
+    "text": "ill",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "057.wav",
+    "text": "me",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "066.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "049.wav",
+    "text": "july",
+    "conf": 0.0,
+    "score": 0.031
+   },
+   {
+    "clip": "065.wav",
+    "text": "guy",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "040.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "047.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "062.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "071.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "hex": {
+  "catchphrase": "Fear the Dark!",
+  "ranked": [
+   {
+    "clip": "052.wav",
+    "text": "fair the dark",
+    "conf": 0.0,
+    "score": 0.965
+   },
+   {
+    "clip": "034.wav",
+    "text": "it's darkest before the dawn",
+    "conf": 0.0,
+    "score": 0.694
+   },
+   {
+    "clip": "028.wav",
+    "text": "the afraid of the dark",
+    "conf": 0.0,
+    "score": 0.567
+   },
+   {
+    "clip": "040.wav",
+    "text": "the dark our begins",
+    "conf": 0.0,
+    "score": 0.518
+   },
+   {
+    "clip": "058.wav",
+    "text": "take a walk on the dark side",
+    "conf": 0.0,
+    "score": 0.513
+   },
+   {
+    "clip": "031.wav",
+    "text": "the the from the lw",
+    "conf": 0.0,
+    "score": 0.49
+   },
+   {
+    "clip": "085.wav",
+    "text": "ah the victoire",
+    "conf": 0.0,
+    "score": 0.312
+   },
+   {
+    "clip": "083.wav",
+    "text": "ah that was low",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "045.wav",
+    "text": "see they're also nada",
+    "conf": 0.0,
+    "score": 0.274
+   },
+   {
+    "clip": "067.wav",
+    "text": "the boys are pay",
+    "conf": 0.0,
+    "score": 0.267
+   },
+   {
+    "clip": "041.wav",
+    "text": "cee lo duca hey man",
+    "conf": 0.0,
+    "score": 0.265
+   },
+   {
+    "clip": "056.wav",
+    "text": "if the i love cody that",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "065.wav",
+    "text": "the first invader",
+    "conf": 0.0,
+    "score": 0.256
+   },
+   {
+    "clip": "062.wav",
+    "text": "then they love cody that",
+    "conf": 0.0,
+    "score": 0.249
+   },
+   {
+    "clip": "064.wav",
+    "text": "they're not say",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "075.wav",
+    "text": "the deal percent play",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "003.wav",
+    "text": "that does she know",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "046.wav",
+    "text": "see when i am need",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "054.wav",
+    "text": "first their the fence dennis",
+    "conf": 0.0,
+    "score": 0.244
+   },
+   {
+    "clip": "043.wav",
+    "text": "look at the little nap",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "050.wav",
+    "text": "they put a sudden thea",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "017.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "018.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "019.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "084.wav",
+    "text": "ah good times",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "055.wav",
+    "text": "amy take a bow here",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "073.wav",
+    "text": "board a bow",
+    "conf": 0.0,
+    "score": 0.235
+   },
+   {
+    "clip": "004.wav",
+    "text": "drug sheen",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "080.wav",
+    "text": "mr ness my",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "048.wav",
+    "text": "the study here their ne",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "086.wav",
+    "text": "ah the good night and satan",
+    "conf": 0.0,
+    "score": 0.228
+   },
+   {
+    "clip": "030.wav",
+    "text": "the stage for their dunk had it",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "060.wav",
+    "text": "come out of the don't glares to",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "082.wav",
+    "text": "the first approach my",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "091.wav",
+    "text": "the move why he says the gala",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "042.wav",
+    "text": "the you don't clear stone dish lacked",
+    "conf": 0.0,
+    "score": 0.215
+   },
+   {
+    "clip": "032.wav",
+    "text": "they may allow sporty that",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "057.wav",
+    "text": "they did dash to reside or",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "005.wav",
+    "text": "home british three and a third day",
+    "conf": 0.0,
+    "score": 0.211
+   },
+   {
+    "clip": "033.wav",
+    "text": "the dose that hot the does out for",
+    "conf": 0.0,
+    "score": 0.211
+   },
+   {
+    "clip": "047.wav",
+    "text": "this is back to bed",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "059.wav",
+    "text": "fuzzy eternally mia",
+    "conf": 0.0,
+    "score": 0.209
+   },
+   {
+    "clip": "014.wav",
+    "text": "in a car sharing a dish",
+    "conf": 0.0,
+    "score": 0.207
+   },
+   {
+    "clip": "069.wav",
+    "text": "that lead power saying that",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "077.wav",
+    "text": "ah daughter full on the key",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "094.wav",
+    "text": "the but they're not the any one",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "072.wav",
+    "text": "good riddance",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "035.wav",
+    "text": "little bit aka hello",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "079.wav",
+    "text": "this get up or shane",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "090.wav",
+    "text": "my power no no equal",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "049.wav",
+    "text": "marty allan mucus better",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "081.wav",
+    "text": "this then i love ross my",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "092.wav",
+    "text": "mine a caf this unfed likely",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "002.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "022.wav",
+    "text": "leah",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "024.wav",
+    "text": "oh oh oh",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "070.wav",
+    "text": "this gun same buff",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "068.wav",
+    "text": "oh or inflation",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "071.wav",
+    "text": "a oh per and start next yes",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "027.wav",
+    "text": "these bomb for it stuff",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "051.wav",
+    "text": "they stood down to nice",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "036.wav",
+    "text": "that's is this am don't kids and",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "078.wav",
+    "text": "until we meet again",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "038.wav",
+    "text": "there's their money sadist thousand school",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "074.wav",
+    "text": "ah and glacier is to egg",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "029.wav",
+    "text": "you have for dinoire",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "066.wav",
+    "text": "oh rest in peace",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "088.wav",
+    "text": "the fact that a good team boss",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "044.wav",
+    "text": "laos cody that say to have",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "061.wav",
+    "text": "the a nice so lotto school",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "087.wav",
+    "text": "that's good according to media they're done",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "039.wav",
+    "text": "the hidden fun at those two to eat",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "093.wav",
+    "text": "emile put a non i iguana",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "015.wav",
+    "text": "they did they lose sneak a two point lead",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "076.wav",
+    "text": "i don't know to avoid now",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "037.wav",
+    "text": "load up your boy yeah equilibrium at a map",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "053.wav",
+    "text": "hum why",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "025.wav",
+    "text": "oh and",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "008.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "012.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "016.wav",
+    "text": "the he saw cage take a lot back he lay pp",
+    "conf": 0.0,
+    "score": 0.132
+   },
+   {
+    "clip": "089.wav",
+    "text": "man color can sign v or neat",
+    "conf": 0.0,
+    "score": 0.112
+   },
+   {
+    "clip": "010.wav",
+    "text": "hi all",
+    "conf": 0.0,
+    "score": 0.094
+   },
+   {
+    "clip": "063.wav",
+    "text": "nisha",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "023.wav",
+    "text": "okay",
+    "conf": 0.0,
+    "score": 0.084
+   },
+   {
+    "clip": "026.wav",
+    "text": "who",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "007.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "021.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "009.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "000.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "013.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "020.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "ignitor": {
+  "catchphrase": "Slash and Burn!",
+  "ranked": [
+   {
+    "clip": "022.wav",
+    "text": "slash have been",
+    "conf": 0.0,
+    "score": 0.854
+   },
+   {
+    "clip": "025.wav",
+    "text": "yeah a bro chat",
+    "conf": 0.0,
+    "score": 0.536
+   },
+   {
+    "clip": "024.wav",
+    "text": "couldn't and bannon",
+    "conf": 0.0,
+    "score": 0.517
+   },
+   {
+    "clip": "071.wav",
+    "text": "i see though been see though",
+    "conf": 0.0,
+    "score": 0.404
+   },
+   {
+    "clip": "042.wav",
+    "text": "they breaking entice i have so",
+    "conf": 0.0,
+    "score": 0.374
+   },
+   {
+    "clip": "067.wav",
+    "text": "they have been vanquished",
+    "conf": 0.0,
+    "score": 0.373
+   },
+   {
+    "clip": "051.wav",
+    "text": "men been sort of strength us food",
+    "conf": 0.0,
+    "score": 0.363
+   },
+   {
+    "clip": "061.wav",
+    "text": "how does that guy who spoils",
+    "conf": 0.0,
+    "score": 0.339
+   },
+   {
+    "clip": "035.wav",
+    "text": "they pay he loose",
+    "conf": 0.0,
+    "score": 0.336
+   },
+   {
+    "clip": "033.wav",
+    "text": "spot and for being",
+    "conf": 0.0,
+    "score": 0.303
+   },
+   {
+    "clip": "021.wav",
+    "text": "the slot and food",
+    "conf": 0.0,
+    "score": 0.286
+   },
+   {
+    "clip": "048.wav",
+    "text": "that kind and fled",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "034.wav",
+    "text": "so sold can score tree",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "043.wav",
+    "text": "the main channel",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "075.wav",
+    "text": "in a puff jersey",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "036.wav",
+    "text": "roberto and three mm",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "072.wav",
+    "text": "evolve over a bidding",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "037.wav",
+    "text": "the if yeah may",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "044.wav",
+    "text": "woman say marsh",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "045.wav",
+    "text": "the food effect",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "073.wav",
+    "text": "in an enable but today",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "030.wav",
+    "text": "some media me true and tom",
+    "conf": 0.0,
+    "score": 0.211
+   },
+   {
+    "clip": "076.wav",
+    "text": "avatar yeah own on a bully",
+    "conf": 0.0,
+    "score": 0.211
+   },
+   {
+    "clip": "032.wav",
+    "text": "by you lay mosh cornish badass",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "038.wav",
+    "text": "this bother you can wash car",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "028.wav",
+    "text": "has downs with swords",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "039.wav",
+    "text": "lou heart attack stat",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "047.wav",
+    "text": "god a third call back",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "070.wav",
+    "text": "high status concrete know",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "066.wav",
+    "text": "hey zed first law firm",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "017.wav",
+    "text": "the wrong",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "026.wav",
+    "text": "i came on",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "069.wav",
+    "text": "the pay spacey toboggan",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "041.wav",
+    "text": "hey ah t",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "074.wav",
+    "text": "the united twa oh no problem",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah so",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "011.wav",
+    "text": "it off so narrow galina mambo",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "060.wav",
+    "text": "the over one hundred bucks do that",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "062.wav",
+    "text": "mano are all that too",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "027.wav",
+    "text": "lot on stumps met spot",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "029.wav",
+    "text": "it could also leaf lab",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "068.wav",
+    "text": "the effect a techy navy top",
+    "conf": 0.0,
+    "score": 0.162
+   },
+   {
+    "clip": "031.wav",
+    "text": "than seattle call list party",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "063.wav",
+    "text": "the boy take a real game speed up",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "040.wav",
+    "text": "the sad way payday loans",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "053.wav",
+    "text": "those series of food that yea",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "001.wav",
+    "text": "guy lot too",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh they took all the time",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "052.wav",
+    "text": "mine our sean's along with more fire",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "016.wav",
+    "text": "their pipe",
+    "conf": 0.0,
+    "score": 0.146
+   },
+   {
+    "clip": "012.wav",
+    "text": "cautious just saw to cheap",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "049.wav",
+    "text": "lot to do you work at that",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "054.wav",
+    "text": "my nerves don't think could be your mind fire",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "056.wav",
+    "text": "the out a muddled out but he got to lobby for a goal",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "004.wav",
+    "text": "oh oh",
+    "conf": 0.0,
+    "score": 0.13
+   },
+   {
+    "clip": "007.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "046.wav",
+    "text": "ignite term thought",
+    "conf": 0.0,
+    "score": 0.128
+   },
+   {
+    "clip": "003.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "005.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "019.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.127
+   },
+   {
+    "clip": "050.wav",
+    "text": "little doll part of luge either",
+    "conf": 0.0,
+    "score": 0.125
+   },
+   {
+    "clip": "055.wav",
+    "text": "the lobby automatic rubbery lack of a walker",
+    "conf": 0.0,
+    "score": 0.125
+   },
+   {
+    "clip": "023.wav",
+    "text": "they pay go to school",
+    "conf": 0.0,
+    "score": 0.118
+   },
+   {
+    "clip": "064.wav",
+    "text": "but they know i think he thought it",
+    "conf": 0.0,
+    "score": 0.095
+   },
+   {
+    "clip": "077.wav",
+    "text": "navi doughty or not have relay",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "065.wav",
+    "text": "the for gore who nabil tortilla",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "057.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.083
+   },
+   {
+    "clip": "059.wav",
+    "text": "api",
+    "conf": 0.0,
+    "score": 0.074
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "008.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "009.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "013.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "014.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "015.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.021
+   },
+   {
+    "clip": "058.wav",
+    "text": "i",
+    "conf": 0.0,
+    "score": 0.007
+   },
+   {
+    "clip": "018.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "020.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "lightning-rod": {
+  "catchphrase": "One Strike and You're Out!",
+  "ranked": [
+   {
+    "clip": "059.wav",
+    "text": "then the other later than yours",
+    "conf": 0.0,
+    "score": 0.418
+   },
+   {
+    "clip": "092.wav",
+    "text": "grab your foods that out all",
+    "conf": 0.0,
+    "score": 0.389
+   },
+   {
+    "clip": "080.wav",
+    "text": "on put that on that",
+    "conf": 0.0,
+    "score": 0.373
+   },
+   {
+    "clip": "100.wav",
+    "text": "there were two stroke victim got rubin",
+    "conf": 0.0,
+    "score": 0.364
+   },
+   {
+    "clip": "083.wav",
+    "text": "they go there's a lot out and run it at all",
+    "conf": 0.0,
+    "score": 0.356
+   },
+   {
+    "clip": "094.wav",
+    "text": "three don't we're at it",
+    "conf": 0.0,
+    "score": 0.355
+   },
+   {
+    "clip": "034.wav",
+    "text": "therefore heard some stories go",
+    "conf": 0.0,
+    "score": 0.354
+   },
+   {
+    "clip": "071.wav",
+    "text": "have you killed but only door",
+    "conf": 0.0,
+    "score": 0.349
+   },
+   {
+    "clip": "014.wav",
+    "text": "have all those move all of us and whole on earth",
+    "conf": 0.0,
+    "score": 0.337
+   },
+   {
+    "clip": "048.wav",
+    "text": "came around for storage",
+    "conf": 0.0,
+    "score": 0.336
+   },
+   {
+    "clip": "065.wav",
+    "text": "there are other thing you know people had any tall",
+    "conf": 0.0,
+    "score": 0.331
+   },
+   {
+    "clip": "066.wav",
+    "text": "obama monitor star puts their war",
+    "conf": 0.0,
+    "score": 0.328
+   },
+   {
+    "clip": "088.wav",
+    "text": "he pointed out real close that door",
+    "conf": 0.0,
+    "score": 0.319
+   },
+   {
+    "clip": "002.wav",
+    "text": "shame on it",
+    "conf": 0.0,
+    "score": 0.306
+   },
+   {
+    "clip": "098.wav",
+    "text": "oh stupid rule over do",
+    "conf": 0.0,
+    "score": 0.299
+   },
+   {
+    "clip": "052.wav",
+    "text": "the best they can prove",
+    "conf": 0.0,
+    "score": 0.298
+   },
+   {
+    "clip": "039.wav",
+    "text": "so who to based on a boost",
+    "conf": 0.0,
+    "score": 0.297
+   },
+   {
+    "clip": "037.wav",
+    "text": "the a strong country roads",
+    "conf": 0.0,
+    "score": 0.29
+   },
+   {
+    "clip": "087.wav",
+    "text": "the stage i'm here for ago go",
+    "conf": 0.0,
+    "score": 0.286
+   },
+   {
+    "clip": "040.wav",
+    "text": "four hundred and i part all",
+    "conf": 0.0,
+    "score": 0.283
+   },
+   {
+    "clip": "041.wav",
+    "text": "there are paco it all",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "074.wav",
+    "text": "la victoire to sure you",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "089.wav",
+    "text": "sounds like a giant teddy teddy",
+    "conf": 0.0,
+    "score": 0.274
+   },
+   {
+    "clip": "085.wav",
+    "text": "he than that biography rude",
+    "conf": 0.0,
+    "score": 0.266
+   },
+   {
+    "clip": "101.wav",
+    "text": "the field delivered to do this",
+    "conf": 0.0,
+    "score": 0.263
+   },
+   {
+    "clip": "045.wav",
+    "text": "scotland the todo",
+    "conf": 0.0,
+    "score": 0.261
+   },
+   {
+    "clip": "050.wav",
+    "text": "so you never know",
+    "conf": 0.0,
+    "score": 0.261
+   },
+   {
+    "clip": "084.wav",
+    "text": "the are your boss will form of birth",
+    "conf": 0.0,
+    "score": 0.261
+   },
+   {
+    "clip": "012.wav",
+    "text": "the way was live and",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "073.wav",
+    "text": "the as like though",
+    "conf": 0.0,
+    "score": 0.26
+   },
+   {
+    "clip": "042.wav",
+    "text": "lotta didn't get a bad day that",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "061.wav",
+    "text": "story",
+    "conf": 0.0,
+    "score": 0.253
+   },
+   {
+    "clip": "096.wav",
+    "text": "their home years and years left close the",
+    "conf": 0.0,
+    "score": 0.252
+   },
+   {
+    "clip": "056.wav",
+    "text": "the grandmother that's book",
+    "conf": 0.0,
+    "score": 0.248
+   },
+   {
+    "clip": "047.wav",
+    "text": "the guys sit war at all",
+    "conf": 0.0,
+    "score": 0.242
+   },
+   {
+    "clip": "025.wav",
+    "text": "there's a room",
+    "conf": 0.0,
+    "score": 0.241
+   },
+   {
+    "clip": "032.wav",
+    "text": "this could have a lot",
+    "conf": 0.0,
+    "score": 0.241
+   },
+   {
+    "clip": "051.wav",
+    "text": "this low key rope install about",
+    "conf": 0.0,
+    "score": 0.241
+   },
+   {
+    "clip": "021.wav",
+    "text": "they say repairs",
+    "conf": 0.0,
+    "score": 0.24
+   },
+   {
+    "clip": "067.wav",
+    "text": "there's the cost",
+    "conf": 0.0,
+    "score": 0.24
+   },
+   {
+    "clip": "090.wav",
+    "text": "made for old sputtering on it will be",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "031.wav",
+    "text": "let me small mode know",
+    "conf": 0.0,
+    "score": 0.222
+   },
+   {
+    "clip": "082.wav",
+    "text": "that are getting there",
+    "conf": 0.0,
+    "score": 0.222
+   },
+   {
+    "clip": "026.wav",
+    "text": "the new label vanish",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "079.wav",
+    "text": "oh who productive good nature",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "093.wav",
+    "text": "constitutional garbo",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "091.wav",
+    "text": "i just from a good",
+    "conf": 0.0,
+    "score": 0.219
+   },
+   {
+    "clip": "043.wav",
+    "text": "we flew defender",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "062.wav",
+    "text": "as a boy girl",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "097.wav",
+    "text": "cause mean meme",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "064.wav",
+    "text": "that's thought about her there",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "078.wav",
+    "text": "the doctor wish need to devote a flop",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "049.wav",
+    "text": "the way it goes to bowl",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "099.wav",
+    "text": "the for herzog low tech two years",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "081.wav",
+    "text": "how to use to see",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "022.wav",
+    "text": "i won't mention",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "033.wav",
+    "text": "that's let's go",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "053.wav",
+    "text": "they have a feeling that they don't have a day",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "054.wav",
+    "text": "shouldn't go",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "060.wav",
+    "text": "time stamp all",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "068.wav",
+    "text": "or be killed",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "086.wav",
+    "text": "to put a prosthetic need to all law",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "030.wav",
+    "text": "it does took the workshop",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "046.wav",
+    "text": "where they said that top",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "072.wav",
+    "text": "that's really hope it's over a bit a",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "038.wav",
+    "text": "large orders this wall",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "069.wav",
+    "text": "the event of oil so go please call the",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "070.wav",
+    "text": "this kill people or to pre tax it's like energy",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "035.wav",
+    "text": "yeah in a puddle",
+    "conf": 0.0,
+    "score": 0.174
+   },
+   {
+    "clip": "077.wav",
+    "text": "remember that it can also",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "095.wav",
+    "text": "you might know the drill for all troubles",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "036.wav",
+    "text": "there's a public some slot horrifying",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "063.wav",
+    "text": "the school",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "013.wav",
+    "text": "over from",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "075.wav",
+    "text": "see me go",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "057.wav",
+    "text": "that's good",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "029.wav",
+    "text": "then head",
+    "conf": 0.0,
+    "score": 0.142
+   },
+   {
+    "clip": "005.wav",
+    "text": "the way",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "007.wav",
+    "text": "the way",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "024.wav",
+    "text": "okay",
+    "conf": 0.0,
+    "score": 0.14
+   },
+   {
+    "clip": "058.wav",
+    "text": "okay",
+    "conf": 0.0,
+    "score": 0.14
+   },
+   {
+    "clip": "055.wav",
+    "text": "then would new",
+    "conf": 0.0,
+    "score": 0.125
+   },
+   {
+    "clip": "076.wav",
+    "text": "la be totally totally investment never caught",
+    "conf": 0.0,
+    "score": 0.12
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah okay",
+    "conf": 0.0,
+    "score": 0.112
+   },
+   {
+    "clip": "027.wav",
+    "text": "man",
+    "conf": 0.0,
+    "score": 0.076
+   },
+   {
+    "clip": "023.wav",
+    "text": "say no",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "000.wav",
+    "text": "slow",
+    "conf": 0.0,
+    "score": 0.047
+   },
+   {
+    "clip": "044.wav",
+    "text": "know",
+    "conf": 0.0,
+    "score": 0.047
+   },
+   {
+    "clip": "018.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.044
+   },
+   {
+    "clip": "020.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.044
+   },
+   {
+    "clip": "028.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.044
+   },
+   {
+    "clip": "001.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "010.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "011.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "015.wav",
+    "text": "eh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "016.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "017.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "004.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "009.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "019.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "prism-break": {
+  "catchphrase": "The Beam is Supreme!",
+  "ranked": [
+   {
+    "clip": "008.wav",
+    "text": "the item",
+    "conf": 0.0,
+    "score": 0.275
+   },
+   {
+    "clip": "022.wav",
+    "text": "that in that god",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "021.wav",
+    "text": "that ready",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "002.wav",
+    "text": "black and brown bread",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "003.wav",
+    "text": "really bad",
+    "conf": 0.0,
+    "score": 0.177
+   },
+   {
+    "clip": "019.wav",
+    "text": "you're at",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "001.wav",
+    "text": "head",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "010.wav",
+    "text": "then",
+    "conf": 0.0,
+    "score": 0.138
+   },
+   {
+    "clip": "028.wav",
+    "text": "rivera",
+    "conf": 0.0,
+    "score": 0.104
+   },
+   {
+    "clip": "027.wav",
+    "text": "rabbi",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "004.wav",
+    "text": "dead",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "016.wav",
+    "text": "hell",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "012.wav",
+    "text": "hi",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "013.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.064
+   },
+   {
+    "clip": "017.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.064
+   },
+   {
+    "clip": "000.wav",
+    "text": "well",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "009.wav",
+    "text": "lab",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "020.wav",
+    "text": "man",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "026.wav",
+    "text": "rob",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "007.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "025.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "023.wav",
+    "text": "i",
+    "conf": 0.0,
+    "score": 0.05
+   },
+   {
+    "clip": "024.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.011
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "018.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "slam-bam": {
+  "catchphrase": "Armed and Dangerous!",
+  "ranked": [
+   {
+    "clip": "040.wav",
+    "text": "let me go",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "043.wav",
+    "text": "that can",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "035.wav",
+    "text": "right right",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "002.wav",
+    "text": "i know",
+    "conf": 0.0,
+    "score": 0.14
+   },
+   {
+    "clip": "037.wav",
+    "text": "there's a lot of fear",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "000.wav",
+    "text": "yeah i",
+    "conf": 0.0,
+    "score": 0.104
+   },
+   {
+    "clip": "029.wav",
+    "text": "oh wow",
+    "conf": 0.0,
+    "score": 0.104
+   },
+   {
+    "clip": "021.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "033.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "006.wav",
+    "text": "know",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "038.wav",
+    "text": "jake",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "009.wav",
+    "text": "you",
+    "conf": 0.0,
+    "score": 0.098
+   },
+   {
+    "clip": "013.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.098
+   },
+   {
+    "clip": "003.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "004.wav",
+    "text": "no nope",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "039.wav",
+    "text": "oh well",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "005.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "012.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "023.wav",
+    "text": "well",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "008.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "032.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "042.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.057
+   },
+   {
+    "clip": "011.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "027.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "034.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.053
+   },
+   {
+    "clip": "007.wav",
+    "text": "hi",
+    "conf": 0.0,
+    "score": 0.011
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "010.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "015.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "018.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "019.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "020.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "022.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "025.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "028.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "030.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "031.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "036.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "041.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "sonic-boom": {
+  "catchphrase": "Full scream ahead!",
+  "ranked": [
+   {
+    "clip": "023.wav",
+    "text": "right syria guy",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "011.wav",
+    "text": "rather than",
+    "conf": 0.0,
+    "score": 0.225
+   },
+   {
+    "clip": "019.wav",
+    "text": "the media and i really am",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "026.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "022.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "004.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "012.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "014.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "016.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "025.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.107
+   },
+   {
+    "clip": "000.wav",
+    "text": "air",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "020.wav",
+    "text": "air",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "010.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "024.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "018.wav",
+    "text": "know",
+    "conf": 0.0,
+    "score": 0.024
+   },
+   {
+    "clip": "007.wav",
+    "text": "i",
+    "conf": 0.0,
+    "score": 0.006
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "009.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "021.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "spyro": {
+  "catchphrase": "All Fired Up!",
+  "ranked": [
+   {
+    "clip": "004.wav",
+    "text": "ah fired up",
+    "conf": 0.0,
+    "score": 0.783
+   },
+   {
+    "clip": "017.wav",
+    "text": "and a balance when able to have read everything",
+    "conf": 0.0,
+    "score": 0.448
+   },
+   {
+    "clip": "081.wav",
+    "text": "the cave know it up",
+    "conf": 0.0,
+    "score": 0.387
+   },
+   {
+    "clip": "075.wav",
+    "text": "both afford to state",
+    "conf": 0.0,
+    "score": 0.351
+   },
+   {
+    "clip": "055.wav",
+    "text": "the defend all",
+    "conf": 0.0,
+    "score": 0.34
+   },
+   {
+    "clip": "038.wav",
+    "text": "the first of all too",
+    "conf": 0.0,
+    "score": 0.323
+   },
+   {
+    "clip": "037.wav",
+    "text": "then one and all",
+    "conf": 0.0,
+    "score": 0.321
+   },
+   {
+    "clip": "041.wav",
+    "text": "they're free and the lowest other",
+    "conf": 0.0,
+    "score": 0.306
+   },
+   {
+    "clip": "057.wav",
+    "text": "that tidy can be as the allah",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "003.wav",
+    "text": "liar for the states",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "051.wav",
+    "text": "as ab de i moved",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "036.wav",
+    "text": "therefore data hang from alan",
+    "conf": 0.0,
+    "score": 0.235
+   },
+   {
+    "clip": "035.wav",
+    "text": "be a filler spectacular",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "039.wav",
+    "text": "i love satire didn't",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "040.wav",
+    "text": "the different direct t",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "049.wav",
+    "text": "adventure costs",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "062.wav",
+    "text": "yeah would i go",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "007.wav",
+    "text": "sana to die for aka",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "085.wav",
+    "text": "india three remarry",
+    "conf": 0.0,
+    "score": 0.208
+   },
+   {
+    "clip": "006.wav",
+    "text": "less africa fiat",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "012.wav",
+    "text": "that yeah",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "031.wav",
+    "text": "the age showtime",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "092.wav",
+    "text": "the same a there",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "014.wav",
+    "text": "that guy",
+    "conf": 0.0,
+    "score": 0.202
+   },
+   {
+    "clip": "034.wav",
+    "text": "the of are you share",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "056.wav",
+    "text": "they followed a toss",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "054.wav",
+    "text": "then and fall",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "073.wav",
+    "text": "archaeology karma",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "086.wav",
+    "text": "no retro say that",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "050.wav",
+    "text": "that paid to level to you",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "083.wav",
+    "text": "genius i q leisure me",
+    "conf": 0.0,
+    "score": 0.194
+   },
+   {
+    "clip": "074.wav",
+    "text": "look for this girl of quite enough",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "053.wav",
+    "text": "ventura madama",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "076.wav",
+    "text": "born to battle",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "044.wav",
+    "text": "the holy scale and",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "080.wav",
+    "text": "see the parental tiger",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "084.wav",
+    "text": "nema it's off game",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "048.wav",
+    "text": "the of on to your hoped",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "095.wav",
+    "text": "the see fought see peak",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "030.wav",
+    "text": "it is show time",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "082.wav",
+    "text": "never back down",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "008.wav",
+    "text": "man guys if whoever",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "005.wav",
+    "text": "just youtube",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "046.wav",
+    "text": "the sky lads",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "070.wav",
+    "text": "can handle the horns",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "033.wav",
+    "text": "this is showtime",
+    "conf": 0.0,
+    "score": 0.171
+   },
+   {
+    "clip": "045.wav",
+    "text": "thirty sky lands",
+    "conf": 0.0,
+    "score": 0.171
+   },
+   {
+    "clip": "060.wav",
+    "text": "that that attack neat out",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "078.wav",
+    "text": "so much came from go than",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "052.wav",
+    "text": "love ventura me gamma",
+    "conf": 0.0,
+    "score": 0.166
+   },
+   {
+    "clip": "061.wav",
+    "text": "don't dare the dragon",
+    "conf": 0.0,
+    "score": 0.166
+   },
+   {
+    "clip": "079.wav",
+    "text": "that op ed come back today",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "042.wav",
+    "text": "for sky lands",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "043.wav",
+    "text": "for sky lands",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "064.wav",
+    "text": "most three that a drag",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "093.wav",
+    "text": "well beyond attack call me and orleans",
+    "conf": 0.0,
+    "score": 0.158
+   },
+   {
+    "clip": "047.wav",
+    "text": "this guy lands",
+    "conf": 0.0,
+    "score": 0.155
+   },
+   {
+    "clip": "091.wav",
+    "text": "how see",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "032.wav",
+    "text": "last so spectacular",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "013.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "023.wav",
+    "text": "ah ah",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "066.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.148
+   },
+   {
+    "clip": "071.wav",
+    "text": "just three ever see below",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "077.wav",
+    "text": "there's your grandma back",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "059.wav",
+    "text": "the different that looked other",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "072.wav",
+    "text": "hey not candy how now busy",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "058.wav",
+    "text": "in the affairs that el mundo",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "069.wav",
+    "text": "need to stomp they had horns",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "096.wav",
+    "text": "the lake these nation with them but a man",
+    "conf": 0.0,
+    "score": 0.131
+   },
+   {
+    "clip": "097.wav",
+    "text": "they still think i'm gonna go see become a quarter map",
+    "conf": 0.0,
+    "score": 0.131
+   },
+   {
+    "clip": "020.wav",
+    "text": "the fact that that that",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "063.wav",
+    "text": "the legged a met them the none",
+    "conf": 0.0,
+    "score": 0.126
+   },
+   {
+    "clip": "098.wav",
+    "text": "dammit there's gonna look like on don't quite nice",
+    "conf": 0.0,
+    "score": 0.126
+   },
+   {
+    "clip": "016.wav",
+    "text": "that when the in a hanging in yeah",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "087.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "088.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "089.wav",
+    "text": "the way",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "090.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "065.wav",
+    "text": "no they suffer yourself and ago",
+    "conf": 0.0,
+    "score": 0.102
+   },
+   {
+    "clip": "018.wav",
+    "text": "oh bah",
+    "conf": 0.0,
+    "score": 0.1
+   },
+   {
+    "clip": "068.wav",
+    "text": "the ha",
+    "conf": 0.0,
+    "score": 0.1
+   },
+   {
+    "clip": "094.wav",
+    "text": "mess with the dragon get the horns",
+    "conf": 0.0,
+    "score": 0.094
+   },
+   {
+    "clip": "024.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "026.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "067.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "019.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "000.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "001.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "002.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "009.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "011.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "021.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "025.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.025
+   },
+   {
+    "clip": "015.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "027.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "028.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "stealth-elf": {
+  "catchphrase": "Silent, But Deadly!",
+  "ranked": [
+   {
+    "clip": "074.wav",
+    "text": "no but but face",
+    "conf": 0.0,
+    "score": 0.463
+   },
+   {
+    "clip": "072.wav",
+    "text": "san is plenty",
+    "conf": 0.0,
+    "score": 0.436
+   },
+   {
+    "clip": "054.wav",
+    "text": "lies about take less",
+    "conf": 0.0,
+    "score": 0.43
+   },
+   {
+    "clip": "075.wav",
+    "text": "say to meet to me but i",
+    "conf": 0.0,
+    "score": 0.404
+   },
+   {
+    "clip": "080.wav",
+    "text": "the ticket know but by the address",
+    "conf": 0.0,
+    "score": 0.394
+   },
+   {
+    "clip": "091.wav",
+    "text": "so no norm but i rarely own brain",
+    "conf": 0.0,
+    "score": 0.382
+   },
+   {
+    "clip": "086.wav",
+    "text": "the know but er nurse of wifi and",
+    "conf": 0.0,
+    "score": 0.346
+   },
+   {
+    "clip": "013.wav",
+    "text": "they'll but i yes that up you below twenty cozy",
+    "conf": 0.0,
+    "score": 0.327
+   },
+   {
+    "clip": "071.wav",
+    "text": "kenya by this year",
+    "conf": 0.0,
+    "score": 0.3
+   },
+   {
+    "clip": "052.wav",
+    "text": "the time it gets me",
+    "conf": 0.0,
+    "score": 0.264
+   },
+   {
+    "clip": "070.wav",
+    "text": "you're not blame",
+    "conf": 0.0,
+    "score": 0.258
+   },
+   {
+    "clip": "064.wav",
+    "text": "not too late",
+    "conf": 0.0,
+    "score": 0.257
+   },
+   {
+    "clip": "008.wav",
+    "text": "one in ten dollars",
+    "conf": 0.0,
+    "score": 0.249
+   },
+   {
+    "clip": "063.wav",
+    "text": "nope nope get that",
+    "conf": 0.0,
+    "score": 0.249
+   },
+   {
+    "clip": "077.wav",
+    "text": "they didn't buy families you",
+    "conf": 0.0,
+    "score": 0.241
+   },
+   {
+    "clip": "084.wav",
+    "text": "snail that any canadian oc",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "087.wav",
+    "text": "the it and to need me yeah",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "060.wav",
+    "text": "now philly on feasts",
+    "conf": 0.0,
+    "score": 0.231
+   },
+   {
+    "clip": "003.wav",
+    "text": "look we get me",
+    "conf": 0.0,
+    "score": 0.228
+   },
+   {
+    "clip": "012.wav",
+    "text": "unless change nearly as and",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "090.wav",
+    "text": "cease to make on denver any",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "017.wav",
+    "text": "huge general",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "037.wav",
+    "text": "oh really",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "058.wav",
+    "text": "hide and seek",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "082.wav",
+    "text": "fast that not boston now",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "047.wav",
+    "text": "what didn't want that",
+    "conf": 0.0,
+    "score": 0.223
+   },
+   {
+    "clip": "078.wav",
+    "text": "he's acted ah nice blend say",
+    "conf": 0.0,
+    "score": 0.221
+   },
+   {
+    "clip": "057.wav",
+    "text": "on offers don't like yeah",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "007.wav",
+    "text": "they'll think that eva",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "085.wav",
+    "text": "save a lot to man on a bus dancer",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "056.wav",
+    "text": "semen feel sad a more than",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "083.wav",
+    "text": "my let me pass the ip that",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "088.wav",
+    "text": "now you see me then you didn't",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "010.wav",
+    "text": "you'll have to be quicker than that",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "040.wav",
+    "text": "when you least expect it",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "053.wav",
+    "text": "that a setback guess see",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "076.wav",
+    "text": "how did you not to blink",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "046.wav",
+    "text": "now you see me now you don't",
+    "conf": 0.0,
+    "score": 0.201
+   },
+   {
+    "clip": "049.wav",
+    "text": "home regularly way",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "022.wav",
+    "text": "last i heard i a chef or john",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "042.wav",
+    "text": "then manganese dammit the net",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "045.wav",
+    "text": "new see me and new neat mayor",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "068.wav",
+    "text": "duck do that",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "018.wav",
+    "text": "ah clear us",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "092.wav",
+    "text": "oh damn it is our know",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "000.wav",
+    "text": "the i mean",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "004.wav",
+    "text": "nice try",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "035.wav",
+    "text": "wow day",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "041.wav",
+    "text": "these you see me that yeah why",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "044.wav",
+    "text": "the main are still was bad ass",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "062.wav",
+    "text": "mahesh that for the wow",
+    "conf": 0.0,
+    "score": 0.186
+   },
+   {
+    "clip": "094.wav",
+    "text": "you can't see i'm heck yeah",
+    "conf": 0.0,
+    "score": 0.186
+   },
+   {
+    "clip": "048.wav",
+    "text": "it seems to me yet street ne",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "073.wav",
+    "text": "known this thread of the",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "081.wav",
+    "text": "hell man it's never know",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "093.wav",
+    "text": "like to meet seat come down bang boom",
+    "conf": 0.0,
+    "score": 0.179
+   },
+   {
+    "clip": "055.wav",
+    "text": "the see also my literally",
+    "conf": 0.0,
+    "score": 0.175
+   },
+   {
+    "clip": "009.wav",
+    "text": "the mood sneller sagged on dot",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "089.wav",
+    "text": "latimer enough whack lot in the library",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "023.wav",
+    "text": "ah one too narrow and i mean are none are now has she been that three them but as like lobby like as yazoo rubashkin that woo hoo ha ha ha ha ha one don't narrow and i mean are none none has she been that three back as like lobby like as yeah you are barking that woo hoo ha ha ha ha one i don't need",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "039.wav",
+    "text": "i knew yet moved from matt",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "059.wav",
+    "text": "july cash cash",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "050.wav",
+    "text": "would have me this out and know",
+    "conf": 0.0,
+    "score": 0.167
+   },
+   {
+    "clip": "079.wav",
+    "text": "yeah people they to the non this the",
+    "conf": 0.0,
+    "score": 0.166
+   },
+   {
+    "clip": "005.wav",
+    "text": "the or a see",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "006.wav",
+    "text": "tough as lot",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "069.wav",
+    "text": "me i my need",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "026.wav",
+    "text": "this is the",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "065.wav",
+    "text": "who who say",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh yeah",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "051.wav",
+    "text": "the average los mag don't luck",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "043.wav",
+    "text": "then domain of the less pay the",
+    "conf": 0.0,
+    "score": 0.149
+   },
+   {
+    "clip": "061.wav",
+    "text": "for a tivo a me stereos",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "067.wav",
+    "text": "dark dark the replicator the",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "096.wav",
+    "text": "that's don't need these to touch them v",
+    "conf": 0.0,
+    "score": 0.14
+   },
+   {
+    "clip": "098.wav",
+    "text": "look at no point at which point the thirteenth annual",
+    "conf": 0.0,
+    "score": 0.135
+   },
+   {
+    "clip": "066.wav",
+    "text": "flap to spat",
+    "conf": 0.0,
+    "score": 0.133
+   },
+   {
+    "clip": "097.wav",
+    "text": "char can have a the ball thought of the man",
+    "conf": 0.0,
+    "score": 0.13
+   },
+   {
+    "clip": "095.wav",
+    "text": "the core of what battersea a mile",
+    "conf": 0.0,
+    "score": 0.124
+   },
+   {
+    "clip": "031.wav",
+    "text": "yeah z",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "025.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "027.wav",
+    "text": "lol",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "021.wav",
+    "text": "i she mine does to talk i been carrying much matter how her hair job so fast yeah i mean",
+    "conf": 0.0,
+    "score": 0.096
+   },
+   {
+    "clip": "014.wav",
+    "text": "that said than had a cassette imagine wrap it up",
+    "conf": 0.0,
+    "score": 0.091
+   },
+   {
+    "clip": "011.wav",
+    "text": "for the hot tamale clip your heartbeat gossip",
+    "conf": 0.0,
+    "score": 0.067
+   },
+   {
+    "clip": "016.wav",
+    "text": "gosh",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "019.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "020.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "024.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "030.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "032.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "034.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "038.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "033.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.018
+   },
+   {
+    "clip": "015.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "029.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "028.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "036.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "stump-smash": {
+  "catchphrase": "Drop The Hammer!",
+  "ranked": [
+   {
+    "clip": "025.wav",
+    "text": "that the hammer",
+    "conf": 0.0,
+    "score": 0.655
+   },
+   {
+    "clip": "073.wav",
+    "text": "you did stubs matched her",
+    "conf": 0.0,
+    "score": 0.487
+   },
+   {
+    "clip": "084.wav",
+    "text": "you're dead her go",
+    "conf": 0.0,
+    "score": 0.445
+   },
+   {
+    "clip": "077.wav",
+    "text": "they have i notice that are thought her",
+    "conf": 0.0,
+    "score": 0.413
+   },
+   {
+    "clip": "068.wav",
+    "text": "you go on a play old movies are more",
+    "conf": 0.0,
+    "score": 0.373
+   },
+   {
+    "clip": "023.wav",
+    "text": "the name or",
+    "conf": 0.0,
+    "score": 0.35
+   },
+   {
+    "clip": "014.wav",
+    "text": "the other",
+    "conf": 0.0,
+    "score": 0.323
+   },
+   {
+    "clip": "015.wav",
+    "text": "the other",
+    "conf": 0.0,
+    "score": 0.323
+   },
+   {
+    "clip": "037.wav",
+    "text": "the that three",
+    "conf": 0.0,
+    "score": 0.311
+   },
+   {
+    "clip": "031.wav",
+    "text": "combs their smash",
+    "conf": 0.0,
+    "score": 0.285
+   },
+   {
+    "clip": "078.wav",
+    "text": "they are not be",
+    "conf": 0.0,
+    "score": 0.28
+   },
+   {
+    "clip": "054.wav",
+    "text": "mark hey back go",
+    "conf": 0.0,
+    "score": 0.268
+   },
+   {
+    "clip": "049.wav",
+    "text": "don't like to smash",
+    "conf": 0.0,
+    "score": 0.264
+   },
+   {
+    "clip": "048.wav",
+    "text": "stop little storm by",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "050.wav",
+    "text": "there's water causer",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "036.wav",
+    "text": "the end for that bomb",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "040.wav",
+    "text": "o j that a lot better",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "056.wav",
+    "text": "var top law",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "058.wav",
+    "text": "the oda to ski archer",
+    "conf": 0.0,
+    "score": 0.246
+   },
+   {
+    "clip": "065.wav",
+    "text": "if you gotta say",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "038.wav",
+    "text": "phase where is our war",
+    "conf": 0.0,
+    "score": 0.238
+   },
+   {
+    "clip": "087.wav",
+    "text": "do best up guess act clara",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "029.wav",
+    "text": "the royal albert p your",
+    "conf": 0.0,
+    "score": 0.231
+   },
+   {
+    "clip": "021.wav",
+    "text": "leave me alone or",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "022.wav",
+    "text": "leave me alone or",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "076.wav",
+    "text": "the status quo yeah chatter",
+    "conf": 0.0,
+    "score": 0.227
+   },
+   {
+    "clip": "055.wav",
+    "text": "next stop smash up",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "080.wav",
+    "text": "v to wow cause law",
+    "conf": 0.0,
+    "score": 0.22
+   },
+   {
+    "clip": "030.wav",
+    "text": "got dodgertown",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "042.wav",
+    "text": "a to bury dawn",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "083.wav",
+    "text": "there's i know",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "059.wav",
+    "text": "the ota how much i can",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "000.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "007.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.213
+   },
+   {
+    "clip": "044.wav",
+    "text": "fab does ah",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "081.wav",
+    "text": "bolden fate",
+    "conf": 0.0,
+    "score": 0.212
+   },
+   {
+    "clip": "027.wav",
+    "text": "oh my laws",
+    "conf": 0.0,
+    "score": 0.211
+   },
+   {
+    "clip": "062.wav",
+    "text": "hey cause say oh",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "067.wav",
+    "text": "that you but up the wrong tree",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "047.wav",
+    "text": "then there's got to pay",
+    "conf": 0.0,
+    "score": 0.207
+   },
+   {
+    "clip": "034.wav",
+    "text": "there are no one of the culprit",
+    "conf": 0.0,
+    "score": 0.205
+   },
+   {
+    "clip": "088.wav",
+    "text": "avatar victorious yeah charm day",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "074.wav",
+    "text": "tire fe kabul are you",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "053.wav",
+    "text": "stone level stop last dad",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "069.wav",
+    "text": "do lakes the humid and fashion bob and",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "082.wav",
+    "text": "that allowed to go",
+    "conf": 0.0,
+    "score": 0.192
+   },
+   {
+    "clip": "024.wav",
+    "text": "news lucid ends",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "057.wav",
+    "text": "the smartest klein heights",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "064.wav",
+    "text": "what is going to unclear media army",
+    "conf": 0.0,
+    "score": 0.187
+   },
+   {
+    "clip": "046.wav",
+    "text": "own duet crash",
+    "conf": 0.0,
+    "score": 0.186
+   },
+   {
+    "clip": "033.wav",
+    "text": "the sculptor my stats adventure",
+    "conf": 0.0,
+    "score": 0.185
+   },
+   {
+    "clip": "041.wav",
+    "text": "oh you're out of or",
+    "conf": 0.0,
+    "score": 0.185
+   },
+   {
+    "clip": "043.wav",
+    "text": "yeah to smash",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "061.wav",
+    "text": "jag graduates",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "089.wav",
+    "text": "they've already a piece of their",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "026.wav",
+    "text": "george street bought all",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "060.wav",
+    "text": "i'm in darkness to wreck",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "086.wav",
+    "text": "day kazu",
+    "conf": 0.0,
+    "score": 0.171
+   },
+   {
+    "clip": "006.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "071.wav",
+    "text": "they're give up guys that will",
+    "conf": 0.0,
+    "score": 0.17
+   },
+   {
+    "clip": "013.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "019.wav",
+    "text": "one guy",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "039.wav",
+    "text": "damn fun stuff mom fun",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "075.wav",
+    "text": "best kebab shop",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "085.wav",
+    "text": "you been dubbed",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "070.wav",
+    "text": "the same a so control albatross but yeah to",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "066.wav",
+    "text": "the yeah but if a kid a bogus olds",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "035.wav",
+    "text": "carrier and goldberg",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "072.wav",
+    "text": "you've got a sparkler he'll a lotta",
+    "conf": 0.0,
+    "score": 0.151
+   },
+   {
+    "clip": "032.wav",
+    "text": "lord all hundred pounds on paw",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "052.wav",
+    "text": "last time pr just yeah trotter",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "045.wav",
+    "text": "i spy combat",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "063.wav",
+    "text": "sure if nine it's spikes stellar",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "051.wav",
+    "text": "tom fun on such mutton",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "028.wav",
+    "text": "this guy child martello",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "018.wav",
+    "text": "ten are",
+    "conf": 0.0,
+    "score": 0.128
+   },
+   {
+    "clip": "008.wav",
+    "text": "see",
+    "conf": 0.0,
+    "score": 0.12
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "016.wav",
+    "text": "he",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "017.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "079.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "011.wav",
+    "text": "the way to get it will declare were obese each time i do",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "010.wav",
+    "text": "maybe it but we only ah honor roll know",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "012.wav",
+    "text": "but",
+    "conf": 0.0,
+    "score": 0.07
+   },
+   {
+    "clip": "004.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "009.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "020.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "sunburn": {
+  "catchphrase": "Roast N' Toast!",
+  "ranked": [
+   {
+    "clip": "012.wav",
+    "text": "right that i",
+    "conf": 0.0,
+    "score": 0.236
+   },
+   {
+    "clip": "008.wav",
+    "text": "right there",
+    "conf": 0.0,
+    "score": 0.235
+   },
+   {
+    "clip": "013.wav",
+    "text": "you know",
+    "conf": 0.0,
+    "score": 0.233
+   },
+   {
+    "clip": "010.wav",
+    "text": "where are the how",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "011.wav",
+    "text": "or issue",
+    "conf": 0.0,
+    "score": 0.19
+   },
+   {
+    "clip": "022.wav",
+    "text": "today",
+    "conf": 0.0,
+    "score": 0.188
+   },
+   {
+    "clip": "014.wav",
+    "text": "a long",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "015.wav",
+    "text": "and he",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "026.wav",
+    "text": "the day",
+    "conf": 0.0,
+    "score": 0.099
+   },
+   {
+    "clip": "024.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.088
+   },
+   {
+    "clip": "021.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.084
+   },
+   {
+    "clip": "020.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "000.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "019.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "028.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.075
+   },
+   {
+    "clip": "007.wav",
+    "text": "like",
+    "conf": 0.0,
+    "score": 0.031
+   },
+   {
+    "clip": "009.wav",
+    "text": "why",
+    "conf": 0.0,
+    "score": 0.023
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "003.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "004.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "018.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "023.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "025.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "027.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "terrafin": {
+  "catchphrase": "It's Feeding Time!",
+  "ranked": [
+   {
+    "clip": "025.wav",
+    "text": "that's ah",
+    "conf": 0.0,
+    "score": 0.341
+   },
+   {
+    "clip": "021.wav",
+    "text": "or proper by retire",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "002.wav",
+    "text": "pat burrow dry",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "009.wav",
+    "text": "ah my bad guy",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "014.wav",
+    "text": "the earth",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "003.wav",
+    "text": "barbara barbara blog and ten",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "020.wav",
+    "text": "bam bam bam bam i'm glad i'm back",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "019.wav",
+    "text": "bam bam bam bam bam her bam",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "018.wav",
+    "text": "there are",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "029.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "008.wav",
+    "text": "rep barbara barbara",
+    "conf": 0.0,
+    "score": 0.139
+   },
+   {
+    "clip": "032.wav",
+    "text": "my bad app",
+    "conf": 0.0,
+    "score": 0.125
+   },
+   {
+    "clip": "004.wav",
+    "text": "all bad black lab rat math ah",
+    "conf": 0.0,
+    "score": 0.117
+   },
+   {
+    "clip": "006.wav",
+    "text": "bad guy",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "013.wav",
+    "text": "herrera",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "030.wav",
+    "text": "that ah",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "005.wav",
+    "text": "the ah bah what bye bye bye bye bye bye bye bye bye bye bye",
+    "conf": 0.0,
+    "score": 0.112
+   },
+   {
+    "clip": "031.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "012.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.108
+   },
+   {
+    "clip": "015.wav",
+    "text": "current",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "000.wav",
+    "text": "ah ah",
+    "conf": 0.0,
+    "score": 0.07
+   },
+   {
+    "clip": "001.wav",
+    "text": "iraq",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "022.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "007.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "011.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "023.wav",
+    "text": "or",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "027.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "028.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.012
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "trigger-happy": {
+  "catchphrase": "No Gold, No Glory!",
+  "ranked": [
+   {
+    "clip": "025.wav",
+    "text": "didn't have the",
+    "conf": 0.0,
+    "score": 0.21
+   },
+   {
+    "clip": "000.wav",
+    "text": "ah really",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "001.wav",
+    "text": "the hell",
+    "conf": 0.0,
+    "score": 0.163
+   },
+   {
+    "clip": "003.wav",
+    "text": "ah well",
+    "conf": 0.0,
+    "score": 0.161
+   },
+   {
+    "clip": "020.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.16
+   },
+   {
+    "clip": "009.wav",
+    "text": "ah ah edit",
+    "conf": 0.0,
+    "score": 0.132
+   },
+   {
+    "clip": "027.wav",
+    "text": "ha ha ha",
+    "conf": 0.0,
+    "score": 0.125
+   },
+   {
+    "clip": "028.wav",
+    "text": "okay",
+    "conf": 0.0,
+    "score": 0.115
+   },
+   {
+    "clip": "014.wav",
+    "text": "oh man",
+    "conf": 0.0,
+    "score": 0.078
+   },
+   {
+    "clip": "023.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.074
+   },
+   {
+    "clip": "011.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.062
+   },
+   {
+    "clip": "018.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.062
+   },
+   {
+    "clip": "002.wav",
+    "text": "stats",
+    "conf": 0.0,
+    "score": 0.031
+   },
+   {
+    "clip": "012.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.019
+   },
+   {
+    "clip": "007.wav",
+    "text": "as",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "019.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "030.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.013
+   },
+   {
+    "clip": "029.wav",
+    "text": "a",
+    "conf": 0.0,
+    "score": 0.006
+   },
+   {
+    "clip": "004.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "017.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "021.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "026.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "031.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "voodood": {
+  "catchphrase": "Axe First, Questions Later!",
+  "ranked": [
+   {
+    "clip": "008.wav",
+    "text": "the or whatever",
+    "conf": 0.0,
+    "score": 0.24
+   },
+   {
+    "clip": "023.wav",
+    "text": "what about know all",
+    "conf": 0.0,
+    "score": 0.24
+   },
+   {
+    "clip": "018.wav",
+    "text": "are you live",
+    "conf": 0.0,
+    "score": 0.218
+   },
+   {
+    "clip": "026.wav",
+    "text": "oh no no no longer",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "009.wav",
+    "text": "earlier you know where where where",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "017.wav",
+    "text": "the whole air",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "038.wav",
+    "text": "the old all",
+    "conf": 0.0,
+    "score": 0.144
+   },
+   {
+    "clip": "012.wav",
+    "text": "the earth",
+    "conf": 0.0,
+    "score": 0.142
+   },
+   {
+    "clip": "027.wav",
+    "text": "oh lord",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "036.wav",
+    "text": "to roll",
+    "conf": 0.0,
+    "score": 0.141
+   },
+   {
+    "clip": "025.wav",
+    "text": "oh your member india",
+    "conf": 0.0,
+    "score": 0.14
+   },
+   {
+    "clip": "011.wav",
+    "text": "or earth or",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "013.wav",
+    "text": "cooper",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "024.wav",
+    "text": "monday",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "004.wav",
+    "text": "ga ga",
+    "conf": 0.0,
+    "score": 0.11
+   },
+   {
+    "clip": "010.wav",
+    "text": "you know",
+    "conf": 0.0,
+    "score": 0.087
+   },
+   {
+    "clip": "022.wav",
+    "text": "nominal",
+    "conf": 0.0,
+    "score": 0.084
+   },
+   {
+    "clip": "032.wav",
+    "text": "oh dear",
+    "conf": 0.0,
+    "score": 0.084
+   },
+   {
+    "clip": "037.wav",
+    "text": "oh man",
+    "conf": 0.0,
+    "score": 0.082
+   },
+   {
+    "clip": "003.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.08
+   },
+   {
+    "clip": "019.wav",
+    "text": "no no",
+    "conf": 0.0,
+    "score": 0.08
+   },
+   {
+    "clip": "021.wav",
+    "text": "oh no",
+    "conf": 0.0,
+    "score": 0.08
+   },
+   {
+    "clip": "034.wav",
+    "text": "or oh",
+    "conf": 0.0,
+    "score": 0.08
+   },
+   {
+    "clip": "030.wav",
+    "text": "all",
+    "conf": 0.0,
+    "score": 0.076
+   },
+   {
+    "clip": "028.wav",
+    "text": "oh no rule",
+    "conf": 0.0,
+    "score": 0.066
+   },
+   {
+    "clip": "005.wav",
+    "text": "roll them",
+    "conf": 0.0,
+    "score": 0.062
+   },
+   {
+    "clip": "033.wav",
+    "text": "oh you're",
+    "conf": 0.0,
+    "score": 0.062
+   },
+   {
+    "clip": "016.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.047
+   },
+   {
+    "clip": "029.wav",
+    "text": "no a",
+    "conf": 0.0,
+    "score": 0.047
+   },
+   {
+    "clip": "000.wav",
+    "text": "ra",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "001.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "002.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "006.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "015.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "020.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "031.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "035.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.041
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "warnado": {
+  "catchphrase": "For the Wind!",
+  "ranked": [
+   {
+    "clip": "024.wav",
+    "text": "the holiday",
+    "conf": 0.0,
+    "score": 0.326
+   },
+   {
+    "clip": "000.wav",
+    "text": "the whatever and",
+    "conf": 0.0,
+    "score": 0.3
+   },
+   {
+    "clip": "036.wav",
+    "text": "a oh where lie",
+    "conf": 0.0,
+    "score": 0.293
+   },
+   {
+    "clip": "019.wav",
+    "text": "then why",
+    "conf": 0.0,
+    "score": 0.292
+   },
+   {
+    "clip": "037.wav",
+    "text": "what happened",
+    "conf": 0.0,
+    "score": 0.272
+   },
+   {
+    "clip": "027.wav",
+    "text": "wow you who",
+    "conf": 0.0,
+    "score": 0.248
+   },
+   {
+    "clip": "006.wav",
+    "text": "oh ha ha",
+    "conf": 0.0,
+    "score": 0.247
+   },
+   {
+    "clip": "033.wav",
+    "text": "whoop whoop their a",
+    "conf": 0.0,
+    "score": 0.237
+   },
+   {
+    "clip": "035.wav",
+    "text": "though i don't he",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "038.wav",
+    "text": "pardon me",
+    "conf": 0.0,
+    "score": 0.204
+   },
+   {
+    "clip": "003.wav",
+    "text": "you do you go",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "008.wav",
+    "text": "oh yea",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "012.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "014.wav",
+    "text": "there",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "034.wav",
+    "text": "they vargo lol he",
+    "conf": 0.0,
+    "score": 0.195
+   },
+   {
+    "clip": "032.wav",
+    "text": "while through our whole",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "010.wav",
+    "text": "may our my hair by abbott do",
+    "conf": 0.0,
+    "score": 0.178
+   },
+   {
+    "clip": "011.wav",
+    "text": "him around up by",
+    "conf": 0.0,
+    "score": 0.171
+   },
+   {
+    "clip": "009.wav",
+    "text": "the matter or are you",
+    "conf": 0.0,
+    "score": 0.166
+   },
+   {
+    "clip": "025.wav",
+    "text": "yeah how year",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "028.wav",
+    "text": "though",
+    "conf": 0.0,
+    "score": 0.15
+   },
+   {
+    "clip": "001.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "004.wav",
+    "text": "her",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "005.wav",
+    "text": "her",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "015.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "016.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "021.wav",
+    "text": "and",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "022.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "029.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "020.wav",
+    "text": "laura",
+    "conf": 0.0,
+    "score": 0.095
+   },
+   {
+    "clip": "002.wav",
+    "text": "what",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "023.wav",
+    "text": "year",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "013.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "017.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "018.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "030.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "031.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.081
+   }
+  ]
+ },
+ "wham-shell": {
+  "catchphrase": "Brace for the Mace!",
+  "ranked": [
+   {
+    "clip": "031.wav",
+    "text": "oh was those photos all",
+    "conf": 0.0,
+    "score": 0.232
+   },
+   {
+    "clip": "016.wav",
+    "text": "no removal rumor know",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "007.wav",
+    "text": "oh my bad",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "023.wav",
+    "text": "the was i ah",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "028.wav",
+    "text": "the aluminum",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "030.wav",
+    "text": "several george was an our",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "017.wav",
+    "text": "all really no real world rollover",
+    "conf": 0.0,
+    "score": 0.196
+   },
+   {
+    "clip": "032.wav",
+    "text": "oh also a lot sorrow",
+    "conf": 0.0,
+    "score": 0.185
+   },
+   {
+    "clip": "020.wav",
+    "text": "obama",
+    "conf": 0.0,
+    "score": 0.184
+   },
+   {
+    "clip": "003.wav",
+    "text": "oh no oh",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "004.wav",
+    "text": "oh my god",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "033.wav",
+    "text": "the long",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "018.wav",
+    "text": "the old old old old models general rule",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "025.wav",
+    "text": "earlier",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "029.wav",
+    "text": "mom mom",
+    "conf": 0.0,
+    "score": 0.147
+   },
+   {
+    "clip": "006.wav",
+    "text": "ah ah",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "027.wav",
+    "text": "will on",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "012.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "024.wav",
+    "text": "hello",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "026.wav",
+    "text": "right",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "010.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.104
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "001.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "005.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "008.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "009.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "013.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "014.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "019.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "035.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.101
+   },
+   {
+    "clip": "034.wav",
+    "text": "got a",
+    "conf": 0.0,
+    "score": 0.067
+   },
+   {
+    "clip": "002.wav",
+    "text": "good",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "022.wav",
+    "text": "iowa",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "021.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "whirlwind": {
+  "catchphrase": "Twists of fury!",
+  "ranked": [
+   {
+    "clip": "023.wav",
+    "text": "so i'm that guy",
+    "conf": 0.0,
+    "score": 0.249
+   },
+   {
+    "clip": "007.wav",
+    "text": "moon newman of",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "027.wav",
+    "text": "that be da da",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "008.wav",
+    "text": "that that ah",
+    "conf": 0.0,
+    "score": 0.224
+   },
+   {
+    "clip": "001.wav",
+    "text": "oh other you know",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "004.wav",
+    "text": "so they know down",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "014.wav",
+    "text": "thou car",
+    "conf": 0.0,
+    "score": 0.18
+   },
+   {
+    "clip": "018.wav",
+    "text": "there now people but that that",
+    "conf": 0.0,
+    "score": 0.149
+   },
+   {
+    "clip": "003.wav",
+    "text": "that allow",
+    "conf": 0.0,
+    "score": 0.146
+   },
+   {
+    "clip": "006.wav",
+    "text": "oh and ah",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "002.wav",
+    "text": "go lady",
+    "conf": 0.0,
+    "score": 0.136
+   },
+   {
+    "clip": "025.wav",
+    "text": "lobbied gonna need thought that",
+    "conf": 0.0,
+    "score": 0.105
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah kinda",
+    "conf": 0.0,
+    "score": 0.098
+   },
+   {
+    "clip": "000.wav",
+    "text": "ah ha",
+    "conf": 0.0,
+    "score": 0.083
+   },
+   {
+    "clip": "005.wav",
+    "text": "never",
+    "conf": 0.0,
+    "score": 0.083
+   },
+   {
+    "clip": "019.wav",
+    "text": "ah ah",
+    "conf": 0.0,
+    "score": 0.083
+   },
+   {
+    "clip": "011.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "013.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "017.wav",
+    "text": "neither bought by luck at the time",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "022.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.079
+   },
+   {
+    "clip": "009.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "016.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "028.wav",
+    "text": "it",
+    "conf": 0.0,
+    "score": 0.071
+   },
+   {
+    "clip": "010.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "012.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "015.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "020.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "021.wav",
+    "text": "he",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "024.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.014
+   }
+  ]
+ },
+ "wrecking-ball": {
+  "catchphrase": "Wreck-N-Roll!",
+  "ranked": [
+   {
+    "clip": "027.wav",
+    "text": "well",
+    "conf": 0.0,
+    "score": 0.258
+   },
+   {
+    "clip": "024.wav",
+    "text": "hammer and",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "029.wav",
+    "text": "the op",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "009.wav",
+    "text": "my mind",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "002.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "008.wav",
+    "text": "game",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "010.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "018.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.09
+   },
+   {
+    "clip": "004.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "015.wav",
+    "text": "why",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "022.wav",
+    "text": "hey",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "031.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.085
+   },
+   {
+    "clip": "016.wav",
+    "text": "eh",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "020.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "036.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.081
+   },
+   {
+    "clip": "003.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.033
+   },
+   {
+    "clip": "017.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.033
+   },
+   {
+    "clip": "028.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.033
+   },
+   {
+    "clip": "012.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "014.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "019.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "026.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "035.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "000.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "005.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "006.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "007.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "011.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "013.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "021.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "023.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "025.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "030.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "032.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "033.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "034.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "037.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "038.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "zap": {
+  "catchphrase": "Ride the Lightning!",
+  "ranked": [
+   {
+    "clip": "013.wav",
+    "text": "why why going to",
+    "conf": 0.0,
+    "score": 0.499
+   },
+   {
+    "clip": "003.wav",
+    "text": "right now",
+    "conf": 0.0,
+    "score": 0.25
+   },
+   {
+    "clip": "000.wav",
+    "text": "the up to",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "020.wav",
+    "text": "the behavior",
+    "conf": 0.0,
+    "score": 0.217
+   },
+   {
+    "clip": "026.wav",
+    "text": "i'm glad it",
+    "conf": 0.0,
+    "score": 0.185
+   },
+   {
+    "clip": "034.wav",
+    "text": "higher",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "007.wav",
+    "text": "what will happen",
+    "conf": 0.0,
+    "score": 0.168
+   },
+   {
+    "clip": "005.wav",
+    "text": "the",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "030.wav",
+    "text": "that",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "027.wav",
+    "text": "why not",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "010.wav",
+    "text": "i am",
+    "conf": 0.0,
+    "score": 0.104
+   },
+   {
+    "clip": "021.wav",
+    "text": "look",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "006.wav",
+    "text": "now",
+    "conf": 0.0,
+    "score": 0.06
+   },
+   {
+    "clip": "009.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "012.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "018.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "022.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "029.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.056
+   },
+   {
+    "clip": "011.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.017
+   },
+   {
+    "clip": "001.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "002.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "004.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "008.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "014.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "015.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "016.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "017.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "019.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "023.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "024.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "025.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "028.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "031.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "032.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "033.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "035.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ },
+ "zook": {
+  "catchphrase": "Locked and Loaded!",
+  "ranked": [
+   {
+    "clip": "054.wav",
+    "text": "though could find but ah",
+    "conf": 0.0,
+    "score": 0.449
+   },
+   {
+    "clip": "048.wav",
+    "text": "load of the pot bomb",
+    "conf": 0.0,
+    "score": 0.432
+   },
+   {
+    "clip": "041.wav",
+    "text": "so cannot read",
+    "conf": 0.0,
+    "score": 0.286
+   },
+   {
+    "clip": "055.wav",
+    "text": "does that home",
+    "conf": 0.0,
+    "score": 0.286
+   },
+   {
+    "clip": "053.wav",
+    "text": "like smash this bomb",
+    "conf": 0.0,
+    "score": 0.255
+   },
+   {
+    "clip": "052.wav",
+    "text": "the about fail boom",
+    "conf": 0.0,
+    "score": 0.239
+   },
+   {
+    "clip": "026.wav",
+    "text": "they cannot bear",
+    "conf": 0.0,
+    "score": 0.23
+   },
+   {
+    "clip": "081.wav",
+    "text": "how do like that",
+    "conf": 0.0,
+    "score": 0.23
+   },
+   {
+    "clip": "004.wav",
+    "text": "sorry vs in and",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "034.wav",
+    "text": "well as so boom",
+    "conf": 0.0,
+    "score": 0.229
+   },
+   {
+    "clip": "001.wav",
+    "text": "fresh larger",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "002.wav",
+    "text": "the damn bad",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "029.wav",
+    "text": "than my nose",
+    "conf": 0.0,
+    "score": 0.226
+   },
+   {
+    "clip": "059.wav",
+    "text": "follow sports vous",
+    "conf": 0.0,
+    "score": 0.223
+   },
+   {
+    "clip": "031.wav",
+    "text": "there are no start now",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "063.wav",
+    "text": "no guy does luke's out",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "078.wav",
+    "text": "they very up a toddler",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "079.wav",
+    "text": "gonna learn about that",
+    "conf": 0.0,
+    "score": 0.216
+   },
+   {
+    "clip": "050.wav",
+    "text": "here comes the boom",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "062.wav",
+    "text": "he is so good and zu then of long",
+    "conf": 0.0,
+    "score": 0.214
+   },
+   {
+    "clip": "065.wav",
+    "text": "if get past so can't",
+    "conf": 0.0,
+    "score": 0.207
+   },
+   {
+    "clip": "066.wav",
+    "text": "kill v about joke",
+    "conf": 0.0,
+    "score": 0.206
+   },
+   {
+    "clip": "044.wav",
+    "text": "stage for the be",
+    "conf": 0.0,
+    "score": 0.203
+   },
+   {
+    "clip": "068.wav",
+    "text": "the ah for going to get a bigger",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "071.wav",
+    "text": "ah makes this match leftist realized",
+    "conf": 0.0,
+    "score": 0.2
+   },
+   {
+    "clip": "082.wav",
+    "text": "hey is that gm",
+    "conf": 0.0,
+    "score": 0.198
+   },
+   {
+    "clip": "077.wav",
+    "text": "given it income ah",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "084.wav",
+    "text": "no that the air pietro to",
+    "conf": 0.0,
+    "score": 0.197
+   },
+   {
+    "clip": "046.wav",
+    "text": "now do boom",
+    "conf": 0.0,
+    "score": 0.193
+   },
+   {
+    "clip": "042.wav",
+    "text": "joker i'll toss aggravates you",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "045.wav",
+    "text": "voter be",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "089.wav",
+    "text": "dean buddy bob griese das boot",
+    "conf": 0.0,
+    "score": 0.191
+   },
+   {
+    "clip": "080.wav",
+    "text": "hey reduction of on",
+    "conf": 0.0,
+    "score": 0.189
+   },
+   {
+    "clip": "067.wav",
+    "text": "though though so kind as well though",
+    "conf": 0.0,
+    "score": 0.183
+   },
+   {
+    "clip": "073.wav",
+    "text": "most must that but a lot of zuma",
+    "conf": 0.0,
+    "score": 0.182
+   },
+   {
+    "clip": "061.wav",
+    "text": "they've got they've all boom",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "083.wav",
+    "text": "a big effect yeah that's",
+    "conf": 0.0,
+    "score": 0.181
+   },
+   {
+    "clip": "005.wav",
+    "text": "the astronaut charged",
+    "conf": 0.0,
+    "score": 0.176
+   },
+   {
+    "clip": "012.wav",
+    "text": "the the beauty of day be do be a double",
+    "conf": 0.0,
+    "score": 0.172
+   },
+   {
+    "clip": "027.wav",
+    "text": "merge two days",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "051.wav",
+    "text": "during the bay",
+    "conf": 0.0,
+    "score": 0.169
+   },
+   {
+    "clip": "033.wav",
+    "text": "marriage low i da bomb big time",
+    "conf": 0.0,
+    "score": 0.167
+   },
+   {
+    "clip": "049.wav",
+    "text": "there's not a third of whom",
+    "conf": 0.0,
+    "score": 0.165
+   },
+   {
+    "clip": "056.wav",
+    "text": "that follow be tailored",
+    "conf": 0.0,
+    "score": 0.164
+   },
+   {
+    "clip": "016.wav",
+    "text": "ha tae bo door to buy ah",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "025.wav",
+    "text": "ha tae bo door to buy ah",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "028.wav",
+    "text": "now though",
+    "conf": 0.0,
+    "score": 0.159
+   },
+   {
+    "clip": "058.wav",
+    "text": "i go boom",
+    "conf": 0.0,
+    "score": 0.157
+   },
+   {
+    "clip": "036.wav",
+    "text": "the what you don't throw alexander",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "037.wav",
+    "text": "why is that we put a a to sir",
+    "conf": 0.0,
+    "score": 0.156
+   },
+   {
+    "clip": "057.wav",
+    "text": "my head",
+    "conf": 0.0,
+    "score": 0.154
+   },
+   {
+    "clip": "047.wav",
+    "text": "sides fit us bomb",
+    "conf": 0.0,
+    "score": 0.153
+   },
+   {
+    "clip": "030.wav",
+    "text": "logo",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "076.wav",
+    "text": "the guy new go but ah",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "087.wav",
+    "text": "to do",
+    "conf": 0.0,
+    "score": 0.152
+   },
+   {
+    "clip": "069.wav",
+    "text": "ha better lot do next time julia",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "074.wav",
+    "text": "cobra of that google the ah",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "075.wav",
+    "text": "the be really define who ah",
+    "conf": 0.0,
+    "score": 0.145
+   },
+   {
+    "clip": "035.wav",
+    "text": "they made the bomb about marriage does",
+    "conf": 0.0,
+    "score": 0.143
+   },
+   {
+    "clip": "070.wav",
+    "text": "ah you i please don't shove the portions were",
+    "conf": 0.0,
+    "score": 0.139
+   },
+   {
+    "clip": "032.wav",
+    "text": "they had no it's it's of global",
+    "conf": 0.0,
+    "score": 0.13
+   },
+   {
+    "clip": "072.wav",
+    "text": "the drama your lot of seem about that",
+    "conf": 0.0,
+    "score": 0.129
+   },
+   {
+    "clip": "006.wav",
+    "text": "there there is no",
+    "conf": 0.0,
+    "score": 0.126
+   },
+   {
+    "clip": "003.wav",
+    "text": "that gee if i go",
+    "conf": 0.0,
+    "score": 0.121
+   },
+   {
+    "clip": "064.wav",
+    "text": "does so this joke hello",
+    "conf": 0.0,
+    "score": 0.119
+   },
+   {
+    "clip": "039.wav",
+    "text": "the current top",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "060.wav",
+    "text": "burbank",
+    "conf": 0.0,
+    "score": 0.116
+   },
+   {
+    "clip": "038.wav",
+    "text": "did by",
+    "conf": 0.0,
+    "score": 0.114
+   },
+   {
+    "clip": "007.wav",
+    "text": "ah ha",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "015.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "024.wav",
+    "text": "ha ha",
+    "conf": 0.0,
+    "score": 0.111
+   },
+   {
+    "clip": "014.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "023.wav",
+    "text": "yeah",
+    "conf": 0.0,
+    "score": 0.109
+   },
+   {
+    "clip": "040.wav",
+    "text": "garza they go",
+    "conf": 0.0,
+    "score": 0.106
+   },
+   {
+    "clip": "043.wav",
+    "text": "they were so",
+    "conf": 0.0,
+    "score": 0.102
+   },
+   {
+    "clip": "013.wav",
+    "text": "door beat up see but wouldn't that be bob bill",
+    "conf": 0.0,
+    "score": 0.094
+   },
+   {
+    "clip": "085.wav",
+    "text": "the get there but i say so",
+    "conf": 0.0,
+    "score": 0.086
+   },
+   {
+    "clip": "018.wav",
+    "text": "wow",
+    "conf": 0.0,
+    "score": 0.063
+   },
+   {
+    "clip": "000.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "008.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "009.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "010.wav",
+    "text": "oh",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "011.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "020.wav",
+    "text": "no",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "021.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "022.wav",
+    "text": "ha",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "086.wav",
+    "text": "ah",
+    "conf": 0.0,
+    "score": 0.059
+   },
+   {
+    "clip": "088.wav",
+    "text": "guy",
+    "conf": 0.0,
+    "score": 0.018
+   },
+   {
+    "clip": "017.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   },
+   {
+    "clip": "019.wav",
+    "text": "",
+    "conf": 0.0,
+    "score": 0.0
+   }
+  ]
+ }
+}

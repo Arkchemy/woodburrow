@@ -7,3 +7,11 @@ node_modules/
 .env
 .env.*
 !.env.example
+
+# The extracted voice lines are kept as an archive, the way the Skylanders
+# wiki hosts catchphrase audio for documentation. Provenance and the
+# extraction method are recorded in branding/voicelines/FINDINGS.md.
+
+# Working intermediates, not deliverables
+branding/icon/out/
+branding/icon/out-tight/

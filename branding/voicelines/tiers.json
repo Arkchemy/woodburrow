@@ -1,0 +1,162 @@
+{
+ "whirlwind": {
+  "clips": 30,
+  "tier": "reduced",
+  "arc": "000_AirDragon"
+ },
+ "sonic-boom": {
+  "clips": 27,
+  "tier": "reduced",
+  "arc": "001_Gryphon"
+ },
+ "warnado": {
+  "clips": 39,
+  "tier": "reduced",
+  "arc": "002_SkyTurtle"
+ },
+ "lightning-rod": {
+  "clips": 102,
+  "tier": "full",
+  "arc": "003_StormGiant"
+ },
+ "bash": {
+  "clips": 36,
+  "tier": "reduced",
+  "arc": "004_Rock_Dragon"
+ },
+ "terrafin": {
+  "clips": 33,
+  "tier": "reduced",
+  "arc": "005_LandShark"
+ },
+ "dino-rang": {
+  "clips": 33,
+  "tier": "reduced",
+  "arc": "006_DinoRang"
+ },
+ "prism-break": {
+  "clips": 30,
+  "tier": "reduced",
+  "arc": "007_GemGolem"
+ },
+ "sunburn": {
+  "clips": 30,
+  "tier": "reduced",
+  "arc": "008_FireDragon"
+ },
+ "eruptor": {
+  "clips": 105,
+  "tier": "full",
+  "arc": "009_Eruptor"
+ },
+ "ignitor": {
+  "clips": 78,
+  "tier": "full",
+  "arc": "010_FlameKnight"
+ },
+ "flameslinger": {
+  "clips": 113,
+  "tier": "full",
+  "arc": "011_FireElf"
+ },
+ "zap": {
+  "clips": 36,
+  "tier": "reduced",
+  "arc": "012_SeaDragon"
+ },
+ "wham-shell": {
+  "clips": 36,
+  "tier": "reduced",
+  "arc": "013_Crab"
+ },
+ "gill-grunt": {
+  "clips": 98,
+  "tier": "full",
+  "arc": "014_GillGrunt"
+ },
+ "slam-bam": {
+  "clips": 44,
+  "tier": "reduced",
+  "arc": "015_Yeti"
+ },
+ "spyro": {
+  "clips": 99,
+  "tier": "full",
+  "arc": "016_Spyro"
+ },
+ "voodood": {
+  "clips": 39,
+  "tier": "reduced",
+  "arc": "017_SkullOrc"
+ },
+ "double-trouble": {
+  "clips": 39,
+  "tier": "reduced",
+  "arc": "018_Wizard"
+ },
+ "wrecking-ball": {
+  "clips": 39,
+  "tier": "reduced",
+  "arc": "019_GoldenCheat"
+ },
+ "drobot": {
+  "clips": 33,
+  "tier": "reduced",
+  "arc": "020_Metal_Dragon"
+ },
+ "drill-sergeant": {
+  "clips": 30,
+  "tier": "reduced",
+  "arc": "021_DrillBot"
+ },
+ "boomer": {
+  "clips": 33,
+  "tier": "reduced",
+  "arc": "022_Bomb_Troll"
+ },
+ "trigger-happy": {
+  "clips": 32,
+  "tier": "reduced",
+  "arc": "023_ForceFieldGrub"
+ },
+ "camo": {
+  "clips": 30,
+  "tier": "reduced",
+  "arc": "024_LifeDragon"
+ },
+ "zook": {
+  "clips": 90,
+  "tier": "full",
+  "arc": "025_BamBazooker"
+ },
+ "stealth-elf": {
+  "clips": 99,
+  "tier": "full",
+  "arc": "026_StealthElf"
+ },
+ "stump-smash": {
+  "clips": 90,
+  "tier": "full",
+  "arc": "027_Ent"
+ },
+ "hex": {
+  "clips": 95,
+  "tier": "full",
+  "arc": "029_ShadowMaid"
+ },
+ "chop-chop": {
+  "clips": 97,
+  "tier": "full",
+  "arc": "030_PandoranElite"
+ },
+ "ghost-roaster": {
+  "clips": 32,
+  "tier": "reduced",
+  "arc": "031_GhostEater"
+ },
+ "cynder": {
+  "clips": 102,
+  "tier": "full",
+  "arc": "032_Cynder"
+ }
+}

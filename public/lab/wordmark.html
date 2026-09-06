@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkchemy wordmark lab</title>
+<style>
+@font-face{font-family:"Luckiest Guy";src:url("../fonts/luckiest-guy-latin.woff2") format("woff2");font-display:swap}
+
+:root{--ui:#1c1c22;--panel:#26262f;--line:#3a3a46;--txt:#e8e8ee;--dim:#9a9aa8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ui);color:var(--txt);
+     font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:14px 20px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:15px;font-weight:600}
+header p{margin:4px 0 0;color:var(--dim);font-size:12px}
+.wrap{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 62px)}
+.panel{background:var(--panel);border-right:1px solid var(--line);padding:16px;overflow-y:auto}
+.stage{padding:22px;display:flex;flex-direction:column;gap:20px}
+
+fieldset{border:1px solid var(--line);border-radius:6px;margin:0 0 14px;padding:10px 12px 12px}
+legend{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:0 4px}
+label{display:block;margin:8px 0 3px;font-size:12px;color:var(--dim)}
+input[type=text],select{width:100%;background:#1a1a20;color:var(--txt);
+  border:1px solid var(--line);border-radius:4px;padding:5px 7px;font:inherit}
+input[type=range]{width:100%}
+input[type=color]{width:100%;height:30px;background:none;border:1px solid var(--line);
+  border-radius:4px;padding:1px;cursor:pointer}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.val{color:var(--txt);font-variant-numeric:tabular-nums;font-size:12px;flex:0 0 46px;text-align:right}
+
+.preview{border-radius:8px;padding:26px;display:flex;align-items:center;gap:20px;
+         justify-content:center;flex-wrap:wrap;min-height:150px}
+.preview.light{background:#fff}
+.preview.dark{background:#12121a}
+.preview.sky{background:url("../images/cloud-header/cloud-header-bg.jpg") center/cover}
+.preview img.icon{height:104px;flex:0 0 auto}
+.caption{color:var(--dim);font-size:11px;margin:0 0 -10px 2px}
+
+.readout{background:#15151b;border:1px solid var(--line);border-radius:6px;padding:12px 14px;
+         font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;color:#cfd2e0}
+button{background:#3b3b48;color:var(--txt);border:1px solid var(--line);border-radius:4px;
+       padding:6px 10px;font:inherit;cursor:pointer}
+button:hover{background:#464657}
+</style>
+</head>
+<body>
+<header>
+  <h1>Arkchemy wordmark lab</h1>
+  <p>Dial the colour in here, then read the hex values off the bottom and hand those to the image generator.</p>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <fieldset><legend>text</legend>
+      <input type="text" id="word" value="ARKCHEMY">
+      <label>typeface (approximation only)</label>
+      <select id="font">
+        <option value="'Montserrat Black','Montserrat',sans-serif">Montserrat Black — geometric, closest base</option>
+        <option value="'Nimbus Sans Narrow',sans-serif">Nimbus Sans Narrow — condensed</option>
+        <option value="'Open Sans Extrabold','Open Sans',sans-serif">Open Sans Extrabold</option>
+        <option value="'Cantarell Extra Bold',sans-serif">Cantarell Extra Bold</option>
+        <option value="Impact, Haettenschweiler, sans-serif">Impact — tall + condensed</option>
+        <option value="'Arial Black',sans-serif">Arial Black</option>
+        <option value="Luckiest Guy">Luckiest Guy (bundled, rounded)</option>
+      </select>
+      <label>letter spacing <span class="val" id="trackV">0</span></label>
+      <input type="range" id="track" min="-10" max="40" value="8">
+      <label>condense <span class="val" id="sxV">100%</span></label>
+      <input type="range" id="sx" min="55" max="130" value="100">
+      <label>height <span class="val" id="syV">100%</span></label>
+      <input type="range" id="sy" min="85" max="140" value="100">
+    </fieldset>
+
+    <fieldset><legend>letterforms</legend>
+      <label><input type="checkbox" id="custom" checked> custom angular glyphs (drawn, not a font)</label>
+      <p style="margin:6px 0 0;font-size:11px;color:var(--dim)">
+        Cut terminals and straight edges, on a 100-unit cap grid. Uncheck to
+        fall back to an installed typeface for comparison.</p>
+    </fieldset>
+
+    <fieldset><legend>corners</legend>
+      <label><input type="checkbox" id="sharp" checked> sharp mitred joins</label>
+      <p style="margin:6px 0 0;font-size:11px;color:var(--dim)">
+        Rounded joins soften every corner and are the main reason a heavy sans
+        stops looking like the Skylanders mark. Sharp is closer.</p>
+      <label>point sharpness <span class="val" id="mlV">6</span></label>
+      <input type="range" id="ml" min="1" max="14" value="6">
+    </fieldset>
+
+    <fieldset><legend>fill</legend>
+      <label><input type="checkbox" id="grad"> use a gradient</label>
+      <label>fill / gradient start</label>
+      <input type="color" id="c1" value="#3d1140">
+      <div id="gradOnly" hidden>
+        <label>gradient end</label>
+        <input type="color" id="c2" value="#7a1f4e">
+        <label>angle <span class="val" id="angV">0</span></label>
+        <input type="range" id="ang" min="0" max="180" value="0">
+      </div>
+    </fieldset>
+
+    <fieldset><legend>outline</legend>
+      <label>colour</label>
+      <input type="color" id="oc" value="#f3c34e">
+      <label>weight <span class="val" id="owV">10</span></label>
+      <input type="range" id="ow" min="0" max="26" value="10">
+      <label>outer keyline</label>
+      <input type="color" id="kc" value="#2a1030">
+      <label>keyline weight <span class="val" id="kwV">4</span></label>
+      <input type="range" id="kw" min="0" max="16" value="4">
+    </fieldset>
+
+    <fieldset><legend>compare</legend>
+      <label><input type="checkbox" id="showIcon" checked> show the balloon beside it</label>
+      <button id="reset">reset to current logo</button>
+    </fieldset>
+  </div>
+
+  <div class="stage">
+    <p class="caption">on white</p>
+    <div class="preview light" id="pLight"></div>
+    <p class="caption">on dark — the one that catches failures</p>
+    <div class="preview dark" id="pDark"></div>
+    <p class="caption">over the cloud header</p>
+    <div class="preview sky" id="pSky"></div>
+    <p class="caption">at 200px wide, on dark and on white</p>
+    <div class="preview dark" id="pSmall" style="min-height:90px"></div>
+    <p class="caption">values to hand to the image generator</p>
+    <div class="readout" id="out"></div>
+  </div>
+</div>
+
+<script>
+
+/* ---- custom angular capitals, drawn for this mark -------------------
+   Each glyph lives on a 0..100 cap-height grid, baseline at y=100, and
+   carries its own advance width. Straight edges only -- the Skylanders
+   register is cut, not curved, and a font substitute can never give us
+   that no matter how the stroke is joined. */
+const GLYPHS = {
+  /* The flared wedge-serif set, matched to the game-subtitle face
+     (IMAGINATORS / TRAP TEAM), not the condensed SKYLANDERS arc. Both exist
+     in the real logos; this one was the preferred read for a standalone
+     wordmark. Bone-shaped stems -- wide at top and bottom, pinched at the
+     waist -- with small angular wedge serifs. Cap height 100, baseline 100. */
+  "A":{w:96,d:"M36,0 L54,0 L96,100 L66,100 L66,91 L72,86 L65,70 L31,70 L24,86 L30,91 L30,100 L0,100 L0,91 L6,86 Z M45,16 L62,56 L32,56 Z"},
+  "R":{w:88,d:"M0,0 L54,0 L80,18 L80,48 L62,58 L82,90 L86,94 L86,100 L56,100 L42,62 L26,62 L26,86 L32,91 L32,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z M26,15 L54,15 L64,26 L64,41 L54,52 L26,52 Z"},
+  "K":{w:78,d:"M0,0 L32,0 L32,9 L26,14 L26,38 L50,10 L46,4 L46,0 L78,0 L78,7 L70,12 L44,46 L72,88 L78,92 L78,100 L48,100 L30,68 L26,73 L26,86 L32,91 L32,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "C":{w:66,d:"M64,0 L64,26 L54,20 L32,20 L23,29 L23,71 L32,80 L54,80 L64,74 L64,100 L50,100 L22,100 L0,80 L0,20 L22,0 Z"},
+  "H":{w:84,d:"M0,0 L32,0 L32,9 L26,14 L26,41 L58,41 L58,14 L52,9 L52,0 L84,0 L84,9 L78,14 L78,86 L84,91 L84,100 L52,100 L52,91 L58,86 L58,59 L26,59 L26,86 L32,91 L32,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "E":{w:70,d:"M0,0 L68,0 L68,24 L60,19 L26,19 L26,40 L56,40 L56,59 L26,59 L26,81 L62,81 L70,76 L70,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "M":{w:104,d:"M0,0 L30,0 L52,52 L74,0 L104,0 L104,9 L98,14 L98,86 L104,91 L104,100 L72,100 L72,91 L78,86 L78,42 L58,86 L46,86 L26,42 L26,86 L32,91 L32,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "Y":{w:82,d:"M0,0 L32,0 L32,7 L26,11 L41,45 L56,11 L50,7 L50,0 L82,0 L82,8 L74,13 L51,64 L51,86 L58,91 L58,100 L24,100 L24,91 L31,86 L31,64 L8,13 L0,8 Z"},
+  "S":{w:72,d:"M68,3 L68,26 L58,20 L32,20 L26,26 L26,34 L34,40 L58,46 L70,58 L70,82 L52,100 L22,100 L4,97 L4,73 L16,80 L42,80 L48,74 L48,64 L40,58 L16,52 L4,40 L4,17 L20,0 L48,0 Z"},
+  "T":{w:76,d:"M0,0 L76,0 L76,25 L66,19 L50,19 L50,86 L57,91 L57,100 L21,100 L21,91 L28,86 L28,19 L10,19 L0,25 Z"},
+  "N":{w:88,d:"M0,0 L30,0 L62,60 L62,14 L56,9 L56,0 L88,0 L88,9 L82,14 L82,100 L54,100 L20,36 L20,86 L27,91 L27,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "O":{w:84,d:"M32,0 L52,0 L76,20 L76,80 L52,100 L32,100 L8,80 L8,20 Z M38,20 L29,29 L29,71 L38,80 L46,80 L55,71 L55,29 L46,20 Z"},
+  "I":{w:34,d:"M0,0 L34,0 L34,9 L27,14 L27,86 L34,91 L34,100 L0,100 L0,91 L7,86 L7,14 L0,9 Z"},
+  "B":{w:80,d:"M0,0 L50,0 L72,17 L72,38 L60,48 L74,58 L74,82 L50,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z M26,15 L26,42 L44,42 L52,35 L52,22 L44,15 Z M26,58 L26,85 L46,85 L54,78 L54,65 L46,58 Z"},
+  "D":{w:84,d:"M0,0 L48,0 L76,22 L76,78 L48,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z M26,17 L26,83 L42,83 L54,72 L54,28 L42,17 Z"},
+  "F":{w:68,d:"M0,0 L66,0 L66,24 L58,19 L26,19 L26,42 L54,42 L54,61 L26,61 L26,86 L33,91 L33,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "G":{w:84,d:"M72,3 L72,26 L62,20 L40,20 L31,29 L31,71 L40,80 L58,80 L58,62 L44,62 L44,44 L80,44 L80,90 L60,100 L30,100 L8,80 L8,20 L30,0 L58,0 Z"},
+  "J":{w:64,d:"M30,0 L62,0 L62,9 L56,14 L56,76 L38,100 L14,100 L2,94 L2,70 L14,80 L28,80 L36,72 L36,14 L30,9 Z"},
+  "L":{w:66,d:"M0,0 L33,0 L33,9 L26,14 L26,81 L58,81 L66,76 L66,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z"},
+  "P":{w:76,d:"M0,0 L48,0 L72,18 L72,46 L48,64 L26,64 L26,86 L33,91 L33,100 L0,100 L0,91 L6,86 L6,14 L0,9 Z M26,17 L26,47 L44,47 L52,40 L52,24 L44,17 Z"},
+  "Q":{w:84,d:"M32,0 L52,0 L76,20 L76,72 L66,82 L78,96 L60,100 L50,88 L32,88 L8,68 L8,20 Z M38,20 L29,29 L29,63 L38,71 L46,71 L55,63 L55,29 L46,20 Z"},
+  "U":{w:84,d:"M0,0 L33,0 L33,9 L26,14 L26,70 L34,80 L50,80 L58,70 L58,14 L51,9 L51,0 L84,0 L84,9 L78,14 L78,76 L56,100 L28,100 L6,76 L6,14 L0,9 Z"},
+  "V":{w:82,d:"M0,0 L33,0 L33,8 L26,13 L41,74 L56,13 L49,8 L49,0 L82,0 L82,8 L75,13 L53,100 L29,100 L7,13 L0,8 Z"},
+  "W":{w:112,d:"M0,0 L32,0 L32,8 L26,13 L36,72 L48,20 L64,20 L76,72 L86,13 L80,8 L80,0 L112,0 L112,8 L105,13 L88,100 L64,100 L56,58 L48,100 L24,100 L7,13 L0,8 Z"},
+  "X":{w:84,d:"M0,0 L33,0 L33,8 L27,12 L42,40 L57,12 L51,8 L51,0 L84,0 L84,8 L76,13 L54,50 L77,88 L84,92 L84,100 L51,100 L51,91 L57,87 L42,60 L27,87 L33,91 L33,100 L0,100 L0,92 L8,88 L31,50 L8,13 L0,8 Z"},
+  "Z":{w:76,d:"M0,0 L74,0 L74,18 L26,81 L66,81 L74,76 L74,100 L0,100 L0,82 L48,19 L10,19 L0,25 Z"},
+  " ":{w:38,d:""}
+};
+
+/* Lay the glyphs out left to right, tracking applied between advances. */
+function drawWord(word, track){
+  let x = 0, out = "";
+  for (const ch of word.toUpperCase()){
+    const g = GLYPHS[ch];
+    if (!g){ x += 40 + track; continue; }
+    if (g.d) out += `<path transform="translate(${x},0)" d="${g.d}"/>`;
+    x += g.w + track;
+  }
+  return {paths: out, width: Math.max(x - track, 1)};
+}
+
+const $ = id => document.getElementById(id);
+const els = ['word','font','custom','track','sx','sy','sharp','ml','grad','c1','c2','ang','oc','ow','kc','kw','showIcon'].map($);
+
+/* SVG text with paint-order:stroke keeps the stroke OUTSIDE the glyph, which is
+   how the real logo is drawn. -webkit-text-stroke centres it and eats the
+   letterforms, so it is not usable for judging weight. */
+function svg(word, o, width){
+  const gid = 'g'+Math.random().toString(36).slice(2,8);
+  const fill = o.grad ? `url(#${gid})` : o.c1;
+  const rad = o.ang*Math.PI/180, x2=(Math.cos(rad)*100).toFixed(1), y2=(Math.sin(rad)*100).toFixed(1);
+  const defs = o.grad ? `<defs><linearGradient id="${gid}" x1="0%" y1="0%" x2="${x2}%" y2="${y2}%">
+      <stop offset="0%" stop-color="${o.c1}"/><stop offset="100%" stop-color="${o.c2}"/>
+    </linearGradient></defs>` : '';
+  const join = o.sharp ? 'miter' : 'round';
+  const pad = (o.ow + o.kw) + 14;
+
+  if (o.custom){
+    const {paths, width:wd} = drawWord(word, o.track);
+    const vb = `${-pad} ${-pad} ${wd+pad*2} ${100+pad*2}`;
+    const layer = (stroke, sw) => `<g fill="${fill}" stroke="${stroke}" stroke-width="${sw}"
+        stroke-linejoin="${join}" stroke-miterlimit="${o.ml}" fill-rule="evenodd"
+        style="paint-order:stroke fill">${paths}</g>`;
+    return `<svg viewBox="${vb}" ${width?`width="${width}"`:'height="110"'}
+        xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"
+        style="max-width:100%;display:block">${defs}
+        <g transform="translate(${wd/2},0) scale(${o.sx/100},${o.sy/100}) translate(${-wd/2},0)">
+        ${o.kw>0?layer(o.kc,(o.ow+o.kw)*2):''}${layer(o.oc,o.ow*2)}</g></svg>`;
+  }
+
+  const t = (stroke, sw) => `<text x="50%" y="72%" text-anchor="middle"
+      font-family="${o.font.replace(/"/g,'&quot;')}" font-size="100" letter-spacing="${o.track}"
+      fill="${fill}" stroke="${stroke}" stroke-width="${sw}"
+      stroke-linejoin="${join}" stroke-miterlimit="${o.ml}"
+      paint-order="stroke" style="paint-order:stroke fill"
+      transform="translate(450,0) scale(${o.sx/100},${o.sy/100}) translate(-450,0)"
+      >${word}</text>`;
+  return `<svg viewBox="0 0 900 150" ${width?`width="${width}"`:'height="110"'}
+      xmlns="http://www.w3.org/2000/svg" style="overflow:visible;max-width:100%">
+      ${defs}${o.kw>0?t(o.kc,(o.ow+o.kw)*2):''}${t(o.oc,o.ow*2)}</svg>`;
+}
+
+function render(){
+  const o = {word:$('word').value||'ARKCHEMY', font:$('font').value, track:+$('track').value,
+             grad:$('grad').checked, c1:$('c1').value, c2:$('c2').value, ang:+$('ang').value,
+             oc:$('oc').value, ow:+$('ow').value, kc:$('kc').value, kw:+$('kw').value,
+             sharp:$('sharp').checked, ml:+$('ml').value, sx:+$('sx').value, sy:+$('sy').value,
+             custom:$('custom').checked};
+  $('trackV').textContent=o.track; $('angV').textContent=o.ang+'°';
+  $('owV').textContent=o.ow; $('kwV').textContent=o.kw;
+  $('sxV').textContent=o.sx+'%'; $('syV').textContent=o.sy+'%'; $('mlV').textContent=o.ml;
+  $('gradOnly').hidden = !o.grad;
+
+  const icon = $('showIcon').checked
+    ? '<img class="icon" src="../images/logo/arkchemy-icon-256.png" alt="">' : '';
+  for (const [id,w] of [['pLight',0],['pDark',0],['pSky',0]])
+    $(id).innerHTML = icon + svg(o.word,o,w);
+  $('pSmall').innerHTML = svg(o.word,o,200) +
+      '<span style="background:#fff;padding:10px;border-radius:6px">'+svg(o.word,o,200)+'</span>';
+
+  $('out').textContent =
+`fill            ${o.grad ? o.c1+'  ->  '+o.c2+'   (angle '+o.ang+'°)' : o.c1}
+outline         ${o.oc}   weight ${o.ow}
+outer keyline   ${o.kc}   weight ${o.kw}
+letter spacing  ${o.track}
+condense        ${o.sx}%      height ${o.sy}%
+corners         ${o.sharp?'sharp mitred (limit '+o.ml+')':'rounded'}
+letterforms     ${o.custom?'custom angular glyphs':o.font}
+                (stand-in; the real mark is custom-drawn)`;
+}
+
+els.forEach(e=>{e.addEventListener('input',render);e.addEventListener('change',render);});
+$('reset').addEventListener('click',()=>{
+  $('grad').checked=false; $('c1').value='#3d1140'; $('oc').value='#f3c34e';
+  $('ow').value=10; $('kc').value='#2a1030'; $('kw').value=4; $('track').value=2;
+  $('sx').value=100; $('sy').value=100; $('custom').checked=true; $('sharp').checked=true; $('ml').value=6; render();
+});
+render();
+</script>
+</body>
+</html>

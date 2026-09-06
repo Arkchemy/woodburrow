@@ -1,0 +1,1055 @@
+[
+ {
+  "slug": "bash",
+  "name": "Bash",
+  "element": "Earth",
+  "species": "Rock Dragon",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Rock and Roll!",
+  "audio": null,
+  "voClips": 36,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Tail Swipe",
+    "desc": "Bash swings his tail around to attack a full 360 degrees of enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Rock and Roll",
+    "desc": "Bash rolls into a ball to bowl over his enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Triceratops Honor Guard",
+    "desc": "New armor makes Bash harder to hit. [[Console Stats",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Rolling Thunder",
+    "desc": "While rolling, press Attack 3 to launch into the air and slam down.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "boomer",
+  "name": "Boomer",
+  "element": "Tech",
+  "species": "Troll",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Bring the Boom!",
+  "audio": null,
+  "voClips": 33,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Dynamite Toss",
+    "desc": "Hurl an explosive stick of troll-grade dynamite.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Troll Smash",
+    "desc": "Smash the ground with such impact that enemies are knocked back from the furious shockwave of power.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Troll Bomb Boot",
+    "desc": "Troll Bombs can be kicked at enemies.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "camo",
+  "name": "Camo",
+  "element": "Life",
+  "species": "Plant/Dragons",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Fruit Punch!",
+  "audio": null,
+  "voClips": 30,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Sun Burst",
+    "desc": "Camo can blast enemies with concentrated life energy in the form of a tiny sun.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Firecracker Vines",
+    "desc": "Conjure a vine of rapid growth and incredibly explosive bounty.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Orbiting Sun Shield",
+    "desc": "Create a Sun Blast shield.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Explosive Harvest",
+    "desc": "Any melons can turn into explosive SUPERMELONS and launch at enemies.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "chop-chop",
+  "name": "Chop Chop",
+  "element": "Undead",
+  "species": "Arkeyans",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Slice and Dice!",
+  "audio": "audio/chop-chop.ogg",
+  "voClips": 97,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Arkeyan Blade",
+    "desc": "Slash away at Chop Chop's enemies with this ancient blade.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Arkeyan Shield",
+    "desc": "Hold down the button shown to protect Chop Chop from most attacks, and deflect projectiles as well.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Cursed Bone Brambler",
+    "desc": "Bone Brambles do extra damage.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Shield Skewer",
+    "desc": "Hold Attack 1 and press Attack 1 to burst forward in a mega shield bash attack.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "cynder",
+  "name": "Cynder",
+  "element": "Undead",
+  "species": "Dragons",
+  "gender": "Female",
+  "role": "Core Skylanders",
+  "catchphrase": "Volts and Lightning!",
+  "audio": null,
+  "voClips": 102,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Spectral Lightning",
+    "desc": "Press and hold your primary power button to shock enemies with bolts of lightning.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Shadow Dash",
+    "desc": "Dash forward in shadow form. Ghost allies are summoned in your wake.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Haunted Ally",
+    "desc": "A ghost ally travels with you and damages enemies.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Lightning Rain",
+    "desc": "While flying, press Attack 2 to bring a great lightning blast down from the sky. In the 3DS version, jump and press the Y button to perform it.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "dino-rang",
+  "name": "Dino-Rang",
+  "element": "Earth",
+  "species": "Dinosaur",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Come 'Rang or Shine!",
+  "audio": "audio/dino-rang.ogg",
+  "voClips": 33,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Stone Boomerangs",
+    "desc": "Throw boomerangs at enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Boomerang Shield",
+    "desc": "Throw both boomerangs around in a circle for a close-ranged attack.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Sticky Boomerangs",
+    "desc": "Boomerangs pick up [[treasures",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "double-trouble",
+  "name": "Double Trouble",
+  "element": "Magic",
+  "species": "Tiki-Masked Sorcerer",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Boom Shock-A-Laka!",
+  "audio": null,
+  "voClips": 39,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Eldritch Beam",
+    "desc": "Press and hold the primary power button to fire beam of energy that locks onto targets. Damage = 10. Crit = 15.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Conjure Exploding Double",
+    "desc": "Summon a mindless double that seeks out enemies and explodes. Damage = ??? Crit = ??? x 1.5.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Waterwalker",
+    "desc": "Can fly over water. In Swap Force: Double Trouble now hovers over hazards and gains increased speed in Water Power Zones.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Triple Trouble!",
+    "desc": "Eldritch Beam splits off into three separate beams when it locks on an enemy.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "drill-sergeant",
+  "name": "Drill Sergeant",
+  "element": "Tech",
+  "species": "Arkeyans",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Licensed to Drill!",
+  "audio": "audio/drill-sergeant.ogg",
+  "voClips": 30,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Drill Rocket",
+    "desc": "Shoot homing rockets that chase down enemies for massive damage.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Bulldoze Charge",
+    "desc": "Drill Sergeant can dash forward and barrel over enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Arkeyan Armor",
+    "desc": "New armor makes Drill Sergeant harder to hit.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Futurecannon",
+    "desc": "Hold Attack 3 to fire energy pulses that haven't been invented yet.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "drobot",
+  "name": "Drobot",
+  "element": "Tech",
+  "species": "Dragons",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Blink and Destroy!",
+  "audio": null,
+  "voClips": 33,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Mega Blasters",
+    "desc": "Shoot rapidfire laser blasts out of your eyes.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Tactical Bladegears",
+    "desc": "Deploy spinning bladegears that ricochet off of walls and pummel enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Afterburners",
+    "desc": "Flies faster and afterburners damage enemies.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Supreme Bladegear",
+    "desc": "Hold Attack 2 to combine Bladegears into one controllable Super Bladegear!",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "eruptor",
+  "name": "Eruptor",
+  "element": "Fire",
+  "species": "Lava Monster",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Born to Burn!",
+  "audio": null,
+  "voClips": 105,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Lava Lob",
+    "desc": "Press attack 1 to lob blobs of lava at your enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Eruption",
+    "desc": "Press attack 2 to erupt into a pool of lava, damaging enemies all around you.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Mega Magma Balls",
+    "desc": "Shoot up to 3 Magma Balls at a time that do extra damage.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Lava Barf",
+    "desc": "Hold Attack 3 to charge up a powerful stream of projectile lava barf.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "flameslinger",
+  "name": "Flameslinger",
+  "element": "Fire",
+  "species": "Elves",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Let the Flames Begin!",
+  "audio": "audio/flameslinger.ogg",
+  "voClips": 113,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Fire Arrow",
+    "desc": "Shoot flaming arrows at your enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Flame Dash",
+    "desc": "Dash forward, leaving a flaming path of destruction behind.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Super Volley Shot",
+    "desc": "Flaming Arrow Rain shoots more arrows that covers more area",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Speed Demon",
+    "desc": "While dashing, press Attack 1 to run even faster and leave a new flame trail.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "ghost-roaster",
+  "name": "Ghost Roaster",
+  "element": "Undead",
+  "species": "Ghouls",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "No Chain, No Gain!",
+  "audio": null,
+  "voClips": 32,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Chain Whip",
+    "desc": "Press attack 1 to swing your chain tail at enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Skull Charge",
+    "desc": "Press attack 2 to transform into a ghostly head that barrels through enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Lingering Curse",
+    "desc": "Ghosts have a bigger attack range and knocks enemies away.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "gill-grunt",
+  "name": "Gill Grunt",
+  "element": "Water",
+  "species": "Gillmen",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Fear the Fish!",
+  "audio": "audio/gill-grunt.mp3",
+  "voClips": 98,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Harpoon Gun",
+    "desc": "Press attack 1 to shoot high-velocity harpoons at your enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Power Hose",
+    "desc": "Press attack 2 to spray water at your enemies to knock them back.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Anchor Cannon",
+    "desc": "hold down the primary power button to charge the giant anchor gun attack, then release to fire.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Anchor's Away",
+    "desc": "hold square (ps3/ps4) or x (x360/xone) and release to fire three giant anchor guns.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "hex",
+  "name": "Hex",
+  "element": "Undead",
+  "species": "Elves",
+  "gender": "Female",
+  "role": "Core Skylanders",
+  "catchphrase": "Fear the Dark!",
+  "audio": "audio/hex.ogg",
+  "voClips": 95,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Conjure Phantom Orb",
+    "desc": "Launch magic orbs of spectral energy that track your foes.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Rain of Skulls",
+    "desc": "Hold the button shown to begin casting this spell. When fully charged, ghostly skulls rain down.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Skull Shield",
+    "desc": "Rain of Skulls knocks away enemies and attacks.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Skull Buddy",
+    "desc": "Hold Attack 2 to charge up a Skull Storm, then press Attack 1 to conjure a giant skull pal.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "ignitor",
+  "name": "Ignitor",
+  "element": "Fire",
+  "species": "Fire Spirit Knight",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Slash and Burn!",
+  "audio": "audio/ignitor.ogg",
+  "voClips": 78,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Flame Blade",
+    "desc": "Swing your sword.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Flame Form Mortar",
+    "desc": "Launch your flame spirit in an arc at your foes.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Fire Forged Armor",
+    "desc": "New Armor makes Ignitor harder to hit. Grants +40 [[Statistics",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Blue Flame",
+    "desc": "After executing Flame Form or Mega Slam attacks, Ignitor leaves a trail of blue fire. In the 3DS version, press X and his Fire Spirit will leave a trail of fire as it attacks enemies.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "lightning-rod",
+  "name": "Lightning Rod",
+  "element": "Air",
+  "species": "Storm Giant",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "One Strike and You're Out!",
+  "audio": "audio/lightning-rod.ogg",
+  "voClips": 102,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Lightning Bolt",
+    "desc": "Throw a lightning bolt at enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Grand Lightning Summoning",
+    "desc": "Bring lightning down from the sky and control where it moves.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Zapper Field Deluxe",
+    "desc": "Zapper Field and clouds do extra damage.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Big Bolt",
+    "desc": "Hold Attack 1 to throw the biggest bolt of lightning known to man!",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "prism-break",
+  "name": "Prism Break",
+  "element": "Earth",
+  "species": "Crystal Rock Golem",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "The Beam is Supreme!",
+  "audio": null,
+  "voClips": 30,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Energy Beam",
+    "desc": "Fire and sustain a powerful beam of energy.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Summon Crystal Shard",
+    "desc": "Summon crystal shards to smash enemies and refract Energy Beams.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Shard Soul Prison",
+    "desc": "Crystal Gems form at defeated enemies.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Pulse Power",
+    "desc": "While holding Attack 1, press Attack 2 to send a powerful pulse down the beam.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "slam-bam",
+  "name": "Slam Bam",
+  "element": "Water",
+  "species": "Yetis",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Armed and Dangerous!",
+  "audio": null,
+  "voClips": 44,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Yeti Fists",
+    "desc": "Throw powerful punches with all four fists.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Ice Prison",
+    "desc": "Hold the secondary power button and then release to summon an ice prison that will trap enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Yeti-Cooling Factor",
+    "desc": "Increased coolness and can surf faster.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Sleigh Me",
+    "desc": "Hold Attack 3 to take a ride on a powerful ice sleigh. To perform his Wow Pow in the 3DS version he must be at level 6 and dash to make a giant spiky ice shield appear.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "sonic-boom",
+  "name": "Sonic Boom",
+  "element": "Air",
+  "species": "Gryphon",
+  "gender": "Female",
+  "role": "Core Skylanders",
+  "catchphrase": "Full scream ahead!",
+  "audio": null,
+  "voClips": 27,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Roar",
+    "desc": "Unleash a deafening screech.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Egg Toss",
+    "desc": "Launch an egg that hatches into a feisty baby.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Resonant Frequency",
+    "desc": "Roar at babies and they will roar too. This only lasts for about 30 seconds.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Super Baby",
+    "desc": "Hold Attack 2 to combine regular babies into one Super Baby! Lasts for about 1 minute.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "spyro",
+  "name": "Spyro",
+  "element": "Magic",
+  "species": "Dragon",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "All Fired Up!",
+  "audio": "audio/spyro.mp3",
+  "voClips": 99,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Dragon's Fire",
+    "desc": "Spyro breathes balls of flame from his mouth, incinerating enemies. Damage = 15. Crit = 22.5.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Charge",
+    "desc": "Spyro runs head down knocking over enemies with his horns. Damage = 10. Crit = 15.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Spyro's Earth Pound",
+    "desc": "Perform a devastating dive-bomb head smash while flying, damaging enemies all around you. Damage = 50. Crit = 75.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Fireslam!",
+    "desc": "While flying, press Attack 2 to allow Spyro to shoot fireballs and perform a flaming slam.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "stealth-elf",
+  "name": "Stealth Elf",
+  "element": "Life",
+  "species": "Elf",
+  "gender": "Female",
+  "role": "Core Skylanders",
+  "catchphrase": "Silent, But Deadly!",
+  "audio": "audio/stealth-elf.ogg",
+  "voClips": 99,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Blade Slash",
+    "desc": "Slice up your enemies with a pair of sharp blades.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Stealthier Decoy",
+    "desc": "Disappear completely but leave behind a decoy image that enemies are drawn to.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Sylvan Regeneration",
+    "desc": "Regenerate health over time.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Knife Blender",
+    "desc": "Hold Attack 1 to unleash a mega 360-degree knife slash attack.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "stump-smash",
+  "name": "Stump Smash",
+  "element": "Life",
+  "species": "Ent",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Drop The Hammer!",
+  "audio": "audio/stump-smash.ogg",
+  "voClips": 90,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Pulverize",
+    "desc": "Uncork a Stumpfist smash.",
+    "kind": "Primary"
+   },
+   {
+    "name": "When Acorns Attack",
+    "desc": "Spit acorns at your foes to slow them down.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Waterlogged",
+    "desc": "You can float and regain health in water. In Swap Force: Stump Smash regenerates health in Water Power Zones.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Auto-Nuts",
+    "desc": "Hold Attack 2 to rapidly spit out a series of nuts.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "sunburn",
+  "name": "Sunburn",
+  "element": "Fire",
+  "species": "Phoenix/Dragons",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Roast N' Toast!",
+  "audio": null,
+  "voClips": 30,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Flamethrower Breath",
+    "desc": "Unleash a stream of flame breath",
+    "kind": "Primary"
+   },
+   {
+    "name": "Immolation Teleport",
+    "desc": "Teleport to another location, leaving a damaging flame behind.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Flight of the Phoenix",
+    "desc": "Phoenix Dash lasts longer, does more damage, and ends with a blast.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "terrafin",
+  "name": "Terrafin",
+  "element": "Earth",
+  "species": "Dirt Shark",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "It's Feeding Time!",
+  "audio": null,
+  "voClips": 33,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Punch",
+    "desc": "Terrafin can punch his opponents. Chain multiple punches to perform a combo attack.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Earthswim",
+    "desc": "Burrow underground to avoid attacks. Terrafin can jump up from the earth to perform a Belly Flop attack.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Surface Feeder",
+    "desc": "Terrafin can collect powerups even while burrowed.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Dive Burrow",
+    "desc": "While in the air for a bellyflop, press Attack 2 to immediately dive back underground. In the 3DS version, dash and press X to make come up from the ground and perform a combo of his Chompion and Earth Mover abilities creating an even bigger shockwave.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "trigger-happy",
+  "name": "Trigger Happy",
+  "element": "Tech",
+  "species": "Gremlins",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "No Gold, No Glory!",
+  "audio": "audio/trigger-happy.mp3",
+  "voClips": 32,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Golden Pistols",
+    "desc": "Shoot rapidfire coins out of both golden guns.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Lob Golden Safe",
+    "desc": "Lob explosive golden safes at Trigger Happy's enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Infinite Ammo",
+    "desc": "Golden Machine Gun has unlimited ammo.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Megablast",
+    "desc": "While using the mini-gun, press Attack 1 for a super blast.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "voodood",
+  "name": "Voodood",
+  "element": "Magic",
+  "species": "Orc",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Axe First, Questions Later!",
+  "audio": "audio/voodood.ogg",
+  "voClips": 39,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Axe Reaver",
+    "desc": "Voodood swings his fearsome axe. Damage = 16. Crit = 24.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Zipline Axe",
+    "desc": "Launch the blade of your axe and rapidly reel yourself in. Damage = 18. Crit = 27.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Impervious Tripwire",
+    "desc": "Magic Tripwire deflects shots.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "warnado",
+  "name": "Warnado",
+  "element": "Air",
+  "species": "Turtles",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "For the Wind!",
+  "audio": null,
+  "voClips": 39,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Spin Attack",
+    "desc": "Spin in your shell to take out enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Summon Tornado",
+    "desc": "A high velocity spin generates a tornado that picks up enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Thick Shelled",
+    "desc": "A thicker shell provides better armor. Grants +40 armor.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "wham-shell",
+  "name": "Wham-Shell",
+  "element": "Water",
+  "species": "Crab",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Brace for the Mace!",
+  "audio": null,
+  "voClips": 36,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Malacostracan Mace",
+    "desc": "Swing Wham-Shell's big mace at his enemies.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Starfish Bullets",
+    "desc": "Wham-Shell's mace shoots starfish bullets.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Carapace Plating",
+    "desc": "New armor makes Wham-Shell harder to hit.",
+    "kind": "Soul Gem"
+   }
+  ]
+ },
+ {
+  "slug": "whirlwind",
+  "name": "Whirlwind",
+  "element": "Air",
+  "species": "Unicorn Dragons",
+  "gender": "Female",
+  "role": "Core Skylanders",
+  "catchphrase": "Twists of fury!",
+  "audio": null,
+  "voClips": 30,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Rainbow of Doom",
+    "desc": "An arced blast of rainbow energy.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Tempest Cloud",
+    "desc": "Send forth clouds that electrocute nearby enemies.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Rainbow of Healing",
+    "desc": "\"Rainbows HEAL your allies!\"",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Cloudbursting",
+    "desc": "When clouds disappear, they explode into rainbows.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "wrecking-ball",
+  "name": "Wrecking Ball",
+  "element": "Magic",
+  "species": "Grub",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Wreck-N-Roll!",
+  "audio": null,
+  "voClips": 39,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Tongue Whap",
+    "desc": "Wrecking Ball slaps enemies with his super-tongue. Damage = 8. Crit = 12.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Forcefield Ball",
+    "desc": "Summon magic for a spin forcefield charge.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Enemy Slurp",
+    "desc": "Wrecking Ball can swallow smaller enemies and regains 10 health when he does so.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Disco Ball",
+    "desc": "Press Attack 2 to turn Wrecking Ball's Force Field into a magical disco ball.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "zap",
+  "name": "Zap",
+  "element": "Water",
+  "species": "Dragons",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Ride the Lightning!",
+  "audio": "audio/zap.ogg",
+  "voClips": 36,
+  "voTier": "reduced",
+  "moves": [
+   {
+    "name": "Lightning Breath",
+    "desc": "Zap spits out pure electricity.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Sea Slime Slide",
+    "desc": "Zap slides on a trail of sea slime that enemies will become stuck in.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "Love for the Sea",
+    "desc": "Regenerate health in water. In Swap Force: Zap regenerates health in Water Power Zones.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "For Riley",
+    "desc": "While riding a wave, press Attack 2 to make a big splash.",
+    "kind": "Wow Pow"
+   }
+  ]
+ },
+ {
+  "slug": "zook",
+  "name": "Zook",
+  "element": "Life",
+  "species": "Bambazooker",
+  "gender": "Male",
+  "role": "Core Skylanders",
+  "catchphrase": "Locked and Loaded!",
+  "audio": null,
+  "voClips": 90,
+  "voTier": "full",
+  "moves": [
+   {
+    "name": "Bazooka Attack",
+    "desc": "Press and hold your primary power button to fire Bazooka Shells that explode into shrapnel. Hold down the button to extend the range.",
+    "kind": "Primary"
+   },
+   {
+    "name": "Foliage Barrier",
+    "desc": "Grow a barricade made of plants to protect yourself.",
+    "kind": "Secondary"
+   },
+   {
+    "name": "MIRV Mortar",
+    "desc": "Mortar shells explode into 3 smaller shells.",
+    "kind": "Soul Gem"
+   },
+   {
+    "name": "Target Lock",
+    "desc": "Hold Attack 3 to bring up a targeting reticle, and press Attack 1 to hit that target with a full mortar.",
+    "kind": "Wow Pow"
+   }
+  ]
+ }
+]

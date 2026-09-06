@@ -1,0 +1,101 @@
+[
+ {
+  "name": "Aaronateataco",
+  "role": "Founder & Lead Developer",
+  "element": "Light",
+  "github": "https://github.com/Aaronateataco",
+  "repos": 5,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "Claude",
+  "role": "AI Development Assistant (code, research, testing/debugging support)",
+  "element": "Air",
+  "github": "https://github.com/claude",
+  "repos": 5,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "NefariousTechSupport",
+  "role": "Community Research -- Alchemy Engine Reverse Engineering",
+  "element": "Fire",
+  "github": null,
+  "repos": 2,
+  "section": "special-thanks",
+  "battleClass": "Kaos"
+ },
+ {
+  "name": "winnernombre",
+  "role": "Community Research & Project Direction",
+  "element": "Tech",
+  "github": "https://github.com/WinnerNombre",
+  "repos": 2,
+  "section": "special-thanks",
+  "battleClass": null
+ },
+ {
+  "name": "gutterbeasts",
+  "role": "Special Thanks -- Community Research",
+  "element": "Magic",
+  "github": null,
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "bonesinmysoup",
+  "role": "Special Thanks -- Community Research",
+  "element": "Undead",
+  "github": null,
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "supersamus02",
+  "role": "Special Thanks -- Community Research",
+  "element": "n/a",
+  "github": "https://github.com/SuperSamus",
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "jensj56",
+  "role": "Special Thanks -- Community Research",
+  "element": "n/a",
+  "github": null,
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "jackthebloke",
+  "role": "Special Thanks -- Community Research",
+  "element": "n/a",
+  "github": null,
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "LG-RZ",
+  "role": "Special Thanks -- Community Research",
+  "element": "n/a",
+  "github": "https://github.com/LG-RZ",
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ },
+ {
+  "name": "retexcraft",
+  "role": "Special Thanks -- Community Research",
+  "element": "n/a",
+  "github": null,
+  "repos": 1,
+  "section": "core",
+  "battleClass": null
+ }
+]

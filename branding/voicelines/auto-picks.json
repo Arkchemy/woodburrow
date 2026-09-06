@@ -1,0 +1,34 @@
+{
+ "dino-rang": {
+  "clip": "025.wav",
+  "confidence": 0.815
+ },
+ "drill-sergeant": {
+  "clip": "001.wav",
+  "confidence": 0.571
+ },
+ "gill-grunt": {
+  "clip": "013.wav",
+  "confidence": 0.797
+ },
+ "spyro": {
+  "clip": "046.wav",
+  "confidence": 0.761
+ },
+ "stump-smash": {
+  "clip": "025.wav",
+  "confidence": 0.558
+ },
+ "trigger-happy": {
+  "clip": "020.wav",
+  "confidence": 0.383
+ },
+ "voodood": {
+  "clip": "005.wav",
+  "confidence": 0.52
+ },
+ "zap": {
+  "clip": "024.wav",
+  "confidence": 0.589
+ }
+}
