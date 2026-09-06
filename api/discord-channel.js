@@ -33,23 +33,50 @@ export default async function handler(req, res) {
     return;
   }
 
-  const limit = which === 'faq' ? 50 : 20;
+  // Discord caps one request at 100, so walk backwards with ?before= to pick
+  // up older posts. Capped so a long-running channel cannot turn one page load
+  // into an unbounded crawl: the FAQ is a reference channel and wants all of
+  // it, progress only needs recent history.
+  const MAX_PAGES = which === 'faq' ? 10 : 3;   // up to 1000 / 300 messages
+
+  let raw = [];
+  let before = null;
 
   try {
-    const r = await fetch(
-      `https://discord.com/api/v10/channels/${id}/messages?limit=${limit}`,
-      { headers: { Authorization: `Bot ${token}` } }
-    );
+    for (let page = 0; page < MAX_PAGES; page++) {
+      const url = new URL(`https://discord.com/api/v10/channels/${id}/messages`);
+      url.searchParams.set('limit', '100');
+      if (before) url.searchParams.set('before', before);
 
-    if (!r.ok) {
-      // Surface Discord's own status so a permissions problem is diagnosable
-      // rather than looking like an empty channel.
-      res.status(502).json({ error: 'discord', status: r.status });
-      return;
+      const r = await fetch(url, { headers: { Authorization: `Bot ${token}` } });
+
+      if (r.status === 429) {
+        // Rate limited. Keep whatever pages already succeeded rather than
+        // failing the whole request and showing an empty channel.
+        break;
+      }
+      if (!r.ok) {
+        if (page === 0) {
+          // Surface Discord's own status so a permissions problem is
+          // diagnosable rather than looking like an empty channel.
+          res.status(502).json({ error: 'discord', status: r.status });
+          return;
+        }
+        break;
+      }
+
+      const batch = await r.json();
+      if (!batch.length) break;
+      raw = raw.concat(batch);
+      before = batch[batch.length - 1].id;   // oldest in this page
+      if (batch.length < 100) break;          // reached the start of the channel
     }
+  } catch (e) {
+    res.status(502).json({ error: 'fetch failed' });
+    return;
+  }
 
-    const raw = await r.json();
-
+  {
     const messages = raw
       .filter(m => (m.content && m.content.trim()) || (m.embeds && m.embeds.length))
       .map(m => ({
@@ -70,14 +97,21 @@ export default async function handler(req, res) {
           .filter(a => a.content_type && a.content_type.startsWith('image/'))
           .map(a => ({ url: a.url, width: a.width, height: a.height })),
       }))
-      // Discord returns newest first; the FAQ reads better oldest-first.
+      // Discord returns newest first within each page, and pages walk further
+      // back, so the whole set is newest-first. The FAQ reads oldest-first.
       .reverse();
 
     // Cached at the edge so the page is live without hammering Discord: served
-    // instantly, revalidated in the background.
-    res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=600');
-    res.status(200).json({ channel: which, guild: GUILD, count: messages.length, messages });
-  } catch (e) {
-    res.status(502).json({ error: 'fetch failed' });
+    // instantly, revalidated in the background. The FAQ is cached far longer --
+    // it changes rarely and now costs up to ten upstream requests to rebuild,
+    // while progress is the feed people expect to be current.
+    res.setHeader('Cache-Control', which === 'faq'
+      ? 's-maxage=900, stale-while-revalidate=3600'
+      : 's-maxage=60, stale-while-revalidate=600');
+    res.status(200).json({
+      channel: which, guild: GUILD, count: messages.length,
+      complete: raw.length < MAX_PAGES * 100,   // false = the cap was hit
+      messages,
+    });
   }
 }
