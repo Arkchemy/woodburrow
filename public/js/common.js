@@ -454,8 +454,9 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitT
 /* --- the footer's Discord link -----------------------------------------
    The invite comes from /api/discord-invite rather than being written into
    the markup: the widget hands out a temporary invite, so a hardcoded one
-   goes dead within a day. The link stays hidden until a real invite is in
-   hand, which is better than shipping a link that 404s. */
+   goes dead within a day. The route falls back to a permanent invite when
+   the widget cannot be read, and the link stays hidden in the one case where
+   neither is available. */
 {
     const link = document.getElementById("footDiscord");
     if (link) {

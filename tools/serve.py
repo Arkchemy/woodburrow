@@ -99,10 +99,15 @@ class H(http.server.SimpleHTTPRequestHandler):
                 body = _j.dumps({"username": "stub", "display_name": None,
                                  "avatar": None}).encode()
             elif q.path == "/api/discord-invite":
-                # The real route reads Discord's public widget; locally just
-                # hand back a plausible invite so the footer link is exercised.
-                body = _j.dumps({"invite": "https://discord.com/invite/EXAMPLE",
-                                 "name": "Arkchemy", "online": 7}).encode()
+                # The real route reads Discord's public widget and falls back
+                # to the permanent invite. ?simulate=none returns neither, to
+                # check the footer hides the link rather than showing a dead one.
+                if args.get("simulate") == "none":
+                    body = _j.dumps({"invite": None, "reason": "widget-disabled"}).encode()
+                else:
+                    body = _j.dumps({"invite": "https://discord.com/invite/KJWyHUczCV",
+                                     "source": "widget", "name": "Arkchemy",
+                                     "online": 7}).encode()
             elif q.path == "/api/license":
                 lic = ROOT / ("LEGAL.md" if args.get("repo") == "legal" else "LICENSE")
                 body = _j.dumps({"repo": args.get("repo", "woodburrow"),
