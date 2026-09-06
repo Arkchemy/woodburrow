@@ -231,19 +231,18 @@
        duplicates the list once so the marquee loops without a seam. */
     fetch("contributors.json" + DATA_V).then(r => r.json()).then(list => {
         const grid = document.getElementById("contribGrid");
-        const lede = document.getElementById("contribLede");
         if (!list.length) { grid.innerHTML = ""; return; }
 
         const core = list.filter(c => c.section !== "special-thanks");
         const thanks = list.filter(c => c.section === "special-thanks");
-        lede.textContent = list.length + " people have put work into Arkchemy" +
-            (thanks.length ? ", including " + thanks.length +
-             " whose reverse-engineering of the Alchemy engine the port leans on." : ".");
 
-        /* A plain card: avatar left with an element-coloured ring, name and
-           role right, element symbol badged on the avatar. The supplied frame
-           art is 317x188 in teal and does not compose against this palette --
-           the pieces overlapped the nameplate and buried the name. */
+        document.getElementById("contribLede").textContent =
+            core.length === 1
+                ? "The project is built by one person."
+                : core.length + " people build the project.";
+        document.getElementById("thanksLede").textContent =
+            thanks.length + " people have helped with research, direction and testing.";
+
         const card = c => {
             const el = c.github ? document.createElement("a") : document.createElement("div");
             el.className = "contrib-card reveal";
@@ -253,29 +252,36 @@
             el.innerHTML =
                 `<span class="face">` +
                   /* The local file (GitHub avatar or lettered placeholder) is
-                   rendered first so a card is never empty; the real Discord
-                   avatar is swapped in below once resolved. /api/discord-avatar
-                   returns JSON, not an image, and its `avatar` field is already
-                   proxied through /api/avatar-image -- the CSP is
-                   img-src 'self', so a cdn.discordapp.com URL would be blocked. */
-                `<img class="pfp" src="images/contributors/${c.slug}.png"` +
-                ` data-discord="${c.discordId || ""}" alt="" loading="lazy">` +
+                     rendered first so a card is never empty; the real Discord
+                     avatar is swapped in below once resolved.
+                     /api/discord-avatar returns JSON, not an image, and its
+                     avatar field is already proxied through /api/avatar-image --
+                     the CSP is img-src 'self', so a cdn.discordapp.com URL
+                     would be blocked. */
+                  `<img class="pfp" src="images/contributors/${c.slug}.png"` +
+                  ` data-discord="${c.discordId || ""}" alt="" loading="lazy">` +
                   (elFile ? `<img class="elicon" src="images/elements/${elFile}.webp" alt="${c.element}">` : "") +
                 `</span>` +
                 `<span class="body">` +
                   `<span class="cname">${c.name}</span>` +
                   `<span class="crole">${c.role}</span>` +
-                  (c.section === "special-thanks" ? `<span class="tag">Special thanks</span>` : "") +
                 `</span>`;
             return el;
         };
 
+        /* One card, not a marquee -- a rail of a single item scrolling past
+           itself looks broken. */
+        core.forEach(c => grid.appendChild(card(c)));
+
+        const thanksHost = document.getElementById("thanksGrid");
         const track = document.createElement("div");
         track.className = "contrib-track";
         /* twice through: the animation translates by -50%, so the second copy
            is exactly where the first was when it wraps */
-        [...core, ...thanks, ...core, ...thanks].forEach(c => track.appendChild(card(c)));
-        grid.appendChild(track);
+        [...thanks, ...thanks].forEach(c => thanksHost && track.appendChild(card(c)));
+        if (thanksHost) thanksHost.appendChild(track);
+        /* a short list would leave a visible gap mid-loop; hold it still */
+        if (thanks.length < 5) track.style.animation = "none";
 
         /* Resolve Discord avatars once per person, not once per card -- the
            list is rendered twice for the seamless marquee loop. */
@@ -283,7 +289,7 @@
         ids.forEach(id => {
             fetch("/api/discord-avatar?id=" + id).then(r => r.json()).then(d => {
                 if (!d || !d.avatar) return;
-                grid.querySelectorAll(`img[data-discord="${id}"]`)
+                document.querySelectorAll(`img[data-discord="${id}"]`)
                     .forEach(img => { img.src = d.avatar; });
             }).catch(() => {});
         });
@@ -314,7 +320,19 @@
     };
     const esc = t => { const d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
     /* Discord markdown, only the parts that actually appear in these channels. */
-    const mdLite = t => esc(t)
+    /* Discord custom emoji: <:name:id> and animated <a:name:id>. Served from
+       cdn.discordapp.com/emojis/{id}, routed through the proxy like every other
+       image because the CSP is img-src 'self'. Unicode emoji need no handling --
+       they are just characters. Applied after escaping, so the angle brackets
+       have already become &lt;/&gt;. */
+    const emojiRe = /&lt;(a?):([A-Za-z0-9_]+):(\d+)&gt;/g;
+    const withEmoji = h => h.replace(emojiRe, (_, anim, name, id) => {
+        const url = `https://cdn.discordapp.com/emojis/${id}.${anim ? "gif" : "png"}?size=48`;
+        return `<img class="demoji" src="/api/avatar-image?src=${encodeURIComponent(url)}"` +
+               ` alt=":${name}:" title=":${name}:" loading="lazy">`;
+    });
+
+    const mdLite = t => withEmoji(esc(t))
         .replace(/```([\s\S]*?)```/g, (_, c) => `<pre>${c.trim()}</pre>`)
         .replace(/`([^`]+)`/g, "<code>$1</code>")
         .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
@@ -333,7 +351,7 @@
             el.innerHTML =
                 `<header>` +
                   (m.author.avatar ? `<img src="${m.author.avatar}" alt="" loading="lazy">` : `<span class="noav"></span>`) +
-                  `<b>${esc(m.author.name)}</b><time datetime="${m.timestamp}">${timeAgo(m.timestamp)}</time>` +
+                  `<b>${withEmoji(esc(m.author.name))}</b><time datetime="${m.timestamp}">${timeAgo(m.timestamp)}</time>` +
                 `</header><div class="body">${mdLite(m.content)}</div>` +
                 m.attachments.map(a => `<img class="shot" src="${a.url}" alt="" loading="lazy">`).join("");
             host.appendChild(el);
@@ -354,7 +372,10 @@
             const el = document.createElement("details");
             el.className = "qa reveal";
             el.style.setProperty("--i", i);
-            el.innerHTML = `<summary>${esc(q)}</summary><div class="qa-body">${mdLite(a || "")}</div>`;
+            /* withEmoji, not bare esc: the question is where the custom emoji
+               usually is, and esc alone leaves &lt;:name:id&gt; as text. */
+            el.innerHTML = `<summary>${withEmoji(esc(q))}</summary>` +
+                           `<div class="qa-body">${mdLite(a || "")}</div>`;
             host.appendChild(el);
         });
         watchReveal();
@@ -444,12 +465,12 @@
             return;
         }
         if (!d.members || !d.members.length) {
-            host.innerHTML = '<p class="feed-empty">Nobody holds the tester role yet.</p>';
+            host.innerHTML = '<p class="feed-empty">Nobody has signed up yet.</p>';
             return;
         }
-        lede.textContent = d.count + " " +
-            (d.count === 1 ? "person runs" : "people run") +
-            " the builds on real hardware and report back.";
+        lede.textContent = d.count + " " + (d.count === 1 ? "person is" : "people are") +
+            " signed up to test as soon as a build is ready. Builds are not" +
+            " released publicly.";
         d.members.forEach((t, i) => {
             const el = document.createElement("div");
             el.className = "tester reveal";
@@ -472,6 +493,37 @@
             el.src = el.dataset.fallback;
         }
     }, true);
+
+
+    /* --- mobile menu ------------------------------------------------------
+       The nav is a plain list on desktop and a slide-in panel below 760px.
+       Kept accessible: the toggle owns aria-expanded, Escape closes, focus
+       returns to the button, and following a link closes the panel. */
+    {
+        const btn = document.getElementById("navToggle");
+        const nav = document.getElementById("site-nav");
+        const scrim = document.getElementById("navScrim");
+        const setOpen = open => {
+            document.documentElement.classList.toggle("nav-open", open);
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+            scrim.hidden = !open;
+            /* stop the page scrolling behind the panel */
+            document.body.style.overflow = open ? "hidden" : "";
+        };
+        btn.addEventListener("click", () => setOpen(!document.documentElement.classList.contains("nav-open")));
+        scrim.addEventListener("click", () => { setOpen(false); btn.focus(); });
+        nav.addEventListener("click", e => { if (e.target.tagName === "A") setOpen(false); });
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && document.documentElement.classList.contains("nav-open")) {
+                setOpen(false); btn.focus();
+            }
+        });
+        /* Resizing past the breakpoint with the panel open would otherwise
+           leave the body locked and the scrim covering a desktop layout. */
+        addEventListener("resize", () => {
+            if (innerWidth > 760) setOpen(false);
+        });
+    }
 
     function play(c) {
         if (!c.audio) return;

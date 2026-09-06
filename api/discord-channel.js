@@ -13,6 +13,11 @@
 // in the server with "View Channel" + "Read Message History" on both channels.
 // The token stays server-side; the browser only ever talks to this route.
 
+/* Everything image-shaped is handed back pointing at /api/avatar-image. The
+   page's CSP is img-src 'self', so a raw cdn.discordapp.com URL renders as a
+   broken image -- which is exactly what happened to the progress avatars. */
+const proxy = u => '/api/avatar-image?src=' + encodeURIComponent(u);
+
 const CHANNELS = {
   faq:      '1540514996704780380',
   progress: '1542245342190374975',
@@ -94,13 +99,13 @@ export default async function handler(req, res) {
           name: (m.member && m.member.nick) || m.author.global_name || m.author.username,
           id: m.author.id,
           avatar: m.author.avatar
-            ? `https://cdn.discordapp.com/avatars/${m.author.id}/${m.author.avatar}.png?size=64`
+            ? proxy(`https://cdn.discordapp.com/avatars/${m.author.id}/${m.author.avatar}.png?size=64`)
             : null,
           bot: !!m.author.bot,
         },
         attachments: (m.attachments || [])
           .filter(a => a.content_type && a.content_type.startsWith('image/'))
-          .map(a => ({ url: a.url, width: a.width, height: a.height })),
+          .map(a => ({ url: proxy(a.url), width: a.width, height: a.height })),
       }))
       // Discord returns newest first within each page, and pages walk further
       // back, so the whole set is newest-first. The FAQ reads oldest-first.

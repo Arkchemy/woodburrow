@@ -15,7 +15,7 @@
   "element": "Air",
   "github": "https://github.com/claude",
   "discordId": null,
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "NefariousTechSupport",
@@ -42,7 +42,7 @@
   "element": "Magic",
   "github": null,
   "discordId": "1267971835413401664",
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "bonesinmysoup",
@@ -51,7 +51,7 @@
   "element": "Undead",
   "github": null,
   "discordId": "731587862423797762",
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "supersamus02",
@@ -60,7 +60,7 @@
   "element": null,
   "github": "https://github.com/SuperSamus",
   "discordId": "402569493747990528",
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "jensj56",
@@ -69,7 +69,7 @@
   "element": null,
   "github": null,
   "discordId": "368385351078772736",
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "jackthebloke",
@@ -78,7 +78,7 @@
   "element": null,
   "github": null,
   "discordId": "1035213830579568650",
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "LG-RZ",
@@ -87,7 +87,7 @@
   "element": null,
   "github": "https://github.com/LG-RZ",
   "discordId": null,
-  "section": "core"
+  "section": "special-thanks"
  },
  {
   "name": "retexcraft",
@@ -96,6 +96,6 @@
   "element": null,
   "github": null,
   "discordId": "718520146460803145",
-  "section": "core"
+  "section": "special-thanks"
  }
 ]

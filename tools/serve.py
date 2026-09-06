@@ -20,14 +20,14 @@ _LOCAL_DISCORD = {
     "progress": {"messages": [
         {"id": "1", "content": "**Boot** reached static-init 113/114; the stall is a freed frame manager.",
          "timestamp": "2026-09-06T09:00:00+00:00",
-         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": "/api/avatar-image?src=x", "bot": False},
          "attachments": []},
         {"id": "2", "content": "Roster now covers all six games. `rosters.json` rebuilt.",
          "timestamp": "2026-09-06T11:30:00+00:00",
          "author": {"name": "Claude", "id": "2", "avatar": None, "bot": True},
          "attachments": []}]},
     "faq": {"messages": [
-        {"id": "3", "content": "**Is this legal?** Arkchemy ships no game content. You supply your own copy.",
+        {"id": "3", "content": "**Who is Xpec guy? <:xpecGuy:1543926752856776804>** A running joke in the server.",
          "timestamp": "2026-09-01T10:00:00+00:00",
          "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
          "attachments": []},
