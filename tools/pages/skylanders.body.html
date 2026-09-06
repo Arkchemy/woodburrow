@@ -1,0 +1,57 @@
+        <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
+        <p class="lede">Every Skylander, by game and element. Pick one to see
+        its element, portrait, catchphrase and moves.</p>
+
+        <div class="game-tabs" id="gameTabs"></div>
+
+        <div class="roster-tools">
+            <button id="randomPick" type="button">&#8635; Random Skylander</button>
+            <span id="voiceNote"></span>
+        </div>
+
+        <section class="showcase" id="showcase" hidden>
+            <button class="stage-nav prev" type="button" aria-label="Previous Skylander">&#10094;</button>
+            <button class="stage-nav next" type="button" aria-label="Next Skylander">&#10095;</button>
+            <div class="stage" id="stage">
+                <div class="loadouts left">
+                    <div class="loadout">
+                        <p class="lo-label">Element</p>
+                        <img class="emblem" id="s-emblem" alt=""
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                    </div>
+                    <div class="loadout">
+                        <p class="lo-label">Portrait</p>
+                        <img class="face" id="s-face" alt=""
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                    </div>
+                </div>
+
+                <div class="hero-slot">
+                    <img class="hero-img" id="s-hero" alt=""
+                         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                </div>
+
+                <div class="loadouts right">
+                    <div class="loadout">
+                        <p class="lo-label">Catchphrase</p>
+                        <blockquote id="s-catch"></blockquote>
+                        <button class="play-line" id="s-play" type="button">&#9654; Play</button>
+                    </div>
+                    <div class="loadout">
+                        <p class="lo-label">Profile</p>
+                        <dl id="s-facts"></dl>
+                    </div>
+                    <div class="loadout" id="s-moves-card" hidden>
+                        <p class="lo-label">Moves</p>
+                        <ul id="s-moves"></ul>
+                    </div>
+                </div>
+
+                <div class="plate">
+                    <span class="el-tag" id="s-el"></span>
+                    <h3 id="s-name"></h3>
+                </div>
+            </div>
+        </section>
+
+        <div id="elements"></div>

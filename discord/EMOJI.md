@@ -9,8 +9,13 @@ exactly as in the `name` column. The site reads the same names from
 `public/emoji.json`, so once an emoji exists you only have to paste its id in
 there and `:thatName:` works on the website as well as in Discord.
 
-**Getting an id:** post the emoji in any channel, right-click it → *Copy Link*.
-The link ends `…/emojis/1543926752856776804.webp` — the number is the id.
+**Getting the ids:** don't copy them by hand — run
+
+```bash
+DISCORD_BOT_TOKEN=... python3 discord/emoji_sync.py
+```
+
+which reads the server's emoji and fills `public/emoji.json` in by name.
 
 **Limits on a level-0 server:** 50 static + 50 animated, 256 KB each. Upload at
 128×128 PNG with transparency; Discord downscales to 32×32 for display, so
@@ -18,12 +23,11 @@ anything with fine detail needs to survive that.
 
 ---
 
-## Project (4)
+## Project (3)
 
 | name | what it should be |
 |---|---|
 | `arkchemy` | the Arkchemy balloon mark, cropped tight |
-| `arkFlask` | the alchemy flask from the logo, on its own |
 | `portalPower` | a Portal of Power seen from above, glowing ring |
 | `soulGem` | a soul gem — for when someone finds something genuinely rare |
 
@@ -56,16 +60,6 @@ Source art is the element medallion for each.
 `elemMagic` · `elemTech` · `elemFire` · `elemWater` · `elemEarth` ·
 `elemAir` · `elemLife` · `elemUndead` · `elemLight` · `elemDark`
 
-## Animated, if you want them (3)
-
-Kept to three — animated emoji are the ones people notice being overused.
-
-| name | what it should be |
-|---|---|
-| `loadingSpin` | the flask bubbling, or a simple spinner |
-| `portalSpin` | the Portal of Power ring rotating |
-| `buildingNow` | a progress bar filling and resetting |
-
 ---
 
 ## Where they are used on the site
@@ -75,11 +69,12 @@ fallback, so **the site renders correctly right now with no emoji uploaded at
 all** — `:buildPass:` shows ✅ until the id is filled in, then switches to the
 real one. Nothing ever appears as a broken image.
 
-Fill in ids like this:
+An entry looks like this once synced:
 
 ```json
 "buildPass": { "id": "1543926752856776804", "fallback": "✅", "use": "build succeeded" }
 ```
 
-Send me the ids and I will paste them in, or edit that file directly — no
-rebuild needed beyond `python3 tools/stamp.py`.
+The site uses `:arkchemy:`, `:bigBrain:`, `:switchDock:`, `:buildPass:` and
+`:bootLoop:` in its own copy today; the rest are there for Discord and for
+whatever the progress posts reach for.

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Arkchemy is porting Skylanders: Spyro's Adventure to the Nintendo Switch with a static recompiler. A fan preservation project, not affiliated with Activision.">
+<meta name="description" content="The six Skylanders games, all on the same Alchemy engine, and why the five that are not being ported still matter to the port.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkchemy</title>
+<title>The games · Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
@@ -87,7 +87,7 @@
             <img src="images/logo/arkchemy-icon-256.png" alt="" width="256" height="256">
         </a>
         <a href="/#project">The Project</a>
-        <a href="/games">The Games</a>
+        <a href="/games" aria-current="page">The Games</a>
         <a href="/skylanders">Skylanders</a>
         <a href="/#progress">Progress</a>
         <a href="/#faq">FAQ</a>
@@ -98,41 +98,22 @@
     <div id="navScrim" hidden></div>
 
     <main id="main" tabindex="-1">
-        <h2 id="project"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>What this is</h2>
-        <p class="lede">Arkchemy is porting <strong>Skylanders: Spyro's Adventure</strong>
-        to the Nintendo Switch. The console it shipped on is out of production, the
-        online services behind the series are gone, and the discs will not read
-        forever. This is an attempt to keep the game playable.</p>
-        <p class="lede">The work is a static recompiler: the game's PowerPC code
-        is translated to C, then rebuilt for ARM64. Nothing is emulated at runtime.</p>
+        <h2 id="games"><svg class="h-ico" aria-hidden="true"><use href="#i-controller"/></svg>The games</h2>
+        <p class="lede">Six games on one engine. Only the first is being ported
+        &mdash; the rest are here because they share the engine, so what the port
+        learns about one usually applies to the others.</p>
 
-        <ul class="jump">
-            <li class="reveal" style="--i:0"><a href="/games">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-controller"/></svg>
-                <b>The games</b><span>Six on one engine, and why the other five matter</span></a></li>
-            <li class="reveal" style="--i:1"><a href="/skylanders">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spark"/></svg>
-                <b>The Skylanders</b><span>All 351, by game and element, with moves and voice lines</span></a></li>
-        </ul>
+        <div class="game-cards" id="gameCards"></div>
 
-        <h2 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h2>
-        <p class="lede">Live from the Discord progress channel.</p>
-        <div class="feed-clip" id="progressClip">
-            <div id="progressFeed" class="feed"></div>
+        <div class="callout reveal">
+            <h3>Why the others matter</h3>
+            <p>Every one of these runs on Alchemy, the same engine, with the same
+            archive format and the same object model. A structure worked out by
+            staring at <i>Imaginators</i> &mdash; which shipped with its symbols
+            intact &mdash; is usually the same structure <i>Spyro&rsquo;s
+            Adventure</i> uses with the names stripped out. The later games are
+            documentation for the earlier one.</p>
         </div>
-        <p class="more-link" id="progressMore" hidden><button type="button" id="progressExpand">
-            Show everything<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path fill="currentColor" d="M12 16l-8-8 1.4-1.4L12 13.2l6.6-6.6L20 8z"/></svg></button></p>
-
-        <h2 id="faq"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>FAQ</h2>
-        <p class="lede">Live from the Discord FAQ channel, so it stays current.</p>
-        <div id="faqList" class="faq"></div>
-
-        <h2 id="people"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>The people</h2>
-        <p class="lede">One person writes the code. A lot of others have put
-        research, direction and patience into it.</p>
-        <div id="peopleGrid" class="person-lead-grid"></div>
-        <p class="more-link"><a href="/contributors">Everyone who has helped
-            <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path fill="currentColor" d="M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z"/></svg></a></p>
 
     </main>
 
@@ -184,6 +165,6 @@
     </footer>
 
     <script src="js/common.js?v=1788711654"></script>
-    <script src="js/home.js?v=1788711349"></script>
+    <script src="js/games.js?v=1788711372"></script>
 </body>
 </html>

@@ -18,6 +18,23 @@ for rule in cfg.get("headers", []):
 _INTENT_OFF = True
 _LOCAL_DISCORD = {
     "progress": {"messages": [
+        # Oldest first, which is what /api/discord-channel hands the page: it
+        # reverses Discord's newest-first pages. The front page reverses again
+        # for this feed. The stub used to list these newest-first, so locally
+        # the feed came out backwards and the two-post cap showed the two
+        # oldest posts -- a bug in the fixture that looked like a bug in the page.
+        {"id": "8", "content": "**Wordmark** redrawn as outlined paths so it needs no font to have loaded.",
+         "timestamp": "2026-09-03T09:10:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []},
+        {"id": "7", "content": "`igArchive` v4 layout written up. Four file opens before the stall.",
+         "timestamp": "2026-09-04T14:20:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []},
+        {"id": "6", "content": "Pool index 28 is invisible to LZMA. Chasing the wipe at call 440,610.",
+         "timestamp": "2026-09-05T16:00:00+00:00",
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
+         "attachments": []},
         {"id": "1", "content": "**Boot** reached static-init 113/114; the stall is a freed frame manager.",
          "timestamp": "2026-09-06T09:00:00+00:00",
          "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},

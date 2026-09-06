@@ -638,7 +638,7 @@ h2 { view-transition-name: none; }
    people want to find their own name in it, which a moving rail fights. */
 .tester-grid {
     display: grid; gap: 8px; margin: 0 0 24px;
-    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(148px, 100%), 1fr));
 }
 .tester {
     display: flex; align-items: center; gap: 8px;
@@ -654,10 +654,10 @@ h2 { view-transition-name: none; }
 }
 .tester .tname {
     font-size: 12.5px; color: var(--ink);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    overflow: hidden; white-space: nowrap;   /* .fit shrinks it instead of clipping */
 }
 @media (max-width: 700px) {
-    .tester-grid { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 6px; }
+    .tester-grid { grid-template-columns: repeat(auto-fill, minmax(min(132px, 100%), 1fr)); gap: 6px; }
     .tester .tname { font-size: 11.5px; }
 }
 
@@ -915,7 +915,7 @@ h1#site-lockup { margin: 0; font-size: inherit; line-height: 1; }
    Three facts, stated once, before any of the cards. */
 .stat-row {
     list-style: none; display: grid; gap: 12px; margin: 0 0 30px; padding: 0;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .stat-row li {
     position: relative; overflow: hidden;
@@ -965,11 +965,12 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 .person .p-name {
     display: block; font-family: "Luckiest Guy", Impact, sans-serif;
     font-size: 16px; letter-spacing: .03em; line-height: 1.15; color: var(--plum);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    overflow: hidden; white-space: nowrap;   /* .fit shrinks it instead of clipping */
 }
 .person .p-role {
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden; font-size: 12px; line-height: 1.4; color: #5c5268; margin-top: 3px;
+    max-height: 3.4em;   /* two lines at this size; .fit shrinks to stay inside */
 }
 /* the GitHub mark only resolves on hover, so it never competes with the name */
 .person .p-go {
@@ -980,7 +981,7 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 
 /* The lead card is the person who writes the code; it gets the full width
    and an element-tinted wash rather than being one tile among many. */
-.person-lead-grid { display: grid; gap: 12px; margin: 0 0 12px; }
+.person-lead-grid { display: grid; gap: 12px; margin: 0 0 12px; grid-template-columns: minmax(0, 1fr); }
 .person-lead {
     gap: 20px; padding: 22px 24px; border-top-width: 4px;
     background:
@@ -989,11 +990,15 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 .person-lead .pfp { width: 84px; height: 84px; box-shadow: 0 0 0 4px var(--el); }
 .person-lead .elicon { width: 30px; height: 30px; right: -6px; bottom: -6px; }
 .person-lead .p-name { font-size: 24px; }
-.person-lead .p-role { font-size: 14px; -webkit-line-clamp: 3; }
+.person-lead .p-role { font-size: 14px; -webkit-line-clamp: 3; max-height: 4.4em; }
 
+/* minmax(0,1fr), not 1fr: a 1fr track has min-width:auto, so a long
+   unbroken name grows the track past its container instead of being
+   constrained -- the card gets wider than the page rather than the
+   text being clipped or shrunk. */
 .person-grid {
     display: grid; gap: 12px; margin: 0 0 26px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
 }
 
 /* --- the closing card on both pages ------------------------------------ */
@@ -1013,7 +1018,7 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 /* --- /legal: the three-fact summary ------------------------------------ */
 .gist {
     list-style: none; display: grid; gap: 12px; margin: 0 0 32px; padding: 0;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 .gist li {
     padding: 18px 18px 16px; border-radius: 14px; background: #fff;
@@ -1157,11 +1162,11 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 }
 
 @media (max-width: 760px) {
-    .stat-row, .gist { grid-template-columns: 1fr 1fr; gap: 9px; }
+    .stat-row, .gist { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 9px; }
     .gist li:last-child { grid-column: 1 / -1; }
     .stat-row li { padding: 13px 14px; }
     .stat-row b { font-size: 30px; }
-    .person-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 9px; }
+    .person-grid { grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 9px; }
     .person { padding: 11px 13px; gap: 15px; }   /* clears the element badge */
     .person .pfp { width: 46px; height: 46px; }
     .person-lead { padding: 16px 17px; gap: 15px; }
@@ -1175,7 +1180,7 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 }
 
 @media (max-width: 520px) {
-    .stat-row { grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
 
     /* Three stacked cards of padding would push the documents themselves a
        whole screen down. Same three facts, laid out as rows. */
@@ -1190,8 +1195,8 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .stat-row li::after { display: none; }
     .stat-row b { font-size: 25px; }
     .stat-row > li > span { font-size: 11px; line-height: 1.3; }
-    .gist { grid-template-columns: 1fr; }
-    .person-grid { grid-template-columns: 1fr; }
+    .gist { grid-template-columns: minmax(0, 1fr); }
+    .person-grid { grid-template-columns: minmax(0, 1fr); }
 
     /* the table stacks: each row becomes a small card with its column names
        carried down as labels, since a 3-column table cannot fit here */
@@ -1261,4 +1266,156 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .egg-toast { transition: opacity .01s; }
     .portal h2, .portal .p-name, .portal .stat-row b,
     .portal #cloud-header::after, .portal footer, .portal .person { transition: none; }
+}
+
+/* =======================================================================
+   The games page, the front-page jump cards, the capped progress feed and
+   the nav's home mark.
+   ======================================================================= */
+
+/* --- the nav's Arkchemy mark -------------------------------------------
+   Only on desktop, and only once the cloud header has scrolled away: while
+   the header is on screen the mark is already there, twice the size, and a
+   second copy directly under it looks like a mistake. JS sets .scrolled. */
+#site-nav .nav-home { display: none; }
+@media (min-width: 761px) {
+    #site-nav .nav-home {
+        display: grid; place-items: center;
+        position: absolute; left: 14px; top: 50%;
+        width: 40px; height: 40px; margin-top: -20px;
+        padding: 0;                  /* #site-nav a adds 7px 15px */
+        background: none;
+        opacity: 0; transform: translateY(-6px) scale(.85);
+        pointer-events: none;
+        transition: opacity .28s var(--ease), transform .28s var(--ease);
+    }
+    #site-nav .nav-home img { width: 100%; height: 100%; object-fit: contain; }
+    #site-nav .nav-home::after { display: none; }   /* no underline sweep on the mark */
+    .scrolled #site-nav .nav-home { opacity: 1; transform: none; pointer-events: auto; }
+    /* the links shift right to make room, but only while the mark is there */
+    .scrolled #site-nav { padding-left: 54px; }
+}
+
+/* --- front page: where to go next -------------------------------------- */
+.jump {
+    list-style: none; margin: 0 0 34px; padding: 0;
+    display: grid; gap: 12px; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+}
+.jump a {
+    display: grid; grid-template-columns: 38px 1fr; gap: 2px 14px;
+    align-items: center; height: 100%;
+    padding: 18px 20px; border-radius: 15px; text-decoration: none;
+    background: linear-gradient(155deg, #fff, #faf7fc);
+    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.08);
+    transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease),
+                border-color var(--fast) var(--ease);
+}
+.jump a:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(60,30,80,.16); border-color: #e0cfe8; }
+.jump svg { grid-row: span 2; width: 34px; height: 34px; color: var(--berry); }
+.jump b {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 18px; letter-spacing: .03em; color: var(--plum);
+}
+.jump span { font-size: 13px; line-height: 1.45; color: #6a6376; }
+
+/* --- the games page ---------------------------------------------------- */
+.game-cards { display: grid; gap: 14px; grid-template-columns: minmax(0,1fr) minmax(0,1fr); margin: 0 0 30px; }
+.game-card {
+    display: grid; grid-template-columns: 132px 1fr; gap: 18px; align-items: center;
+    padding: 18px 22px 18px 18px; border-radius: 16px; text-decoration: none;
+    color: var(--ink); background: #fff;
+    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.08);
+    transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+.game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(60,30,80,.18); }
+/* the game actually being ported gets the whole width and the gold edge */
+.game-card.is-now {
+    grid-column: 1 / -1; grid-template-columns: 190px 1fr;
+    border-color: var(--gold); box-shadow: 0 6px 20px rgba(243,195,78,.28);
+    background: linear-gradient(150deg, #fffdf6, #fff 60%);
+}
+.gc-logo { display: grid; place-items: center; }
+.gc-logo img { width: 100%; height: auto; max-height: 96px; object-fit: contain; }
+.game-card.is-now .gc-logo img { max-height: 128px; }
+
+.gc-body { min-width: 0; }
+.gc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.gc-body h3 {
+    margin: 0; font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 20px; letter-spacing: .03em; color: var(--plum);
+}
+.game-card.is-now .gc-body h3 { font-size: 25px; }
+.gc-status {
+    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    border-radius: 999px; padding: 3px 9px; white-space: nowrap;
+}
+.st-now { background: var(--gold); color: #4a2a02; }
+.st-ref { background: #f0eaf4; color: #6a6376; }
+.gc-hook { margin: 7px 0 11px; font-size: 13.5px; line-height: 1.55; color: #5c5268; max-width: 56ch; }
+
+.gc-stats { display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: baseline; }
+.gc-stats > span { white-space: nowrap; }
+.gc-stats b {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    font-size: 17px; color: var(--berry); letter-spacing: .02em;
+}
+.gc-stats i { font-style: normal; font-size: 11.5px; color: #8a7f96; margin-left: 5px; }
+.gc-go {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 12px;
+    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 12.5px;
+    letter-spacing: .04em; color: var(--berry);
+}
+.gc-go svg { transition: transform var(--fast) var(--ease); }
+.game-card:hover .gc-go svg { transform: translateX(4px); }
+
+/* --- the progress feed, capped ----------------------------------------
+   The clip is a scroll container, not a truncation: everything is still
+   there and reachable, it just does not take over the page. */
+.feed-clip { position: relative; }
+.feed-clip.capped {
+    max-height: var(--cap, 460px); overflow-y: auto; overscroll-behavior: contain;
+    /* fade the last stretch rather than overlaying a gradient block, so the
+       text under it is genuinely translucent instead of sitting on paper */
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 84px), transparent);
+            mask-image: linear-gradient(180deg, #000 calc(100% - 84px), transparent);
+    padding-bottom: 10px;
+    scrollbar-width: thin; scrollbar-color: #ddd2e6 transparent;
+}
+.feed-clip.capped::-webkit-scrollbar { width: 8px; }
+.feed-clip.capped::-webkit-scrollbar-thumb { background: #ddd2e6; border-radius: 4px; }
+/* once you have scrolled to the end there is nothing left to hint at, so the
+   fade would just be haze over the last post */
+.feed-clip.at-end {
+    -webkit-mask-image: none; mask-image: none;
+}
+#progressMore button {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: 0; cursor: pointer; padding: 0;
+    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
+    letter-spacing: .04em; color: var(--berry);
+}
+#progressMore button:hover { color: var(--plum); }
+#progressMore svg { transition: transform var(--fast) var(--ease); }
+#progressMore button:hover svg { transform: translateY(2px); }
+
+@media (max-width: 760px) {
+    .jump { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+    .jump a { padding: 14px 16px; gap: 2px 12px; grid-template-columns: 30px 1fr; }
+    .jump svg { width: 28px; height: 28px; }
+    .jump b { font-size: 16px; }
+    .jump span { font-size: 12px; }
+
+    .game-cards { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .game-card, .game-card.is-now { grid-template-columns: 92px 1fr; gap: 14px; padding: 14px 16px 14px 13px; }
+    .gc-logo img, .game-card.is-now .gc-logo img { max-height: 68px; }
+    .gc-body h3, .game-card.is-now .gc-body h3 { font-size: 17px; }
+    .gc-hook { font-size: 12.5px; margin: 5px 0 9px; }
+    .gc-stats { gap: 3px 14px; }
+    .gc-stats b { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .jump a:hover, .game-card:hover { transform: none; }
+    .game-card:hover .gc-go svg, #progressMore button:hover svg { transform: none; }
+    #site-nav .nav-home { transition: none; }
 }

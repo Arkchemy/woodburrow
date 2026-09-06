@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Arkchemy is porting Skylanders: Spyro's Adventure to the Nintendo Switch with a static recompiler. A fan preservation project, not affiliated with Activision.">
+<meta name="description" content="Every Skylander across all six games, by element, with portraits, catchphrases and moves.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arkchemy</title>
+<title>Skylanders · Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
@@ -88,7 +88,7 @@
         </a>
         <a href="/#project">The Project</a>
         <a href="/games">The Games</a>
-        <a href="/skylanders">Skylanders</a>
+        <a href="/skylanders" aria-current="page">Skylanders</a>
         <a href="/#progress">Progress</a>
         <a href="/#faq">FAQ</a>
         <a href="/contributors">Contributors</a>
@@ -98,41 +98,63 @@
     <div id="navScrim" hidden></div>
 
     <main id="main" tabindex="-1">
-        <h2 id="project"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>What this is</h2>
-        <p class="lede">Arkchemy is porting <strong>Skylanders: Spyro's Adventure</strong>
-        to the Nintendo Switch. The console it shipped on is out of production, the
-        online services behind the series are gone, and the discs will not read
-        forever. This is an attempt to keep the game playable.</p>
-        <p class="lede">The work is a static recompiler: the game's PowerPC code
-        is translated to C, then rebuilt for ARM64. Nothing is emulated at runtime.</p>
+        <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
+        <p class="lede">Every Skylander, by game and element. Pick one to see
+        its element, portrait, catchphrase and moves.</p>
 
-        <ul class="jump">
-            <li class="reveal" style="--i:0"><a href="/games">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-controller"/></svg>
-                <b>The games</b><span>Six on one engine, and why the other five matter</span></a></li>
-            <li class="reveal" style="--i:1"><a href="/skylanders">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-spark"/></svg>
-                <b>The Skylanders</b><span>All 351, by game and element, with moves and voice lines</span></a></li>
-        </ul>
+        <div class="game-tabs" id="gameTabs"></div>
 
-        <h2 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h2>
-        <p class="lede">Live from the Discord progress channel.</p>
-        <div class="feed-clip" id="progressClip">
-            <div id="progressFeed" class="feed"></div>
+        <div class="roster-tools">
+            <button id="randomPick" type="button">&#8635; Random Skylander</button>
+            <span id="voiceNote"></span>
         </div>
-        <p class="more-link" id="progressMore" hidden><button type="button" id="progressExpand">
-            Show everything<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path fill="currentColor" d="M12 16l-8-8 1.4-1.4L12 13.2l6.6-6.6L20 8z"/></svg></button></p>
 
-        <h2 id="faq"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>FAQ</h2>
-        <p class="lede">Live from the Discord FAQ channel, so it stays current.</p>
-        <div id="faqList" class="faq"></div>
+        <section class="showcase" id="showcase" hidden>
+            <button class="stage-nav prev" type="button" aria-label="Previous Skylander">&#10094;</button>
+            <button class="stage-nav next" type="button" aria-label="Next Skylander">&#10095;</button>
+            <div class="stage" id="stage">
+                <div class="loadouts left">
+                    <div class="loadout">
+                        <p class="lo-label">Element</p>
+                        <img class="emblem" id="s-emblem" alt=""
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                    </div>
+                    <div class="loadout">
+                        <p class="lo-label">Portrait</p>
+                        <img class="face" id="s-face" alt=""
+                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                    </div>
+                </div>
 
-        <h2 id="people"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>The people</h2>
-        <p class="lede">One person writes the code. A lot of others have put
-        research, direction and patience into it.</p>
-        <div id="peopleGrid" class="person-lead-grid"></div>
-        <p class="more-link"><a href="/contributors">Everyone who has helped
-            <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path fill="currentColor" d="M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z"/></svg></a></p>
+                <div class="hero-slot">
+                    <img class="hero-img" id="s-hero" alt=""
+                         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                </div>
+
+                <div class="loadouts right">
+                    <div class="loadout">
+                        <p class="lo-label">Catchphrase</p>
+                        <blockquote id="s-catch"></blockquote>
+                        <button class="play-line" id="s-play" type="button">&#9654; Play</button>
+                    </div>
+                    <div class="loadout">
+                        <p class="lo-label">Profile</p>
+                        <dl id="s-facts"></dl>
+                    </div>
+                    <div class="loadout" id="s-moves-card" hidden>
+                        <p class="lo-label">Moves</p>
+                        <ul id="s-moves"></ul>
+                    </div>
+                </div>
+
+                <div class="plate">
+                    <span class="el-tag" id="s-el"></span>
+                    <h3 id="s-name"></h3>
+                </div>
+            </div>
+        </section>
+
+        <div id="elements"></div>
 
     </main>
 
@@ -184,6 +206,6 @@
     </footer>
 
     <script src="js/common.js?v=1788711654"></script>
-    <script src="js/home.js?v=1788711349"></script>
+    <script src="js/skylanders.js?v=1788710994"></script>
 </body>
 </html>

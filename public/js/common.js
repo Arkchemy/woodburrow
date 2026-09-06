@@ -8,7 +8,7 @@
        stamp is the newest data-file mtime -- a date alone does not bust the
        cache when the data is regenerated the same day. Refresh it with
        tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1788708692";
+    const DATA_V = "?v=1788710906";
 
 /* --- element palette, used by the roster and the contributor cards --- */
     const ELEMENT_COLOUR = {
@@ -374,3 +374,79 @@ fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
         });
     }
 }
+
+/* --- has the cloud header scrolled away? -------------------------------
+   Drives the small Arkchemy mark in the sticky nav, which only makes sense
+   once the big one is off screen.
+
+   A scroll listener rather than an IntersectionObserver on a sentinel: the
+   observer fires nothing at all for an element inside #cloud-header, which
+   is overflow:hidden with transformed children, and a compare against one
+   number is cheaper than working out why. Reads are coalesced into a frame,
+   so scrolling still only measures once per paint. */
+{
+    const header = document.getElementById("cloud-header");
+    if (header) {
+        let ticking = false;
+        const update = () => {
+            ticking = false;
+            const past = header.getBoundingClientRect().bottom <= 0;
+            document.documentElement.classList.toggle("scrolled", past);
+        };
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        };
+        addEventListener("scroll", onScroll, { passive: true });
+        addEventListener("resize", onScroll);
+        update();
+    }
+}
+
+/* --- text that would be clipped shrinks instead -------------------------
+   Names and roles come from a CSV and from Discord, so there is no length
+   to design to. Rather than an ellipsis eating the end of a name, step the
+   font down until it fits, to a floor where it is still readable -- below
+   that, clipping is the honest outcome and the title attribute carries the
+   whole string.
+
+   Marked with .fit so it is opt-in: applying this to body copy would be a
+   lot of layout reads for no benefit. */
+function fitText(root) {
+    const els = (root || document).querySelectorAll(".fit:not([data-fitted])");
+    if (!els.length) return;
+
+    els.forEach(el => {
+        el.dataset.fitted = "1";
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        const min = Math.max(10, base * 0.72);
+        /* one line or several: overflowing sideways means it is a single
+           line that is too long, overflowing down means it wraps too far */
+        const over = () => el.scrollWidth > el.clientWidth + 1 ||
+                           el.scrollHeight > el.clientHeight + 1;
+        if (!over()) return;
+        let size = base;
+        while (size > min && over()) {
+            size -= 0.5;
+            el.style.fontSize = size + "px";
+        }
+        if (over() && !el.title) el.title = el.textContent.trim();
+    });
+}
+
+/* Re-run on resize: a card that fits at 1280px may not at 380px, and a size
+   set for the narrow case would stay needlessly small on the way back up. */
+let fitTimer = null;
+addEventListener("resize", () => {
+    clearTimeout(fitTimer);
+    fitTimer = setTimeout(() => {
+        document.querySelectorAll(".fit[data-fitted]").forEach(el => {
+            el.style.fontSize = "";
+            delete el.dataset.fitted;
+        });
+        fitText();
+    }, 180);
+});
+/* webfonts land after first paint and change every measurement */
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitText());

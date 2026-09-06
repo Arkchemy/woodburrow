@@ -40,8 +40,8 @@ function personCard(c, big) {
           (elFile ? `<img class="elicon" src="images/elements/${elFile}.webp" alt="${c.element}">` : "") +
         `</span>` +
         `<span class="body">` +
-          `<span class="p-name">${esc(c.name)}</span>` +
-          `<span class="p-role">${esc(big ? c.role.replace(/ -- /g, " \u2014 ") : trimRole(c.role))}</span>` +
+          `<span class="p-name fit">${esc(c.name)}</span>` +
+          `<span class="p-role fit">${esc(big ? c.role.replace(/ -- /g, " \u2014 ") : trimRole(c.role))}</span>` +
         `</span>` +
         (c.github ? `<span class="p-go" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="15" height="15"><path fill="currentColor" d="M8 0a8 8 0 00-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-1-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 014 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.8-3.6 4 .3.3.6.8.6 1.6v2.3c0 .2.1.5.5.4A8 8 0 008 0z"/></svg>
@@ -73,6 +73,7 @@ fetch("contributors.json" + DATA_V).then(r => r.json()).then(list => {
 
     resolveAvatars(list.map(c => c.discordId));
     watchReveal();
+    fitText();
 }).catch(() => {
     const grid = document.getElementById("contribGrid");
     if (grid) grid.innerHTML = '<p class="feed-empty">The contributor list is unavailable right now.</p>';
@@ -102,10 +103,11 @@ fetch("/api/discord-role?role=testers").then(r => r.json()).then(d => {
         el.innerHTML =
             (t.avatar ? `<img src="${t.avatar}" alt="" loading="lazy">`
                       : `<span class="noav">${esc(t.name.slice(0, 1).toUpperCase())}</span>`) +
-            `<span class="tname">${esc(t.name)}</span>`;
+            `<span class="tname fit">${esc(t.name)}</span>`;
         host.appendChild(el);
     });
     watchReveal();
+    fitText();
 }).catch(() => {
     const host = document.getElementById("testerGrid");
     if (host) host.innerHTML = '<p class="feed-empty">The tester list is unavailable right now.</p>';

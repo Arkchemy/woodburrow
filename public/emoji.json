@@ -1,27 +1,110 @@
 {
-  "_comment": "Arkchemy's own Discord emoji. Fill in each id once the emoji is uploaded to the server (right-click the emoji in Discord, Copy Link -- the id is the number in the filename). Until an id is set the site renders the unicode fallback, so nothing ever shows as a broken image. Names match the emoji's name in Discord so the same :name: works in both places.",
+  "_comment": "Arkchemy's own Discord emoji. Run discord/emoji_sync.py to fill the ids in from the server; it matches on name. Until an id is set the site renders the unicode fallback, so nothing ever shows as a broken image. Names match the emoji's name in Discord so the same :name: works in both places.",
   "emoji": {
-    "arkchemy":    { "id": null, "fallback": "🎈", "use": "the project mark" },
-    "arkFlask":    { "id": null, "fallback": "⚗️",  "use": "recompiler / alchemy" },
-    "portalPower": { "id": null, "fallback": "💫",  "use": "Portal of Power" },
-    "soulGem":     { "id": null, "fallback": "💎",  "use": "a rare find" },
-    "buildPass":   { "id": null, "fallback": "✅",        "use": "build succeeded" },
-    "buildFail":   { "id": null, "fallback": "❌",        "use": "build broke" },
-    "bootLoop":    { "id": null, "fallback": "🔁",  "use": "still not booting" },
-    "bigBrain":    { "id": null, "fallback": "🧠",  "use": "a real breakthrough" },
-    "bugSquash":   { "id": null, "fallback": "🐛",  "use": "bug fixed" },
-    "switchDock":  { "id": null, "fallback": "🎮",  "use": "runs on Switch" },
-    "wiiU":        { "id": null, "fallback": "💿",  "use": "the source platform" },
-    "xpecGuy":     { "id": "1543926752856776804", "fallback": "🙂", "use": "the in-joke" },
-    "elemMagic":   { "id": null, "fallback": "🔮", "use": "element: Magic" },
-    "elemTech":    { "id": null, "fallback": "⚙️",  "use": "element: Tech" },
-    "elemFire":    { "id": null, "fallback": "🔥", "use": "element: Fire" },
-    "elemWater":   { "id": null, "fallback": "💧", "use": "element: Water" },
-    "elemEarth":   { "id": null, "fallback": "🪨", "use": "element: Earth" },
-    "elemAir":     { "id": null, "fallback": "🌬️", "use": "element: Air" },
-    "elemLife":    { "id": null, "fallback": "🌿", "use": "element: Life" },
-    "elemUndead":  { "id": null, "fallback": "💀", "use": "element: Undead" },
-    "elemLight":   { "id": null, "fallback": "☀️",  "use": "element: Light" },
-    "elemDark":    { "id": null, "fallback": "🌑", "use": "element: Dark" }
+    "arkchemy": {
+      "id": null,
+      "fallback": "🎈",
+      "use": "the project mark"
+    },
+    "portalPower": {
+      "id": null,
+      "fallback": "💫",
+      "use": "Portal of Power"
+    },
+    "soulGem": {
+      "id": null,
+      "fallback": "💎",
+      "use": "a rare find"
+    },
+    "buildPass": {
+      "id": null,
+      "fallback": "✅",
+      "use": "build succeeded"
+    },
+    "buildFail": {
+      "id": null,
+      "fallback": "❌",
+      "use": "build broke"
+    },
+    "bootLoop": {
+      "id": null,
+      "fallback": "🔁",
+      "use": "still not booting"
+    },
+    "bigBrain": {
+      "id": null,
+      "fallback": "🧠",
+      "use": "a real breakthrough"
+    },
+    "bugSquash": {
+      "id": null,
+      "fallback": "🐛",
+      "use": "bug fixed"
+    },
+    "switchDock": {
+      "id": null,
+      "fallback": "🎮",
+      "use": "runs on Switch"
+    },
+    "wiiU": {
+      "id": null,
+      "fallback": "💿",
+      "use": "the source platform"
+    },
+    "xpecGuy": {
+      "id": "1543926752856776804",
+      "fallback": "🙂",
+      "use": "the in-joke"
+    },
+    "elemMagic": {
+      "id": null,
+      "fallback": "🔮",
+      "use": "element: Magic"
+    },
+    "elemTech": {
+      "id": null,
+      "fallback": "⚙️",
+      "use": "element: Tech"
+    },
+    "elemFire": {
+      "id": null,
+      "fallback": "🔥",
+      "use": "element: Fire"
+    },
+    "elemWater": {
+      "id": null,
+      "fallback": "💧",
+      "use": "element: Water"
+    },
+    "elemEarth": {
+      "id": null,
+      "fallback": "🪨",
+      "use": "element: Earth"
+    },
+    "elemAir": {
+      "id": null,
+      "fallback": "🌬️",
+      "use": "element: Air"
+    },
+    "elemLife": {
+      "id": null,
+      "fallback": "🌿",
+      "use": "element: Life"
+    },
+    "elemUndead": {
+      "id": null,
+      "fallback": "💀",
+      "use": "element: Undead"
+    },
+    "elemLight": {
+      "id": null,
+      "fallback": "☀️",
+      "use": "element: Light"
+    },
+    "elemDark": {
+      "id": null,
+      "fallback": "🌑",
+      "use": "element: Dark"
+    }
   }
 }

@@ -16,6 +16,20 @@ PUBLIC = ROOT / "public"
 BODIES = ROOT / "tools" / "pages"
 
 PAGES = {
+    "games.html": dict(
+        title="The games · Arkchemy",
+        desc="The six Skylanders games, all on the same Alchemy engine, and "
+             "why the five that are not being ported still matter to the port.",
+        scripts=["js/games.js"],
+        nav="games",
+    ),
+    "skylanders.html": dict(
+        title="Skylanders · Arkchemy",
+        desc="Every Skylander across all six games, by element, with "
+             "portraits, catchphrases and moves.",
+        scripts=["js/skylanders.js"],
+        nav="skylanders",
+    ),
     "legal.html": dict(
         title="Legal · Arkchemy",
         desc="Arkchemy's privacy notice, trademark position, takedown route "

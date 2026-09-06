@@ -19,7 +19,8 @@ import pathlib
 import re
 
 PUB = pathlib.Path(__file__).resolve().parents[1] / "public"
-PAGES = ["index.html", "legal.html", "contributors.html"]
+PAGES = ["index.html", "games.html", "skylanders.html",
+         "legal.html", "contributors.html"]
 
 # DATA_V lives in the shared script, not in the pages -- every page that reads
 # a .json file goes through it.
