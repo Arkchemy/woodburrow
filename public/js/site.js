@@ -272,6 +272,19 @@
     }).catch(() => {});
 
 
+    /* "0 messages" has three causes and they look identical on the page, so
+       say which one it is instead of a generic empty state. */
+    const feedEmpty = d => {
+        if (d && d.needsMessageContentIntent) return '<p class="feed-empty"><b>Message Content Intent is off.</b> ' +
+            'Discord returned ' + d.fetched + ' message' + (d.fetched === 1 ? '' : 's') +
+            ' but blanked the text. Enable it on the bot at ' +
+            '<a href="https://discord.com/developers/applications" target="_blank" rel="noopener">' +
+            'discord.com/developers/applications</a> \u2192 Bot \u2192 Privileged Gateway Intents \u2192 ' +
+            'Message Content Intent.</p>';
+        if (d && d.fetched === 0) return '<p class="feed-empty">Nothing posted in that channel yet.</p>';
+        return '<p class="feed-empty">Nothing to show right now.</p>';
+    };
+
     /* --- live from Discord ------------------------------------------------
        Both come through /api/discord-channel, which holds the bot token
        server-side and only accepts the two channel names. */
@@ -294,8 +307,7 @@
 
     fetch("/api/discord-channel?channel=progress").then(r => r.json()).then(d => {
         const host = document.getElementById("progressFeed");
-        if (!d.messages || !d.messages.length) { host.innerHTML =
-            '<p class="feed-empty">No updates to show right now.</p>'; return; }
+        if (!d.messages || !d.messages.length) { host.innerHTML = feedEmpty(d); return; }
         d.messages.slice().reverse().forEach((m, i) => {
             const el = document.createElement("article");
             el.className = "post reveal";
@@ -314,8 +326,7 @@
 
     fetch("/api/discord-channel?channel=faq").then(r => r.json()).then(d => {
         const host = document.getElementById("faqList");
-        if (!d.messages || !d.messages.length) { host.innerHTML =
-            '<p class="feed-empty">No questions posted yet.</p>'; return; }
+        if (!d.messages || !d.messages.length) { host.innerHTML = feedEmpty(d); return; }
         d.messages.forEach((m, i) => {
             /* "**Question?** answer" is how these are written in the channel;
                fall back to the first line when they are not. */

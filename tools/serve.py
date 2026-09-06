@@ -15,6 +15,7 @@ for rule in cfg.get("headers", []):
     if rule.get("source") in ("/(.*)", "/(.*)/"):
         HEADERS += [(h["key"], h["value"]) for h in rule["headers"]]
 
+_INTENT_OFF = True
 _LOCAL_DISCORD = {
     "progress": {"messages": [
         {"id": "1", "content": "**Boot** reached static-init 113/114; the stall is a freed frame manager.",
@@ -80,6 +81,16 @@ class H(http.server.SimpleHTTPRequestHandler):
             q = _u.urlparse(self.path)
             args = dict(_u.parse_qsl(q.query))
             if q.path == "/api/discord-channel":
+                # ?simulate=intentoff reproduces a bot without Message Content
+                # Intent: Discord returns the messages but blanks the text.
+                if args.get("simulate") == "intentoff":
+                    body = _j.dumps({"fetched": 7, "withText": 0,
+                                     "needsMessageContentIntent": True,
+                                     "count": 0, "messages": []}).encode()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.send_header("Content-Length", str(len(body)))
+                    self.end_headers(); self.wfile.write(body); return
                 which = args.get("channel", "")
                 body = _j.dumps(_LOCAL_DISCORD.get(which, {"messages": []})).encode()
             elif q.path == "/api/license":

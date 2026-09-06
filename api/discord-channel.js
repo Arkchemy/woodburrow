@@ -78,7 +78,12 @@ export default async function handler(req, res) {
 
   {
     const messages = raw
-      .filter(m => (m.content && m.content.trim()) || (m.embeds && m.embeds.length))
+      /* Keep anything with text, an embed, or an image. Without Message
+         Content Intent `content` is blank but embeds and attachments still
+         come through, so a screenshot-only update is still worth showing. */
+      .filter(m => (m.content && m.content.trim())
+                || (m.embeds && m.embeds.length)
+                || (m.attachments && m.attachments.length))
       .map(m => ({
         id: m.id,
         content: m.content || (m.embeds[0] && (m.embeds[0].description || m.embeds[0].title)) || '',
@@ -108,8 +113,22 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', which === 'faq'
       ? 's-maxage=900, stale-while-revalidate=3600'
       : 's-maxage=60, stale-while-revalidate=600');
+    /* Diagnostics, because "0 messages" has three very different causes and
+       they are indistinguishable from the outside:
+         fetched 0                  -> the channel really is empty, or the id is
+                                       wrong (permissions would have 403'd above)
+         fetched > 0, withText 0    -> Message Content Intent is off. Discord
+                                       returns the messages but blanks `content`
+                                       for guild messages unless the bot has the
+                                       privileged intent enabled. This is a REST
+                                       restriction too, not gateway-only.
+         fetched > 0, withText > 0  -> working */
+    const withText = raw.filter(m => m.content && m.content.trim()).length;
     res.status(200).json({
       channel: which, guild: GUILD, count: messages.length,
+      fetched: raw.length,
+      withText,
+      needsMessageContentIntent: raw.length > 0 && withText === 0,
       complete: raw.length < MAX_PAGES * 100,   // false = the cap was hit
       messages,
     });
