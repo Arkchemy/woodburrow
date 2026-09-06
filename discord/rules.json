@@ -19,7 +19,9 @@
               "inline": false
             }
           ],
-          "footer": { "text": "arkchemy.dev · github.com/Arkchemy" }
+          "footer": {
+            "text": "arkchemy.vercel.app · github.com/Arkchemy"
+          }
         }
       ]
     },
@@ -66,7 +68,9 @@
               "inline": false
             }
           ],
-          "footer": { "text": "Staying here means you accept these." }
+          "footer": {
+            "text": "Staying here means you accept these."
+          }
         }
       ]
     },
