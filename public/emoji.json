@@ -1,110 +1,105 @@
 {
-  "_comment": "Arkchemy's own Discord emoji. Run discord/emoji_sync.py to fill the ids in from the server; it matches on name. Until an id is set the site renders the unicode fallback, so nothing ever shows as a broken image. Names match the emoji's name in Discord so the same :name: works in both places.",
+  "_comment": "Which custom emoji the site uses, and what each falls back to when the server does not have it. Ids are NOT stored here -- /api/discord-emoji reads them live from the guild by name, so uploading or re-uploading an emoji needs no change to this file. The fallback is what renders until an emoji with that name exists, which is why nothing is ever a broken image.",
   "emoji": {
     "arkchemy": {
-      "id": null,
       "fallback": "🎈",
       "use": "the project mark"
     },
     "portalPower": {
-      "id": null,
       "fallback": "💫",
       "use": "Portal of Power"
     },
     "soulGem": {
-      "id": null,
       "fallback": "💎",
       "use": "a rare find"
     },
     "buildPass": {
-      "id": null,
       "fallback": "✅",
       "use": "build succeeded"
     },
     "buildFail": {
-      "id": null,
       "fallback": "❌",
       "use": "build broke"
     },
     "bootLoop": {
-      "id": null,
       "fallback": "🔁",
       "use": "still not booting"
     },
     "bigBrain": {
-      "id": null,
       "fallback": "🧠",
       "use": "a real breakthrough"
     },
     "bugSquash": {
-      "id": null,
       "fallback": "🐛",
       "use": "bug fixed"
     },
     "switchDock": {
-      "id": null,
       "fallback": "🎮",
       "use": "runs on Switch"
     },
     "wiiU": {
-      "id": null,
       "fallback": "💿",
       "use": "the source platform"
     },
     "xpecGuy": {
-      "id": "1543926752856776804",
       "fallback": "🙂",
       "use": "the in-joke"
     },
     "elemMagic": {
-      "id": null,
       "fallback": "🔮",
       "use": "element: Magic"
     },
     "elemTech": {
-      "id": null,
       "fallback": "⚙️",
       "use": "element: Tech"
     },
     "elemFire": {
-      "id": null,
       "fallback": "🔥",
       "use": "element: Fire"
     },
     "elemWater": {
-      "id": null,
       "fallback": "💧",
       "use": "element: Water"
     },
     "elemEarth": {
-      "id": null,
       "fallback": "🪨",
       "use": "element: Earth"
     },
     "elemAir": {
-      "id": null,
       "fallback": "🌬️",
       "use": "element: Air"
     },
     "elemLife": {
-      "id": null,
       "fallback": "🌿",
       "use": "element: Life"
     },
     "elemUndead": {
-      "id": null,
       "fallback": "💀",
       "use": "element: Undead"
     },
     "elemLight": {
-      "id": null,
       "fallback": "☀️",
       "use": "element: Light"
     },
     "elemDark": {
-      "id": null,
       "fallback": "🌑",
       "use": "element: Dark"
+    },
+    "elemKaos": {
+      "fallback": "👺",
+      "use": "element: Kaos"
+    },
+    "elemNonElemental": {
+      "fallback": "⚪",
+      "use": "element: none"
+    },
+    "akuAku": {
+      "fallback": "🗿",
+      "use": "the mask"
+    },
+    "realisticChompy": {
+      "fallback": "🐊",
+      "use": "a chompy, uncomfortably"
     }
   }
 }
