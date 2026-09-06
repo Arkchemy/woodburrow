@@ -561,13 +561,15 @@
        <html> rather than inline styles, so CSS owns the two positions. */
     {
         const header = document.getElementById("cloud-header");
-        const mark = () => {
-            const past = header ? header.getBoundingClientRect().bottom <= 8 : scrollY > 120;
-            document.documentElement.classList.toggle("nav-stuck", past);
+        /* Publish the header's real height so the toggle can sit in its
+           bottom-right corner at any breakpoint instead of a fixed offset. */
+        const measure = () => {
+            if (header) document.documentElement.style.setProperty(
+                "--hdr-h", Math.round(header.getBoundingClientRect().height) + "px");
         };
-        addEventListener("scroll", mark, { passive: true });
-        addEventListener("resize", mark);
-        mark();
+        measure();
+        addEventListener("resize", measure);
+
     }
 
     /* --- mobile menu ------------------------------------------------------

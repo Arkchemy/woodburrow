@@ -532,24 +532,65 @@ h2 { view-transition-name: none; }
 }
 
 /* --- mobile ------------------------------------------------------------- */
+/* --- mobile: the showcase is the biggest space consumer, so it becomes a
+   compact card instead of a three-column stage ------------------------- */
 @media (max-width: 700px) {
-    main { padding: 0 14px 32px; }
-    h2 { font-size: 26px; margin: 20px 0 5px; }
-    .lede { font-size: 15px; }
-    .stage { grid-template-columns: 1fr; padding: 10px 8px 14px; }
-    .loadouts.left, .loadouts.right { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .loadout { width: 100%; padding: 9px 11px; }
-    .hero-img { max-height: 200px; }
-    .plate h3 { font-size: 27px; }
-    .stage-nav { width: 36px; height: 36px; font-size: 18px; }
-    .chip { flex: 0 0 62px; width: 62px; }
+    main { padding: 0 13px 28px; }
+    h2 { font-size: 25px; margin: 18px 0 4px; }
+    .lede { font-size: 14.5px; margin: 0 0 10px; }
+
+    /* hero and its two side columns become one flowing card */
+    .stage {
+        grid-template-columns: 1fr;
+        padding: 8px 8px 12px; gap: 6px;
+        grid-template-areas: "hero" "name" "meta";
+    }
+    .hero-slot { grid-area: hero; }
+    /* the name belongs under the art, not after the stats */
+    .plate { grid-area: name; margin: 0; }
+    .hero-img { max-height: 168px; }
+    .hero-img.portrait-only { max-height: 128px; }
+
+    /* Element and Portrait are decoration at this size -- the emblem is
+       already in the name plate and the portrait is the chip you tapped. */
+    .loadouts.left { display: none; }
+
+    .loadouts.right {
+        grid-area: meta;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+        align-content: start;
+    }
+    .loadout { width: 100%; padding: 8px 10px; border-top-width: 2px; }
+    .loadout h4 { font-size: 11px; margin-bottom: 4px; }
+    .loadout blockquote { font-size: 16px; }
+    .loadout dl { font-size: 12px; gap: 1px 8px; }
+    /* moves run full width under the two cards and scroll if long */
+    #s-moves-card { grid-column: 1 / -1; max-height: 168px; overflow-y: auto; }
+    #s-moves li { margin-bottom: 5px; }
+    #s-moves span { font-size: 11px; }
+
+    .plate h3 { font-size: 24px; margin-top: 4px; }
+    .stage-nav { width: 34px; height: 34px; font-size: 17px; }
+    .stage-nav.prev { left: 2px; } .stage-nav.next { right: 2px; }
+
+    /* roster: tighter, and the two element columns stack */
+    #elements { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .chip { flex: 0 0 60px; width: 60px; }
     .chip img { width: 46px; height: 46px; }
-    .chip span { font-size: 9px; }
+    .chip span { font-size: 9px; min-height: 2.2em; }
     .el-mark img { width: 24px; height: 24px; }
-    .contrib-card { width: 232px; min-height: 84px; }
-    .lic-body { max-height: 260px; font-size: 11px; }
+    .el-mark span { font-size: 12px; }
+    .el-row { gap: 1px; }
+
+    .game-tabs { gap: 4px; }
+    .game-tabs button { font-size: 11.5px; padding: 4px 9px; }
+    .game-tabs button small { font-size: 9px; }
+
+    .contrib-card { width: 100%; min-height: 78px; }
+    .contrib-list .contrib-card { width: 100%; }
+    .lic-body { max-height: 240px; font-size: 11px; }
     .post .body, .qa-body { font-size: 13.5px; }
-    .game-tabs button { font-size: 12px; padding: 4px 10px; }
+    h3.sub { font-size: 18px; }
 }
 @media (max-width: 400px) {
     .chip { flex: 0 0 56px; width: 56px; }
@@ -618,7 +659,10 @@ h3.sub {
        scrollable width and makes the whole page scroll sideways -- the content
        itself fits. Clip it at the root, and take the panel out of the tab order
        while it is off-screen. */
-    html, body { overflow-x: hidden; }
+    /* clip, not hidden: overflow:hidden on an ancestor turns it into a scroll
+       container, which silently kills position:sticky on the menu toggle.
+       overflow-x:clip does the same clipping without that side effect. */
+    html, body { overflow-x: clip; }
 
     #site-nav {
         position: fixed; inset: 0 0 0 auto; z-index: 55;
@@ -694,12 +738,27 @@ h3.sub {
 
 /* --- sticky navigation --------------------------------------------------
    Desktop: the bar sticks once the cloud header has scrolled past. */
-#site-nav { position: sticky; top: 0; z-index: 40; }
+/* Desktop only. On mobile #site-nav is the slide-in panel and must stay
+   fixed -- a sticky/static override here previously dropped it back into the
+   document flow, leaving a tall block of dead links above the content. */
+@media (min-width: 761px) {
+    #site-nav { position: sticky; top: 0; z-index: 40; }
+}
 
 @media (max-width: 760px) {
     /* The toggle sits below the cloud header at rest so it never covers the
        logo, and pins to the top edge once the header is scrolled past. */
-    #navToggle { position: absolute; top: 138px; right: 10px; }
-    .nav-stuck #navToggle { position: fixed; top: 8px; }
-    #site-nav { position: static; }        /* the panel is fixed when open */
+    /* position:sticky does the whole job with no JavaScript: the button sits
+       in the header's bottom-right corner (over empty sky -- the logo is
+       centred, so nothing is covered and no vertical space is used), then pins
+       itself 8px from the top once the header scrolls away. The negative top
+       margin lifts it into the header without taking it out of flow, which is
+       what sticky needs. Doing this from a scroll or IntersectionObserver
+       handler meant the button scrolled off-screen and became unreachable if
+       the event never arrived. */
+    #navToggle {
+        position: sticky;
+        top: 8px;
+        margin: -52px 10px 0 auto;
+    }
 }
