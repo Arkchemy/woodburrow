@@ -9,9 +9,21 @@
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
 <link rel="apple-touch-icon" href="images/logo/arkchemy-icon-256.png">
 <link rel="stylesheet" href="css/cloud-header.css?v=1788686141">
-<link rel="stylesheet" href="css/site.css?v=1788702311">
+<link rel="stylesheet" href="css/site.css?v=1788702663">
 </head>
 <body>
+<svg id="icons" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16a2 2 0 012 2v9a2 2 0 01-2 2H9l-5 4V6a2 2 0 012-2z"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm.1 15.5a1.2 1.2 0 110-2.4 1.2 1.2 0 010 2.4zM14 10.4c-.5.6-1 .9-1.3 1.2-.3.3-.4.5-.4 1.1h-1.7c0-1.1.3-1.7.9-2.3l.8-.8c.3-.3.4-.6.4-1 0-.7-.5-1.2-1.3-1.2-.8 0-1.4.5-1.5 1.4H8.2c.1-1.8 1.4-2.9 3.2-2.9 1.9 0 3.1 1.1 3.1 2.6 0 .7-.2 1.3-.5 1.9z"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><path fill="currentColor" d="M9 12a4 4 0 100-8 4 4 0 000 8zm7 0a3 3 0 100-6 3 3 0 000 6zM2 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5v1H2v-1zm15.5 1v-1c0-1.9-.8-3.5-2.1-4.6 3.1.2 5.6 2.1 5.6 4.6v1h-3.5z"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path fill="currentColor" d="M9 2h6v2h-1v5.2l4.7 8.4A2 2 0 0117 21H7a2 2 0 01-1.7-3.4L10 9.2V4H9V2zm3 11a2 2 0 100 4 2 2 0 000-4z"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path fill="currentColor" d="M6 2h8l4 4v16H6V2zm7 1.5V7h3.5L13 3.5zM8 11h8v1.6H8V11zm0 3.4h8V16H8v-1.6zm0 3.4h5v1.6H8v-1.6z"/></symbol>
+    <symbol id="i-controller" viewBox="0 0 24 24"><path fill="currentColor" d="M7 7h10a5 5 0 015 5v3a3 3 0 01-5.6 1.5L15 15H9l-1.4 1.5A3 3 0 012 15v-3a5 5 0 015-5zm-1 3v1.5H4.5V13H6v1.5h1.5V13H9v-1.5H7.5V10H6zm10 .5a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4zm2.2 2.6a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></symbol>
+  </defs>
+</svg>
+
     <div id="cloud-header">
         <div class="cloud-header-c0">
             <div id="cIsland1" class="atvi-image"><img src="images/cloud-header/island.png" alt=""></div>
@@ -82,7 +94,7 @@
     <div id="navScrim" hidden></div>
 
     <main>
-        <h2 id="project">What this is</h2>
+        <h2 id="project"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>What this is</h2>
         <p class="lede">Arkchemy is porting <strong>Skylanders: Spyro's Adventure</strong>
         to the Nintendo Switch. The console it shipped on is out of production, the
         online services behind the series are gone, and the discs will not read
@@ -90,7 +102,7 @@
         <p class="lede">The work is a static recompiler: the game's PowerPC code
         is translated to C, then rebuilt for ARM64. Nothing is emulated at runtime.</p>
 
-        <h2 id="games">The games</h2>
+        <h2 id="games"><svg class="h-ico" aria-hidden="true"><use href="#i-controller"/></svg>The games</h2>
         <p class="lede">All six run on the same engine, so most of what the first port needs the
         others need too.</p>
         <div class="games">
@@ -102,7 +114,7 @@
             <a class="" title="Imaginators"><img src="images/games/Imaginators-logo.png" alt="Imaginators" loading="lazy"></a>
         </div>
 
-        <h2 id="roster">The Skylanders</h2>
+        <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
         <p class="lede">Every Skylander, by game and element.</p>
 
         <div class="game-tabs" id="gameTabs"></div>
@@ -161,15 +173,15 @@
         <div id="elements"></div>
 
 
-        <h2 id="progress">Progress</h2>
+        <h2 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h2>
         <p class="lede">Live from the Discord progress channel.</p>
         <div id="progressFeed" class="feed"></div>
 
-        <h2 id="faq">FAQ</h2>
+        <h2 id="faq"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>FAQ</h2>
         <p class="lede">Live from the Discord FAQ channel, so it stays current.</p>
         <div id="faqList" class="faq"></div>
 
-        <h2 id="contributors">Contributors</h2>
+        <h2 id="contributors"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>Contributors</h2>
         <p class="lede" id="contribLede"></p>
         <div id="contribGrid" class="contrib-list"></div>
 
@@ -178,13 +190,13 @@
         leans on, without which a lot of this would have taken far longer.</p>
         <div id="thanksGrid" class="contrib-rail"></div>
 
-        <h2 id="testers">Beta testers</h2>
+        <h2 id="testers"><svg class="h-ico" aria-hidden="true"><use href="#i-people"/></svg>Beta testers</h2>
         <p class="lede" id="testerLede">Signed up to test as soon as a build is
         ready. Builds are not released publicly.</p>
         <div id="testerGrid" class="tester-grid"></div>
 
 
-        <h2 id="licence">Licence</h2>
+        <h2 id="licence"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Licence</h2>
         <p class="lede">Pulled from the repository, so it always matches what the
         code ships under.</p>
         <div class="lic-tabs" id="licTabs"></div>

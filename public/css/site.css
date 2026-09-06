@@ -586,7 +586,11 @@ h2 { view-transition-name: none; }
     .game-tabs button { font-size: 11.5px; padding: 4px 9px; }
     .game-tabs button small { font-size: 9px; }
 
-    .contrib-card { width: 100%; min-height: 78px; }
+    /* A percentage width inside the max-content marquee track resolves
+       against the track's own intrinsic width, so `width: 100%` made a single
+       card 7139px wide and the Special thanks rail looked empty. Rail cards
+       keep a fixed width; only the wrapping contributor list goes full width. */
+    .contrib-card { width: 240px; min-height: 78px; }
     .contrib-list .contrib-card { width: 100%; }
     .lic-body { max-height: 240px; font-size: 11px; }
     .post .body, .qa-body { font-size: 13.5px; }
@@ -759,6 +763,75 @@ h3.sub {
     #navToggle {
         position: sticky;
         top: 8px;
-        margin: -52px 10px 0 auto;
+        /* sits just under the header, then pins to the top edge once the
+           header scrolls away -- sticky handles both with no JavaScript */
+        margin: 8px 10px 0 auto;
     }
+}
+
+/* --- section icons ------------------------------------------------------
+   One inline sprite referenced with <use>, so there are no extra requests and
+   every icon inherits currentColor. Decorative, so aria-hidden. */
+.h-ico {
+    width: .78em; height: .78em; margin-right: .32em;
+    vertical-align: -0.04em; color: var(--gold);
+    filter: drop-shadow(0 1px 0 rgba(61,17,64,.35));
+}
+h2 { display: flex; align-items: center; gap: 0; }
+
+/* --- motion ------------------------------------------------------------
+   Everything shares one easing and one duration scale, so the page moves as
+   a single system rather than a pile of unrelated effects. */
+:root {
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --fast: .16s;
+    --med: .28s;
+}
+
+/* interactive lift, used by every card-like surface */
+.qa, .post, .tester, .contrib-card, .lic-tabs button, .game-tabs button {
+    transition: transform var(--fast) var(--ease),
+                box-shadow var(--fast) var(--ease),
+                border-color var(--fast) var(--ease);
+}
+.qa:hover, .post:hover, .tester:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(60,30,80,.13); }
+.game-tabs button:hover, .lic-tabs button:hover { transform: translateY(-1px); }
+.game-tabs button[aria-pressed="true"] { transform: none; }
+
+/* the FAQ marker rotates, and the body slides open */
+.qa summary::before { transition: transform var(--med) var(--ease), background var(--fast) var(--ease); }
+.qa[open] .qa-body { animation: qaOpen var(--med) var(--ease) both; }
+@keyframes qaOpen { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+/* the showcase hero settles rather than snapping */
+.hero-img { animation: heroIn .34s var(--ease) both; }
+@keyframes heroIn { from { opacity: 0; transform: translateY(6px) scale(.985); } to { opacity: 1; transform: none; } }
+
+/* roster chips respond to touch as well as hover */
+.chip img { transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease); }
+.chip:active img { transform: scale(.93); }
+
+/* nav underline grows from the centre */
+#site-nav a { position: relative; }
+#site-nav a::after {
+    content: ""; position: absolute; left: 50%; right: 50%; bottom: 6px; height: 2px;
+    background: var(--gold); border-radius: 2px;
+    transition: left var(--med) var(--ease), right var(--med) var(--ease);
+}
+#site-nav a:hover::after, #site-nav a:focus-visible::after { left: 14px; right: 14px; }
+
+/* focus is always visible, and matches the palette */
+a:focus-visible, button:focus-visible, summary:focus-visible, .spoiler:focus-visible {
+    outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .qa:hover, .post:hover, .tester:hover,
+    .game-tabs button:hover, .lic-tabs button:hover { transform: none; }
+    .hero-img, .qa[open] .qa-body { animation: none; }
+    #site-nav a::after { transition: none; }
+}
+@media (max-width: 760px) {
+    /* no hover on touch, and the underline would sit under a tapped link */
+    #site-nav a::after { display: none; }
 }
