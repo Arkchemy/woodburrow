@@ -252,7 +252,14 @@
             const elFile = ELEMENT_FILE[c.element];
             el.innerHTML =
                 `<span class="face">` +
-                  `<img class="pfp" src="images/contributors/${c.slug}.png" alt="" loading="lazy">` +
+                  /* The local file (GitHub avatar or lettered placeholder) is
+                   rendered first so a card is never empty; the real Discord
+                   avatar is swapped in below once resolved. /api/discord-avatar
+                   returns JSON, not an image, and its `avatar` field is already
+                   proxied through /api/avatar-image -- the CSP is
+                   img-src 'self', so a cdn.discordapp.com URL would be blocked. */
+                `<img class="pfp" src="images/contributors/${c.slug}.png"` +
+                ` data-discord="${c.discordId || ""}" alt="" loading="lazy">` +
                   (elFile ? `<img class="elicon" src="images/elements/${elFile}.webp" alt="${c.element}">` : "") +
                 `</span>` +
                 `<span class="body">` +
@@ -269,6 +276,17 @@
            is exactly where the first was when it wraps */
         [...core, ...thanks, ...core, ...thanks].forEach(c => track.appendChild(card(c)));
         grid.appendChild(track);
+
+        /* Resolve Discord avatars once per person, not once per card -- the
+           list is rendered twice for the seamless marquee loop. */
+        const ids = [...new Set(list.filter(c => c.discordId).map(c => c.discordId))];
+        ids.forEach(id => {
+            fetch("/api/discord-avatar?id=" + id).then(r => r.json()).then(d => {
+                if (!d || !d.avatar) return;
+                grid.querySelectorAll(`img[data-discord="${id}"]`)
+                    .forEach(img => { img.src = d.avatar; });
+            }).catch(() => {});
+        });
     }).catch(() => {});
 
 
@@ -413,6 +431,47 @@
         }
         document.querySelectorAll(".reveal:not(.shown)").forEach(el => revealObserver.observe(el));
     }
+
+
+    /* --- testers, from the Discord role -------------------------------- */
+    fetch("/api/discord-role?role=testers").then(r => r.json()).then(d => {
+        const host = document.getElementById("testerGrid");
+        const lede = document.getElementById("testerLede");
+        if (d.error) {
+            host.innerHTML = '<p class="feed-empty">' +
+                (d.hint ? "Testers are unavailable: " + d.hint + "."
+                        : "Testers are unavailable right now.") + '</p>';
+            return;
+        }
+        if (!d.members || !d.members.length) {
+            host.innerHTML = '<p class="feed-empty">Nobody holds the tester role yet.</p>';
+            return;
+        }
+        lede.textContent = d.count + " " +
+            (d.count === 1 ? "person runs" : "people run") +
+            " the builds on real hardware and report back.";
+        d.members.forEach((t, i) => {
+            const el = document.createElement("div");
+            el.className = "tester reveal";
+            el.style.setProperty("--i", Math.min(i, 12));
+            el.innerHTML =
+                (t.avatar ? `<img src="${t.avatar}" alt="" loading="lazy">`
+                          : `<span class="noav">${t.name.slice(0,1).toUpperCase()}</span>`) +
+                `<span class="tname">${t.name}</span>`;
+            host.appendChild(el);
+        });
+        watchReveal();
+    }).catch(() => { document.getElementById("testerGrid").innerHTML =
+        '<p class="feed-empty">Testers are unavailable right now.</p>'; });
+
+    /* An avatar lookup can fail (deleted account, rate limit); fall back to the
+       local file rather than leaving a broken image. */
+    document.addEventListener("error", e => {
+        const el = e.target;
+        if (el.tagName === "IMG" && el.dataset.fallback && el.src !== el.dataset.fallback) {
+            el.src = el.dataset.fallback;
+        }
+    }, true);
 
     function play(c) {
         if (!c.audio) return;

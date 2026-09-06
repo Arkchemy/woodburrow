@@ -5,6 +5,7 @@
   "role": "Founder & Lead Developer",
   "element": "Light",
   "github": "https://github.com/Aaronateataco",
+  "discordId": "1534947437880279085",
   "section": "core"
  },
  {
@@ -13,6 +14,7 @@
   "role": "AI Development Assistant (code, research, testing/debugging support)",
   "element": "Air",
   "github": "https://github.com/claude",
+  "discordId": null,
   "section": "core"
  },
  {
@@ -21,6 +23,7 @@
   "role": "Community Research -- Alchemy Engine Reverse Engineering",
   "element": "Fire",
   "github": null,
+  "discordId": "508375441267228673",
   "section": "special-thanks"
  },
  {
@@ -29,6 +32,7 @@
   "role": "Community Research & Project Direction",
   "element": "Tech",
   "github": "https://github.com/WinnerNombre",
+  "discordId": "350989977460408321",
   "section": "special-thanks"
  },
  {
@@ -37,6 +41,7 @@
   "role": "Special Thanks -- Community Research",
   "element": "Magic",
   "github": null,
+  "discordId": "1267971835413401664",
   "section": "core"
  },
  {
@@ -45,6 +50,7 @@
   "role": "Special Thanks -- Community Research",
   "element": "Undead",
   "github": null,
+  "discordId": "731587862423797762",
   "section": "core"
  },
  {
@@ -53,6 +59,7 @@
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": "https://github.com/SuperSamus",
+  "discordId": "402569493747990528",
   "section": "core"
  },
  {
@@ -61,6 +68,7 @@
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": null,
+  "discordId": "368385351078772736",
   "section": "core"
  },
  {
@@ -69,6 +77,7 @@
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": null,
+  "discordId": "1035213830579568650",
   "section": "core"
  },
  {
@@ -77,6 +86,7 @@
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": "https://github.com/LG-RZ",
+  "discordId": null,
   "section": "core"
  },
  {
@@ -85,6 +95,7 @@
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": null,
+  "discordId": "718520146460803145",
   "section": "core"
  }
 ]

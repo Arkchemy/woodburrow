@@ -93,6 +93,15 @@ class H(http.server.SimpleHTTPRequestHandler):
                     self.end_headers(); self.wfile.write(body); return
                 which = args.get("channel", "")
                 body = _j.dumps(_LOCAL_DISCORD.get(which, {"messages": []})).encode()
+            elif q.path == "/api/discord-role":
+                body = _j.dumps({"role": "testers", "scanned": 42, "count": 5,
+                    "members": [{"id": str(i), "name": n, "avatar": None, "bot": False}
+                                for i, n in enumerate(
+                                    ["bonesinmysoup", "gutterbeasts", "jackthebloke",
+                                     "LG-RZ", "retexcraft"], start=1)]}).encode()
+            elif q.path == "/api/discord-avatar":
+                body = _j.dumps({"username": "stub", "display_name": None,
+                                 "avatar": None}).encode()
             elif q.path == "/api/license":
                 lic = ROOT / "LICENSE"
                 body = _j.dumps({"repo": args.get("repo", "woodburrow"),
