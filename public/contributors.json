@@ -1,101 +1,90 @@
 [
  {
   "name": "Aaronateataco",
+  "slug": "aaronateataco",
   "role": "Founder & Lead Developer",
   "element": "Light",
   "github": "https://github.com/Aaronateataco",
-  "repos": 5,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "Claude",
+  "slug": "claude",
   "role": "AI Development Assistant (code, research, testing/debugging support)",
   "element": "Air",
   "github": "https://github.com/claude",
-  "repos": 5,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "NefariousTechSupport",
+  "slug": "nefarioustechsupport",
   "role": "Community Research -- Alchemy Engine Reverse Engineering",
   "element": "Fire",
   "github": null,
-  "repos": 2,
-  "section": "special-thanks",
-  "battleClass": "Kaos"
+  "section": "special-thanks"
  },
  {
   "name": "winnernombre",
+  "slug": "winnernombre",
   "role": "Community Research & Project Direction",
   "element": "Tech",
   "github": "https://github.com/WinnerNombre",
-  "repos": 2,
-  "section": "special-thanks",
-  "battleClass": null
+  "section": "special-thanks"
  },
  {
   "name": "gutterbeasts",
+  "slug": "gutterbeasts",
   "role": "Special Thanks -- Community Research",
   "element": "Magic",
   "github": null,
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "bonesinmysoup",
+  "slug": "bonesinmysoup",
   "role": "Special Thanks -- Community Research",
   "element": "Undead",
   "github": null,
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "supersamus02",
+  "slug": "supersamus02",
   "role": "Special Thanks -- Community Research",
-  "element": "n/a",
+  "element": null,
   "github": "https://github.com/SuperSamus",
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "jensj56",
+  "slug": "jensj56",
   "role": "Special Thanks -- Community Research",
-  "element": "n/a",
+  "element": null,
   "github": null,
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "jackthebloke",
+  "slug": "jackthebloke",
   "role": "Special Thanks -- Community Research",
-  "element": "n/a",
+  "element": null,
   "github": null,
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "LG-RZ",
+  "slug": "lg-rz",
   "role": "Special Thanks -- Community Research",
-  "element": "n/a",
+  "element": null,
   "github": "https://github.com/LG-RZ",
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  },
  {
   "name": "retexcraft",
+  "slug": "retexcraft",
   "role": "Special Thanks -- Community Research",
-  "element": "n/a",
+  "element": null,
   "github": null,
-  "repos": 1,
-  "section": "core",
-  "battleClass": null
+  "section": "core"
  }
 ]

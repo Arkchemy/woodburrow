@@ -347,59 +347,58 @@ footer a { color: var(--gold); }
 .load-empty { color: #7d7288; font-size: 14px; }
 
 /* --- contributors ------------------------------------------------------
-   A marquee rail of Skylanders-style cards. It scrolls on its own, pauses
-   on hover or keyboard focus, and holds still for anyone who has asked for
-   reduced motion. The list is duplicated once so the loop has no seam. */
+   A marquee rail of cards: avatar with an element-coloured ring on the left,
+   name and role on the right, element symbol badged on the avatar. Scrolls on
+   its own, pauses on hover or keyboard focus, holds still under reduced
+   motion. The list is duplicated once so the loop has no seam. */
 .contrib-rail {
-    position: relative;
-    overflow: hidden;
-    margin: 0 0 30px;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    position: relative; overflow: hidden; margin: 0 0 30px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
-.contrib-track {
-    display: flex;
-    gap: 14px;
-    width: max-content;
-    animation: contribScroll 46s linear infinite;
-}
+.contrib-track { display: flex; gap: 12px; width: max-content;
+                 animation: contribScroll 58s linear infinite; }
 .contrib-rail:hover .contrib-track,
 .contrib-rail:focus-within .contrib-track { animation-play-state: paused; }
 @keyframes contribScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .contrib-card {
-    flex: 0 0 auto;
-    width: 238px; height: 141px;         /* the frame art is 317x188 */
-    position: relative;
-    border: 0; padding: 0; cursor: default;
-    background: url("../images/contributor-frame-bg.png") center/contain no-repeat;
-    text-align: left;
-    font: inherit; color: var(--ink);
+    flex: 0 0 auto; display: flex; align-items: center; gap: 12px;
+    width: 268px; min-height: 92px; padding: 12px 14px;
+    background: #fff; color: var(--ink); text-align: left; text-decoration: none;
+    border: 1px solid #e6dfec; border-top: 3px solid var(--el);
+    border-radius: 12px; box-shadow: 0 3px 10px rgba(60,30,80,.10);
+    transition: transform .15s ease, box-shadow .15s ease;
 }
-a.contrib-card { cursor: pointer; text-decoration: none; }
-a.contrib-card:hover { transform: translateY(-2px); }
-.contrib-card .ring {
-    position: absolute; inset: 0;
-    background-position: center; background-size: contain; background-repeat: no-repeat;
-    pointer-events: none;
+a.contrib-card:hover { transform: translateY(-3px); box-shadow: 0 7px 18px rgba(60,30,80,.18); }
+
+.contrib-card .face { position: relative; flex: 0 0 auto; }
+.contrib-card .pfp {
+    display: block; width: 58px; height: 58px; border-radius: 50%;
+    object-fit: cover; background: #efe9f3;
+    box-shadow: 0 0 0 3px var(--el);
 }
-.contrib-card .body {
-    position: absolute; left: 20px; right: 16px; top: 30px;
+.contrib-card .elicon {
+    position: absolute; right: -5px; bottom: -5px;
+    width: 24px; height: 24px; object-fit: contain;
+    background: #fff; border-radius: 50%; padding: 2px;
+    box-shadow: 0 1px 4px rgba(60,30,80,.28);
 }
+.contrib-card .body { min-width: 0; }
 .contrib-card .cname {
+    display: block;
     font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 16px; letter-spacing: .04em; color: var(--plum);
-    margin: 0 0 3px; line-height: 1.1;
+    font-size: 15px; letter-spacing: .03em; line-height: 1.15; color: var(--plum);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .contrib-card .crole {
-    font-size: 10.5px; line-height: 1.3; color: #5c5268;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; font-size: 11.5px; line-height: 1.35; color: #5c5268; margin-top: 2px;
 }
-.contrib-card .cel {
-    position: absolute; left: 20px; bottom: 18px;
-    font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
-    color: #1b0f22; background: var(--el, #b9a9c6);
-    border-radius: 20px; padding: 1px 8px; font-weight: 700;
+.contrib-card .tag {
+    display: inline-block; margin-top: 4px;
+    font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+    color: #1b0f22; background: var(--gold); border-radius: 20px; padding: 1px 7px;
 }
 .contrib-note { font-size: 13px; color: #6a6376; margin: -6px 0 14px; }
 
@@ -424,3 +423,14 @@ a.contrib-card:hover { transform: translateY(-2px); }
 .loadouts.right { align-content: start; }
 .sting { display: block; width: 100%; max-width: 860px; border-radius: 12px;
          margin: 0 0 28px; background: #0d0a14; box-shadow: 0 6px 18px rgba(60,30,80,.18); }
+/* separates the vehicles from the drivers inside a SuperChargers element row */
+.el-split {
+    flex: 0 0 auto;
+    align-self: center;
+    width: 9px; height: 9px;
+    margin: 0 9px;
+    transform: rotate(45deg);
+    background: var(--el);
+    opacity: .55;
+    border-radius: 2px;
+}

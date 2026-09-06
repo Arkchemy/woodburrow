@@ -70,7 +70,26 @@
                 `<img src="images/elements/${ELEMENT_FILE[el] || "magic"}.webp" alt="">` +
                 `<span>${el}</span></div>`;
             const row = group.querySelector(".el-row");
-            game.roster[el].forEach((c, i) => {
+
+            /* Only figures actually introduced in this game. The wiki groups
+               carry-overs under "Returning Skylanders", which is why Bouncer
+               was showing under Swap Force -- he is a Giants figure. */
+            let members = game.roster[el].filter(c => c.category !== "Returning");
+
+            /* SuperChargers splits into drivers and vehicles. Keep them in the
+               same element row, drivers first, with a diamond between. */
+            const vehicles = members.filter(c => c.category === "Vehicle");
+            const others   = members.filter(c => c.category !== "Vehicle");
+            members = vehicles.length ? others.concat(vehicles) : members;
+            const splitAt = vehicles.length ? others.length : -1;
+
+            members.forEach((c, i) => {
+                if (i === splitAt) {
+                    const sep = document.createElement("span");
+                    sep.className = "el-split";
+                    sep.title = "Vehicles";
+                    row.appendChild(sep);
+                }
                 c.element = c.element || el;
                 const idx = VISIBLE.push(c) - 1;
                 const b = document.createElement("button");
@@ -220,19 +239,26 @@
             (thanks.length ? ", including " + thanks.length +
              " whose reverse-engineering of the Alchemy engine the port leans on." : ".");
 
+        /* A plain card: avatar left with an element-coloured ring, name and
+           role right, element symbol badged on the avatar. The supplied frame
+           art is 317x188 in teal and does not compose against this palette --
+           the pieces overlapped the nameplate and buried the name. */
         const card = c => {
             const el = c.github ? document.createElement("a") : document.createElement("div");
             el.className = "contrib-card";
             if (c.github) { el.href = c.github; el.target = "_blank"; el.rel = "noopener"; }
-            const colour = ELEMENT_COLOUR[c.element] || "#b9a9c6";
-            el.style.setProperty("--el", colour);
-            /* the two ring overlays are the same art as the Skylanders cards */
+            el.style.setProperty("--el", ELEMENT_COLOUR[c.element] || "#b9a9c6");
+            const elFile = ELEMENT_FILE[c.element];
             el.innerHTML =
-                `<span class="ring" style="background-image:url('images/contributor-frame-ring-pfp1.png')"></span>` +
-                (c.element ? `<span class="ring" style="background-image:url('images/contributor-frame-ring-element.png')"></span>` : "") +
-                `<span class="body"><span class="cname">${c.name}</span>` +
-                `<span class="crole">${c.role}</span></span>` +
-                (c.element ? `<span class="cel">${c.element}</span>` : "");
+                `<span class="face">` +
+                  `<img class="pfp" src="images/contributors/${c.slug}.png" alt="" loading="lazy">` +
+                  (elFile ? `<img class="elicon" src="images/elements/${elFile}.webp" alt="${c.element}">` : "") +
+                `</span>` +
+                `<span class="body">` +
+                  `<span class="cname">${c.name}</span>` +
+                  `<span class="crole">${c.role}</span>` +
+                  (c.section === "special-thanks" ? `<span class="tag">Special thanks</span>` : "") +
+                `</span>`;
             return el;
         };
 
