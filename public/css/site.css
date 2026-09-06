@@ -614,8 +614,15 @@ h3.sub {
     .nav-open #navToggle span:nth-child(2) { opacity: 0; }
     .nav-open #navToggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+    /* The closed panel is parked off the right edge, which extends the
+       scrollable width and makes the whole page scroll sideways -- the content
+       itself fits. Clip it at the root, and take the panel out of the tab order
+       while it is off-screen. */
+    html, body { overflow-x: hidden; }
+
     #site-nav {
         position: fixed; inset: 0 0 0 auto; z-index: 55;
+        visibility: hidden;
         width: min(78vw, 300px);
         display: flex; flex-direction: column; align-items: stretch; gap: 0;
         padding: 68px 0 20px;
@@ -624,7 +631,7 @@ h3.sub {
         transition: transform .26s cubic-bezier(.22,1,.36,1);
         overflow-y: auto;
     }
-    .nav-open #site-nav { transform: none; }
+    .nav-open #site-nav { transform: none; visibility: visible; }
     #site-nav a {
         padding: 13px 22px; font-size: 17px; text-align: left;
         border-bottom: 1px solid rgba(243,195,78,.14);
@@ -657,3 +664,42 @@ h3.sub {
     vertical-align: -0.3em; margin: 0 1px; object-fit: contain;
 }
 .qa summary .demoji { width: 1.2em; height: 1.2em; vertical-align: -0.25em; }
+
+/* --- long links must not push the layout sideways ----------------------- */
+.qa-body, .post .body, .qa summary {
+    overflow-wrap: anywhere;      /* break inside a long URL rather than overflow */
+    word-break: break-word;
+}
+.qa-body a, .post .body a { overflow-wrap: anywhere; }
+.qa-body pre, .post .body pre { max-width: 100%; }
+
+/* markdown pieces that the renderer can now emit */
+.post .body h3, .post .body h4, .post .body h5,
+.qa-body h3, .qa-body h4, .qa-body h5 {
+    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
+    color: var(--plum); margin: 8px 0 3px; letter-spacing: .02em;
+}
+.post .body h3, .qa-body h3 { font-size: 17px; }
+.post .body h4, .qa-body h4 { font-size: 15px; }
+.post .body h5, .qa-body h5 { font-size: 14px; }
+.post .body ul, .post .body ol, .qa-body ul, .qa-body ol { margin: 5px 0 5px 20px; padding: 0; }
+.post .body li, .qa-body li { margin: 2px 0; }
+.post .body u, .qa-body u { text-underline-offset: 2px; }
+.subtext { color: #7d7288; font-size: .85em; display: block; }
+.spoiler {
+    background: #3b3346; color: transparent; border-radius: 4px; padding: 0 3px;
+    cursor: pointer; transition: color .12s ease, background .12s ease;
+}
+.spoiler:hover, .spoiler:focus, .spoiler.revealed { background: #e6dfec; color: inherit; }
+
+/* --- sticky navigation --------------------------------------------------
+   Desktop: the bar sticks once the cloud header has scrolled past. */
+#site-nav { position: sticky; top: 0; z-index: 40; }
+
+@media (max-width: 760px) {
+    /* The toggle sits below the cloud header at rest so it never covers the
+       logo, and pins to the top edge once the header is scrolled past. */
+    #navToggle { position: absolute; top: 138px; right: 10px; }
+    .nav-stuck #navToggle { position: fixed; top: 8px; }
+    #site-nav { position: static; }        /* the panel is fixed when open */
+}

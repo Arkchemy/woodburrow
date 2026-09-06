@@ -319,7 +319,6 @@
         return "just now";
     };
     const esc = t => { const d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
-    /* Discord markdown, only the parts that actually appear in these channels. */
     /* Discord custom emoji: <:name:id> and animated <a:name:id>. Served from
        cdn.discordapp.com/emojis/{id}, routed through the proxy like every other
        image because the CSP is img-src 'self'. Unicode emoji need no handling --
@@ -332,14 +331,70 @@
                ` alt=":${name}:" title=":${name}:" loading="lazy">`;
     });
 
-    const mdLite = t => withEmoji(esc(t))
-        .replace(/```([\s\S]*?)```/g, (_, c) => `<pre>${c.trim()}</pre>`)
-        .replace(/`([^`]+)`/g, "<code>$1</code>")
-        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-        .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
-        .replace(/^&gt; ?(.*)$/gm, "<blockquote>$1</blockquote>")
-        .replace(/https?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`)
-        .replace(/\n/g, "<br>");
+    /* Discord markdown. Order matters throughout: longer delimiters are
+       consumed before their prefixes, so ***x*** is not eaten by ** and __x__
+       is not eaten by _. Because each pass wraps its match in a tag and leaves
+       the inner text alone, nesting composes on its own -- __**x**__ becomes
+       <u><strong>x</strong></u> without needing a real parser. */
+    const mdLite = (t) => {
+        if (!t) return "";
+        /* Code is pulled out first and put back last, so nothing inside a code
+           span is ever treated as markup. */
+        const stash = [];
+        const keep = (html) => "@@MD" + (stash.push(html) - 1) + "@@";
+
+        let h = t;
+        h = h.replace(/```(?:([a-zA-Z0-9+#-]*)\n)?([\s\S]*?)```/g,
+            (_, lang, code) => keep("<pre>" + esc(code.replace(/\n$/, "")) + "</pre>"));
+        h = h.replace(/`([^`\n]+)`/g, (_, code) => keep("<code>" + esc(code) + "</code>"));
+
+        h = esc(h);
+
+        /* Block level, line by line. */
+        const lines = h.split("\n");
+        const out = [];
+        let inList = null;
+        const closeList = () => { if (inList) { out.push("</" + inList + ">"); inList = null; } };
+        for (const line of lines) {
+            let m;
+            if ((m = line.match(/^&gt;&gt;&gt; ?([\s\S]*)$/))) { closeList(); out.push("<blockquote>" + m[1] + "</blockquote>"); continue; }
+            if ((m = line.match(/^&gt; ?(.*)$/)))              { closeList(); out.push("<blockquote>" + m[1] + "</blockquote>"); continue; }
+            if ((m = line.match(/^(#{1,3}) +(.*)$/)))          { closeList(); const n = m[1].length + 3; out.push("<h" + n + ">" + m[2] + "</h" + n + ">"); continue; }
+            if ((m = line.match(/^-# +(.*)$/)))                { closeList(); out.push('<small class="subtext">' + m[1] + "</small>"); continue; }
+            if ((m = line.match(/^ *[-*+] +(.*)$/)))           { if (inList !== "ul") { closeList(); out.push("<ul>"); inList = "ul"; } out.push("<li>" + m[1] + "</li>"); continue; }
+            if ((m = line.match(/^ *\d+\. +(.*)$/)))           { if (inList !== "ol") { closeList(); out.push("<ol>"); inList = "ol"; } out.push("<li>" + m[1] + "</li>"); continue; }
+            closeList();
+            out.push(line);
+        }
+        closeList();
+        h = out.join("\n");
+
+        /* Masked links first, so their text can still carry formatting. */
+        h = h.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g,
+            (_, text, url) => '<a href="' + url + '" target="_blank" rel="noopener">' + text + "</a>");
+
+        /* Inline, longest delimiter before its prefix. */
+        h = h.replace(/\*\*\*([\s\S]+?)\*\*\*/g, "<strong><em>$1</em></strong>");
+        h = h.replace(/\*\*([\s\S]+?)\*\*/g,     "<strong>$1</strong>");
+        h = h.replace(/___([\s\S]+?)___/g,       "<u><em>$1</em></u>");
+        h = h.replace(/__([\s\S]+?)__/g,         "<u>$1</u>");
+        h = h.replace(/~~([\s\S]+?)~~/g,         "<s>$1</s>");
+        h = h.replace(/\|\|([\s\S]+?)\|\|/g,     '<span class="spoiler" tabindex="0">$1</span>');
+        h = h.replace(/(^|[^*\w])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+        h = h.replace(/(^|[^_\w])_([^_\n]+)_/g,   "$1<em>$2</em>");
+
+        /* Bare URLs that are not already inside an anchor. */
+        h = h.replace(/(^|[\s>])(https?:\/\/[^\s<]+)/g,
+            (_, pre, url) => pre + '<a href="' + url + '" target="_blank" rel="noopener">' + url + "</a>");
+
+        h = withEmoji(h);
+        h = h.replace(/\n/g, "<br>");
+        h = h.replace(/@@MD(\d+)@@/g, (_, i) => stash[+i]);
+        /* Block elements must not be separated by the <br> runs above. */
+        h = h.replace(/<br>(\s*<(?:pre|blockquote|ul|ol|h[3-6]))/g, "$1");
+        h = h.replace(/(<\/(?:pre|blockquote|ul|ol|h[3-6])>)\s*<br>/g, "$1");
+        return h;
+    };
 
     fetch("/api/discord-channel?channel=progress").then(r => r.json()).then(d => {
         const host = document.getElementById("progressFeed");
@@ -485,6 +540,11 @@
     }).catch(() => { document.getElementById("testerGrid").innerHTML =
         '<p class="feed-empty">Testers are unavailable right now.</p>'; });
 
+    document.addEventListener("click", e => {
+        if (e.target.classList && e.target.classList.contains("spoiler"))
+            e.target.classList.add("revealed");
+    });
+
     /* An avatar lookup can fail (deleted account, rate limit); fall back to the
        local file rather than leaving a broken image. */
     document.addEventListener("error", e => {
@@ -494,6 +554,21 @@
         }
     }, true);
 
+
+
+    /* The mobile toggle rests under the cloud header so it never covers the
+       logo, and pins to the top once the header has scrolled past. A class on
+       <html> rather than inline styles, so CSS owns the two positions. */
+    {
+        const header = document.getElementById("cloud-header");
+        const mark = () => {
+            const past = header ? header.getBoundingClientRect().bottom <= 8 : scrollY > 120;
+            document.documentElement.classList.toggle("nav-stuck", past);
+        };
+        addEventListener("scroll", mark, { passive: true });
+        addEventListener("resize", mark);
+        mark();
+    }
 
     /* --- mobile menu ------------------------------------------------------
        The nav is a plain list on desktop and a slide-in panel below 760px.
