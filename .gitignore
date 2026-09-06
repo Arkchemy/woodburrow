@@ -8,9 +8,18 @@ node_modules/
 .env.*
 !.env.example
 
-# The extracted voice lines are kept as an archive, the way the Skylanders
-# wiki hosts catchphrase audio for documentation. Provenance and the
-# extraction method are recorded in branding/voicelines/FINDINGS.md.
+# The extracted voice-line corpus stays local. The project's whole legal
+# position is that it distributes no game content -- the plan puts it as
+# "it never touches or redistributes Activision's assets/code itself", and
+# LICENSE 6 says the same. 1,848 clips lifted off a retail disc contradicts
+# that, and the wiki comparison does not hold at this scale: the wiki hosts a
+# handful of catchphrases as citations, not most of a game's voice track.
+#
+# Nothing is lost. branding/voicelines/FINDINGS.md documents the igArchive v4
+# layout, the DSP-ADPCM codec and the extraction method, so anyone with their
+# own disc can regenerate the whole set. The 14 short catchphrases the site
+# actually plays stay in public/audio as citations.
+branding/voicelines/*/
 
 # Working intermediates, not deliverables
 branding/icon/out/

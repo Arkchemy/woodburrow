@@ -763,10 +763,15 @@ h3.sub {
     #navToggle {
         position: sticky;
         top: 8px;
-        /* sits just under the header, then pins to the top edge once the
-           header scrolls away -- sticky handles both with no JavaScript */
-        margin: 8px 10px 0 auto;
+        /* Sits just under the header, then pins to the top edge once the
+           header scrolls away -- sticky handles both with no JavaScript. The
+           negative bottom margin means it does not reserve a 52px strip of
+           empty page above the first heading; the heading's own top margin
+           keeps them from colliding. */
+        margin: 6px 10px -38px auto;
     }
+    main { padding-top: 4px; }
+    main > h2:first-of-type { margin-top: 44px; }
 }
 
 /* --- section icons ------------------------------------------------------

@@ -99,13 +99,16 @@
 /* Narrow screens: shrink the header and the lockup together, and drop the
    wordmark rather than let it squeeze the balloon into nothing. */
 @media (max-width: 720px) {
-    #cloud-header          { height: 130px; }
+    #cloud-header          { height: 112px; }
     #site-lockup           { gap: 5px; }
-    #site-lockup .mark     { height: 96px; }
-    #site-lockup .wordmark { height: 55px; }
+    #site-lockup .mark     { height: 74px; }
+    #site-lockup .wordmark { height: 44px; }
 }
 @media (max-width: 440px) {
-    #cloud-header          { height: 110px; }
-    #site-lockup .mark     { height: 78px; }
-    #site-lockup .wordmark { display: none; }
+    #cloud-header          { height: 92px; }
+    #site-lockup .mark     { height: 58px; }
+    /* the wordmark stays: it is the site's name, and at this size the balloon
+       alone does not identify the page. It just gets small. */
+    #site-lockup .wordmark { height: 34px; display: block; }
+    #site-lockup           { gap: 4px; }
 }
