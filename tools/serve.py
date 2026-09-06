@@ -20,7 +20,7 @@ _LOCAL_DISCORD = {
     "progress": {"messages": [
         {"id": "1", "content": "**Boot** reached static-init 113/114; the stall is a freed frame manager.",
          "timestamp": "2026-09-06T09:00:00+00:00",
-         "author": {"name": "Aaronateataco", "id": "1", "avatar": "/api/avatar-image?src=x", "bot": False},
+         "author": {"name": "Aaronateataco", "id": "1", "avatar": None, "bot": False},
          "attachments": []},
         {"id": "2", "content": "Roster now covers all six games. `rosters.json` rebuilt.",
          "timestamp": "2026-09-06T11:30:00+00:00",
@@ -53,6 +53,25 @@ class H(http.server.SimpleHTTPRequestHandler):
                     self.end_headers(); self.wfile.write(body); return
                 which = args.get("channel", "")
                 body = _j.dumps(_LOCAL_DISCORD.get(which, {"messages": []})).encode()
+            elif q.path == "/api/avatar-image":
+                # Vercel runs the real hardened proxy; locally just fetch the
+                # allowlisted host so images resolve and a local check does not
+                # report false broken-image counts.
+                import urllib.request as _r
+                src = args.get("src", "")
+                if not src.startswith(("https://cdn.discordapp.com/",
+                                       "https://avatars.githubusercontent.com/",
+                                       "https://github.com/")):
+                    self.send_error(400); return
+                try:
+                    up = _r.urlopen(_r.Request(src, headers={"User-Agent": "arkchemy-local"}), timeout=20)
+                    data = up.read()
+                    self.send_response(200)
+                    self.send_header("Content-Type", up.headers.get("Content-Type", "image/png"))
+                    self.send_header("Content-Length", str(len(data)))
+                    self.end_headers(); self.wfile.write(data); return
+                except Exception:
+                    self.send_error(502); return
             elif q.path == "/api/discord-role":
                 body = _j.dumps({"role": "testers", "scanned": 42, "count": 5,
                     "members": [{"id": str(i), "name": n, "avatar": None, "bot": False}
