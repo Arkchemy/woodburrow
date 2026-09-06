@@ -24,3 +24,8 @@ branding/voicelines/*/
 # Working intermediates, not deliverables
 branding/icon/out/
 branding/icon/out-tight/
+# Added by the Vercel CLI when the project was linked. .env* is broader than
+# the .env / .env.* above on purpose: `vercel env pull` writes .env.local and
+# whatever name you give it, and none of those may ever be committed.
+.vercel
+.env*
