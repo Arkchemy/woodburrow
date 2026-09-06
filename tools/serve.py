@@ -98,6 +98,13 @@ class H(http.server.SimpleHTTPRequestHandler):
             elif q.path == "/api/discord-avatar":
                 body = _j.dumps({"username": "stub", "display_name": None,
                                  "avatar": None}).encode()
+            elif q.path == "/api/discord-emoji":
+                # Stands in for the live guild lookup. Gives one emoji a real
+                # id so the "merge live ids over the registry" path is actually
+                # exercised locally rather than assumed.
+                body = _j.dumps({"emoji": {"buildPass": {"id": "1543926752856776804",
+                                                         "animated": False}},
+                                 "count": 1}).encode()
             elif q.path == "/api/discord-invite":
                 # The real route reads Discord's public widget and falls back
                 # to the permanent invite. ?simulate=none returns neither, to

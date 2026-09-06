@@ -246,20 +246,40 @@ function withSiteEmoji(html) {
         const e = SITE_EMOJI[name];
         if (!e) return whole;                 /* not ours -- leave it alone */
         if (!e.id) return `<span class="demoji-uni" title=":${name}:">${e.fallback}</span>`;
-        const url = `https://cdn.discordapp.com/emojis/${e.id}.png?size=48`;
+        const url = `https://cdn.discordapp.com/emojis/${e.id}.${e.animated ? "gif" : "png"}?size=48`;
         return `<img class="demoji" src="/api/avatar-image?src=${encodeURIComponent(url)}"` +
                ` alt=":${name}:" title=":${name}:" loading="lazy">`;
     });
 }
 
-/* Rewrite anything already on the page that opted in with data-emoji, then
-   let later code call withSiteEmoji directly. */
+/* emoji.json says which names the site uses and what each falls back to;
+   /api/discord-emoji supplies the ids, live from the server. Keeping the ids
+   out of the file means uploading an emoji makes it work with no commit, and
+   re-uploading one -- which changes its id -- cannot silently break the page.
+
+   The registry is applied first so the page is right immediately, then the
+   live ids are merged over it and anything that changed is re-rendered. */
+const applyEmoji = () => document.querySelectorAll("[data-emoji]").forEach(el => {
+    const raw = el.dataset.emojiSrc || (el.dataset.emojiSrc = el.textContent);
+    el.innerHTML = withSiteEmoji(esc(raw));
+});
+
 fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
     SITE_EMOJI = d.emoji || {};
-    document.querySelectorAll("[data-emoji]").forEach(el => {
-        const out = withSiteEmoji(esc(el.textContent));
-        if (out !== esc(el.textContent)) el.innerHTML = out;
-    });
+    applyEmoji();
+    return fetch("/api/discord-emoji").then(r => r.json());
+}).then(d => {
+    if (!d || !d.emoji) return;
+    let changed = false;
+    for (const [name, live] of Object.entries(d.emoji)) {
+        const entry = SITE_EMOJI[name];
+        if (!entry) continue;              /* on the server, not used by the site */
+        if (entry.id === live.id && !!entry.animated === live.animated) continue;
+        entry.id = live.id;
+        entry.animated = live.animated;
+        changed = true;
+    }
+    if (changed) applyEmoji();
 }).catch(() => {});
 
 /* --- Easter eggs --------------------------------------------------------
