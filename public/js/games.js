@@ -64,7 +64,7 @@ fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
             `<span class="gc-logo"><img src="images/games/${note.logo}" alt="" loading="lazy"></span>` +
             `<span class="gc-body">` +
                 `<span class="gc-top">` +
-                    `<h3>${esc(g.title)}</h3>` +
+                    `<h3 class="fit">${esc(g.title)}</h3>` +
                     `<span class="gc-status ${st.cls}">${st.text}</span>` +
                 `</span>` +
                 `<p class="gc-hook">${esc(note.hook)}</p>` +
@@ -83,6 +83,7 @@ fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
     });
 
     watchReveal();
+    fitText();
 }).catch(() => {
     const host = document.getElementById("gameCards");
     if (host) host.innerHTML = '<p class="feed-empty">The game list is unavailable right now.</p>';

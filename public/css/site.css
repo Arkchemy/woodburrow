@@ -5,6 +5,12 @@
    exactly as they did on the real site. */
 
 :root {
+    /* This is a light design and there is no dark variant. Saying so stops a
+       browser in dark mode applying its own inversion to form controls,
+       scrollbars and the like, which would clash with the painted colours
+       everywhere else. */
+    color-scheme: light;
+
     --plum:    #3d1140;
     --plum-lo: #2a1030;
     --gold:    #f3c34e;
@@ -400,7 +406,7 @@ footer a { color: var(--gold); }
 .game-tabs button[aria-pressed="true"] {
     background: var(--plum); color: var(--gold); border-color: var(--plum);
 }
-.game-tabs button small { display: block; font-size: 10px; opacity: .7; letter-spacing: .02em; }
+.game-tabs button small { display: block; font-size: 11px; opacity: .78; letter-spacing: .02em; }
 /* characters without a promotional render fall back to their portrait, which
    is small and circular -- don't blow it up to hero size */
 .hero-img.portrait-only { max-height: 190px; border-radius: 50%; }
@@ -457,7 +463,7 @@ footer a { color: var(--gold); }
 #s-moves li:last-child { margin-bottom: 0; }
 #s-moves b { display: inline; color: var(--plum); font-weight: 700; }
 #s-moves i {
-    font-style: normal; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+    font-style: normal; font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
     color: #1b0f22; background: color-mix(in srgb, var(--el) 40%, #e6dfec);
     border-radius: 20px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px;
 }
@@ -611,16 +617,16 @@ h2 { view-transition-name: none; }
 
     /* roster: tighter, and the two element columns stack */
     #elements { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-    .chip { flex: 0 0 60px; width: 60px; }
+    .chip { flex: 0 0 64px; width: 64px; }
     .chip img { width: 46px; height: 46px; }
-    .chip span { font-size: 9px; min-height: 2.2em; }
+    .chip span { font-size: 10px; min-height: 2.4em; }
     .el-mark img { width: 24px; height: 24px; }
     .el-mark span { font-size: 12px; }
     .el-row { gap: 1px; }
 
     .game-tabs { gap: 4px; }
     .game-tabs button { font-size: 11.5px; padding: 4px 9px; }
-    .game-tabs button small { font-size: 9px; }
+    .game-tabs button small { font-size: 10.5px; }
 
     /* A percentage width inside the max-content marquee track resolves
        against the track's own intrinsic width, so `width: 100%` made a single
@@ -901,9 +907,14 @@ h1#site-lockup { margin: 0; font-size: inherit; line-height: 1; }
 }
 .p-chip span { font-size: 13px; color: var(--ink); white-space: nowrap; }
 
-.more-link { margin: -12px 0 30px; }
+/* min-height, not a bigger font: the text stays the size it wants to be and
+   the hit area grows around it. 44px is the comfortable touch target; WCAG
+   2.2's floor is 24. The negative top margin absorbs the extra height so the
+   spacing above is unchanged. */
+.more-link { margin: -20px 0 26px; }
 .more-link a {
     display: inline-flex; align-items: center; gap: 6px;
+    min-height: 44px; padding: 2px 0;
     font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
     letter-spacing: .04em; color: var(--berry); text-decoration: none;
 }
@@ -1296,6 +1307,18 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .scrolled #site-nav { padding-left: 54px; }
 }
 
+/* The horizontal nav starts at 761px but needs ~1060px to fit on one line,
+   so every width from tablet landscape to a small laptop was wrapping it onto
+   two rows -- which also doubled --nav-h and pushed the legal page's sticky
+   sidebar down. Scale the type in that band instead of letting it wrap. */
+@media (min-width: 761px) and (max-width: 1120px) {
+    #site-nav a { font-size: 16px; padding: 7px 10px; }
+    #site-nav { gap: 3px; }
+}
+@media (min-width: 761px) and (max-width: 860px) {
+    #site-nav a { font-size: 14.5px; padding: 6px 8px; }
+}
+
 /* --- front page: where to go next -------------------------------------- */
 .jump {
     list-style: none; margin: 0 0 34px; padding: 0;
@@ -1339,15 +1362,15 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 .game-card.is-now .gc-logo img { max-height: 128px; }
 
 .gc-body { min-width: 0; }
-.gc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.gc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
 .gc-body h3 {
-    margin: 0; font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 20px; letter-spacing: .03em; color: var(--plum);
+    margin: 0; min-width: 0; font-family: "Luckiest Guy", Impact, sans-serif;
+    font-weight: 400; font-size: 20px; letter-spacing: .03em; color: var(--plum);
 }
 .game-card.is-now .gc-body h3 { font-size: 25px; }
 .gc-status {
-    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-    border-radius: 999px; padding: 3px 9px; white-space: nowrap;
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    border-radius: 999px; padding: 3px 10px; white-space: nowrap;
 }
 .st-now { background: var(--gold); color: #4a2a02; }
 .st-ref { background: #f0eaf4; color: #6a6376; }
@@ -1390,7 +1413,8 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 }
 #progressMore button {
     display: inline-flex; align-items: center; gap: 6px;
-    background: none; border: 0; cursor: pointer; padding: 0;
+    background: none; border: 0; cursor: pointer;
+    min-height: 44px; padding: 2px 4px; margin-left: -4px;
     font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
     letter-spacing: .04em; color: var(--berry);
 }
