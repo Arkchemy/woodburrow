@@ -98,6 +98,11 @@ class H(http.server.SimpleHTTPRequestHandler):
             elif q.path == "/api/discord-avatar":
                 body = _j.dumps({"username": "stub", "display_name": None,
                                  "avatar": None}).encode()
+            elif q.path == "/api/discord-invite":
+                # The real route reads Discord's public widget; locally just
+                # hand back a plausible invite so the footer link is exercised.
+                body = _j.dumps({"invite": "https://discord.com/invite/EXAMPLE",
+                                 "name": "Arkchemy", "online": 7}).encode()
             elif q.path == "/api/license":
                 lic = ROOT / ("LEGAL.md" if args.get("repo") == "legal" else "LICENSE")
                 body = _j.dumps({"repo": args.get("repo", "woodburrow"),

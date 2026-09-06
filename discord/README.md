@@ -18,6 +18,11 @@ DISCORD_BOT_TOKEN=... python3 discord/post.py <channel_id> --dry-run
 Drop `--dry-run` to send. The token is the same one the site uses; it is in the
 Vercel project's environment variables.
 
+The channel can be a name or an id. `--list` prints every text channel the bot
+can see. Before sending anything, the embeds are checked against Discord's
+limits (6000 characters an embed, 1024 a field, 25 fields), so a bad edit fails
+up front rather than after the first of three messages has already landed.
+
 `post.py` only posts. It deletes nothing, and it is not going to: deleting the
 old message is two clicks in Discord and cannot be undone, which is not a thing
 to hand to a script.

@@ -450,3 +450,20 @@ addEventListener("resize", () => {
 });
 /* webfonts land after first paint and change every measurement */
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitText());
+
+/* --- the footer's Discord link -----------------------------------------
+   The invite comes from /api/discord-invite rather than being written into
+   the markup: the widget hands out a temporary invite, so a hardcoded one
+   goes dead within a day. The link stays hidden until a real invite is in
+   hand, which is better than shipping a link that 404s. */
+{
+    const link = document.getElementById("footDiscord");
+    if (link) {
+        fetch("/api/discord-invite").then(r => r.json()).then(d => {
+            if (!d || !d.invite) return;
+            link.href = d.invite;
+            link.rel = "noopener";
+            link.hidden = false;
+        }).catch(() => {});
+    }
+}

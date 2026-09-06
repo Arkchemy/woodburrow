@@ -74,6 +74,41 @@ def post(token: str, channel: str, payload: dict) -> dict:
         return json.load(r)
 
 
+# Discord's embed limits. Exceeding one rejects that message with a 400, and
+# since these post one at a time that would leave #rules half-written. Checked
+# up front so a bad edit fails before anything is sent.
+LIMITS = {"title": 256, "description": 4096, "field_name": 256,
+          "field_value": 1024, "footer": 2048, "fields": 25, "total": 6000}
+
+
+def check(messages: list) -> list:
+    problems = []
+    for i, msg in enumerate(messages, 1):
+        for embed in msg.get("embeds", []):
+            where = f"message {i} ({embed.get('title', 'untitled')})"
+            total = 0
+            for key, cap in (("title", "title"), ("description", "description")):
+                v = embed.get(key, "")
+                total += len(v)
+                if len(v) > LIMITS[cap]:
+                    problems.append(f"{where}: {key} is {len(v)}, limit {LIMITS[cap]}")
+            fields = embed.get("fields", [])
+            if len(fields) > LIMITS["fields"]:
+                problems.append(f"{where}: {len(fields)} fields, limit {LIMITS['fields']}")
+            for f in fields:
+                total += len(f.get("name", "")) + len(f.get("value", ""))
+                if len(f.get("name", "")) > LIMITS["field_name"]:
+                    problems.append(f"{where}: field name too long -- {f['name'][:40]}...")
+                if len(f.get("value", "")) > LIMITS["field_value"]:
+                    problems.append(f"{where}: field '{f.get('name')}' value is "
+                                    f"{len(f['value'])}, limit {LIMITS['field_value']}")
+            foot = embed.get("footer", {}).get("text", "")
+            total += len(foot)
+            if total > LIMITS["total"]:
+                problems.append(f"{where}: embed totals {total} characters, limit {LIMITS['total']}")
+    return problems
+
+
 def main() -> int:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     dry = "--dry-run" in sys.argv
@@ -97,6 +132,14 @@ def main() -> int:
     channel = resolve(token, args[0]) if not dry else args[0]
 
     messages = json.loads((HERE / "rules.json").read_text())["messages"]
+
+    problems = check(messages)
+    if problems:
+        print("rules.json will not post as written:", file=sys.stderr)
+        for p in problems:
+            print(f"  {p}", file=sys.stderr)
+        return 1
+    print(f"  {len(messages)} messages, all within Discord's embed limits")
 
     for i, msg in enumerate(messages, 1):
         title = msg["embeds"][0].get("title", "(no title)")
