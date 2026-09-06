@@ -1,5 +1,14 @@
 [
  {
+  "name": "bonesinmysoup",
+  "slug": "bonesinmysoup",
+  "role": "igz Format Research -- Alchemy Container & Fixup Structure",
+  "element": "Undead",
+  "github": null,
+  "discordId": "731587862423797762",
+  "section": "core"
+ },
+ {
   "name": "Aaronateataco",
   "slug": "aaronateataco",
   "role": "Founder & Lead Developer",
@@ -18,57 +27,12 @@
   "section": "special-thanks"
  },
  {
-  "name": "NefariousTechSupport",
-  "slug": "nefarioustechsupport",
-  "role": "Community Research -- Alchemy Engine Reverse Engineering",
-  "element": "Fire",
-  "github": null,
-  "discordId": "508375441267228673",
-  "section": "special-thanks"
- },
- {
-  "name": "winnernombre",
-  "slug": "winnernombre",
-  "role": "Community Research & Project Direction",
-  "element": "Tech",
-  "github": "https://github.com/WinnerNombre",
-  "discordId": "350989977460408321",
-  "section": "special-thanks"
- },
- {
   "name": "gutterbeasts",
   "slug": "gutterbeasts",
   "role": "Special Thanks -- Community Research",
   "element": "Magic",
   "github": null,
   "discordId": "1267971835413401664",
-  "section": "special-thanks"
- },
- {
-  "name": "bonesinmysoup",
-  "slug": "bonesinmysoup",
-  "role": "Special Thanks -- Community Research",
-  "element": "Undead",
-  "github": null,
-  "discordId": "731587862423797762",
-  "section": "special-thanks"
- },
- {
-  "name": "supersamus02",
-  "slug": "supersamus02",
-  "role": "Special Thanks -- Community Research",
-  "element": null,
-  "github": "https://github.com/SuperSamus",
-  "discordId": "402569493747990528",
-  "section": "special-thanks"
- },
- {
-  "name": "jensj56",
-  "slug": "jensj56",
-  "role": "Special Thanks -- Community Research",
-  "element": "Tech",
-  "github": null,
-  "discordId": "368385351078772736",
   "section": "special-thanks"
  },
  {
@@ -81,6 +45,15 @@
   "section": "special-thanks"
  },
  {
+  "name": "jensj56",
+  "slug": "jensj56",
+  "role": "Special Thanks -- Community Research",
+  "element": "Tech",
+  "github": null,
+  "discordId": "368385351078772736",
+  "section": "special-thanks"
+ },
+ {
   "name": "LG-RZ",
   "slug": "lg-rz",
   "role": "Special Thanks -- Community Research",
@@ -90,12 +63,39 @@
   "section": "special-thanks"
  },
  {
+  "name": "NefariousTechSupport",
+  "slug": "nefarioustechsupport",
+  "role": "Community Research -- Alchemy Engine Reverse Engineering",
+  "element": "Fire",
+  "github": null,
+  "discordId": "508375441267228673",
+  "section": "special-thanks"
+ },
+ {
   "name": "retexcraft",
   "slug": "retexcraft",
   "role": "Special Thanks -- Community Research",
   "element": null,
   "github": null,
   "discordId": "718520146460803145",
+  "section": "special-thanks"
+ },
+ {
+  "name": "supersamus02",
+  "slug": "supersamus02",
+  "role": "Special Thanks -- Community Research",
+  "element": null,
+  "github": "https://github.com/SuperSamus",
+  "discordId": "402569493747990528",
+  "section": "special-thanks"
+ },
+ {
+  "name": "winnernombre",
+  "slug": "winnernombre",
+  "role": "Community Research & Project Direction",
+  "element": "Tech",
+  "github": "https://github.com/WinnerNombre",
+  "discordId": "350989977460408321",
   "section": "special-thanks"
  }
 ]

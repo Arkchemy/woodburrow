@@ -117,7 +117,7 @@ fetch("contributors.json" + DATA_V).then(r => r.json()).then(list => {
     const lede = document.querySelector("#people + .lede");
     if (lede) lede.textContent = core.length === 1
         ? "One person writes the code. A lot of others have put research, direction and patience into it."
-        : core.length + " people write the code, with a lot of others behind them.";
+        : core.length + " people build Arkchemy directly, with a lot of others behind them.";
 
     core.forEach(c => {
         const el = document.createElement(c.github ? "a" : "div");

@@ -8,7 +8,7 @@
        stamp is the newest data-file mtime -- a date alone does not bust the
        cache when the data is regenerated the same day. Refresh it with
        tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1788715015";
+    const DATA_V = "?v=1788738856";
 
 /* --- element palette, used by the roster and the contributor cards --- */
     const ELEMENT_COLOUR = {

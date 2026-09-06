@@ -59,7 +59,9 @@ fetch("contributors.json" + DATA_V).then(r => r.json()).then(list => {
     const lede = document.getElementById("contribLede");
     if (lede) lede.textContent = core.length === 1
         ? "Arkchemy is written by one person. Everything below it exists because other people gave their time to it."
-        : core.length + " people write the code.";
+        /* not "write the code" -- this group includes format research, which is
+           what unblocked the port, and calling that coding would be wrong. */
+        : core.length + " people build Arkchemy directly.";
 
     const grid = document.getElementById("contribGrid");
     core.forEach(c => grid.appendChild(personCard(c, true)));
