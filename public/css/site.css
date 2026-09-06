@@ -1307,20 +1307,30 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 #site-nav .nav-home { display: none; }
 @media (min-width: 761px) {
     #site-nav .nav-home {
-        display: grid; place-items: center;
+        display: flex; align-items: center; gap: 9px;
         position: absolute; left: 14px; top: 50%;
-        width: 40px; height: 40px; margin-top: -20px;
+        height: 40px; margin-top: -20px;
         padding: 0;                  /* #site-nav a adds 7px 15px */
         background: none;
         opacity: 0; transform: translateY(-6px) scale(.85);
         pointer-events: none;
         transition: opacity .28s var(--ease), transform .28s var(--ease);
     }
-    #site-nav .nav-home img { width: 100%; height: 100%; object-fit: contain; }
+    #site-nav .nav-home .nh-mark { width: 40px; height: 40px; object-fit: contain; }
+    /* The wordmark only appears where the centred links leave room for it.
+       Below that the balloon carries the mark on its own rather than the two
+       colliding in the middle of the bar. */
+    #site-nav .nav-home .nh-word { display: none; height: 21px; width: auto; }
     #site-nav .nav-home::after { display: none; }   /* no underline sweep on the mark */
     .scrolled #site-nav .nav-home { opacity: 1; transform: none; pointer-events: auto; }
     /* the links shift right to make room, but only while the mark is there */
     .scrolled #site-nav { padding-left: 54px; }
+}
+/* Wide enough that the balloon, the wordmark and the centred links all fit
+   without the first two reaching the third. */
+@media (min-width: 1300px) {
+    #site-nav .nav-home .nh-word { display: block; }
+    .scrolled #site-nav { padding-left: 196px; }
 }
 
 /* The horizontal nav starts at 761px but needs ~1060px to fit on one line,

@@ -75,6 +75,12 @@ def build(parts, w, h, mode):
     elif mode == "flat":
         layers = f'    <g fill="{FILL_A}" fill-rule="evenodd">\n      {body}\n    </g>'
         defs, title = "", "Arkchemy wordmark (solid)"
+    elif mode == "gold":
+        # For the sticky navbar, which is plum: the full lockup's plum fill
+        # vanishes against it and only the gold outline survives, so this is
+        # a solid gold cut that reads at 20px on a dark bar.
+        layers = f'    <g fill="{GOLD}" fill-rule="evenodd">\n      {body}\n    </g>'
+        defs, title = "", "Arkchemy wordmark (gold)"
     elif mode == "black":
         layers = f'    <g fill="#000000" fill-rule="evenodd">\n      {body}\n    </g>'
         defs, title = "", "Arkchemy wordmark (black)"
@@ -94,6 +100,7 @@ parts, width = layout(glyphs)
 OUT.mkdir(parents=True, exist_ok=True)
 for mode, name in [("full","arkchemy-wordmark.svg"),
                    ("flat","arkchemy-wordmark-solid-plum.svg"),
+                   ("gold","arkchemy-wordmark-gold.svg"),
                    ("black","arkchemy-wordmark-black.svg"),
                    ("outline","arkchemy-wordmark-outline.svg")]:
     (OUT/name).write_text(build(parts, width, 100, mode))
