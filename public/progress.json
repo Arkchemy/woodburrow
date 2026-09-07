@@ -2,20 +2,20 @@
   "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
   "schema_version": 2,
   "generated_at": "2026-09-07",
-  "generated_by": "root cause of the boot stall found and fixed; fix not yet confirmed on hardware",
+  "generated_by": "boot stall fixed and confirmed on hardware; the engine now reaches its render loop",
   "max_percent": 95,
   "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
   "overall": {
-    "percent": 48,
-    "headline": "The cause of the boot stall is found: a background thread was writing four bytes past the end of its own stack, onto the bookkeeping of the memory system.",
-    "summary": "When the engine starts a background worker, it hands the worker a block of memory to use as its stack. On this processor a function is required to save its return address just above where that stack begins -- and providing that small gap is the operating system's job. Ours did not, so the very first thing the worker did was write a zero four bytes past the end of its stack. Those four bytes happened to be the label on a five-megabyte region of free memory, saying how large it was. With the label reading zero, the memory system lost track of nearly four megabytes it still owned, and from then on it had nothing left to hand out. The decompression step that was blamed for weeks was simply the first thing to ask for memory afterwards. The real game running under an emulator was used as the reference throughout, and its equivalent region accounts for 99.8 percent of itself, which is what confirmed ours was broken rather than merely busy. The fix is sixteen bytes of reserved space, and it is on the console but has not been run yet."
+    "percent": 53,
+    "headline": "The boot stall is fixed and confirmed: the game now loads its first data archive and gets as far as running a render loop.",
+    "summary": "A background worker had been writing four bytes past the end of its own stack, onto the label recording how large a free region of memory was. With that label reading zero the memory system lost track of nearly four megabytes and eventually had nothing left to give out. Reserving sixteen bytes of space fixed it, and the confirming run is unambiguous: the memory region now keeps all of itself, the engine executed roughly twice as many instructions as before, opened more of the game's files, decompressed the first archive correctly, and emptied the work queue that had been stuck for weeks. It then went further than it ever has -- the code it spends its time in is now scene traversal and camera matrices, which is a render loop. It ran to the end of the test without crashing. Nothing is drawn on screen yet, and the graphics layer remains the largest piece of work left, but the engine is now asking to draw rather than failing to start."
   },
   "status": {
     "state": "active",
     "since": "2026-09-07",
     "on_break": null,
     "break_reason": null,
-    "note": "Root cause found and fixed. Waiting on a hardware run to confirm it, and to see what the boot reaches next."
+    "note": "Boot stall fixed and confirmed. Next is finding out whether the render loop reaches the graphics hardware at all."
   },
   "current_work": {
     "repo": "jouster",
@@ -24,12 +24,12 @@
   },
   "next_work": [
     {
-      "name": "Confirm the fix on hardware",
-      "detail": "Check the memory region keeps all of itself, and that nothing writes past the worker's stack again."
+      "name": "Find out if the render loop reaches the graphics hardware",
+      "detail": "Counting the graphics calls the engine makes. None would mean something still gates drawing; some would name what has to work first."
     },
     {
-      "name": "See how much further the boot gets",
-      "detail": "The first archive should now decompress. Whatever stops it after that is the next thing to find."
+      "name": "Start on the graphics layer",
+      "detail": "The Wii U's shaders are compiled for a different graphics chip than the Switch's, and translating them is the biggest remaining piece of the project."
     }
   ],
   "projects": [
@@ -38,7 +38,7 @@
       "name": "Conquertron",
       "role": "PowerPC32 to C static recompiler core",
       "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 86,
+      "percent": 88,
       "state": "active",
       "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
       "categories": [
@@ -67,7 +67,7 @@
       "name": "Jouster",
       "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
       "url": "https://github.com/Arkchemy/jouster",
-      "percent": 68,
+      "percent": 72,
       "state": "active",
       "summary": "The Switch side. Class registration is complete at 965 of 965 in the retail order, and igArkCore::init has reached file loading and opened the engine's own bootstrap.bld. Real decoded video frames reach the panel from the game's own movie files with no shader translation in the path, and the Wii U boot splash and jingle play from meta/. The boot now waits in the job queue rather than failing.",
       "categories": [
