@@ -48,3 +48,9 @@ project Discord are in [`llms.txt`](llms.txt).
 
 Contributors are listed in [`CONTRIBUTORS.csv`](CONTRIBUTORS.csv); the codename
 scheme is explained in [`CODENAMES.md`](CODENAMES.md).
+
+## Documentation
+
+| Document | What it covers |
+| --- | --- |
+| [`ROADMAP.md`](ROADMAP.md) | Standing rules for honest reporting, and what is open |
