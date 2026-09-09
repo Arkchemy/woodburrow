@@ -1,267 +1,271 @@
 {
-  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
-  "schema_version": 2,
-  "generated_at": "2026-09-07",
-  "generated_by": "boot stall fixed and confirmed on hardware; the engine now reaches its render loop",
-  "max_percent": 95,
-  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
-  "overall": {
-    "percent": 53,
-    "headline": "The boot stall is fixed and confirmed: the game now loads its first data archive and gets as far as running a render loop.",
-    "summary": "A background worker had been writing four bytes past the end of its own stack, onto the label recording how large a free region of memory was. With that label reading zero the memory system lost track of nearly four megabytes and eventually had nothing left to give out. Reserving sixteen bytes of space fixed it, and the confirming run is unambiguous: the memory region now keeps all of itself, the engine executed roughly twice as many instructions as before, opened more of the game's files, decompressed the first archive correctly, and emptied the work queue that had been stuck for weeks. It then went further than it ever has -- the code it spends its time in is now scene traversal and camera matrices, which is a render loop. It ran to the end of the test without crashing. Nothing is drawn on screen yet, and the graphics layer remains the largest piece of work left, but the engine is now asking to draw rather than failing to start."
+ "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
+ "schema_version": 2,
+ "generated_at": "2026-09-09",
+ "generated_by": "root cause of the empty scene found in the recompiler itself; fix built and on the console, not yet run",
+ "max_percent": 95,
+ "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
+ "overall": {
+  "percent": 53,
+  "headline": "The reason the game rendered an empty scene has been found, and it was in our own translator, not the game.",
+  "summary": "The engine decides whether to read its configuration file by checking a single byte in the executable. Our translation of that one check was reading from the wrong place -- about eight thousand bytes away from the flag, in unrelated data that happened to be zero -- so the game concluded configuration was switched off and skipped the whole thing. With no configuration it did not know which level to load, went looking for one called \"test\" that does not exist on the disc, found nothing, and drew an empty scene very efficiently at sixty frames a second. Every symptom traced over the past week was real and correctly measured, and none of them was the cause; the cause sat two steps above the top of the chain. The underlying mistake was general rather than specific: whenever the translator handled a single byte, a half-word or a float belonging to a global variable, it added an address offset that had already been applied. Whole words were always handled correctly, and words are most of the traffic, which is why this survived every earlier hunt. 423 instructions in this game were affected. The fix is built and copied to the console but has not been run yet, so nothing here is confirmed."
+ },
+ "status": {
+  "state": "active",
+  "since": "2026-09-09",
+  "on_break": null,
+  "break_reason": null,
+  "note": "Fix built and on the console, awaiting a run. If it works, the game should load its real starting level for the first time."
+ },
+ "current_work": {
+  "repo": "conquertron",
+  "title": "A whole class of translation bug affecting bytes, half-words and floats",
+  "detail": "Where the game refers to a global variable, the translator computes the address once and then, for word-sized access, correctly ignores a leftover offset. For eleven other instruction kinds it added that offset a second time, so every byte, half-word and float read from a global landed somewhere else. This is now fixed and the affected code rebuilt; the next run says whether the configuration file is finally read."
+ },
+ "next_work": [
+  {
+   "name": "Confirm the configuration file is read",
+   "detail": "The instrumented build reports whether the registry read runs at all and what starting level it ends up with. \"Title\" instead of \"test\" is the answer we want."
   },
-  "status": {
-    "state": "active",
-    "since": "2026-09-07",
-    "on_break": null,
-    "break_reason": null,
-    "note": "Boot stall fixed and confirmed. Next is finding out whether the render loop reaches the graphics hardware at all."
+  {
+   "name": "Get the rest of the first archive decompressing",
+   "detail": "One block of thirty-five has been unpacked so far, because the archive was never registered as somewhere to read from. That should follow from the same fix."
   },
-  "current_work": {
-    "repo": "jouster",
-    "title": "An object the engine refuses to build",
-    "detail": "Construction goes through each class's own description, and a flag in it can veto building the object entirely. Ours is vetoing; the retail game's is not. The memory pool involved is large and mostly free, so nothing here is about running out of space. The next step is to read our copy of that description and compare it field by field against the working game's."
-  },
-  "next_work": [
-    {
-      "name": "Find out if the render loop reaches the graphics hardware",
-      "detail": "Counting the graphics calls the engine makes. None would mean something still gates drawing; some would name what has to work first."
-    },
-    {
-      "name": "Start on the graphics layer",
-      "detail": "The Wii U's shaders are compiled for a different graphics chip than the Switch's, and translating them is the biggest remaining piece of the project."
-    }
-  ],
-  "projects": [
-    {
-      "id": "conquertron",
-      "name": "Conquertron",
-      "role": "PowerPC32 to C static recompiler core",
-      "url": "https://github.com/Arkchemy/conquertron",
-      "percent": 88,
-      "state": "active",
-      "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
-      "categories": [
-        {
-          "key": "translation_coverage",
-          "label": "Translation coverage",
-          "percent": 95,
-          "note": "Every instruction in the target binary decodes and the whole thing links. Held at 95 rather than 100 on the standing rule -- coverage is not a claim that any of it is right."
-        },
-        {
-          "key": "verified_correctness",
-          "label": "Verified correctness",
-          "percent": 60,
-          "note": "Most translated functions have never been exercised by a real run. Unverified, not confirmed good. verify.sh covers arithmetic, floats, globals, function pointers, rodata tables and stripped-binary boundary recovery against ground truth on host and ARM64. Import-call instrumentation now emits from codegen, so a regenerated tree can tell a live shim loop from a genuine hang -- a distinction no existing counter could make."
-        },
-        {
-          "key": "relocation_handling",
-          "label": "Relocation and addressing",
-          "percent": 75,
-          "note": "LWZU and ADDIC relocation-fold bugs found and fixed; RA=0 base-register handling fixed. Data-side .rodata mapping is the remaining open question."
-        }
-      ]
-    },
-    {
-      "id": "jouster",
-      "name": "Jouster",
-      "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
-      "url": "https://github.com/Arkchemy/jouster",
-      "percent": 72,
-      "state": "active",
-      "summary": "The Switch side. Class registration is complete at 965 of 965 in the retail order, and igArkCore::init has reached file loading and opened the engine's own bootstrap.bld. Real decoded video frames reach the panel from the game's own movie files with no shader translation in the path, and the Wii U boot splash and jingle play from meta/. The boot now waits in the job queue rather than failing.",
-      "categories": [
-        {
-          "key": "cafeos_shims",
-          "label": "Cafe OS shim layer",
-          "percent": 66,
-          "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. Three separate 64-bit argument and overflow bugs were fixed across the atomics and event shims on 2026-08-30 and 2026-09-01. The mutex/event/semaphore tables no longer turn exhaustion into a null dereference, and now report their own high-water marks. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops. Video is served natively from the game's own Bink API."
-        },
-        {
-          "key": "engine_bootstrap",
-          "label": "Engine bring-up",
-          "percent": 76,
-          "note": "Registration is complete at 965 of 965 in the retail order, the engine has opened its own bootstrap.bld, and the first 128 KB read back a valid igArchive header into guest memory. The loader then stalled because the read completion was delivered inline instead of after the issuing call returned -- fixed, and awaiting a hardware run."
-        },
-        {
-          "key": "graphics",
-          "label": "Graphics (GX2 to deko3d)",
-          "percent": 20,
-          "note": "gx2_test is real, working infrastructure -- render state, surfaces, buffers, texture binding, clear and present, VSync, GPU submission, all validated. What does not exist: a model or mesh loader, a material path, and any shader translation. GX2 shaders are compiled AMD R600 machine code; deko3d wants offline-compiled Nvidia Maxwell binaries. There is no runtime translation path, and building one is a substantial project in its own right."
-        },
-        {
-          "key": "figure_reading",
-          "label": "Figure reading (portal, dumps, Joy-Con NFC)",
-          "percent": 35,
-          "note": "skylanders_figure.c and skylanders_mifare_keys.c are compiled and passing on the host -- MIFARE Key A derivation matches all 80 known-good test vectors. skylanders_portal.c (USB HID) and skylanders_nfc.c (Joy-Con) need libnx and real hardware and are entirely unverified. No character select UI yet. Public prior art now identified for the parts this does not have: figure and variant ID tables, portal identification IDs, and CC0-licensed .sky dumps for this exact game to test against without physical toys."
-        }
-      ]
-    },
-    {
-      "id": "blaster",
-      "name": "Blaster",
-      "role": "Python tooling and host-testable regression tests",
-      "url": "https://github.com/Arkchemy/blaster",
-      "percent": 70,
-      "state": "supporting",
-      "summary": "The tools that do not need a Switch. igz_tools.py handles Alchemy IGZ archives, extract_field_schema.py statically recovered 616 field names across 616 engine classes with no running game, the Wii to Wii U voice-line transplant pipeline swapped 1,481 English lines across 76 archives, and verify.sh is the recompiler's own correctness suite. verify.sh could not run from a clean clone until 2026-08-23 -- it still referenced the pre-split monorepo layout.",
-      "categories": [
-        {
-          "key": "igz_tooling",
-          "label": "IGZ and archive tooling",
-          "percent": 65,
-          "note": "Read paths are solid. No write path yet -- and a known trap waiting for one: omitting a memory-pool category when re-saving an igz silently misroutes data rather than failing."
-        },
-        {
-          "key": "test_suite",
-          "label": "Recompiler correctness suite",
-          "percent": 70,
-          "note": "18 harnesses run against ground truth on host and under QEMU ARM64, plus a stripped-binary boundary-recovery check. Four harness files at the repo root are not wired into verify.sh at all."
-        },
-        {
-          "key": "field_schema",
-          "label": "Field schema extraction",
-          "percent": 50,
-          "note": "Field names recover statically. Byte offsets are computed at runtime and need a live hook into a running game -- NefariousTechSupport's AlchemyMetadataDumper is the closest existing prior art and already has a TARGET_CAFE guard defined."
-        }
-      ]
-    },
-    {
-      "id": "woodburrow",
-      "name": "Woodburrow",
-      "role": "The project website",
-      "url": "https://github.com/Arkchemy/woodburrow",
-      "percent": 46,
-      "state": "rebuilding",
-      "summary": "The project website. Rebuilt by hand after the 2026-08-22 strip-down and now carrying four real pages -- overview, work, findings and about -- all fed from live data. Every visitor lookup goes through this site's own serverless routes rather than the visitor's browser talking to GitHub or Discord directly.",
-      "categories": [
-        {
-          "key": "contributors",
-          "label": "Contributors and credits",
-          "percent": 85,
-          "note": "Live from CONTRIBUTORS.csv. Element and Battle Class badges render again as of 2026-09-02 -- both columns had been carried in the CSV since before the strip-down with the art sitting unused in the repo. A class with no class art falls back to the elements folder, so a deliberately non-standard pick still renders rather than showing a broken image."
-        },
-        {
-          "key": "serverless_routes",
-          "label": "Serverless proxy routes",
-          "percent": 70,
-          "note": "Four routes keep visitor IPs off third-party logs and share one edge-cached lookup instead of each browser burning its own rate limit. One hardening gap is open in the image proxy -- see the security notes."
-        },
-        {
-          "key": "public_pages",
-          "label": "Public pages (progress, findings, about, licence)",
-          "percent": 55,
-          "note": "Up from 10. All four pages are rebuilt and rendering from progress.json, findings.json and the contributor data: an overview with a live gauge, a work page, a findings page with filtering, and an about page with the roadmap and timeline. Still to do: the pages carry no images or diagrams, and nothing yet visualises the boot progress the log describes."
-        }
-      ]
-    },
-    {
-      "id": "armory",
-      "name": "Armory",
-      "role": "Skylanders Online locker and account linking",
-      "url": "https://github.com/Arkchemy/armory",
-      "percent": 3,
-      "state": "scaffold",
-      "summary": "Created and scaffolded on 2026-08-22 with the shared codenames and contributor files, plus its own stricter licence. Nothing is implemented. The locker is a Switch .nro, not a website feature; account linking is the website half. Both are blocked behind rendering and audio working at all, so this is deliberately parked rather than stalled.",
-      "categories": [
-        {
-          "key": "locker",
-          "label": "On-device locker",
-          "percent": 2,
-          "note": "Blocked on GX2 model rendering and audio playback. Useful lead found in the Discord exports: the figure-summon sequence ('Magic Moment' is the real in-engine term) is implemented in tfbscript, in game data, not hardcoded in the executable -- so the presentation logic may already exist natively rather than needing to be written."
-        },
-        {
-          "key": "account_linking",
-          "label": "Account linking backend",
-          "percent": 0,
-          "note": "Not started. No design yet."
-        }
-      ]
-    }
-  ],
-  "timeline": {
-    "milestone": "Video from the game's own files displaying on hardware -- reached 2026-08-29, partially: frames decode and display, but truncate after a few macroblock rows.",
-    "started": "2026-08-13",
-    "estimate_fast": "about 18 months from the start, so roughly early 2028",
-    "estimate_realistic": "2.5 to 3 years, so roughly mid-2029",
-    "confidence": "low",
-    "basis": "Solo, part-time effort around college. Phase 1 (recompiler) and Phase 2 (GX2 and shaders) are each comparable in scope, and Phase 2 has barely started. Comparable public projects -- N64: Recompiled, Zelda 64: Recompiled -- took multiple contributors several years and had existing decompilation work to build on. This one does not.",
-    "caveat": "The cutscene is a late-stage milestone, not an early one. It needs most of the pipeline working, not just booting.",
-    "stages": [
-      {
-        "stage": "Phase 0 -- dumping and decryption",
-        "estimate": "days to 1-2 weeks",
-        "state": "done"
-      },
-      {
-        "stage": "Proof-of-concept recompiler",
-        "estimate": "2-6 months",
-        "state": "done"
-      },
-      {
-        "stage": "Phase 1 against the real binary, executing without crashing",
-        "estimate": "6-14 months",
-        "state": "in progress"
-      },
-      {
-        "stage": "Phase 2 minimum viable GX2 and shader rendering",
-        "estimate": "6-18 months",
-        "state": "barely started"
-      },
-      {
-        "stage": "Phase 2a video and audio codec work",
-        "estimate": "1-4 months additional",
-        "state": "not started"
-      },
-      {
-        "stage": "Debugging and integration for this specific cutscene",
-        "estimate": "1-3 months",
-        "state": "not started"
-      }
-    ]
-  },
-  "roadmap": {
-    "note": "Deliberately not release chronology.",
-    "games": [
-      {
-        "title": "Spyro's Adventure",
-        "wiiu_port_studio": "Toys for Bob",
-        "state": "in progress"
-      },
-      {
-        "title": "Swap Force",
-        "wiiu_port_studio": "Vicarious Visions",
-        "state": "queued",
-        "why": "The biggest unknown -- new porting studio, new mechanic -- tackled early while the toolchain is still being built."
-      },
-      {
-        "title": "Trap Team",
-        "wiiu_port_studio": "Beenox",
-        "state": "queued",
-        "why": "The third distinct porting studio. Resolve every known authorship lineage while still in toolchain-building mode."
-      },
-      {
-        "title": "Giants",
-        "wiiu_port_studio": "Vicarious Visions",
-        "state": "queued",
-        "why": "First cheap confirmation pass, and by far the easiest of the six to obtain legally."
-      },
-      {
-        "title": "SuperChargers",
-        "wiiu_port_studio": "Vicarious Visions",
-        "state": "queued"
-      },
-      {
-        "title": "Imaginators",
-        "wiiu_port_studio": "Toys for Bob",
-        "state": "queued",
-        "why": "Last -- most content-divergent and the latest engine build, so it gets the most mature toolchain."
-      }
-    ]
-  },
-  "links": {
-    "org": "https://github.com/Arkchemy",
-    "site": "https://arkchemy.vercel.app",
-    "discord": "https://discord.gg/KJWyHUczCV"
+  {
+   "name": "Start on the graphics layer",
+   "detail": "The Wii U's shaders are compiled for a different graphics chip than the Switch's, and translating them is the biggest remaining piece of the project."
   }
+ ],
+ "projects": [
+  {
+   "id": "conquertron",
+   "name": "Conquertron",
+   "role": "PowerPC32 to C static recompiler core",
+   "url": "https://github.com/Arkchemy/conquertron",
+   "percent": 88,
+   "state": "active",
+   "summary": "PowerPC32 to C static recompiler. 100% of .text translates. Five silent codegen bugs found and fixed, the largest being that only .rela.text was ever read -- 48,625 relocations targeting .rodata and .data were discarded, leaving every pointer stored in data null.",
+   "categories": [
+    {
+     "key": "translation_coverage",
+     "label": "Translation coverage",
+     "percent": 95,
+     "note": "Every instruction in the target binary decodes and the whole thing links. Held at 95 rather than 100 on the standing rule -- coverage is not a claim that any of it is right."
+    },
+    {
+     "key": "verified_correctness",
+     "label": "Verified correctness",
+     "percent": 60,
+     "note": "Most translated functions have never been exercised by a real run. Unverified, not confirmed good. verify.sh covers arithmetic, floats, globals, function pointers, rodata tables and stripped-binary boundary recovery against ground truth on host and ARM64. Import-call instrumentation now emits from codegen, so a regenerated tree can tell a live shim loop from a genuine hang -- a distinction no existing counter could make."
+    },
+    {
+     "key": "relocation_handling",
+     "label": "Relocation and addressing",
+     "percent": 75,
+     "note": "LWZU and ADDIC relocation-fold bugs found and fixed; RA=0 base-register handling fixed. Data-side .rodata mapping is the remaining open question."
+    }
+   ]
+  },
+  {
+   "id": "jouster",
+   "name": "Jouster",
+   "role": "Switch runtime, Cafe OS shim layer, and the homebrew .nro itself",
+   "url": "https://github.com/Arkchemy/jouster",
+   "percent": 72,
+   "state": "active",
+   "summary": "The Switch side. Class registration is complete at 965 of 965 in the retail order, and igArkCore::init has reached file loading and opened the engine's own bootstrap.bld. Real decoded video frames reach the panel from the game's own movie files with no shader translation in the path, and the Wii U boot splash and jingle play from meta/. The boot now waits in the job queue rather than failing.",
+   "categories": [
+    {
+     "key": "cafeos_shims",
+     "label": "Cafe OS shim layer",
+     "percent": 66,
+     "note": "coreinit memory, filesystem, threading and synchronisation shims are real and working. Three separate 64-bit argument and overflow bugs were fixed across the atomics and event shims on 2026-08-30 and 2026-09-01. The mutex/event/semaphore tables no longer turn exhaustion into a null dereference, and now report their own high-water marks. gx2 is present and linkable but the shader and draw-call family are deliberate no-ops. Video is served natively from the game's own Bink API."
+    },
+    {
+     "key": "engine_bootstrap",
+     "label": "Engine bring-up",
+     "percent": 76,
+     "note": "Registration is complete at 965 of 965 in the retail order, the engine has opened its own bootstrap.bld, and the first 128 KB read back a valid igArchive header into guest memory. The loader then stalled because the read completion was delivered inline instead of after the issuing call returned -- fixed, and awaiting a hardware run."
+    },
+    {
+     "key": "graphics",
+     "label": "Graphics (GX2 to deko3d)",
+     "percent": 20,
+     "note": "gx2_test is real, working infrastructure -- render state, surfaces, buffers, texture binding, clear and present, VSync, GPU submission, all validated. What does not exist: a model or mesh loader, a material path, and any shader translation. GX2 shaders are compiled AMD R600 machine code; deko3d wants offline-compiled Nvidia Maxwell binaries. There is no runtime translation path, and building one is a substantial project in its own right."
+    },
+    {
+     "key": "figure_reading",
+     "label": "Figure reading (portal, dumps, Joy-Con NFC)",
+     "percent": 35,
+     "note": "skylanders_figure.c and skylanders_mifare_keys.c are compiled and passing on the host -- MIFARE Key A derivation matches all 80 known-good test vectors. skylanders_portal.c (USB HID) and skylanders_nfc.c (Joy-Con) need libnx and real hardware and are entirely unverified. No character select UI yet. Public prior art now identified for the parts this does not have: figure and variant ID tables, portal identification IDs, and CC0-licensed .sky dumps for this exact game to test against without physical toys."
+    }
+   ]
+  },
+  {
+   "id": "blaster",
+   "name": "Blaster",
+   "role": "Python tooling and host-testable regression tests",
+   "url": "https://github.com/Arkchemy/blaster",
+   "percent": 70,
+   "state": "supporting",
+   "summary": "The tools that do not need a Switch. igz_tools.py handles Alchemy IGZ archives, extract_field_schema.py statically recovered 616 field names across 616 engine classes with no running game, the Wii to Wii U voice-line transplant pipeline swapped 1,481 English lines across 76 archives, and verify.sh is the recompiler's own correctness suite. verify.sh could not run from a clean clone until 2026-08-23 -- it still referenced the pre-split monorepo layout.",
+   "categories": [
+    {
+     "key": "igz_tooling",
+     "label": "IGZ and archive tooling",
+     "percent": 65,
+     "note": "Read paths are solid. No write path yet -- and a known trap waiting for one: omitting a memory-pool category when re-saving an igz silently misroutes data rather than failing."
+    },
+    {
+     "key": "test_suite",
+     "label": "Recompiler correctness suite",
+     "percent": 70,
+     "note": "18 harnesses run against ground truth on host and under QEMU ARM64, plus a stripped-binary boundary-recovery check. Four harness files at the repo root are not wired into verify.sh at all."
+    },
+    {
+     "key": "field_schema",
+     "label": "Field schema extraction",
+     "percent": 50,
+     "note": "Field names recover statically. Byte offsets are computed at runtime and need a live hook into a running game -- NefariousTechSupport's AlchemyMetadataDumper is the closest existing prior art and already has a TARGET_CAFE guard defined."
+    }
+   ]
+  },
+  {
+   "id": "woodburrow",
+   "name": "Woodburrow",
+   "role": "The project website",
+   "url": "https://github.com/Arkchemy/woodburrow",
+   "percent": 46,
+   "state": "rebuilding",
+   "summary": "The project website. Rebuilt by hand after the 2026-08-22 strip-down and now carrying four real pages -- overview, work, findings and about -- all fed from live data. Every visitor lookup goes through this site's own serverless routes rather than the visitor's browser talking to GitHub or Discord directly.",
+   "categories": [
+    {
+     "key": "contributors",
+     "label": "Contributors and credits",
+     "percent": 85,
+     "note": "Live from CONTRIBUTORS.csv. Element and Battle Class badges render again as of 2026-09-02 -- both columns had been carried in the CSV since before the strip-down with the art sitting unused in the repo. A class with no class art falls back to the elements folder, so a deliberately non-standard pick still renders rather than showing a broken image."
+    },
+    {
+     "key": "serverless_routes",
+     "label": "Serverless proxy routes",
+     "percent": 70,
+     "note": "Four routes keep visitor IPs off third-party logs and share one edge-cached lookup instead of each browser burning its own rate limit. One hardening gap is open in the image proxy -- see the security notes."
+    },
+    {
+     "key": "public_pages",
+     "label": "Public pages (progress, findings, about, licence)",
+     "percent": 55,
+     "note": "Up from 10. All four pages are rebuilt and rendering from progress.json, findings.json and the contributor data: an overview with a live gauge, a work page, a findings page with filtering, and an about page with the roadmap and timeline. Still to do: the pages carry no images or diagrams, and nothing yet visualises the boot progress the log describes."
+    }
+   ]
+  },
+  {
+   "id": "armory",
+   "name": "Armory",
+   "role": "Skylanders Online locker and account linking",
+   "url": "https://github.com/Arkchemy/armory",
+   "percent": 3,
+   "state": "scaffold",
+   "summary": "Created and scaffolded on 2026-08-22 with the shared codenames and contributor files, plus its own stricter licence. Nothing is implemented. The locker is a Switch .nro, not a website feature; account linking is the website half. Both are blocked behind rendering and audio working at all, so this is deliberately parked rather than stalled.",
+   "categories": [
+    {
+     "key": "locker",
+     "label": "On-device locker",
+     "percent": 2,
+     "note": "Blocked on GX2 model rendering and audio playback. Useful lead found in the Discord exports: the figure-summon sequence ('Magic Moment' is the real in-engine term) is implemented in tfbscript, in game data, not hardcoded in the executable -- so the presentation logic may already exist natively rather than needing to be written."
+    },
+    {
+     "key": "account_linking",
+     "label": "Account linking backend",
+     "percent": 0,
+     "note": "Not started. No design yet."
+    }
+   ]
+  }
+ ],
+ "timeline": {
+  "milestone": "Video from the game's own files displaying on hardware -- reached 2026-08-29, partially: frames decode and display, but truncate after a few macroblock rows.",
+  "started": "2026-08-13",
+  "estimate_fast": "about 18 months from the start, so roughly early 2028",
+  "estimate_realistic": "2.5 to 3 years, so roughly mid-2029",
+  "confidence": "low",
+  "basis": "Solo, part-time effort around college. Phase 1 (recompiler) and Phase 2 (GX2 and shaders) are each comparable in scope, and Phase 2 has barely started. Comparable public projects -- N64: Recompiled, Zelda 64: Recompiled -- took multiple contributors several years and had existing decompilation work to build on. This one does not.",
+  "caveat": "The cutscene is a late-stage milestone, not an early one. It needs most of the pipeline working, not just booting.",
+  "stages": [
+   {
+    "stage": "Phase 0 -- dumping and decryption",
+    "estimate": "days to 1-2 weeks",
+    "state": "done"
+   },
+   {
+    "stage": "Proof-of-concept recompiler",
+    "estimate": "2-6 months",
+    "state": "done"
+   },
+   {
+    "stage": "Phase 1 against the real binary, executing without crashing",
+    "estimate": "6-14 months",
+    "state": "in progress"
+   },
+   {
+    "stage": "Phase 2 minimum viable GX2 and shader rendering",
+    "estimate": "6-18 months",
+    "state": "barely started"
+   },
+   {
+    "stage": "Phase 2a video and audio codec work",
+    "estimate": "1-4 months additional",
+    "state": "not started"
+   },
+   {
+    "stage": "Debugging and integration for this specific cutscene",
+    "estimate": "1-3 months",
+    "state": "not started"
+   }
+  ]
+ },
+ "roadmap": {
+  "note": "Deliberately not release chronology.",
+  "games": [
+   {
+    "title": "Spyro's Adventure",
+    "wiiu_port_studio": "Toys for Bob",
+    "state": "in progress"
+   },
+   {
+    "title": "Swap Force",
+    "wiiu_port_studio": "Vicarious Visions",
+    "state": "queued",
+    "why": "The biggest unknown -- new porting studio, new mechanic -- tackled early while the toolchain is still being built."
+   },
+   {
+    "title": "Trap Team",
+    "wiiu_port_studio": "Beenox",
+    "state": "queued",
+    "why": "The third distinct porting studio. Resolve every known authorship lineage while still in toolchain-building mode."
+   },
+   {
+    "title": "Giants",
+    "wiiu_port_studio": "Vicarious Visions",
+    "state": "queued",
+    "why": "First cheap confirmation pass, and by far the easiest of the six to obtain legally."
+   },
+   {
+    "title": "SuperChargers",
+    "wiiu_port_studio": "Vicarious Visions",
+    "state": "queued"
+   },
+   {
+    "title": "Imaginators",
+    "wiiu_port_studio": "Toys for Bob",
+    "state": "queued",
+    "why": "Last -- most content-divergent and the latest engine build, so it gets the most mature toolchain."
+   }
+  ]
+ },
+ "links": {
+  "org": "https://github.com/Arkchemy",
+  "site": "https://arkchemy.vercel.app",
+  "discord": "https://discord.gg/KJWyHUczCV"
+ }
 }
