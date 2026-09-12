@@ -2,38 +2,38 @@
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
  "generated_at": "2026-09-12",
- "generated_by": "four fixes since the relocation bug: the registry loads, the VRAM pools have memory, the framebuffer allocates, and the loader no longer waits on work only it can create",
+ "generated_by": "the engine is issuing draw calls for the first time; the loader completes and the boot order advances past bootstrap",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
-  "percent": 58,
-  "headline": "The game now reads its own configuration, loads its real starting level, and has memory for its graphics pools.",
-  "summary": "The translation bug found on the 9th is confirmed fixed: the game reads its configuration file, and the starting level it picks is the real one rather than a placeholder that does not exist on the disc. That uncovered three more problems in a row, each hidden behind the last, and all three are now fixed.\n\nThe engine asks for a 400-megabyte block of memory for its graphics pools. The pool it asks from had 464 megabytes with 184 already spent, so the request failed, nine graphics pools were left with no memory at all, and the level loader gave up on the first image it tried to read. Rebalancing how the console's memory is divided fixed that, and the pools now have real memory.\n\nWith those working the engine got far enough to ask for its framebuffer -- the picture it draws into -- and that failed too, because the small pool that backs it had been sized at eight kilobytes on the assumption it was rarely used. It is not rarely used; it holds the screen. It now has the eight megabytes that were sitting unused beside it.\n\nThe last one was subtler. The loader was waiting for a file read to finish, but the thing that starts the next file read is the loader itself, further round the same loop. So it waited for work only it could create. It was not a complete stop, which is what made it hard to see: the sound system's threads happened to nudge it along about once every forty seconds, so the game crept forward and looked frozen. It now does that work itself while waiting.\n\nStill nothing drawn on screen. The graphics layer remains the largest piece of work left."
+  "percent": 64,
+  "headline": "The engine is asking to draw. After fifteen months it has gone from failing to start to submitting 8,581 draw calls in a run.",
+  "summary": "One bug was holding four things shut. When a file read finishes, the system that delivers the news borrows the working state of whatever asked for it -- and it was not putting that state back. So the part of the engine that then said \"wake me when this is ready\" was waiting on the wrong thing entirely, and five different pieces of the operating system stand-in were affected the same way: one of them was locking the wrong lock, which does not stop anything, it just quietly stops protecting it.\n\nIt was found on a desktop in minutes rather than on the console in hours, by running the same code natively with a test that reports a stuck case instead of hanging. Three console runs had already failed to find it.\n\nWith that fixed the run looks completely different. The level loader finishes for the first time and hands over its contents. Compressed blocks unpacked went from 19 to 203. The game reads past its first archive into the legal screen and the global data, following the same file order the retail game uses. And the engine issued 8,581 draw calls, against zero in every run before it.\n\nTo be exact about what that does and does not mean: the game is now asking for pictures, and nothing is yet translating those requests into something the Switch's graphics hardware understands. The shaders are compiled for a different chip and converting them is the largest piece of work left. But the engine has stopped failing to start and begun trying to render, which is a different kind of problem to have."
  },
  "status": {
   "state": "active",
   "since": "2026-09-12",
   "on_break": null,
   "break_reason": null,
-  "note": "Four fixes in a row, each found by measuring rather than guessing. The build carrying the last two has not been run yet."
+  "note": "First draw calls. The graphics translation layer is now the critical path rather than loading."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "A loader waiting for work that only it can create",
-  "detail": "Reading a file is split into starting the read and noticing it finished. The part of the engine that waits for one to finish is also the part that starts the next one, so once it began waiting nothing moved it on. Fixed by having it do that work in short slices while it waits, rather than sleeping until something else wakes it -- on the real console the operating system would have done the waking, and here there is nobody to do it."
+  "title": "Turning draw calls into pictures",
+  "detail": "The engine now submits its drawing to the stand-in for the Wii U's graphics library, which records the requests and does nothing with them. Making them appear means translating each one for the Switch's hardware -- and translating the shaders, which are compiled machine code for a different graphics chip. That is the biggest single piece of work remaining in the project."
  },
  "next_work": [
   {
-   "name": "Get the whole first archive decompressing",
-   "detail": "Nineteen of its thirty-five compressed blocks have been unpacked. The rest were waiting on the fix just described."
+   "name": "See what the engine is actually drawing",
+   "detail": "570,113 graphics calls across 72 different entry points were made in one run. Working out which of them have to be real first is cheaper than translating all of them."
   },
   {
-   "name": "Load the starting level's contents",
-   "detail": "The level's files open and its data is read; the objects inside them have not been built yet."
+   "name": "Shader translation",
+   "detail": "The Wii U's shaders are compiled for an AMD chip and the Switch wants Nvidia ones. This is the wall the project has been walking toward since the start."
   },
   {
-   "name": "Start on the graphics layer",
-   "detail": "The Wii U's shaders are compiled for a different graphics chip than the Switch's, and translating them is the biggest remaining piece of the project."
+   "name": "Finish loading the starting level",
+   "detail": "Two archives now load completely. The title screen's own data is the next one."
   }
  ],
  "projects": [
