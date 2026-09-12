@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-09-09",
+ "generated_at": "2026-09-12",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -17,6 +17,16 @@
   "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
  },
  "findings": [
+  {
+   "id": "vram-pools-are-stack-pools",
+   "title": "The engine's graphics memory is nine stack pools carved out of one block",
+   "area": "alchemy-memory",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "None found. The memory-pool table and the Image/Vertex split do not appear in a search of the local export of all 19 Skylanders: Reverse Engineering Discord channels; the community's memory work has centred on archives and igz layout rather than on pool configuration.",
+   "detail": "The engine builds its memory pools from a table inside the executable listing ten names -- Default, Audio, Video, Image, Text, String, Vertex, AnimationData, Collision and VertexObject -- each tagged with a kind. Eight are ordinary heaps that can hand out and take back memory in any order. Two, Image and Vertex, are a different kind: a stack, which only gives memory back in the reverse of the order it handed it out. Those two are the ones holding textures and geometry, and on this game they are the biggest by far -- one asks for 156 megabytes and another for 87. All nine stack pools are carved out of a single parent block, and the size of that block comes from one number in the game's own configuration file: 419430400 bytes, four hundred megabytes. A stack pool refuses to work at all unless it has both a starting address and a size, so if the parent block cannot be allocated, every one of them is silently inert and the first attempt to load a texture fails.",
+   "why_it_matters": "It explains what a Skylanders game actually spends its memory on, in a form that can be checked rather than guessed: four hundred megabytes reserved for graphics before a single level loads, and split nine ways along lines the engine decides at startup. For anyone porting or emulating one of these games it is also a warning -- the failure is silent. The pools exist, they are registered, they have names, and they are empty, so the symptom appears much later and somewhere else entirely: a level loader that reports it cannot read a file.",
+   "method_note": "Read out of the retail Wii U executable and confirmed on hardware. The two pool classes were identified by mapping their vtable pointers back to the real binary with the project's own find_synth_addr tool rather than inferred from behaviour: igBidirectionalHeapMemoryPool for the heaps, igStackMemoryPool for Image and Vertex. The sizes and the failure were then read off an instrumented run. What would falsify it: a build where the Image pool allocates successfully and a texture load still fails."
+  },
   {
    "id": "registry-autoload-gate",
    "title": "One byte decides whether the engine reads alchemy.xml at all",

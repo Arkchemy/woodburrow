@@ -1,35 +1,35 @@
 {
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
- "generated_at": "2026-09-09",
- "generated_by": "root cause of the empty scene found in the recompiler itself; fix built and on the console, not yet run",
+ "generated_at": "2026-09-12",
+ "generated_by": "four fixes since the relocation bug: the registry loads, the VRAM pools have memory, the framebuffer allocates, and the loader no longer waits on work only it can create",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
-  "percent": 53,
-  "headline": "The reason the game rendered an empty scene has been found, and it was in our own translator, not the game.",
-  "summary": "The engine decides whether to read its configuration file by checking a single byte in the executable. Our translation of that one check was reading from the wrong place -- about eight thousand bytes away from the flag, in unrelated data that happened to be zero -- so the game concluded configuration was switched off and skipped the whole thing. With no configuration it did not know which level to load, went looking for one called \"test\" that does not exist on the disc, found nothing, and drew an empty scene very efficiently at sixty frames a second. Every symptom traced over the past week was real and correctly measured, and none of them was the cause; the cause sat two steps above the top of the chain. The underlying mistake was general rather than specific: whenever the translator handled a single byte, a half-word or a float belonging to a global variable, it added an address offset that had already been applied. Whole words were always handled correctly, and words are most of the traffic, which is why this survived every earlier hunt. 423 instructions in this game were affected. The fix is built and copied to the console but has not been run yet, so nothing here is confirmed."
+  "percent": 58,
+  "headline": "The game now reads its own configuration, loads its real starting level, and has memory for its graphics pools.",
+  "summary": "The translation bug found on the 9th is confirmed fixed: the game reads its configuration file, and the starting level it picks is the real one rather than a placeholder that does not exist on the disc. That uncovered three more problems in a row, each hidden behind the last, and all three are now fixed.\n\nThe engine asks for a 400-megabyte block of memory for its graphics pools. The pool it asks from had 464 megabytes with 184 already spent, so the request failed, nine graphics pools were left with no memory at all, and the level loader gave up on the first image it tried to read. Rebalancing how the console's memory is divided fixed that, and the pools now have real memory.\n\nWith those working the engine got far enough to ask for its framebuffer -- the picture it draws into -- and that failed too, because the small pool that backs it had been sized at eight kilobytes on the assumption it was rarely used. It is not rarely used; it holds the screen. It now has the eight megabytes that were sitting unused beside it.\n\nThe last one was subtler. The loader was waiting for a file read to finish, but the thing that starts the next file read is the loader itself, further round the same loop. So it waited for work only it could create. It was not a complete stop, which is what made it hard to see: the sound system's threads happened to nudge it along about once every forty seconds, so the game crept forward and looked frozen. It now does that work itself while waiting.\n\nStill nothing drawn on screen. The graphics layer remains the largest piece of work left."
  },
  "status": {
   "state": "active",
-  "since": "2026-09-09",
+  "since": "2026-09-12",
   "on_break": null,
   "break_reason": null,
-  "note": "Fix built and on the console, awaiting a run. If it works, the game should load its real starting level for the first time."
+  "note": "Four fixes in a row, each found by measuring rather than guessing. The build carrying the last two has not been run yet."
  },
  "current_work": {
-  "repo": "conquertron",
-  "title": "A whole class of translation bug affecting bytes, half-words and floats",
-  "detail": "Where the game refers to a global variable, the translator computes the address once and then, for word-sized access, correctly ignores a leftover offset. For eleven other instruction kinds it added that offset a second time, so every byte, half-word and float read from a global landed somewhere else. This is now fixed and the affected code rebuilt; the next run says whether the configuration file is finally read."
+  "repo": "jouster",
+  "title": "A loader waiting for work that only it can create",
+  "detail": "Reading a file is split into starting the read and noticing it finished. The part of the engine that waits for one to finish is also the part that starts the next one, so once it began waiting nothing moved it on. Fixed by having it do that work in short slices while it waits, rather than sleeping until something else wakes it -- on the real console the operating system would have done the waking, and here there is nobody to do it."
  },
  "next_work": [
   {
-   "name": "Confirm the configuration file is read",
-   "detail": "The instrumented build reports whether the registry read runs at all and what starting level it ends up with. \"Title\" instead of \"test\" is the answer we want."
+   "name": "Get the whole first archive decompressing",
+   "detail": "Nineteen of its thirty-five compressed blocks have been unpacked. The rest were waiting on the fix just described."
   },
   {
-   "name": "Get the rest of the first archive decompressing",
-   "detail": "One block of thirty-five has been unpacked so far, because the archive was never registered as somewhere to read from. That should follow from the same fix."
+   "name": "Load the starting level's contents",
+   "detail": "The level's files open and its data is read; the objects inside them have not been built yet."
   },
   {
    "name": "Start on the graphics layer",
