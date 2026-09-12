@@ -3031,8 +3031,7 @@
       "slug": "punk-shock",
       "icon": "punk-shock",
       "category": "Variant",
-      "detail": false,
-      "variantOf": "Shock"
+      "detail": false
      },
      {
       "name": "Rip Tide",
@@ -4039,7 +4038,7 @@
       "detail": false
      },
      {
-      "name": "D\u00e9j\u00e0 Vu",
+      "name": "Déjà Vu",
       "slug": "d-j-vu",
       "icon": "d-j-vu",
       "category": "Core",
@@ -5360,10 +5359,9 @@
      {
       "name": "Gold Rusher",
       "slug": "gold-rusher",
-      "icon": "gold-rusher-symbol-png",
+      "icon": "gold-rusher",
       "category": "Variant",
-      "detail": false,
-      "variantOf": "Rusher"
+      "detail": false
      },
      {
       "name": "Shield Striker",
