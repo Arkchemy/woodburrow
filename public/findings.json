@@ -1,7 +1,7 @@
 {
  "$comment": "Reverse-engineering findings from the Arkchemy project that were NOT already documented in the Skylanders: Reverse Engineering Discord. Published so people can read them here instead of having them re-posted into #findings by hand. Every entry records how it was established and what would falsify it.",
  "schema_version": 1,
- "generated_at": "2026-09-12",
+ "generated_at": "2026-09-13",
  "about": {
   "project": "Arkchemy",
   "url": "https://github.com/Arkchemy",
@@ -17,6 +17,15 @@
   "caveat": "All of this is from one game -- Spyro's Adventure on Wii U, a Green Hills / GHS build. Alchemy runs across the whole franchise, but per-platform and per-studio details vary. Verify against your own target before relying on any of it."
  },
  "findings": [
+  {
+   "id": "latte-shaders-translate-and-load",
+   "title": "Every shader the game uses has been translated to the Switch and loaded on hardware",
+   "area": "graphics",
+   "confidence": "hardware_confirmed",
+   "discord_prior_art": "None found for this title specifically. The community has read the GFD shader container before -- kinnay's Nintendo file-format notes document it field for field, and agree with this project's parser, which was written from the bytes first. Translating the instructions inside it has been done publicly once, in decaf-emu, but that is GPL-3.0 and a static recompiler cannot ship code derived from it, so this was written from AMD's own instruction set document instead.",
+   "detail": "A shader is a program compiled for one specific graphics chip. The Wii U's and the Switch's share nothing, so each of the seven shaders this game binds had to be read back from machine code and rewritten.\n\nAll seven now translate and are accepted by the console: it identifies each program by a hash of its contents -- not its address, which the game reallocates, and not its length, since two of the seven are exactly the same size and different programs -- then loads the translated module built from those exact bytes.\n\nThe evidence that the reading is correct is that the programs turn out to be what their names claim. The video shader is a colour conversion: brightness multiplied by one row of constants, the two colour channels accumulated, a bias added, transparency set to fully opaque. Its alpha variant is the same program with a fourth texture read supplying transparency instead of that constant -- which is exactly what the difference between those two names has to mean. Both vertex shaders are the standard four-row matrix multiply with a texture-coordinate passthrough. None of that was predicted in advance; it is what came out.\n\nAMD's own document is wrong in two places, and the shaders settled both. It gives one field's position two different ways in its prose and its own table; read the way the prose says, every multiply in the video shader decodes as an addition and the colour conversion becomes nonsense. Separately, its reference page for the no-op instruction lists the opcode that actually belongs to addition. The instruction tables used here are therefore generated from the document's field enumerations rather than its reference pages.",
+   "date": "2026-09-13"
+  },
   {
    "id": "vram-pools-are-stack-pools",
    "title": "The engine's graphics memory is nine stack pools carved out of one block",

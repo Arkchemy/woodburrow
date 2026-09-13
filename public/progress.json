@@ -1,26 +1,26 @@
 {
  "$comment": "Arkchemy public progress data. Consumed by the woodburrow website. Standing rule: no category may ever exceed 95 -- there can always be bugs and issues later, so nothing is ever reported as finished.",
  "schema_version": 2,
- "generated_at": "2026-09-12",
- "generated_by": "the engine is issuing draw calls for the first time; the loader completes and the boot order advances past bootstrap",
+ "generated_at": "2026-09-13",
+ "generated_by": "every shader the game uses now translates and loads on the console; the drawing path is assembled but not yet drawing",
  "max_percent": 95,
  "max_percent_reason": "Nothing is ever shown as 100%. Coverage is not correctness, and a category that looks finished can still be hiding bugs.",
  "overall": {
-  "percent": 64,
-  "headline": "The engine is asking to draw. After fifteen months it has gone from failing to start to submitting 8,581 draw calls in a run.",
-  "summary": "One bug was holding four things shut. When a file read finishes, the system that delivers the news borrows the working state of whatever asked for it -- and it was not putting that state back. So the part of the engine that then said \"wake me when this is ready\" was waiting on the wrong thing entirely, and five different pieces of the operating system stand-in were affected the same way: one of them was locking the wrong lock, which does not stop anything, it just quietly stops protecting it.\n\nIt was found on a desktop in minutes rather than on the console in hours, by running the same code natively with a test that reports a stuck case instead of hanging. Three console runs had already failed to find it.\n\nWith that fixed the run looks completely different. The level loader finishes for the first time and hands over its contents. Compressed blocks unpacked went from 19 to 203. The game reads past its first archive into the legal screen and the global data, following the same file order the retail game uses. And the engine issued 8,581 draw calls, against zero in every run before it.\n\nTo be exact about what that does and does not mean: the game is now asking for pictures, and nothing is yet translating those requests into something the Switch's graphics hardware understands. The shaders are compiled for a different chip and converting them is the largest piece of work left. But the engine has stopped failing to start and begun trying to render, which is a different kind of problem to have."
+  "percent": 66,
+  "headline": "The game's shaders now run on the Switch. All seven programs the engine uses were translated from the Wii U's graphics chip to the Switch's and accepted by the console.",
+  "summary": "A shader is a small program that runs on the graphics chip itself, and it is compiled for that specific chip -- the Wii U's and the Switch's have nothing in common. The game hands over seven of them. Each one had to be read back from machine code, understood, rewritten in a language the Switch's tools accept, and compiled again.\n\nAll seven now do that, and the console confirms it: it recognises each program by its contents, finds the translated version, and loads it. The proof that the reading was correct is that the shaders turn out to do what their names say -- the video shaders convert colour the way a video player must, and the others are the standard transformation every 3D object needs.\n\nTwo things the translation depended on were measured on the console rather than assumed, because both would have produced a picture that was wrong rather than absent -- the hardest kind of mistake to notice. Both turned out correct.\n\nWhat is left is the last step: actually issuing the drawing. Every piece of information a draw needs is now in place and verified on hardware, five hundred times a run. But adding the single instruction that performs the draw stops the game booting, in a way that makes no sense yet -- the game breaks before that instruction is ever reached. It appears to be a much older bug that has been hiding in the project, which any change of the right size can disturb. Finding that is now the work."
  },
  "status": {
   "state": "active",
-  "since": "2026-09-12",
+  "since": "2026-09-13",
   "on_break": null,
   "break_reason": null,
-  "note": "First draw calls. The graphics translation layer is now the critical path rather than loading."
+  "note": "Shaders translate and load on hardware. The draw path is built and validated; one instruction away from a picture, blocked on an older bug."
  },
  "current_work": {
   "repo": "jouster",
-  "title": "Turning draw calls into pictures",
-  "detail": "The engine now submits its drawing to the stand-in for the Wii U's graphics library, which records the requests and does nothing with them. Making them appear means translating each one for the Switch's hardware -- and translating the shaders, which are compiled machine code for a different graphics chip. That is the biggest single piece of work remaining in the project."
+  "title": "One instruction from a picture",
+  "detail": "The translated shaders load, the vertex data and settings each drawing needs are prepared correctly five hundred times a run, and the console confirms all of it. Adding the one instruction that actually performs the drawing stops the game booting -- and it does so before that instruction ever runs, which means the instruction itself is not what breaks it. Adding that code moves everything after it in memory by three hundred bytes, and something in the project has been sensitive to that all along. Identifying it is the current work, and it matters beyond graphics: it means the boot has been one unlucky edit from breaking for some time."
  },
  "next_work": [
   {
