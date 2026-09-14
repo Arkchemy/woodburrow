@@ -8,7 +8,7 @@
        stamp is the newest data-file mtime -- a date alone does not bust the
        cache when the data is regenerated the same day. Refresh it with
        tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1788820776";
+    const DATA_V = "?v=1789318415";
 
 /* --- element palette, used by the roster and the contributor cards --- */
     const ELEMENT_COLOUR = {
@@ -487,4 +487,83 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitT
             link.hidden = false;
         }).catch(() => {});
     }
+}
+
+/* --- reading progress, and which section you are in ---------------------
+   Two things the nav could not show before. aria-current marks the page,
+   but four of this site's nav links point into one page, so on the home
+   page it says almost nothing about where you are.
+
+   One listener for both, coalesced into a frame the same way the header
+   watcher above does it: scrolling measures once per paint no matter how
+   many things want to know about it.
+
+   The spy deliberately does not use IntersectionObserver. "Which section
+   am I reading" is not "which sections are visible" -- three can be on
+   screen at once, and the answer wanted is the one whose heading you have
+   most recently passed. That is a comparison against one number, which is
+   exactly what a scroll handler is for. */
+{
+    const nav = document.getElementById("site-nav");
+    const root = document.documentElement;
+
+    /* Only links pointing into THIS page. A "/games" link has no section
+       here, and "/#faq" on the games page points somewhere else entirely,
+       so the pathname has to match before the fragment means anything.
+
+       Compared through samePage() rather than directly: the nav links to
+       "/#project" while the file is index.html, so a plain !== makes every
+       link on the home page look like it belongs to a different one. Vercel
+       serves this at "/" so it matches in production and silently would not
+       have locally, or for anyone who typed the filename. */
+    const samePage = (a, b) => {
+        const norm = p => p.replace(/index\.html$/, "").replace(/\/+$/, "") || "/";
+        return norm(a) === norm(b);
+    };
+    const spied = nav ? Array.from(nav.querySelectorAll('a[href*="#"]')).map(a => {
+        const url = new URL(a.getAttribute("href"), location.href);
+        if (!samePage(url.pathname, location.pathname) || !url.hash) return null;
+        const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+        return target ? { a, target } : null;
+    }).filter(Boolean) : [];
+
+    let ticking = false;
+    let lastHere = null;
+
+    const update = () => {
+        ticking = false;
+
+        /* Progress. The denominator can be 0 on a page shorter than the
+           viewport; guard it or the bar reads NaN and vanishes. */
+        const max = root.scrollHeight - innerHeight;
+        const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+        root.style.setProperty("--scroll-progress", p.toFixed(4));
+
+        if (!spied.length) return;
+
+        /* The last section whose top has passed the nav. Falls back to the
+           first, so something is always lit rather than nothing until you
+           scroll -- and at the very bottom the last one wins outright, so a
+           short final section still gets marked when you reach it. */
+        const line = (nav ? nav.getBoundingClientRect().height : 0) + 24;
+        let here = spied[0];
+        for (const s of spied)
+            if (s.target.getBoundingClientRect().top <= line) here = s;
+        if (max > 0 && scrollY >= max - 2) here = spied[spied.length - 1];
+
+        if (here !== lastHere) {
+            if (lastHere) lastHere.a.classList.remove("nav-here");
+            here.a.classList.add("nav-here");
+            lastHere = here;
+        }
+    };
+
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+    };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    update();
 }

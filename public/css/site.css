@@ -1469,3 +1469,108 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .game-card:hover .gc-go svg, #progressMore button:hover svg { transform: none; }
     #site-nav .nav-home { transition: none; }
 }
+
+/* ======================================================================
+   Navigation and motion, 2026-09-14
+   ----------------------------------------------------------------------
+   Additions rather than replacements: the nav already had sticky
+   positioning, the logo swap on scroll, the hover underline sweep, the
+   mobile panel and its scrim. What it had no way of showing was *where
+   you are* -- aria-current marks the page, and the four biggest links on
+   this site all point into one page.
+
+   Everything below is gated on prefers-reduced-motion at the end of the
+   block, in keeping with the rest of this file.
+   ====================================================================== */
+
+/* --- reading progress -------------------------------------------------
+   A gold rule across the bottom edge of the nav, scaled to how far down
+   the page you are. Transform only, so it never triggers layout, and the
+   width comes from a custom property set once per frame by site.js. */
+#site-nav::before {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), #ffe9a8 55%, var(--gold));
+    transform: scaleX(var(--scroll-progress, 0));
+    transform-origin: 0 50%;
+    /* No transition: this tracks the scrollbar, and easing it would make
+       it lag behind the thing it is reporting. */
+    opacity: .85;
+    pointer-events: none;
+}
+
+/* --- the nav settles once it is stuck --------------------------------
+   Slightly tighter and lifted off the page, so the sticky bar reads as
+   floating above the content rather than being part of it. */
+@media (min-width: 761px) {
+    #site-nav {
+        transition: padding var(--med) var(--ease),
+                    box-shadow var(--med) var(--ease),
+                    background-color var(--med) var(--ease);
+    }
+    .scrolled #site-nav {
+        padding-top: 6px; padding-bottom: 6px;
+        box-shadow: 0 6px 20px -8px rgba(20, 8, 30, .55);
+    }
+}
+
+/* --- you are here ----------------------------------------------------
+   Set by the scrollspy in common.js on the link whose section is in
+   view. Deliberately distinct from aria-current: that says "this page",
+   this says "this part of it", and on the home page both can be true of
+   different links at once. */
+#site-nav a.nav-here { color: #fff6dc; }
+#site-nav a.nav-here::after {
+    left: 14px; right: 14px;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(243, 195, 78, .7);
+}
+
+/* --- heading icons ---------------------------------------------------
+   The flask, chat bubble and so on already sit beside every h2. They
+   arrive with the heading instead of just being there. */
+.reveal .h-ico, h2.reveal .h-ico { transform-origin: 50% 60%; }
+.reveal.shown .h-ico {
+    animation: icoPop .5s var(--ease) both;
+    animation-delay: calc(var(--i, 0) * 45ms + 90ms);
+}
+@keyframes icoPop {
+    0%   { transform: scale(.4) rotate(-18deg); opacity: 0 }
+    60%  { transform: scale(1.12) rotate(4deg); opacity: 1 }
+    100% { transform: none; opacity: 1 }
+}
+
+/* --- cards lift --------------------------------------------------
+   The two home-page cards and the games grid already scale their images
+   on hover; this lifts the card itself so the whole target responds,
+   which makes it read as one control rather than a picture in a box. */
+.jump a, .cards a, .games a {
+    transition: transform var(--med) var(--ease), box-shadow var(--med) var(--ease);
+}
+.jump a:hover, .jump a:focus-visible,
+.cards a:hover, .cards a:focus-visible,
+.games a:hover, .games a:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px -14px rgba(61, 17, 64, .5);
+}
+
+/* --- anchor landings -------------------------------------------------
+   A sticky nav covers whatever an in-page link jumps to, so every
+   heading keeps its own height clear above it. scroll-margin, not
+   padding: it moves where the browser stops, not where the text sits. */
+#project, #progress, #faq, #people, [id][class*="sec"] { scroll-margin-top: 84px; }
+
+/* Below 761px #site-nav is the slide-in panel, not a bar across the top, so a
+   progress rule along its bottom edge would be a gold line inside the menu
+   reporting on a page it is covering. */
+@media (max-width: 760px) {
+    #site-nav::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #site-nav::before { display: none; }
+    #site-nav, .scrolled #site-nav { transition: none; }
+    .reveal.shown .h-ico { animation: none; }
+    .jump a, .cards a, .games a { transition: none; }
+    .jump a:hover, .cards a:hover, .games a:hover { transform: none; }
+}
