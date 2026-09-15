@@ -14,6 +14,17 @@ It contains no game code and no game assets.
 | `branding/` | Logo source files (SVG / PNG) |
 | `api/` | Vercel serverless functions (see below) |
 
+## Deployment coupling
+
+This site is Vercel-shaped and worth knowing about before a move. `cleanUrls`
+gives the pages their extensionless URLs, the security headers are all declared
+in `vercel.json`, and the four routes under `api/` are Vercel serverless
+functions. Moving hosts means porting those four functions and re-declaring the
+headers somewhere else; the static pages themselves would move unchanged.
+
+Noted rather than fixed: one host is the right call today, and an abstraction
+layer for a move nobody has planned would cost more than it saves.
+
 ## Serverless routes
 
 All four exist so a visitor's browser only ever talks to this one origin,

@@ -1,0 +1,23 @@
+# Arkchemy — security contact (RFC 9116)
+#
+# This site is static and holds no accounts, no payment data and no personal
+# data beyond what a visitor's browser sends to fetch a page. The serverless
+# routes under /api/ are read-only proxies to GitHub and Discord; they exist so
+# a visitor's browser only ever talks to this one origin, keeping their IP out
+# of third-party logs for services they did not choose to contact.
+#
+# The interesting attack surface is therefore small and mostly other people's:
+# a compromised dependency in those routes, or the Discord bot token they hold.
+# Report anything you find.
+
+Contact: https://github.com/Arkchemy/woodburrow/security/advisories/new
+Contact: https://github.com/Arkchemy
+Expires: 2027-09-15T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://arkchemy.vercel.app/.well-known/security.txt
+Policy: https://arkchemy.vercel.app/legal
+
+# Out of scope, stated plainly so nobody wastes their time:
+#   - "the site embeds Skylanders artwork". Known and deliberate; see /legal.
+#   - missing SPF/DKIM. This domain sends no mail.
+#   - clickjacking on pages with no state to change. There are no forms here.
