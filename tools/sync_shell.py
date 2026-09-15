@@ -44,6 +44,22 @@ PAGES = {
         scripts=["js/skylanders.js"],
         nav="skylanders",
     ),
+    "progress.html": dict(
+        path="/progress",
+        title="Progress · Arkchemy",
+        desc="The Arkchemy build log, posted as it happens — including the "
+             "days where the finding is that something does not work.",
+        scripts=["js/progress.js"],
+        nav="progress",
+    ),
+    "faq.html": dict(
+        path="/faq",
+        title="Questions · Arkchemy",
+        desc="Common questions about the Skylanders Switch port: whether there "
+             "is a download, what it needs, and what is actually working.",
+        scripts=["js/faq.js"],
+        nav="faq",
+    ),
     "legal.html": dict(
         path="/legal",
         title="Legal · Arkchemy",

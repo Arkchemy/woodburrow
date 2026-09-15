@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="The six Skylanders games, all on the same Alchemy engine, and why the five that are not being ported still matter to the port.">
+<meta name="description" content="Common questions about the Skylanders Switch port: whether there is a download, what it needs, and what is actually working.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="canonical" href="https://arkchemy.vercel.app/games">
+<link rel="canonical" href="https://arkchemy.vercel.app/faq">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arkchemy">
-<meta property="og:url" content="https://arkchemy.vercel.app/games">
-<meta property="og:title" content="The games · Arkchemy">
-<meta property="og:description" content="The six Skylanders games, all on the same Alchemy engine, and why the five that are not being ported still matter to the port.">
+<meta property="og:url" content="https://arkchemy.vercel.app/faq">
+<meta property="og:title" content="Questions · Arkchemy">
+<meta property="og:description" content="Common questions about the Skylanders Switch port: whether there is a download, what it needs, and what is actually working.">
 <meta property="og:image" content="https://arkchemy.vercel.app/images/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Arkchemy wordmark over a Skylands sky">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The games · Arkchemy">
-<meta name="twitter:description" content="The six Skylanders games, all on the same Alchemy engine, and why the five that are not being ported still matter to the port.">
+<meta name="twitter:title" content="Questions · Arkchemy">
+<meta name="twitter:description" content="Common questions about the Skylanders Switch port: whether there is a download, what it needs, and what is actually working.">
 <meta name="twitter:image" content="https://arkchemy.vercel.app/images/og-card.png">
 <meta name="theme-color" content="#3d1140">
-<title>The games · Arkchemy</title>
+<title>Questions · Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
@@ -106,11 +106,11 @@
             <img class="nh-word" src="images/logo/arkchemy-wordmark-gold.svg" alt="" width="819" height="130">
         </a>
         <a href="/#project">The Project</a>
-        <a href="/games" aria-current="page">The Games</a>
+        <a href="/games">The Games</a>
         <a href="/skylanders">Skylanders</a>
         <a href="/#chompy">Chompy Party</a>
         <a href="/progress">Progress</a>
-        <a href="/faq">FAQ</a>
+        <a href="/faq" aria-current="page">FAQ</a>
         <a href="/contributors">Contributors</a>
         <a href="/legal">Legal</a>
         <a href="https://github.com/Arkchemy">GitHub</a>
@@ -118,21 +118,22 @@
     <div id="navScrim" hidden></div>
 
     <main id="main" tabindex="-1">
-        <h2 id="games"><svg class="h-ico" aria-hidden="true"><use href="#i-controller"/></svg>The games</h2>
-        <p class="lede">Six games on one engine. Only the first is being ported
-        &mdash; the rest are here because they share the engine, so what the port
-        learns about one usually applies to the others.</p>
+        <h2 id="faq"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>Questions</h2>
+        <p class="lede">Answered in the Discord faq channel and shown here, so
+        there is one copy of each answer rather than one per person who asks.</p>
 
-        <div class="game-cards" id="gameCards"></div>
+        <div id="faqList" class="faq"></div>
 
         <div class="callout reveal">
-            <h3>Why the others matter</h3>
-            <p>Every one of these runs on Alchemy, the same engine, with the same
-            archive format and the same object model. A structure worked out by
-            staring at <i>Imaginators</i> &mdash; which shipped with its symbols
-            intact &mdash; is usually the same structure <i>Spyro&rsquo;s
-            Adventure</i> uses with the names stripped out. The later games are
-            documentation for the earlier one.</p>
+            <h3>Not answered here?</h3>
+            <p>Ask in the Discord. Anything asked more than once tends to end
+            up on this page, so asking is useful even when the answer already
+            exists somewhere in a thread.</p>
+            <p>The two questions that come up most have short answers:
+            <b>no, there is no download</b> &mdash; the port does not render a
+            level yet, and a build that boots to a blank screen is not a
+            release; and <b>no, you will not need to buy anything</b> &mdash;
+            it reads a disc you already own.</p>
         </div>
 
     </main>
@@ -154,7 +155,7 @@
                 <a href="/#games">The games</a>
                 <a href="/#roster">Skylanders</a>
                 <a href="/progress">Progress</a>
-                <a href="/faq">FAQ</a>
+                <a href="/faq" aria-current="page">FAQ</a>
             </nav>
 
             <nav class="foot-col" aria-label="The project">
@@ -185,6 +186,6 @@
     </footer>
 
     <script src="js/common.js?v=1789493352"></script>
-    <script src="js/games.js?v=1788715702"></script>
+    <script src="js/faq.js?v=1789493361"></script>
 </body>
 </html>

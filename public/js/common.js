@@ -567,3 +567,21 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitT
     addEventListener("resize", onScroll);
     update();
 }
+
+/* --- Discord feed helpers, shared ------------------------------------
+   Both /progress and /faq render a Discord channel and both need to say
+   WHY a channel came back empty. Lived in home.js until those became
+   their own pages; two copies of this would drift the moment one of
+   the three causes changed. */
+    /* "0 messages" has three causes and they look identical on the page, so
+       say which one it is instead of a generic empty state. */
+    const feedEmpty = d => {
+        if (d && d.needsMessageContentIntent) return '<p class="feed-empty"><b>Message Content Intent is off.</b> ' +
+            'Discord returned ' + d.fetched + ' message' + (d.fetched === 1 ? '' : 's') +
+            ' but blanked the text. Enable it on the bot at ' +
+            '<a href="https://discord.com/developers/applications" target="_blank" rel="noopener">' +
+            'discord.com/developers/applications</a> \u2192 Bot \u2192 Privileged Gateway Intents \u2192 ' +
+            'Message Content Intent.</p>';
+        if (d && d.fetched === 0) return '<p class="feed-empty">Nothing posted in that channel yet.</p>';
+        return '<p class="feed-empty">Nothing to show right now.</p>';
+    };

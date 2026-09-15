@@ -1,19 +1,10 @@
-/* The front page: the two live Discord feeds and a glance at the people.
-   The games, the roster, the contributors and the legal documents are each
-   their own page. Depends on js/common.js. */
+/* The front page: a glance at the newest progress and at the people.
 
-    /* "0 messages" has three causes and they look identical on the page, so
-       say which one it is instead of a generic empty state. */
-    const feedEmpty = d => {
-        if (d && d.needsMessageContentIntent) return '<p class="feed-empty"><b>Message Content Intent is off.</b> ' +
-            'Discord returned ' + d.fetched + ' message' + (d.fetched === 1 ? '' : 's') +
-            ' but blanked the text. Enable it on the bot at ' +
-            '<a href="https://discord.com/developers/applications" target="_blank" rel="noopener">' +
-            'discord.com/developers/applications</a> \u2192 Bot \u2192 Privileged Gateway Intents \u2192 ' +
-            'Message Content Intent.</p>';
-        if (d && d.fetched === 0) return '<p class="feed-empty">Nothing posted in that channel yet.</p>';
-        return '<p class="feed-empty">Nothing to show right now.</p>';
-    };
+   Everything here is a pointer somewhere else. The full build log is
+   /progress, the questions are /faq, the roster is /skylanders, the people
+   are /contributors -- the front page's job is to say what this is and show
+   enough that the rest is worth a click, not to be a worse copy of four other
+   pages. Depends on js/common.js. */
 
     /* --- live from Discord ------------------------------------------------
        Both come through /api/discord-channel, which holds the bot token
@@ -82,28 +73,6 @@
             more.hidden = true;
         });
     }
-
-    fetch("/api/discord-channel?channel=faq").then(r => r.json()).then(d => {
-        const host = document.getElementById("faqList");
-        if (!d.messages || !d.messages.length) { host.innerHTML = feedEmpty(d); return; }
-        d.messages.forEach((m, i) => {
-            /* "**Question?** answer" is how these are written in the channel;
-               fall back to the first line when they are not. */
-            const bold = m.content.match(/^\*\*(.+?)\*\*\s*([\s\S]*)$/);
-            const q = bold ? bold[1] : m.content.split("\n")[0];
-            const a = bold ? bold[2] : m.content.split("\n").slice(1).join("\n");
-            const el = document.createElement("details");
-            el.className = "qa reveal";
-            el.style.setProperty("--i", i);
-            /* withEmoji, not bare esc: the question is where the custom emoji
-               usually is, and esc alone leaves &lt;:name:id&gt; as text. */
-            el.innerHTML = `<summary>${withEmoji(esc(q))}</summary>` +
-                           `<div class="qa-body">${mdLite(a || "")}</div>`;
-            host.appendChild(el);
-        });
-        watchReveal();
-    }).catch(() => { document.getElementById("faqList").innerHTML =
-        '<p class="feed-empty">FAQ is unavailable.</p>'; });
 
 
 /* --- the people, in brief ---------------------------------------------

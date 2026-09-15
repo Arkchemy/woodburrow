@@ -27,8 +27,15 @@ import re
 # with a replacement character. Nothing warns; it only shows in a browser.
 
 PUB = pathlib.Path(__file__).resolve().parents[1] / "public"
-PAGES = ["index.html", "games.html", "skylanders.html",
-         "legal.html", "contributors.html"]
+# Every page in public/, found rather than listed.
+#
+# This was a hardcoded list, and adding /progress and /faq did not update it --
+# so both shipped with unstamped <script> and <link> tags and would have served
+# a stale cached copy of site.css and their own JS to every returning visitor,
+# silently and for as long as the cache lived. A list that has to be kept in
+# step with sync_shell.py's own list is a list that will fall out of step.
+PAGES = sorted(p.name for p in (pathlib.Path(__file__).resolve().parents[1]
+                                / "public").glob("*.html"))
 
 # DATA_V lives in the shared script, not in the pages -- every page that reads
 # a .json file goes through it.
