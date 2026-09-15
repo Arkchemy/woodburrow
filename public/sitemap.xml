@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Five pages, listed by hand. A generator would be more machinery than a
+     five-page site earns, and a stale generated sitemap is worse than an
+     honest short one. Add a page here when tools/sync_shell.py gains one. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://arkchemy.vercel.app/</loc><priority>1.0</priority></url>
+  <url><loc>https://arkchemy.vercel.app/games</loc><priority>0.8</priority></url>
+  <url><loc>https://arkchemy.vercel.app/skylanders</loc><priority>0.8</priority></url>
+  <url><loc>https://arkchemy.vercel.app/contributors</loc><priority>0.6</priority></url>
+  <url><loc>https://arkchemy.vercel.app/legal</loc><priority>0.4</priority></url>
+</urlset>

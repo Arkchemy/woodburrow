@@ -1,0 +1,12 @@
+# Arkchemy — https://arkchemy.vercel.app
+#
+# Everything here is public and meant to be found. The API routes are not:
+# they are proxies the pages call, they return JSON rather than anything a
+# search result should ever point at, and crawling them spends this project's
+# share of GitHub's unauthenticated rate limit on nobody's behalf.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://arkchemy.vercel.app/sitemap.xml

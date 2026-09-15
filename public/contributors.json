@@ -1,20 +1,20 @@
 [
  {
-  "name": "bonesinmysoup",
-  "slug": "bonesinmysoup",
-  "role": "igz Format Research -- Alchemy Container & Fixup Structure",
-  "element": "Undead",
-  "github": null,
-  "discordId": "731587862423797762",
-  "section": "core"
- },
- {
   "name": "Aaronateataco",
   "slug": "aaronateataco",
   "role": "Founder & Lead Developer",
   "element": "Light",
   "github": "https://github.com/Aaronateataco",
   "discordId": "1534947437880279085",
+  "section": "core"
+ },
+ {
+  "name": "bonesinmysoup",
+  "slug": "bonesinmysoup",
+  "role": "igz Format Research -- Alchemy Container & Fixup Structure",
+  "element": "Undead",
+  "github": null,
+  "discordId": "731587862423797762",
   "section": "core"
  },
  {

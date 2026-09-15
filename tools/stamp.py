@@ -18,6 +18,14 @@ import os
 import pathlib
 import re
 
+# encoding="utf-8" on every read and write, explicitly.
+#
+# Path.read_text()/write_text() use the platform default, which is UTF-8
+# on Linux and cp1252 on Windows. Running this on Windows silently wrote
+# the interpunct in each page title as a bare 0xB7 byte -- invalid UTF-8
+# in a page that declares charset=utf-8, so every sub-page title rendered
+# with a replacement character. Nothing warns; it only shows in a browser.
+
 PUB = pathlib.Path(__file__).resolve().parents[1] / "public"
 PAGES = ["index.html", "games.html", "skylanders.html",
          "legal.html", "contributors.html"]
@@ -26,15 +34,15 @@ PAGES = ["index.html", "games.html", "skylanders.html",
 # a .json file goes through it.
 common = PUB / "js" / "common.js"
 newest = int(max(os.path.getmtime(f) for f in glob.glob(str(PUB / "*.json"))))
-src = common.read_text()
+src = common.read_text(encoding="utf-8")
 out = re.sub(r'const DATA_V = "\?v=[^"]*";', f'const DATA_V = "?v={newest}";', src)
 if out != src:
-    common.write_text(out)
+    common.write_text(out, encoding="utf-8")
 print(f"DATA_V = {newest}")
 
 
 def stamp(page: pathlib.Path) -> None:
-    s = page.read_text()
+    s = page.read_text(encoding="utf-8")
 
     def one(m, attr):
         href = m.group(1)
@@ -55,7 +63,7 @@ def stamp(page: pathlib.Path) -> None:
                lambda m: f'<script src="{m.group(1)}?v={int(os.path.getmtime(PUB / m.group(1)))}"></script>'
                if (PUB / m.group(1)).exists() else m.group(0), s)
 
-    page.write_text(s)
+    page.write_text(s, encoding="utf-8")
     print(f"  {page.name}")
     for m in re.finditer(r'(?:href|src)="([^"]+\.(?:css|js)\?v=\d+)"', s):
         print(f"      {m.group(1)}")
