@@ -2,24 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Every Skylander across all six games, by element, with portraits, catchphrases and moves.">
+<meta name="description" content="What taking the Alchemy engine apart has established, how confident we are in each, and where we were wrong.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="canonical" href="https://arkchemy.vercel.app/skylanders">
+<link rel="canonical" href="https://arkchemy.vercel.app/findings">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arkchemy">
-<meta property="og:url" content="https://arkchemy.vercel.app/skylanders">
-<meta property="og:title" content="Skylanders · Arkchemy">
-<meta property="og:description" content="Every Skylander across all six games, by element, with portraits, catchphrases and moves.">
+<meta property="og:url" content="https://arkchemy.vercel.app/findings">
+<meta property="og:title" content="Findings · Arkchemy">
+<meta property="og:description" content="What taking the Alchemy engine apart has established, how confident we are in each, and where we were wrong.">
 <meta property="og:image" content="https://arkchemy.vercel.app/images/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Arkchemy wordmark over a Skylands sky">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Skylanders · Arkchemy">
-<meta name="twitter:description" content="Every Skylander across all six games, by element, with portraits, catchphrases and moves.">
+<meta name="twitter:title" content="Findings · Arkchemy">
+<meta name="twitter:description" content="What taking the Alchemy engine apart has established, how confident we are in each, and where we were wrong.">
 <meta name="twitter:image" content="https://arkchemy.vercel.app/images/og-card.png">
 <meta name="theme-color" content="#3d1140">
-<title>Skylanders · Arkchemy</title>
+<title>Findings · Arkchemy</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
@@ -107,10 +107,10 @@
         </a>
         <a href="/#project">The Project</a>
         <a href="/games">The Games</a>
-        <a href="/skylanders" aria-current="page">Skylanders</a>
+        <a href="/skylanders">Skylanders</a>
         <a href="/#chompy">Chompy Party</a>
         <a href="/progress">Progress</a>
-        <a href="/findings">Findings</a>
+        <a href="/findings" aria-current="page">Findings</a>
         <a href="/faq">FAQ</a>
         <a href="/contributors">Contributors</a>
         <a href="/legal">Legal</a>
@@ -119,63 +119,49 @@
     <div id="navScrim" hidden></div>
 
     <main id="main" tabindex="-1">
-        <h2 id="roster"><svg class="h-ico" aria-hidden="true"><use href="#i-spark"/></svg>The Skylanders</h2>
-        <p class="lede">Every Skylander, by game and element. Pick one to see
-        its element, portrait, catchphrase and moves.</p>
+        <h2 id="findings"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Findings</h2>
+        <p class="lede">What taking this engine apart has actually established
+        &mdash; each one with how confident we are and how it could be shown
+        wrong. Including the times we were wrong.</p>
 
-        <div class="game-tabs" id="gameTabs"></div>
-
-        <div class="roster-tools">
-            <button id="randomPick" type="button">&#8635; Random Skylander</button>
-            <span id="voiceNote"></span>
+        <div class="callout reveal" id="findingsAbout">
+            <h3>How to read these</h3>
+            <div id="confLegend" class="conf-legend"></div>
+            <p class="foot-note" id="findingsCaveat"></p>
         </div>
 
-        <section class="showcase" id="showcase" hidden>
-            <button class="stage-nav prev" type="button" aria-label="Previous Skylander">&#10094;</button>
-            <button class="stage-nav next" type="button" aria-label="Next Skylander">&#10095;</button>
-            <div class="stage" id="stage">
-                <div class="loadouts left">
-                    <div class="loadout">
-                        <p class="lo-label">Element</p>
-                        <img class="emblem" id="s-emblem" alt=""
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                    </div>
-                    <div class="loadout">
-                        <p class="lo-label">Portrait</p>
-                        <img class="face" id="s-face" alt=""
-                             src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                    </div>
-                </div>
+        <div class="f-controls reveal" role="group" aria-label="Filter findings">
+            <label class="f-field">
+                <span>Area</span>
+                <select id="fArea"><option value="">All areas</option></select>
+            </label>
+            <label class="f-field">
+                <span>Confidence</span>
+                <select id="fConf"><option value="">Any confidence</option></select>
+            </label>
+            <label class="f-field f-search">
+                <span>Search</span>
+                <input type="search" id="fSearch" placeholder="shader, archive, memory&hellip;"
+                       autocomplete="off" spellcheck="false">
+            </label>
+            <p class="f-count" id="fCount" role="status" aria-live="polite"></p>
+        </div>
 
-                <div class="hero-slot">
-                    <img class="hero-img" id="s-hero" alt=""
-                         src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                </div>
+        <div id="findingsList" class="findings-list">
+            <p class="feed-empty">Loading findings&hellip;</p>
+        </div>
 
-                <div class="loadouts right">
-                    <div class="loadout">
-                        <p class="lo-label">Catchphrase</p>
-                        <blockquote id="s-catch"></blockquote>
-                        <button class="play-line" id="s-play" type="button">&#9654; Play</button>
-                    </div>
-                    <div class="loadout">
-                        <p class="lo-label">Profile</p>
-                        <dl id="s-facts"></dl>
-                    </div>
-                    <div class="loadout" id="s-moves-card" hidden>
-                        <p class="lo-label">Moves</p>
-                        <ul id="s-moves"></ul>
-                    </div>
-                </div>
+        <h2 id="open"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>Open questions</h2>
+        <p class="lede">Things we know we do not know. Listed because a question
+        nobody has written down is a question that gets rediscovered.</p>
+        <div id="openList" class="findings-list"></div>
 
-                <div class="plate">
-                    <span class="el-tag" id="s-el"></span>
-                    <h3 id="s-name"></h3>
-                </div>
-            </div>
-        </section>
-
-        <div id="elements"></div>
+        <h2 id="corrections"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>Corrections</h2>
+        <p class="lede">Where we got it wrong, what it actually was, and what
+        believing the wrong thing cost. This section exists because a
+        reverse-engineering project that only publishes its successes is
+        publishing fiction.</p>
+        <div id="corrList" class="corrections-list"></div>
 
     </main>
 
@@ -227,6 +213,6 @@
     </footer>
 
     <script src="js/common.js?v=1789493352"></script>
-    <script src="js/skylanders.js?v=1788710994"></script>
+    <script src="js/findings.js?v=1789556123"></script>
 </body>
 </html>

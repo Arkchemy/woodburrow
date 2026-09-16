@@ -1800,3 +1800,127 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     .scrolled #site-nav { padding-left: 170px; }
     #site-nav .nav-home .nh-word { height: 16px; }
 }
+
+/* ======================================================================
+   /findings, 2026-09-16
+   ----------------------------------------------------------------------
+   findings.json held 44 findings, 8 open questions and 17 corrections and
+   was rendered nowhere. This is that file made readable.
+
+   The corrections get the strongest treatment on the page on purpose.
+   They are the part a reverse-engineering project is least inclined to
+   publish and the part most worth reading.
+   ====================================================================== */
+
+.f-controls {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
+    margin: 18px 0 22px; padding: 14px 16px;
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 1px 0 rgba(61, 17, 64, .07), 0 8px 20px -18px rgba(61, 17, 64, .5);
+}
+.f-field { display: flex; flex-direction: column; gap: 5px; }
+.f-field > span {
+    font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+    color: #6b6479;
+}
+.f-field select, .f-field input {
+    font: inherit; font-size: 15px; color: var(--ink);
+    padding: 7px 10px; border-radius: 8px;
+    border: 1px solid rgba(61, 17, 64, .22); background: #fff;
+    min-width: 11rem;
+}
+.f-field select:focus-visible, .f-field input:focus-visible {
+    outline: 2px solid var(--berry); outline-offset: 1px;
+}
+.f-search input { min-width: 15rem; }
+.f-count { margin: 0 0 4px auto; font-size: 13.5px; color: #6b6479; }
+
+.findings-list, .corrections-list { display: grid; gap: 14px; }
+
+.finding, .correction {
+    background: #fff; border-radius: 12px; padding: 16px 18px;
+    box-shadow: 0 1px 0 rgba(61, 17, 64, .07), 0 10px 24px -20px rgba(61, 17, 64, .55);
+}
+.f-head h3 {
+    margin: 0 0 8px; font-size: 19px; line-height: 1.3;
+    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .01em;
+    color: var(--plum);
+}
+.f-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.f-badge {
+    font-size: 12px; padding: 3px 9px; border-radius: 999px;
+    background: rgba(61, 17, 64, .08); color: #4a3d53; white-space: nowrap;
+}
+.f-area { background: rgba(89, 194, 240, .20); color: #14556f; }
+.f-date { background: rgba(61, 17, 64, .06); color: #6b6479; }
+
+/* Confidence is the one badge worth colour-coding: it is the difference
+   between "seen on hardware" and "read once in a binary", and a reader
+   skimming should not have to open the entry to tell them apart. */
+.f-conf-hardware_confirmed { background: rgba(99, 182, 74, .22); color: #24571a; }
+.f-conf-static_confirmed   { background: rgba(243, 195, 78, .28); color: #5c4304; }
+.f-conf-static_single_source,
+.f-conf-confirmed          { background: rgba(122, 31, 78, .13); color: #6d1c46; }
+
+.f-detail { color: var(--ink); line-height: 1.6; }
+.f-detail p:first-child { margin-top: 0; }
+.f-row { margin: 9px 0 0; line-height: 1.55; }
+.f-row b { color: var(--plum); }
+.f-falsify { padding-left: 11px; border-left: 3px solid rgba(99, 182, 74, .45); }
+.f-prior   { font-size: 14px; color: #5d5668; }
+
+.conf-legend { display: grid; gap: 8px; margin: 6px 0 10px; }
+.conf-item { display: flex; gap: 10px; align-items: baseline; margin: 0; line-height: 1.5; }
+
+/* Corrections: was / now / cost, each visually distinct so the shape of the
+   entry is readable before the words are. */
+.correction { border-left: 4px solid rgba(122, 31, 78, .5); }
+.correction .f-head h3 { text-transform: capitalize; }
+.c-was, .c-now, .c-cost { margin: 8px 0 0; line-height: 1.55; }
+.c-was  { color: #6d5a66; text-decoration-color: rgba(122,31,78,.4); }
+.c-was  b { color: #8a2b57; }
+.c-now  b { color: #24571a; }
+.c-cost { font-size: 14.5px; color: #5d5668; }
+.c-cost b { color: var(--plum); }
+
+@media (max-width: 620px) {
+    .f-controls { padding: 12px; gap: 10px; }
+    .f-field select, .f-field input, .f-search input { min-width: 0; width: 100%; }
+    .f-field { width: 100%; }
+    .f-count { margin-left: 0; }
+}
+
+/* The legend sits inside .callout, which is a dark plum gradient, and the
+   badges above are styled for the white finding cards -- dark text on a
+   barely-tinted pill. On the callout that measured 1.41:1, which is not
+   "low contrast", it is invisible: the pills rendered as blank coloured bars.
+   Inside the callout they get light text and a solid enough pill to carry it. */
+.callout .f-badge {
+    background: rgba(255, 255, 255, .16);
+    color: #fff6dc;
+}
+.callout .f-conf-hardware_confirmed { background: rgba(140, 226, 112, .28); color: #eaffe0; }
+.callout .f-conf-static_confirmed   { background: rgba(243, 195, 78, .30);  color: #fff3cf; }
+.callout .f-conf-static_single_source,
+.callout .f-conf-confirmed          { background: rgba(255, 255, 255, .20); color: #f4e8f2; }
+.callout .conf-item span:last-child { color: #efe9f4; }
+
+/* Grid items default to min-width:auto, which means a grid track refuses to
+   shrink below its widest unbreakable content. These entries are full of
+   identifiers like `latte-shaders-translate-and-load` and `GX2SetColorBuffer`,
+   so at 375px a card measured 411px wide inside a 349px container and ran
+   36px past the viewport.
+   
+   It was invisible because body/html carry overflow-x: clip -- so the page did
+   not scroll sideways, it just silently cut the right-hand edge off every
+   card. min-width:0 lets the track shrink; overflow-wrap lets the long tokens
+   break rather than forcing it wide again. */
+.finding, .correction { min-width: 0; overflow-wrap: anywhere; }
+.f-detail, .f-row, .c-was, .c-now, .c-cost { overflow-wrap: anywhere; }
+
+/* Code spans keep their own line rather than being broken mid-token: a
+   register name split across two lines is worse than one that scrolls. */
+.f-detail code, .f-row code, .c-was code, .c-now code, .c-cost code {
+    overflow-wrap: normal; word-break: keep-all;
+}
+.f-detail pre { overflow-x: auto; max-width: 100%; }

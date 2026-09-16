@@ -60,6 +60,14 @@ PAGES = {
         scripts=["js/faq.js"],
         nav="faq",
     ),
+    "findings.html": dict(
+        path="/findings",
+        title="Findings · Arkchemy",
+        desc="What taking the Alchemy engine apart has established, how "
+             "confident we are in each, and where we were wrong.",
+        scripts=["js/findings.js"],
+        nav="findings",
+    ),
     "legal.html": dict(
         path="/legal",
         title="Legal · Arkchemy",

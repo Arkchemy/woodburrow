@@ -1,0 +1,43 @@
+        <h2 id="findings"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Findings</h2>
+        <p class="lede">What taking this engine apart has actually established
+        &mdash; each one with how confident we are and how it could be shown
+        wrong. Including the times we were wrong.</p>
+
+        <div class="callout reveal" id="findingsAbout">
+            <h3>How to read these</h3>
+            <div id="confLegend" class="conf-legend"></div>
+            <p class="foot-note" id="findingsCaveat"></p>
+        </div>
+
+        <div class="f-controls reveal" role="group" aria-label="Filter findings">
+            <label class="f-field">
+                <span>Area</span>
+                <select id="fArea"><option value="">All areas</option></select>
+            </label>
+            <label class="f-field">
+                <span>Confidence</span>
+                <select id="fConf"><option value="">Any confidence</option></select>
+            </label>
+            <label class="f-field f-search">
+                <span>Search</span>
+                <input type="search" id="fSearch" placeholder="shader, archive, memory&hellip;"
+                       autocomplete="off" spellcheck="false">
+            </label>
+            <p class="f-count" id="fCount" role="status" aria-live="polite"></p>
+        </div>
+
+        <div id="findingsList" class="findings-list">
+            <p class="feed-empty">Loading findings&hellip;</p>
+        </div>
+
+        <h2 id="open"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>Open questions</h2>
+        <p class="lede">Things we know we do not know. Listed because a question
+        nobody has written down is a question that gets rediscovered.</p>
+        <div id="openList" class="findings-list"></div>
+
+        <h2 id="corrections"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>Corrections</h2>
+        <p class="lede">Where we got it wrong, what it actually was, and what
+        believing the wrong thing cost. This section exists because a
+        reverse-engineering project that only publishes its successes is
+        publishing fiction.</p>
+        <div id="corrList" class="corrections-list"></div>
