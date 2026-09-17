@@ -1,104 +1,114 @@
 {
-  "_comment": "Replacement #rules content as Discord embeds. Posted by post.py. Colours are the site's: gold 0xF3C34E accents the welcome, plum 0x3D1140 the rules body. Edit freely -- nothing here is generated.",
-  "messages": [
+ "_comment": "Replacement #rules content as Discord embeds. Posted by post.py. Colours are the site's: gold 0xF3C34E accents the welcome, plum 0x3D1140 the rules body. Edit freely -- nothing here is generated.",
+ "messages": [
+  {
+   "embeds": [
     {
-      "embeds": [
-        {
-          "title": "Welcome to Arkchemy",
-          "color": 15979342,
-          "description": "Arkchemy is porting **Skylanders: Spyro's Adventure** from the Wii U to the Nintendo Switch, by statically recompiling the original PowerPC code to ARM64.\n\nIt is a preservation project. It is not affiliated with Activision, and it never will be.",
-          "fields": [
-            {
-              "name": "What is actually working",
-              "value": "The recompiler translates the full executable. The Switch runtime boots as far as the archive loader. Getting past that is the current work.",
-              "inline": false
-            },
-            {
-              "name": "Where to look",
-              "value": "Progress posts go in the progress channel and appear on the site automatically. Questions asked in the FAQ channel show up there too.",
-              "inline": false
-            }
-          ],
-          "footer": {
-            "text": "arkchemy.vercel.app · github.com/Arkchemy"
-          }
-        }
-      ]
-    },
-    {
-      "embeds": [
-        {
-          "title": "Rules",
-          "color": 4001600,
-          "description": "Seven of them. They exist so this stays a place where the work can happen.",
-          "fields": [
-            {
-              "name": "1 · No piracy, no exceptions",
-              "value": "No ROMs, ISOs, decrypted games, keys, NAND dumps, or links to any of it — not in channels, not in DMs, not \"just asking where\". This is the rule the project's survival depends on. Breaking it is an immediate ban.\n\nArkchemy is a tool. You run it against a copy of the game **you already own**.",
-              "inline": false
-            },
-            {
-              "name": "2 · No builds are distributed",
-              "value": "There is no download, and asking for one repeatedly will get you removed. A built game would contain Activision's assets, which is the one thing this project will not do.",
-              "inline": false
-            },
-            {
-              "name": "3 · Be decent",
-              "value": "Disagree about technical things as much as you like. Personal attacks, harassment, slurs and bigotry get you removed without a warning.",
-              "inline": false
-            },
-            {
-              "name": "4 · Keep channels on topic",
-              "value": "Technical discussion in the technical channels, chat in the chat ones. If a thread is going long, make it a thread.",
-              "inline": false
-            },
-            {
-              "name": "5 · No spam, no advertising",
-              "value": "That includes DMing members with your own project. Ask before posting a link to something you run.",
-              "inline": false
-            },
-            {
-              "name": "6 · Discord's own rules apply",
-              "value": "You must be 13 or older and follow the [Terms of Service](https://discord.com/terms) and [Community Guidelines](https://discord.com/guidelines). NSFW content is not permitted anywhere in this server.",
-              "inline": false
-            },
-            {
-              "name": "7 · Staff decisions stand",
-              "value": "If you think a decision was wrong, say so once, calmly, in DMs. Arguing it publicly is not the route.",
-              "inline": false
-            }
-          ],
-          "footer": {
-            "text": "Staying here means you accept these."
-          }
-        }
-      ]
-    },
-    {
-      "embeds": [
-        {
-          "title": "Credit and licensing",
-          "color": 4001600,
-          "description": "Arkchemy is source-available and free to fork. Two conditions come with it:",
-          "fields": [
-            {
-              "name": "Credit it",
-              "value": "Anything built on Arkchemy shows either the Arkchemy intro or a visible \"Built on Arkchemy\" line.",
-              "inline": false
-            },
-            {
-              "name": "Keep it non-commercial",
-              "value": "No selling it, no putting it behind a paywall, no ad-supported builds.",
-              "inline": false
-            },
-            {
-              "name": "The full text",
-              "value": "Every repository's licence, plus the privacy notice, is on the site at **/legal** — served live from GitHub, so it always matches what the code ships under.",
-              "inline": false
-            }
-          ]
-        }
-      ]
+     "title": "Welcome to Arkchemy",
+     "color": 15979342,
+     "description": "Arkchemy is porting **Skylanders: Spyro's Adventure** from the Wii U to the Nintendo Switch, by statically recompiling the original PowerPC code to ARM64.\n\nIt is a preservation project. It is not affiliated with Activision, and it never will be.",
+     "fields": [
+      {
+       "name": "What is actually working",
+       "value": "The recompiler translates the full executable. The Switch runtime boots as far as the archive loader. Getting past that is the current work.",
+       "inline": false
+      },
+      {
+       "name": "Where to look",
+       "value": "Progress posts go in the progress channel and appear on the site automatically. Questions asked in the FAQ channel show up there too.",
+       "inline": false
+      }
+     ],
+     "footer": {
+      "text": "arkchemy.vercel.app · github.com/Arkchemy"
+     }
     }
-  ]
+   ]
+  },
+  {
+   "embeds": [
+    {
+     "title": "Rules",
+     "color": 4001600,
+     "description": "Nine of them. They exist so this stays a place where the work can happen.",
+     "fields": [
+      {
+       "name": "1 · No piracy, no exceptions",
+       "value": "No ROMs, ISOs, decrypted games, keys, NAND dumps, or links to any of it — not in channels, not in DMs, not \"just asking where\". This is the rule the project's survival depends on. Breaking it is an immediate ban.\n\nArkchemy is a tool. You run it against a copy of the game **you already own**.",
+       "inline": false
+      },
+      {
+       "name": "2 · No builds are distributed",
+       "value": "There is no download, and asking for one repeatedly will get you removed. A built game would contain Activision's assets, which is the one thing this project will not do.",
+       "inline": false
+      },
+      {
+       "name": "3 · Be decent",
+       "value": "Disagree about technical things as much as you like. Personal attacks, harassment, slurs and bigotry get you removed without a warning.",
+       "inline": false
+      },
+      {
+       "name": "4 · Keep channels on topic",
+       "value": "Technical discussion in the technical channels, chat in the chat ones. If a thread is going long, make it a thread.",
+       "inline": false
+      },
+      {
+       "name": "5 · No spam, no advertising",
+       "value": "That includes DMing members with your own project. Ask before posting a link to something you run.",
+       "inline": false
+      },
+      {
+       "name": "6 · AI-assisted work is welcome here",
+       "value": "Arkchemy is built with generative AI as part of the toolchain, openly and on the record — every commit says so. You are welcome to use it, say you used it, ask questions about it, and show what it did well and badly.\n\nThe standard is the same for everyone regardless of how the work was made: say what is measured and what is assumed, and be willing to be shown wrong. A tool does not excuse a claim that was never checked.",
+       "inline": false
+      },
+      {
+       "name": "7 · Please don't bring Arkchemy up in the Skylanders Reverse Engineering server",
+       "value": "That server has decided not to allow discussion, development or promotion of generative AI, including in DMs to its members. Arkchemy is built with it, so mentioning the project there — or inviting people to this server — can get **your** account banned from theirs.\n\nThis is here to keep you out of trouble, not to pick a fight. They are entitled to run their space how they like, we are entitled to run ours, and a lot of people happily belong to both. Keep the two separate and nobody has a problem.",
+       "inline": false
+      },
+      {
+       "name": "8 · Discord's own rules apply",
+       "value": "You must be 13 or older and follow the [Terms of Service](https://discord.com/terms) and [Community Guidelines](https://discord.com/guidelines). NSFW content is not permitted anywhere in this server.",
+       "inline": false
+      },
+      {
+       "name": "9 · Staff decisions stand",
+       "value": "If you think a decision was wrong, say so once, calmly, in DMs. Arguing it publicly is not the route.",
+       "inline": false
+      }
+     ],
+     "footer": {
+      "text": "Staying here means you accept these."
+     }
+    }
+   ]
+  },
+  {
+   "embeds": [
+    {
+     "title": "Credit and licensing",
+     "color": 4001600,
+     "description": "Arkchemy is source-available and free to fork. Two conditions come with it:",
+     "fields": [
+      {
+       "name": "Credit it",
+       "value": "Anything built on Arkchemy shows either the Arkchemy intro or a visible \"Built on Arkchemy\" line.",
+       "inline": false
+      },
+      {
+       "name": "Keep it non-commercial",
+       "value": "No selling it, no putting it behind a paywall, no ad-supported builds.",
+       "inline": false
+      },
+      {
+       "name": "The full text",
+       "value": "Every repository's licence, plus the privacy notice, is on the site at **/legal** — served live from GitHub, so it always matches what the code ships under.",
+       "inline": false
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }
