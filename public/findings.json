@@ -493,8 +493,8 @@
   ],
   "open_questions": [
     {
-      "question": "Why does archive progress vary between runs at all?",
-      "detail": "Runs with identical builds and identical fixes have stopped at 684,652 and at 815,724 bytes. Something timing-dependent decides how many loading tasks get served before the block pool empties, and that has to be understood before any change to the loading path can be judged by its effect on the byte count."
+      "question": "What stops the load at 1,208,940 bytes?",
+      "detail": "Two stalls are fixed and the game reads about three times further, but it still stops around forty-five seconds in and nothing moves afterwards. Whether this is the same six-block exhaustion further along, or something new, has not been measured yet -- and measuring it means turning counters back on, which is now known to change the answer."
     },
     {
       "question": "What are the last six loading tasks waiting for?",
@@ -544,6 +544,13 @@
     }
   ],
   "corrections": [
+    {
+      "id": "the-variance-was-the-instrumentation",
+      "date": "2026-09-20",
+      "was": "Archive progress varies between runs, so the block fix cannot be shown to advance the load.",
+      "now": "It does not vary between runs at all. It varies between builds, because the diagnostic counters were changing the result they measured. With the heaviest ones switched off, the same fixes read 1,208,940 bytes and complete 171 loading tasks, against 684,652 and 60 with the counters on.",
+      "why": "One counter ran once per memory block per availability check. The first fix took that check from 4,647 calls a run to 80,651, so the counter went from roughly 28,000 calls to 484,000 -- the cost of watching scaled up exactly as the fix began working, and hid it. Progress is now measured with those counters off."
+    },
     {
       "id": "relfix-gain-was-a-single-sample",
       "date": "2026-09-20",
