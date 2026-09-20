@@ -1638,156 +1638,23 @@ a.person:hover .p-go { opacity: 1; transform: none; }
    photographic art it produces jagged edges that look worse than the
    interpolation it replaces. The cap is the fix; the filter is not.
    ---------------------------------------------------------------------- */
-.roster img, .games img, .person img, .p-chip img, .chompy-art img {
+.roster img, .games img, .person img, .p-chip img {
     max-width: 100%;
     width: auto;
     height: auto;
     image-rendering: auto;
 }
 
-/* ======================================================================
-   Chompy Party banner, 2026-09-15
-   ----------------------------------------------------------------------
-   Someone else's game, promoted because it is good. The art is a Chompy
-   at a disco, so the banner is a dance floor: a mirror ball, three
-   sweeping beams, a few notes drifting up, and the logo bobbing on the
-   beat.
-
-   Everything animated here is transform or opacity, so none of it costs
-   a layout, and the whole block goes still under prefers-reduced-motion
-   -- a promo banner is exactly the sort of thing that should not move
-   for someone who asked for less movement.
-   ====================================================================== */
-.chompy {
-    position: relative; overflow: hidden; isolation: isolate;
-    display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
-    gap: 26px; align-items: center;
-    margin: 30px 0 34px; padding: 26px 30px;
-    border-radius: 18px;
-    background: radial-gradient(120% 140% at 12% 10%, #2b1250 0%, #160a2b 55%, #0d0620 100%);
-    box-shadow: 0 18px 40px -24px rgba(10, 4, 24, .9),
-                inset 0 0 0 1px rgba(140, 220, 90, .22);
-}
-
-/* --- the dance floor ------------------------------------------------- */
-.chompy-stage { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-
-.cp-ball {
-    position: absolute; top: -46px; left: 50%; width: 92px; height: 92px;
-    margin-left: -46px; border-radius: 50%;
-    background:
-        repeating-conic-gradient(from 0deg, rgba(255,255,255,.30) 0 9deg, rgba(120,160,200,.10) 9deg 18deg),
-        radial-gradient(circle at 34% 30%, #eaf4ff 0%, #8fa8c4 45%, #3c4a63 100%);
-    box-shadow: 0 0 44px rgba(150, 220, 255, .45);
-    animation: cpSpin 9s linear infinite;
-}
-
-.cp-beam {
-    position: absolute; top: 0; left: 50%; width: 210px; height: 118%;
-    transform-origin: 50% 0;
-    background: linear-gradient(180deg, rgba(150, 240, 120, .34), rgba(150, 240, 120, 0) 72%);
-    clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
-    filter: blur(1px);
-}
-.cp-beam-1 { animation: cpSweep1 7.5s ease-in-out infinite; }
-.cp-beam-2 { animation: cpSweep2 9.5s ease-in-out infinite;
-             background: linear-gradient(180deg, rgba(120, 200, 255, .30), rgba(120, 200, 255, 0) 72%); }
-.cp-beam-3 { animation: cpSweep3 11s  ease-in-out infinite;
-             background: linear-gradient(180deg, rgba(255, 140, 220, .26), rgba(255, 140, 220, 0) 72%); }
-
-@keyframes cpSpin   { to { transform: rotate(360deg) } }
-@keyframes cpSweep1 { 0%,100% { transform: rotate(-32deg) } 50% { transform: rotate(26deg) } }
-@keyframes cpSweep2 { 0%,100% { transform: rotate(18deg)  } 50% { transform: rotate(-24deg) } }
-@keyframes cpSweep3 { 0%,100% { transform: rotate(-8deg)  } 50% { transform: rotate(40deg) } }
-
-.cp-note {
-    position: absolute; bottom: 14px; font-size: 20px; font-style: normal;
-    color: rgba(180, 255, 140, .55); opacity: 0;
-    animation: cpFloat 6s ease-in-out infinite;
-}
-.cp-note-1 { left: 16%; animation-delay: 0s }
-.cp-note-2 { left: 47%; animation-delay: 1.9s; color: rgba(150, 210, 255, .55) }
-.cp-note-3 { left: 78%; animation-delay: 3.7s; color: rgba(255, 160, 225, .55) }
-@keyframes cpFloat {
-    0%   { transform: translateY(0) rotate(-8deg);      opacity: 0 }
-    18%  { opacity: 1 }
-    100% { transform: translateY(-150px) rotate(14deg); opacity: 0 }
-}
-
-/* --- the art --------------------------------------------------------- */
-.chompy-art { position: relative; }
-.chompy-art img {
-    display: block; width: 100%; border-radius: 14px;
-    box-shadow: 0 14px 30px -14px rgba(0, 0, 0, .85);
-    animation: cpBob 3.4s ease-in-out infinite;
-}
-@keyframes cpBob {
-    0%, 100% { transform: translateY(0) rotate(-.6deg) }
-    50%      { transform: translateY(-9px) rotate(.6deg) }
-}
-
-/* --- the words ------------------------------------------------------- */
-.chompy-kicker {
-    margin: 0 0 6px; font-size: 13px; letter-spacing: .14em;
-    text-transform: uppercase; color: rgba(180, 255, 140, .85);
-}
-.chompy-title { margin: 0 0 12px; }
-.chompy-title img {
-    display: block; width: min(100%, 340px); height: auto;
-    filter: drop-shadow(0 4px 12px rgba(80, 200, 60, .45));
-    animation: cpChomp 4.2s ease-in-out infinite;
-    transform-origin: 6% 60%;      /* the Chompy head at the left of the logo */
-}
-@keyframes cpChomp {
-    0%, 86%, 100% { transform: scale(1) rotate(0) }
-    90%           { transform: scale(1.045) rotate(-1.6deg) }
-    94%           { transform: scale(.985) rotate(1deg) }
-}
-.chompy-lede  { margin: 0 0 14px; color: #e6e2f2; max-width: 62ch; line-height: 1.55; }
-.chompy-lede strong { color: #ffe9a8; }
-.chompy-small { margin: 12px 0 0; font-size: 12.5px; color: rgba(214, 208, 232, .62); max-width: 62ch; }
-
-.chompy-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
-.cp-btn {
-    display: inline-block; padding: 9px 18px; border-radius: 999px;
-    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .04em;
-    font-size: 17px; text-decoration: none;
-    color: #eaffe0; background: rgba(255, 255, 255, .08);
-    box-shadow: inset 0 0 0 1px rgba(160, 240, 120, .38);
-    transition: transform var(--med) var(--ease), background var(--med) var(--ease),
-                box-shadow var(--med) var(--ease);
-}
-.cp-btn:hover, .cp-btn:focus-visible {
-    transform: translateY(-2px);
-    background: rgba(160, 240, 120, .18);
-    box-shadow: inset 0 0 0 1px rgba(160, 240, 120, .75), 0 10px 22px -12px rgba(120, 220, 90, .8);
-}
-.cp-btn-go {
-    background: linear-gradient(180deg, #7ed957, #4ea832);
-    color: #10240a; box-shadow: inset 0 0 0 1px rgba(210, 255, 180, .55);
-}
-.cp-btn-go:hover, .cp-btn-go:focus-visible {
-    background: linear-gradient(180deg, #96e874, #5bbf3c); color: #0c1c07;
-}
-
-@media (max-width: 720px) {
-    .chompy { grid-template-columns: 1fr; padding: 22px 18px; gap: 18px; }
-    .chompy-art img { width: min(100%, 260px); margin: 0 auto; }
-    .cp-ball { width: 64px; height: 64px; margin-left: -32px; top: -32px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cp-ball, .cp-beam, .cp-note,
-    .chompy-art img, .chompy-title img { animation: none; }
-    .cp-note { opacity: .55 }
-    .cp-btn { transition: none }
-    .cp-btn:hover { transform: none }
-}
 
 /* Adding the logo and a ninth link pushed the bar onto two rows between about
    900px and 1400px. The existing scale-down band stopped at 1120px, which was
    right for eight links and no logo and is not right for this. Widened, and
-   the logo's reserved space shrinks with the type rather than staying fixed. */
+   the logo's reserved space shrinks with the type rather than staying fixed.
+
+   2026-09-20: one link was removed, so the bar is back to nine including
+   the logo. The widened band is now slightly conservative rather than
+   wrong -- type scales down a little earlier than it needs to. Left alone
+   rather than re-tuning two breakpoints to save a pixel. */
 @media (min-width: 900px) and (max-width: 1400px) {
     #site-nav a { font-size: 15.5px; padding: 6px 9px; }
     #site-nav { gap: 2px; padding-left: 150px; }
@@ -1924,3 +1791,7 @@ a.person:hover .p-go { opacity: 1; transform: none; }
     overflow-wrap: normal; word-break: keep-all;
 }
 .f-detail pre { overflow-x: auto; max-width: 100%; }
+
+/* Small print under a 404 list. Renamed from a banner-specific class when
+   that banner was removed -- the rule is generic, the old name was not. */
+.fineprint { margin: 12px 0 0; font-size: 12.5px; color: rgba(214, 208, 232, .62); max-width: 62ch; }
