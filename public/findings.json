@@ -493,6 +493,10 @@
   ],
   "open_questions": [
     {
+      "question": "Why does archive progress vary between runs at all?",
+      "detail": "Runs with identical builds and identical fixes have stopped at 684,652 and at 815,724 bytes. Something timing-dependent decides how many loading tasks get served before the block pool empties, and that has to be understood before any change to the loading path can be judged by its effect on the byte count."
+    },
+    {
       "question": "What are the last six loading tasks waiting for?",
       "detail": "Six tasks never finish and between them hold every block in the pool. Reads that do run complete normally, so these six are not being served at all."
     },
@@ -540,6 +544,13 @@
     }
   ],
   "corrections": [
+    {
+      "id": "relfix-gain-was-a-single-sample",
+      "date": "2026-09-20",
+      "was": "Returning the abandoned block moved the archive from 684,652 bytes to 815,724 -- the first movement in that figure all night.",
+      "now": "That was one run. A later run with the same fix active returned sixty blocks, exactly as intended, and still stopped at 684,652. The fix is confirmed to do what it says; it is not confirmed to advance the load, and the figure varies between runs.",
+      "why": "A single sample was reported as a result. The byte count had been identical across several earlier runs, which made it look deterministic when it was not -- the same mistake this project had already made twice that night with other counters."
+    },
     {
       "id": "pump-alive-was-a-total-not-a-rate",
       "date": "2026-09-20",
