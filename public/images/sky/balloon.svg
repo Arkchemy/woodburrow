@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 130" role="img" aria-label="">
+  <title>A drifting hot-air balloon</title>
+  <defs>
+    <linearGradient id="blA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b8305f"/><stop offset="1" stop-color="#7a1f4e"/>
+    </linearGradient>
+    <linearGradient id="blB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffd977"/><stop offset="1" stop-color="#f3c34e"/>
+    </linearGradient>
+  </defs>
+  <!-- envelope built from three gores so the curvature reads at 80px -->
+  <path fill="url(#blA)" d="M45,4 C20,4 4,26 4,48 C4,70 24,88 45,98 C66,88 86,70 86,48 C86,26 70,4 45,4 Z"/>
+  <path fill="url(#blB)" d="M45,4 C36,4 30,24 30,50 C30,68 36,86 45,98 C54,86 60,68 60,50 C60,24 54,4 45,4 Z"/>
+  <path fill="#2a1030" opacity=".18" d="M45,98 C66,88 86,70 86,48 C86,38 82,28 76,20 C78,32 78,44 74,56 C68,74 57,88 45,98 Z"/>
+  <!-- skirt, ropes, basket -->
+  <path fill="#2a1030" d="M33,96 h24 l-3,8 h-18 Z"/>
+  <path stroke="#2a1030" stroke-width="2.5" fill="none" d="M36,104 L33,114 M54,104 L57,114"/>
+  <rect x="31" y="113" width="28" height="15" rx="3" fill="#8a5a2b"/>
+  <rect x="31" y="117" width="28" height="3" fill="#6b4420"/>
+</svg>

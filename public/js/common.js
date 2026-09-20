@@ -8,7 +8,7 @@
        stamp is the newest data-file mtime -- a date alone does not bust the
        cache when the data is regenerated the same day. Refresh it with
        tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1789492565";
+    const DATA_V = "?v=1789898908";
 
 /* --- element palette, used by the roster and the contributor cards --- */
     const ELEMENT_COLOUR = {
@@ -166,12 +166,12 @@
 
 
 
-    /* The mobile toggle rests under the cloud header so it never covers the
+    /* The mobile toggle rests under the sky header so it never covers the
 
        logo, and pins to the top once the header has scrolled past. A class on
        <html> rather than inline styles, so CSS owns the two positions. */
     {
-        const header = document.getElementById("cloud-header");
+        const header = document.getElementById("sky-header");
         /* Publish the header's real height so the toggle can sit in its
            bottom-right corner at any breakpoint instead of a fixed offset. */
         const nav = document.getElementById("site-nav");
@@ -395,17 +395,17 @@ fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
     }
 }
 
-/* --- has the cloud header scrolled away? -------------------------------
+/* --- has the sky header scrolled away? ---------------------------------
    Drives the small Arkchemy mark in the sticky nav, which only makes sense
    once the big one is off screen.
 
    A scroll listener rather than an IntersectionObserver on a sentinel: the
-   observer fires nothing at all for an element inside #cloud-header, which
+   observer fires nothing at all for an element inside #sky-header, which
    is overflow:hidden with transformed children, and a compare against one
    number is cheaper than working out why. Reads are coalesced into a frame,
    so scrolling still only measures once per paint. */
 {
-    const header = document.getElementById("cloud-header");
+    const header = document.getElementById("sky-header");
     if (header) {
         let ticking = false;
         const update = () => {

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 150" role="img" aria-label="">
+  <title>A floating island</title>
+  <defs>
+    <linearGradient id="ilRock" x1="0" y1="0" x2=".3" y2="1">
+      <stop offset="0" stop-color="#8a6a52"/><stop offset=".55" stop-color="#6b4f3d"/><stop offset="1" stop-color="#4a3428"/>
+    </linearGradient>
+    <linearGradient id="ilGrass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd66a"/><stop offset="1" stop-color="#4e9c46"/>
+    </linearGradient>
+  </defs>
+  <!-- Underside: a tapering root of rock rather than a cone. The silhouette
+       is what reads at 90px wide, so it is cut with a few long facets
+       instead of being smoothed. -->
+  <path fill="url(#ilRock)" d="M12,44 L168,44 L150,74 L138,70 L120,104 L104,96 L92,132 L78,104 L58,112 L46,78 L28,72 Z"/>
+  <path fill="#3a2920" opacity=".35" d="M92,132 L104,96 L120,104 L138,70 L150,74 L168,44 L120,44 Z"/>
+  <!-- grass cap, overhanging the rock on both sides -->
+  <path fill="url(#ilGrass)" d="M6,40 Q6,22 30,20 Q44,6 70,10 Q94,0 118,12 Q146,10 156,24 Q176,28 174,42 Q174,50 158,50 L22,50 Q6,50 6,40 Z"/>
+  <path fill="#fff" opacity=".18" d="M30,20 Q44,6 70,10 Q94,0 118,12 Q96,16 70,18 Q46,18 30,20 Z"/>
+</svg>

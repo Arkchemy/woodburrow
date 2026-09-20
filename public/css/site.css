@@ -1,8 +1,13 @@
 /* Arkchemy — page styles.
-   The animations here are the originals recovered from the Skylanders
-   Trap Team homepage stylesheet (tt-homelibs.css, web.archive.org snapshot
-   20141004013714); keyframe names and timings are unchanged so they behave
-   exactly as they did on the real site. */
+
+   Every animation and colour in this file is the project's own. The note that
+   used to sit here claimed the keyframes were recovered unchanged from the
+   Skylanders: Trap Team homepage stylesheet. That was true of the old
+   cloud-header.css -- now removed, along with the artwork it drove -- and was
+   never true of this file: none of Activision's keyframe names (Floatingx,
+   Floatingz, cloudHeader, general-bounce, sheep-squish) appear here, and none
+   ever did. The claim was inherited when the two files were split and nobody
+   checked it, which made the project's own work look copied. See LEGAL.md. */
 
 :root {
     /* This is a light design and there is no dark variant. Saying so stops a
@@ -88,10 +93,13 @@ h2 {
     align-items: center; justify-content: center;
     /* These logos carry an opaque white outline drawn into the artwork -- it
        exists to separate them from the game's sky, and on a plain light page
-       it reads as a dirty fringe. Rather than a heavy dark slab, give them the
-       sky they were actually drawn for: the same cloud-header plate used at
-       the top of the page. */
-    background: url("../images/cloud-header/cloud-header-bg.jpg") center/cover;
+       it reads as a dirty fringe. Rather than a heavy dark slab, give them a
+       sky to sit against -- the same painted gradient as the page header, so
+       the two read as one surface. */
+    background:
+        radial-gradient(70% 120% at 78% 108%, rgba(255, 233, 170, .8) 0%,
+                                              rgba(255, 233, 170, 0) 60%),
+        linear-gradient(#3f9fe0 0%, #6fc3ee 46%, #a8e0f6 78%, #d8f1fb 100%);
     border-radius: 12px;
     padding: 30px 24px;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
@@ -1281,8 +1289,10 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 .portal .doc-body h2,
 .portal .p-name,
 .portal .stat-row b { color: var(--portal); transition: color 1.4s linear; }
-.portal #cloud-header::after {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
+/* The header paints its own bottom rim with ::after, so the portal glow
+   takes ::before rather than the two fighting over one pseudo-element. */
+.portal #sky-header::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 5;
     background: radial-gradient(70% 130% at 50% 100%, var(--portal), transparent 62%);
     opacity: .38; mix-blend-mode: screen; transition: background 1.4s linear;
 }
@@ -1292,7 +1302,7 @@ a.person:hover .p-go { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
     .egg-toast { transition: opacity .01s; }
     .portal h2, .portal .p-name, .portal .stat-row b,
-    .portal #cloud-header::after, .portal footer, .portal .person { transition: none; }
+    .portal #sky-header::before, .portal footer, .portal .person { transition: none; }
 }
 
 /* =======================================================================

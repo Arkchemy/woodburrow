@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild the sub-pages from index.html's shell.
 
-The head, cloud header, nav and footer are identical on every page and there
+The head, sky header, nav and footer are identical on every page and there
 is no template engine here, so they live in exactly one place -- index.html --
 and this script splices each page's own <main> body into a copy of it. Run it
 after editing anything in the shell; tools/stamp.py then re-stamps the asset

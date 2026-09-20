@@ -7,67 +7,144 @@ Every scraper (Discord, Twitter, Slack, iMessage) crops to roughly 1.91:1, so
 the card is built at exactly that and everything that matters is kept away
 from the edges.
 
-Two things worth knowing before editing the tagline:
+The sky, the islands, the cloud and the balloon are all painted here. The
+previous version composited five PNGs and a background plate taken from a
+web.archive.org capture of Activision's Skylanders site, which made the card
+a derived work of their artwork and put it on every page as og:image. Those
+files are gone; see LEGAL.md. Nothing in this script reads anything it did
+not draw, apart from the project's own wordmark.
 
-  * arkchemy-display.ttf has NO punctuation. Every non-letter renders as a
-    blank .notdef box of fixed width -- measured, not assumed: ':' ',' '.'
-    '&' '!' and the apostrophe all report the same 14.0 advance at 40px, while
-    'A' reports 27.0. The first version of this card read "SPYRO S ADVENTURE"
-    because of it. Keep the tagline to letters and spaces.
-  * The sky is built the same way as armory's lobby background: the header
-    strip on the horizon at its own aspect, a gradient above it continuing the
-    direction the source is already going, and a feathered join. See
-    armory/tools/make-lobby-sky.py for why a straight stretch does not work.
+The colours are the same ones public/css/header.css uses, so the card and the
+page header read as the same sky. If you change one, change both.
+
+One thing worth knowing before editing the tagline: arkchemy-display.ttf has
+NO punctuation. Every non-letter renders as a blank .notdef box of fixed
+width -- measured, not assumed: ':' ',' '.' '&' '!' and the apostrophe all
+report the same 14.0 advance at 40px, while 'A' reports 27.0. The first
+version of this card read "SPYRO S ADVENTURE" because of it. Keep the tagline
+to letters and spaces.
 """
 import os
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUB = os.path.join(HERE, "public")
-CH = os.path.join(PUB, "images", "cloud-header")
 
 W, H = 1200, 630
 BAND_H = 74
-FEATHER = 90
 TAGLINE = "PORTING THE FIRST SKYLANDERS GAME TO THE NINTENDO SWITCH"
 
-strip = Image.open(os.path.join(CH, "cloud-header-bg.jpg")).convert("RGB")
-nh = round(strip.height * W / strip.width)
-strip = strip.resize((W, nh), Image.LANCZOS)
-top_y = H - nh
+# --- sky ------------------------------------------------------------------
+# linear-gradient(#3f9fe0 0%, #6fc3ee 46%, #a8e0f6 78%, #d8f1fb 100%) with a
+# warm radial bloom at 78%/108%, matching header.css stop for stop.
+STOPS = [(0.00, (0x3f, 0x9f, 0xe0)), (0.46, (0x6f, 0xc3, 0xee)),
+         (0.78, (0xa8, 0xe0, 0xf6)), (1.00, (0xd8, 0xf1, 0xfb))]
+BLOOM = (255, 233, 170)
+BLOOM_A = 0.85
 
-row0 = [strip.getpixel((x, 0)) for x in range(0, W, 7)]
-join = tuple(sum(p[i] for p in row0) // len(row0) for i in range(3))
-deep = (2, 150, 222)
 
-card = Image.new("RGB", (W, H))
-px = card.load()
+def sky_row(t):
+    for i in range(len(STOPS) - 1):
+        a, ca = STOPS[i]
+        b, cb = STOPS[i + 1]
+        if t <= b or i == len(STOPS) - 2:
+            k = 0.0 if b == a else (t - a) / (b - a)
+            k = max(0.0, min(1.0, k))
+            return tuple(round(ca[j] + (cb[j] - ca[j]) * k) for j in range(3))
+
+
+rows = [sky_row(y / (H - 1)) for y in range(H)]
+# Radial: centre at (78%, 108%) of the box, radii 70% and 120%. Falls to zero
+# at 60% of the way out, as in the CSS.
+cx, cy = 0.78 * W, 1.08 * H
+rx, ry = 0.70 * W, 1.20 * H
+px = []
 for y in range(H):
-    t = min(1.0, y / max(1, top_y - 1))
-    c = tuple(round(deep[i] + (join[i] - deep[i]) * t) for i in range(3))
+    base = rows[y]
+    dy = (y - cy) / ry
+    dy2 = dy * dy
     for x in range(W):
-        px[x, y] = c
+        dx = (x - cx) / rx
+        d = (dx * dx + dy2) ** 0.5
+        if d < 0.60:
+            a = BLOOM_A * (1.0 - d / 0.60)
+            px.append(tuple(round(base[j] + (BLOOM[j] - base[j]) * a)
+                            for j in range(3)))
+        else:
+            px.append(base)
+card = Image.new("RGB", (W, H))
+card.putdata(px)
 
-mask = Image.new("L", (W, nh), 255)
-mp = mask.load()
-for y in range(min(FEATHER, nh)):
-    a = round(255 * y / FEATHER)
-    for x in range(W):
-        mp[x, y] = a
-card.paste(strip, (0, top_y), mask)
+# --- drawn pieces ---------------------------------------------------------
+# Same silhouettes as public/images/sky/*.svg, expressed as polygons. The
+# island paths are the SVG coordinates scaled; the grass cap is an ellipse
+# because at card size the quadratic overhang is under a pixel.
+ROCK_HI, ROCK_LO = (0x8a, 0x6a, 0x52), (0x4a, 0x34, 0x28)
+GRASS_HI, GRASS_LO = (0x8f, 0xd6, 0x6a), (0x4e, 0x9c, 0x46)
+
+ISLE_LG = [(12, 44), (168, 44), (150, 74), (138, 70), (120, 104), (104, 96),
+           (92, 132), (78, 104), (58, 112), (46, 78), (28, 72)]
+ISLE_SM = [(10, 30), (100, 30), (88, 52), (76, 48), (62, 80), (50, 54),
+           (34, 58), (24, 44)]
 
 
-def layer(name, box, pos):
-    im = Image.open(os.path.join(CH, name)).convert("RGBA").resize(box, Image.LANCZOS)
-    card.paste(im, pos, im)
+def island(pts, src_w, x, y, w):
+    s = w / src_w
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.polygon([(x + px_ * s, y + py_ * s) for px_, py_ in pts],
+              fill=ROCK_LO + (255,))
+    # grass cap: two ellipses, the lighter one inset at the top for a lit edge
+    cap_h = 30 * s
+    d.ellipse([x + 4 * s, y + 20 * s - cap_h * .34,
+               x + (src_w - 4) * s, y + 20 * s + cap_h * .66],
+              fill=GRASS_LO + (255,))
+    d.ellipse([x + 12 * s, y + 20 * s - cap_h * .30,
+               x + (src_w - 12) * s, y + 20 * s + cap_h * .22],
+              fill=GRASS_HI + (255,))
+    card.paste(lay, (0, 0), lay)
 
 
-layer("island2.png", (150, 134), (40, 74))
-layer("island4.png", (132, 83), (1010, 120))
-layer("island3.png", (80, 75), (150, 430))
-layer("balloon.png", (96, 159), (1040, 330))
-layer("cloud.png", (300, 65), (830, 60))
+def cloud(x, y, w, alpha=255):
+    s = w / 240.0
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    for ox, oy, r in ((46, 58, 34), (96, 40, 46), (152, 46, 40), (196, 62, 30)):
+        d.ellipse([x + (ox - r) * s, y + (oy - r) * s,
+                   x + (ox + r) * s, y + (oy + r) * s], fill=(255, 255, 255, alpha))
+    d.rounded_rectangle([x + 14 * s, y + 56 * s, x + 214 * s, y + 90 * s],
+                        radius=18 * s, fill=(255, 255, 255, alpha))
+    card.paste(lay, (0, 0), lay)
 
+
+def balloon(x, y, w):
+    s = w / 90.0
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    d.ellipse([x + 4 * s, y + 4 * s, x + 86 * s, y + 96 * s],
+              fill=(0xb8, 0x30, 0x5f, 255))
+    d.ellipse([x + 30 * s, y + 4 * s, x + 60 * s, y + 98 * s],
+              fill=(0xf3, 0xc3, 0x4e, 255))
+    d.polygon([(x + 33 * s, y + 94 * s), (x + 57 * s, y + 94 * s),
+               (x + 54 * s, y + 104 * s), (x + 36 * s, y + 104 * s)],
+              fill=(0x2a, 0x10, 0x30, 255))
+    d.line([(x + 36 * s, y + 104 * s), (x + 33 * s, y + 114 * s)],
+           fill=(0x2a, 0x10, 0x30, 255), width=max(1, round(2.5 * s)))
+    d.line([(x + 54 * s, y + 104 * s), (x + 57 * s, y + 114 * s)],
+           fill=(0x2a, 0x10, 0x30, 255), width=max(1, round(2.5 * s)))
+    d.rounded_rectangle([x + 31 * s, y + 113 * s, x + 59 * s, y + 128 * s],
+                        radius=3 * s, fill=(0x8a, 0x5a, 0x2b, 255))
+    card.paste(lay, (0, 0), lay)
+
+
+cloud(760, 40, 330)
+cloud(80, 330, 240, alpha=150)
+island(ISLE_LG, 180, 40, 74, 168)
+island(ISLE_LG, 180, 1000, 118, 140)
+island(ISLE_SM, 110, 156, 424, 96)
+balloon(1046, 328, 104)
+
+# --- wordmark and tagline -------------------------------------------------
 wm = Image.open(os.path.join(HERE, "branding", "wordmark",
                              "arkchemy-wordmark@3000.png")).convert("RGBA")
 tw = 860

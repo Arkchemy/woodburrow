@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 100" role="img" aria-label="">
+  <title>A small floating island</title>
+  <defs>
+    <linearGradient id="isRock" x1="0" y1="0" x2=".3" y2="1">
+      <stop offset="0" stop-color="#8a6a52"/><stop offset="1" stop-color="#4a3428"/>
+    </linearGradient>
+    <linearGradient id="isGrass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd66a"/><stop offset="1" stop-color="#4e9c46"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#isRock)" d="M10,30 L100,30 L88,52 L76,48 L62,80 L50,54 L34,58 L24,44 Z"/>
+  <path fill="#3a2920" opacity=".3" d="M62,80 L76,48 L88,52 L100,30 L64,30 Z"/>
+  <path fill="url(#isGrass)" d="M4,26 Q4,12 24,12 Q38,2 60,8 Q86,6 94,16 Q108,20 106,28 Q106,34 94,34 L16,34 Q4,34 4,26 Z"/>
+  <path fill="#fff" opacity=".18" d="M24,12 Q38,2 60,8 Q40,12 24,12 Z"/>
+</svg>

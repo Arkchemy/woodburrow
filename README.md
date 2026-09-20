@@ -4,7 +4,11 @@ The public website for [Arkchemy](https://github.com/Arkchemy), deployed on
 Vercel.
 
 This repository holds the site and the small set of serverless routes it calls.
-It contains no game code and no game assets.
+
+It contains **no game code**. It does contain some game-derived *content*: 14
+short voice clips and a large set of character renders and box art taken from
+fan wikis, all used to illustrate the site. Saying it holds "no game assets"
+would be untrue, and `LEGAL.md` sets out exactly what is here and why.
 
 ## Layout
 
