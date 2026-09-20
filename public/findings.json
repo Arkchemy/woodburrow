@@ -18,6 +18,15 @@
   },
   "findings": [
     {
+      "id": "pool-always-empty-at-the-stall",
+      "date": "2026-09-20",
+      "title": "The block pool is empty every time the load stops",
+      "area": "loading",
+      "confidence": "hardware_confirmed",
+      "discord_prior_art": "None found.",
+      "detail": "However far the load gets -- and it varies -- the state at the stall is the same: all six blocks held, none free and none in the reusable cached state. Read directly out of the block array at exit rather than by counting during the run, so it costs nothing and cannot distort what it measures. This is the one result that has reproduced across every run."
+    },
+    {
       "id": "black-screen-is-not-a-graphics-fault",
       "title": "The black screen is not a graphics fault -- nothing is ever submitted to draw",
       "area": "graphics",
@@ -544,6 +553,13 @@
     }
   ],
   "corrections": [
+    {
+      "id": "loading-progress-is-nondeterministic",
+      "date": "2026-09-20",
+      "was": "Archive progress is deterministic for a given build, so the instrumentation must have been suppressing the fix when the figure dropped back.",
+      "now": "It is not deterministic. Five runs produced three different figures -- 684,652 bytes, 815,724 and 1,208,940 -- including two from builds with the same runtime shape. The gaps are exact multiples of a single 128KB read, so a variable number of reads complete before the block pool empties.",
+      "why": "Two claims were each made off one sample per side: first that a fix had advanced the load, then that a counter had suppressed it. Neither was tested by repetition. Nothing about how far the load gets can be claimed from a single run, and the figures published on this page for that were withdrawn rather than replaced."
+    },
     {
       "id": "the-variance-was-the-instrumentation",
       "date": "2026-09-20",
