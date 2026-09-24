@@ -1,12 +1,17 @@
-        <h2 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h2>
-        <p class="lede">The build log, posted as it happens. This is the
+        <header class="page-head">
+            <p class="eyebrow">Build log</p>
+            <h1 id="progress"><svg class="h-ico" aria-hidden="true"><use href="#i-chat"/></svg>Progress</h1>
+            <p class="lede">The build log, posted as it happens. This is the
         Discord progress channel, unedited &mdash; including the days where the
         finding is that something does not work.</p>
+        </header>
+
+        <p class="more-link" style="margin:0 0 20px"><a href="/#stands">Where the port stands overall<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
 
         <div id="progressFeed" class="feed"></div>
 
         <div class="callout reveal">
-            <h3>Where the detail lives</h3>
+            <h2>Where the detail lives</h2>
             <p>These posts are the short version. Each repository keeps its own
             write-ups &mdash; <code>test-results/</code> for what a hardware run
             measured, <code>findings/</code> for the bugs that turned out to

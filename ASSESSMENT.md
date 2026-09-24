@@ -48,14 +48,23 @@ visitor's browser never contacts GitHub or Discord directly. Verified at 375px,
 1000px, 1280px and 1440px with no horizontal overflow at any of them.
 
 ### Interaction capability — **met**
-- Contrast measured, not eyeballed. Every text pair on the site is **AAA**
-  (lowest is 9.34:1 against a 4.5:1 AA requirement).
+- Contrast measured, not eyeballed, and re-measured after the 2026-09
+  overhaul. Every text pair on a solid background, on every page, in both the
+  light and the dark theme, is **AAA** (7:1 for body text, 4.5:1 for large).
+  Text over the hero sky and the gradient callouts cannot be measured that way
+  and was checked by eye against its darkest and lightest points.
 - Skip link, `lang="en"`, alt text on every image, width/height on content
   images to prevent layout shift.
-- Heading hierarchy verified on all eight pages — no skipped levels.
-- `prefers-reduced-motion` honoured in **13** separate blocks. Every animation
-  added this week, including the Chompy banner, goes fully still.
-- `aria-current` marks the active page; a scrollspy marks the active section.
+- One `<h1>` per page and no skipped heading levels, checked on all nine
+  pages after the overhaul (it had regressed: page titles became `<h1>` and
+  several `<h3>` followed them directly).
+- `prefers-reduced-motion` is one block at the end of the stylesheet, so
+  nothing declared above it can outrank it: every animation stops and every
+  transition becomes instant.
+- No horizontal overflow at 360px on any page, including the findings, whose
+  C++ identifiers and hex addresses had pushed cards off screen.
+- `aria-current` marks the active page. The findings tabs follow the ARIA tabs
+  pattern: arrow keys, Home and End move between them.
 
 ### Reliability — **met**
 The reveal system has a failsafe: anything unrevealed 1.5s after load is shown

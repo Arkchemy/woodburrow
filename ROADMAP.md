@@ -20,16 +20,18 @@ optimistically.
 - rules automation via a Vercel function: posts and edits, never deletes,
   gated on a secret, idempotent, daily cron
 - contributors page, Discord integration with embeds
+- **the 2026-09 overhaul**: a compact top bar in place of the 170px sky banner
+  on every page, a front page built around six stages (never percentages),
+  light and dark themes, and one stylesheet instead of two
+- **a timeline view** for corrections: grouped by date, newest first, so the
+  story of a bug -- theory, disproof, correction -- reads in order
+- **retractions shown as retractions**: the original claim kept, struck
+  through, next to what replaced it and what believing it cost
 
 ## Open
 
-- [ ] **A timeline view.** The findings feed is chronological but flat; the
-      story of a bug — theory, disproof, correction — is more interesting than
-      any single entry and is currently invisible.
-- [ ] **Retractions shown as retractions.** Several published findings were
-      later corrected. Presenting only the corrected version hides the most
-      useful part.
 - [ ] screenshots or video once anything renders
-- [ ] an accessibility pass: focus order, reduced-motion coverage, contrast
-      audit against WCAG AA
+- [ ] an accessibility pass by a person using a screen reader. Contrast,
+      heading order, 360px reflow and reduced motion are measured (see
+      `ASSESSMENT.md`); how the tabs and the roster actually sound is not
 - [ ] make the roster data browsable rather than only powering other pages

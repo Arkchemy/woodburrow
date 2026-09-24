@@ -107,7 +107,11 @@ def main() -> int:
 
     for name, cfg in PAGES.items():
         body = (BODIES / (name.replace(".html", "") + ".body.html")).read_text(encoding="utf-8").rstrip("\n")
-        page = head_of_page + "\n" + body + "\n\n    " + tail_of_page
+        # Sub-pages sit in one centred column; the front page lays out its
+        # own full-width bands, which is why this wrapper is added here and
+        # is not part of the shell.
+        page = (head_of_page + '\n        <div class="wrap page">\n' + body +
+                "\n        </div>\n\n    " + tail_of_page)
 
         page = page.replace("<title>Arkchemy</title>", f"<title>{cfg['title']}</title>")
         page = re.sub(r'(<meta name="description" content=")[^"]*(")',
@@ -149,6 +153,10 @@ def main() -> int:
         page = re.sub(r'\n *<script src="js/home\.js[^"]*"></script>',
                       "".join(f'\n    <script src="{s}"></script>' for s in cfg["scripts"]),
                       page, count=1)
+
+        # index.html marks Home as the current page; no sub-page is Home.
+        page = page.replace('<a href="/" aria-current="page">Home</a>',
+                            '<a href="/">Home</a>', 1)
 
         # Mark the current page in the nav so it is not a link to itself.
         if cfg["nav"]:

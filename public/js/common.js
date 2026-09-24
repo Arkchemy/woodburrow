@@ -8,7 +8,7 @@
        stamp is the newest data-file mtime -- a date alone does not bust the
        cache when the data is regenerated the same day. Refresh it with
        tools/stamp.py after changing any .json here. */
-    const DATA_V = "?v=1789898908";
+    const DATA_V = "?v=1790192195";
 
 /* --- element palette, used by the roster and the contributor cards --- */
     const ELEMENT_COLOUR = {
@@ -166,33 +166,22 @@
 
 
 
-    /* The mobile toggle rests under the sky header so it never covers the
-
-       logo, and pins to the top once the header has scrolled past. A class on
-       <html> rather than inline styles, so CSS owns the two positions. */
+    /* The top bar's real height, published for anything that has to clear
+       it: the legal page's sticky sidebar, and the scroll-padding every
+       anchor jump lands against. Measured rather than assumed, because the
+       bar is a fixed height today and would not stay that way silently. */
     {
-        const header = document.getElementById("sky-header");
-        /* Publish the header's real height so the toggle can sit in its
-           bottom-right corner at any breakpoint instead of a fixed offset. */
-        const nav = document.getElementById("site-nav");
+        const bar = document.getElementById("topbar");
         const measure = () => {
-            const root = document.documentElement.style;
-            if (header) root.setProperty(
-                "--hdr-h", Math.round(header.getBoundingClientRect().height) + "px");
-            /* The desktop nav is sticky and wraps to a second row on narrower
-               windows, so anything that has to clear it -- the legal page's
-               sticky sidebar, and every heading an anchor jumps to -- needs
-               its measured height rather than a guessed constant. */
-            if (nav) root.setProperty(
-                "--nav-h", Math.round(nav.getBoundingClientRect().height) + "px");
+            if (bar) document.documentElement.style.setProperty(
+                "--nav-h", Math.round(bar.getBoundingClientRect().height) + "px");
         };
         measure();
         addEventListener("resize", measure);
-
     }
 
     /* --- mobile menu ------------------------------------------------------
-       The nav is a plain list on desktop and a slide-in panel below 760px.
+       The nav is a plain row on desktop and a drop-down panel below 900px.
        Kept accessible: the toggle owns aria-expanded, Escape closes, focus
        returns to the button, and following a link closes the panel. */
     {
@@ -217,14 +206,14 @@
         /* Resizing past the breakpoint with the panel open would otherwise
            leave the body locked and the scrim covering a desktop layout. */
         addEventListener("resize", () => {
-            if (innerWidth > 760) setOpen(false);
+            if (innerWidth > 900) setOpen(false);
         });
     }
 
     /* Seed the reveal animation on whatever headings and ledes the page has.
        Page-specific files call watchReveal() again after they add content. */
     document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll("main > h2, main > .lede").forEach((el, i) => {
+        document.querySelectorAll(".page > h2, .page > .lede, .band > .sec-head").forEach((el, i) => {
             el.classList.add("reveal"); el.style.setProperty("--i", i % 4);
         });
         watchReveal();
@@ -313,7 +302,7 @@ fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
         "%cSkylanders: Spyro's Adventure, statically recompiled from Wii U PowerPC to Switch ARM64.\n" +
         "Nothing on this page is minified and there is no analytics of any kind -- have a look around.\n" +
         "The code: https://github.com/Arkchemy\n" +
-        "Curious how far the boot gets? /#progress",
+        "Curious how far the boot gets? /progress",
         "color:#7a1f4e;font:13px/1.7 system-ui");
 
     /* 2. Konami code -> the whole page runs through the ten element colours,
@@ -395,23 +384,22 @@ fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
     }
 }
 
-/* --- has the sky header scrolled away? ---------------------------------
-   Drives the small Arkchemy mark in the sticky nav, which only makes sense
-   once the big one is off screen.
-
-   A scroll listener rather than an IntersectionObserver on a sentinel: the
-   observer fires nothing at all for an element inside #sky-header, which
-   is overflow:hidden with transformed children, and a compare against one
-   number is cheaper than working out why. Reads are coalesced into a frame,
-   so scrolling still only measures once per paint. */
+/* --- has the front page's hero scrolled away? --------------------------
+   The front page carries the full lockup in its hero, so the small wordmark
+   in the top bar only appears once that one is out of sight. Every other
+   page shows it from the start. A scroll handler coalesced into a frame:
+   one comparison per paint. */
 {
-    const header = document.getElementById("sky-header");
-    if (header) {
+    const hero = document.querySelector(".hero");
+    const root = document.documentElement;
+    if (hero) {
+        root.classList.add("is-home");
+        const lockup = document.getElementById("site-lockup");
         let ticking = false;
         const update = () => {
             ticking = false;
-            const past = header.getBoundingClientRect().bottom <= 0;
-            document.documentElement.classList.toggle("scrolled", past);
+            const bar = parseInt(getComputedStyle(root).getPropertyValue("--nav-h"), 10) || 64;
+            root.classList.toggle("scrolled", (lockup || hero).getBoundingClientRect().bottom <= bar);
         };
         const onScroll = () => {
             if (ticking) return;
@@ -471,20 +459,22 @@ addEventListener("resize", () => {
 /* webfonts land after first paint and change every measurement */
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitText());
 
-/* --- the footer's Discord link -----------------------------------------
+/* --- the Discord links, in the top bar and the footer ------------------
    The invite comes from /api/discord-invite rather than being written into
    the markup: the widget hands out a temporary invite, so a hardcoded one
    goes dead within a day. The route falls back to a permanent invite when
-   the widget cannot be read, and the link stays hidden in the one case where
+   the widget cannot be read, and the links stay hidden in the one case where
    neither is available. */
 {
-    const link = document.getElementById("footDiscord");
-    if (link) {
+    const links = ["navDiscord", "footDiscord"].map(id => document.getElementById(id)).filter(Boolean);
+    if (links.length) {
         fetch("/api/discord-invite").then(r => r.json()).then(d => {
             if (!d || !d.invite) return;
-            link.href = d.invite;
-            link.rel = "noopener";
-            link.hidden = false;
+            links.forEach(link => {
+                link.href = d.invite;
+                link.rel = "noopener";
+                link.hidden = false;
+            });
         }).catch(() => {});
     }
 }
