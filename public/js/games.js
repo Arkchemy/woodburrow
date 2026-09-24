@@ -64,7 +64,7 @@ fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
             `<span class="gc-logo"><img src="images/games/${note.logo}" alt="" loading="lazy"></span>` +
             `<span class="gc-body">` +
                 `<span class="gc-top">` +
-                    `<h3 class="fit">${esc(g.title)}</h3>` +
+                    `<h2 class="fit">${esc(g.title)}</h2>` +
                     `<span class="gc-status ${st.cls}">${st.text}</span>` +
                 `</span>` +
                 `<p class="gc-hook">${esc(note.hook)}</p>` +

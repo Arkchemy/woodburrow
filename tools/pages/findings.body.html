@@ -1,43 +1,64 @@
-        <h2 id="findings"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>Findings</h2>
-        <p class="lede">What taking this engine apart has actually established
-        &mdash; each one with how confident we are and how it could be shown
-        wrong. Including the times we were wrong.</p>
+        <header class="page-head">
+            <p class="eyebrow">Findings</p>
+            <h1 id="findings"><svg class="h-ico" aria-hidden="true"><use href="#i-doc"/></svg>What taking the engine apart has established</h1>
+            <p class="lede">Each finding says how confident we are and how it could be shown
+            wrong. The corrections are here too, because a reverse-engineering project
+            that only publishes its successes is publishing fiction.</p>
+        </header>
 
-        <div class="callout reveal" id="findingsAbout">
-            <h3>How to read these</h3>
-            <div id="confLegend" class="conf-legend"></div>
-            <p class="foot-note" id="findingsCaveat"></p>
+        <div class="f-tabs" role="tablist" aria-label="Sections">
+            <button type="button" role="tab" id="tab-findings" aria-controls="panel-findings" aria-selected="true">Findings <span class="n" id="nFindings">&hellip;</span></button>
+            <button type="button" role="tab" id="tab-corrections" aria-controls="panel-corrections" aria-selected="false" tabindex="-1">Corrections <span class="n" id="nCorrections">&hellip;</span></button>
+            <button type="button" role="tab" id="tab-open" aria-controls="panel-open" aria-selected="false" tabindex="-1">Open questions <span class="n" id="nOpen">&hellip;</span></button>
+            <button type="button" role="tab" id="tab-confirmations" aria-controls="panel-confirmations" aria-selected="false" tabindex="-1">Confirmed from others <span class="n" id="nConf">&hellip;</span></button>
         </div>
 
-        <div class="f-controls reveal" role="group" aria-label="Filter findings">
-            <label class="f-field">
-                <span>Area</span>
-                <select id="fArea"><option value="">All areas</option></select>
-            </label>
-            <label class="f-field">
-                <span>Confidence</span>
-                <select id="fConf"><option value="">Any confidence</option></select>
-            </label>
-            <label class="f-field f-search">
-                <span>Search</span>
-                <input type="search" id="fSearch" placeholder="shader, archive, memory&hellip;"
-                       autocomplete="off" spellcheck="false">
-            </label>
-            <p class="f-count" id="fCount" role="status" aria-live="polite"></p>
-        </div>
+        <section class="f-panel" role="tabpanel" id="panel-findings" aria-labelledby="tab-findings">
+            <div class="f-controls" role="group" aria-label="Filter findings">
+                <label class="f-field">
+                    <span>Area</span>
+                    <select id="fArea"><option value="">All areas</option></select>
+                </label>
+                <label class="f-field">
+                    <span>Confidence</span>
+                    <select id="fConf"><option value="">Any confidence</option></select>
+                </label>
+                <label class="f-field f-search">
+                    <span>Search</span>
+                    <input type="search" id="fSearch" placeholder="shader, archive, memory&hellip;"
+                           autocomplete="off" spellcheck="false">
+                </label>
+                <p class="f-count" id="fCount" role="status" aria-live="polite"></p>
+            </div>
+            <div id="findingsList" class="timeline">
+                <p class="feed-empty">Loading findings&hellip;</p>
+            </div>
+            <div class="callout" id="findingsAbout">
+                <h2>How to read the confidence labels</h2>
+                <div id="confLegend" class="conf-legend"></div>
+                <p class="foot-note" id="findingsCaveat"></p>
+            </div>
+        </section>
 
-        <div id="findingsList" class="findings-list">
-            <p class="feed-empty">Loading findings&hellip;</p>
-        </div>
+        <section class="f-panel" role="tabpanel" id="panel-corrections" aria-labelledby="tab-corrections" hidden>
+            <p class="lede">Where we got it wrong, what it actually was, and what believing
+            the wrong thing cost. Newest first. Nothing here has been quietly edited away:
+            the original claim is kept, struck through, next to what replaced it.</p>
+            <div id="corrList" class="timeline"></div>
+            <div class="callout" id="methodNote" hidden>
+                <h2>How theories die here</h2>
+                <p id="methodText"></p>
+            </div>
+        </section>
 
-        <h2 id="open"><svg class="h-ico" aria-hidden="true"><use href="#i-help"/></svg>Open questions</h2>
-        <p class="lede">Things we know we do not know. Listed because a question
-        nobody has written down is a question that gets rediscovered.</p>
-        <div id="openList" class="findings-list"></div>
+        <section class="f-panel" role="tabpanel" id="panel-open" aria-labelledby="tab-open" hidden>
+            <p class="lede">Things we know we do not know. Listed because a question nobody
+            has written down is a question that gets rediscovered.</p>
+            <div id="openList" class="t-items"></div>
+        </section>
 
-        <h2 id="corrections"><svg class="h-ico" aria-hidden="true"><use href="#i-flask"/></svg>Corrections</h2>
-        <p class="lede">Where we got it wrong, what it actually was, and what
-        believing the wrong thing cost. This section exists because a
-        reverse-engineering project that only publishes its successes is
-        publishing fiction.</p>
-        <div id="corrList" class="corrections-list"></div>
+        <section class="f-panel" role="tabpanel" id="panel-confirmations" aria-labelledby="tab-confirmations" hidden>
+            <p class="lede">Things the Skylanders reverse-engineering community established
+            first, which this port then relied on. Credited to the people who found them.</p>
+            <div id="confList" class="t-items"></div>
+        </section>

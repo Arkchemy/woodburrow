@@ -1,1807 +1,973 @@
-/* Arkchemy — page styles.
+/* Arkchemy -- the whole site's stylesheet.
+ *
+ * One file. It replaced site.css + header.css in the 2026-09 overhaul, when
+ * the 170px sky banner on every page became a hero on the front page only and
+ * a compact bar everywhere else.
+ *
+ * Organised top to bottom: fonts, tokens (light, then dark), base, the shell
+ * (top bar, footer), shared components, then one block per page. Every colour
+ * comes from a token, so the dark theme is a token swap and nothing more.
+ *
+ * Contrast: every body-text pair is meant to be AAA (7:1) in both themes.
+ * Measure it on the rendered pages after changing a colour token rather
+ * than trusting this comment.
+ */
 
-   Every animation and colour in this file is the project's own. The note that
-   used to sit here claimed the keyframes were recovered unchanged from the
-   Skylanders: Trap Team homepage stylesheet. That was true of the old
-   cloud-header.css -- now removed, along with the artwork it drove -- and was
-   never true of this file: none of Activision's keyframe names (Floatingx,
-   Floatingz, cloudHeader, general-bounce, sheep-squish) appear here, and none
-   ever did. The claim was inherited when the two files were split and nobody
-   checked it, which made the project's own work look copied. See LEGAL.md. */
+/* --- fonts -------------------------------------------------------------
+   Self-hosted so a visitor's browser only ever contacts this origin, and so
+   the CSP stays font-src 'self'. Luckiest Guy is for display headings only:
+   it is a poster face, and at 13px in a nav bar it was the single biggest
+   readability problem the old site had. */
+@font-face {
+    font-family: "Luckiest Guy";
+    src: url("../fonts/luckiest-guy-latin.woff2") format("woff2");
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+2122;
+}
+@font-face {
+    font-family: "Luckiest Guy";
+    src: url("../fonts/luckiest-guy-latin-ext.woff2") format("woff2");
+    font-display: swap;
+    unicode-range: U+0100-024F, U+1E00-1EFF, U+2020, U+20A0-20AB;
+}
 
+/* --- tokens ------------------------------------------------------------- */
 :root {
-    /* This is a light design and there is no dark variant. Saying so stops a
-       browser in dark mode applying its own inversion to form controls,
-       scrollbars and the like, which would clash with the painted colours
-       everywhere else. */
-    color-scheme: light;
+    color-scheme: light dark;
 
+    /* brand, fixed in both themes */
     --plum:    #3d1140;
     --plum-lo: #2a1030;
-    --gold:    #f3c34e;
     --berry:   #7a1f4e;
-    --sky:     #59c2f0;
-    --ink:     #24202c;
-    --paper:   #f6f4f8;
+    --gold:    #f3c34e;
+    --gold-hi: #ffd97a;
+
+    /* theme */
+    --bg:        #f7f4fa;
+    --surface:   #ffffff;
+    --surface-2: #f0eaf5;
+    --ink:       #1d1724;
+    --ink-2:     #3a3145;
+    --muted:     #4d4458;
+    --line:      #e2d9ea;
+    --line-2:    #cfc2da;
+    --accent:    #7a1f4e;   /* links, active states */
+    --accent-2:  #5a1438;
+    --head:      #3d1140;   /* headings */
+    --gold-ink:  #6b4700;   /* gold as text on a light surface */
+    --gold-soft: #fdf3d6;
+    --ok:        #175a2b;
+    --ok-soft:   #e3f3e6;
+    --warn:      #8a2a14;
+    --warn-soft: #fbe6de;
+    --info:      #154a6e;
+    --info-soft: #e1eff9;
+    --shadow:    0 1px 2px rgba(40, 16, 48, .06), 0 6px 20px rgba(40, 16, 48, .07);
+    --shadow-lg: 0 2px 4px rgba(40, 16, 48, .08), 0 18px 48px rgba(40, 16, 48, .14);
+
+    --sky-top:   #4aa9e6;
+    --sky-mid:   #9fd6f5;
+    --sky-low:   #e6f4fb;
+
+    --radius:    14px;
+    --radius-sm: 9px;
+    --wrap:      1120px;
+    --text:      68ch;
+    --bar-h:     64px;
+    --ease:      cubic-bezier(.22, 1, .36, 1);
+
+    --display: "Luckiest Guy", Impact, "Arial Black", sans-serif;
+    --sans:    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono:    ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
 }
 
-* { box-sizing: border-box; }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg:        #140e19;
+        --surface:   #1e1626;
+        --surface-2: #281e31;
+        --ink:       #f3eef7;
+        --ink-2:     #e1d8e9;
+        --muted:     #cbbfd6;
+        --line:      #362a42;
+        --line-2:    #4a3b58;
+        --accent:    #f7d57a;
+        --accent-2:  #ffe39c;
+        --head:      #f6e7ff;
+        --gold-ink:  #f7d57a;
+        --gold-soft: #33280f;
+        --ok:        #9be0ad;
+        --ok-soft:   #16301e;
+        --warn:      #ffb49e;
+        --warn-soft: #3a1c14;
+        --info:      #a9d8f8;
+        --info-soft: #132b3d;
+        --shadow:    0 1px 2px rgba(0, 0, 0, .3), 0 6px 20px rgba(0, 0, 0, .25);
+        --shadow-lg: 0 2px 4px rgba(0, 0, 0, .35), 0 18px 48px rgba(0, 0, 0, .45);
 
+        --sky-top:   #1a1e4d;
+        --sky-mid:   #3b1c52;
+        --sky-low:   #140e19;
+    }
+}
+
+/* --- base --------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--bar-h) + 16px); }
 body {
     margin: 0;
-    background: var(--paper);
+    background: var(--bg);
     color: var(--ink);
-    font: 16px/1.7 ui-rounded, "Nunito", "Segoe UI Variable", "Segoe UI",
-          system-ui, -apple-system, Roboto, sans-serif;
-}
-
-main { max-width: 980px; margin: 0 auto; padding: 0 20px 64px; }
-
-/* --- headings use the Arkchemy display face --------------------------- */
-h2 {
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400;
-    font-size: 34px;
-    letter-spacing: .06em;
-    /* Explicit, and tight: a display face inheriting the body's 1.7 gives a
-       heading a line box twice the height of its own letters, which both
-       looks loose and makes the icon's offset unpredictable. */
-    line-height: 1.22;
-    color: var(--plum);
-    margin: 46px 0 10px;
-}
-.lede { margin: 0 0 26px; color: #5b5566; max-width: 62ch; }
-
-/* --- nav: drops in on load, exactly as the original did ---------------- */
-#site-nav {
-    display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;
-    background: var(--plum); padding: 10px 14px;
-    animation: animNavDropDown .55s ease-out both;
-}
-#site-nav a {
-    color: var(--gold); text-decoration: none; padding: 7px 15px; border-radius: 4px;
-    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .05em;
-    font-size: 19px; transition: background .18s ease, transform .18s ease;
-}
-#site-nav a:hover, #site-nav a:focus-visible {
-    background: rgba(243,195,78,.16); transform: translateY(-1px);
-}
-
-/* --- character roster ------------------------------------------------- */
-.roster {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-    gap: 4px 0;
-    justify-items: center;
-}
-.roster figure { margin: 0; width: 100%; text-align: center; }
-.roster img {
-    width: auto; height: 118px; max-width: 100%;
-    display: block; margin: 0 auto;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,.28));
-    transition: transform .2s ease;
-}
-.roster figure:hover img { animation: general-bounce 1s ease-out; }
-.roster figcaption {
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 14px; letter-spacing: .05em; color: var(--plum); margin-top: 4px;
-}
-
-/* --- the six games ----------------------------------------------------- */
-.games {
-    display: flex; flex-wrap: wrap; gap: 20px 26px;
-    align-items: center; justify-content: center;
-    /* These logos carry an opaque white outline drawn into the artwork -- it
-       exists to separate them from the game's sky, and on a plain light page
-       it reads as a dirty fringe. Rather than a heavy dark slab, give them a
-       sky to sit against -- the same painted gradient as the page header, so
-       the two read as one surface. */
-    background:
-        radial-gradient(70% 120% at 78% 108%, rgba(255, 233, 170, .8) 0%,
-                                              rgba(255, 233, 170, 0) 60%),
-        linear-gradient(#3f9fe0 0%, #6fc3ee 46%, #a8e0f6 78%, #d8f1fb 100%);
-    border-radius: 12px;
-    padding: 30px 24px;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
-}
-.games img {
-    height: 74px; width: auto;
-    transition: transform .2s ease;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
-}
-.games a:hover img { animation: sheep-squish .5s ease-in-out; }
-.games .now { position: relative; }
-.games .now::after {
-    content: "porting now";
-    position: absolute; left: 50%; bottom: -18px; transform: translateX(-50%);
-    font: 600 11px/1 "Segoe UI", sans-serif; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--berry); white-space: nowrap;
-}
-
-/* --- progress ---------------------------------------------------------- */
-.bar { background: #e3dfe9; border-radius: 20px; height: 15px; overflow: hidden; max-width: 460px; }
-.bar span {
-    display: block; height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--berry), var(--gold));
-    border-radius: 20px; transition: width 1.1s ease-out;
-}
-.stat { font: 600 13px/1.5 "Segoe UI", sans-serif; color: #6a6376; margin-top: 6px; }
-
-/* --- footer -------------------------------------------------------------
-   Four columns over a legal bar. The plum ground is lifted with a faint
-   radial so the block does not read as a flat slab under a colourful page. */
-footer {
-    position: relative; overflow: hidden;
-    background: var(--plum-lo); color: #cbb8d4;
-    padding: 40px 20px 22px; font-size: 13px;
-    background-image:
-        radial-gradient(120% 90% at 12% -20%, rgba(122,31,78,.75), transparent 60%),
-        radial-gradient(90% 80% at 92% 0%, rgba(89,194,240,.13), transparent 62%);
-}
-footer a { color: var(--gold); }
-
-.foot-grid {
-    max-width: 980px; margin: 0 auto; display: grid; gap: 28px 32px;
-    grid-template-columns: 1.6fr 1fr 1fr 1.4fr; align-items: start;
-}
-.foot-brand { max-width: 34ch; }
-/* a button, not an image: it is the Easter-egg trigger, so it must be
-   reachable by keyboard like any other control */
-.foot-mark {
-    display: block; padding: 0; margin: 0 0 12px; border: 0; background: none;
-    cursor: pointer; line-height: 0;
-}
-.foot-mark img {
-    width: 58px; height: 58px;
-    filter: drop-shadow(0 3px 8px rgba(0,0,0,.4));
-    transition: transform .35s var(--ease);
-}
-.foot-mark:hover img { transform: translateY(-3px) rotate(-4deg); }
-.foot-mark:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 8px; }
-.foot-tag { margin: 0; line-height: 1.6; color: #bda8c8; }
-.foot-tag i { color: #d9c8e2; }
-.foot-egg {
-    margin: 10px 0 0; padding: 8px 11px; border-radius: 9px;
-    background: rgba(243,195,78,.12); border: 1px solid rgba(243,195,78,.3);
-    color: #f0dca6; font-size: 12px; line-height: 1.5;
-}
-
-.foot-col { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
-.foot-h {
-    margin: 0 0 3px; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400; font-size: 12px; letter-spacing: .13em;
-    text-transform: uppercase; color: #8f7d9c;
-}
-.foot-col a {
-    text-decoration: none; color: #d5c4dd; font-size: 13.5px;
-    padding: 1px 0; border-bottom: 1px solid transparent;
-    transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
-}
-.foot-col a:hover { color: var(--gold); border-bottom-color: rgba(243,195,78,.5); }
-.foot-col a[aria-current="page"] { color: var(--gold); }
-.foot-note { margin: 0; line-height: 1.6; color: #bda8c8; font-size: 12.5px; }
-.foot-cta {
-    display: inline-flex; align-items: center; gap: 5px; margin-top: 4px;
-    color: var(--gold) !important; border-bottom: 0 !important;
-}
-.foot-cta svg { transition: transform var(--fast) var(--ease); }
-.foot-cta:hover svg { transform: translateX(3px); }
-
-.foot-bar {
-    max-width: 980px; margin: 30px auto 0; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,.10);
-    display: flex; gap: 16px; align-items: baseline; justify-content: space-between;
-}
-.foot-bar p { margin: 0; font-size: 11.5px; line-height: 1.6; color: #a493ae; max-width: 78ch; }
-.foot-bar b { color: #cbb8d4; }
-.foot-built {
-    flex: none; font-family: "Luckiest Guy", Impact, sans-serif;
-    letter-spacing: .05em; color: #8f7d9c !important; white-space: nowrap;
-}
-.foot-built span { color: var(--gold); }
-
-@media (max-width: 860px) {
-    .foot-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
-    .foot-brand { grid-column: 1 / -1; max-width: none; }
-}
-@media (max-width: 480px) {
-    footer { padding: 28px 18px 20px; }
-    .foot-grid { grid-template-columns: 1fr; gap: 20px; }
-    .foot-bar { flex-direction: column; gap: 10px; margin-top: 22px; }
-    .foot-mark img { width: 48px; height: 48px; }
-}
-@media (prefers-reduced-motion: reduce) {
-    .foot-mark:hover img, .foot-cta:hover svg { transform: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    #site-nav, .roster figure { animation: none; }
-    .roster figure:hover img, .games a:hover img { animation: none; }
-    .bar span { transition: none; }
-}
-
-/* --- roster by element ------------------------------------------------- */
-.roster-tools { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; flex-wrap: wrap; }
-#randomPick {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 18px; letter-spacing: .04em;
-    background: var(--plum); color: var(--gold); border: 2px solid var(--gold);
-    border-radius: 8px; padding: 8px 16px; cursor: pointer;
-    transition: transform .15s ease, background .15s ease;
-}
-#randomPick:hover { background: var(--berry); transform: translateY(-1px); }
-#randomPick:disabled { opacity: .4; cursor: not-allowed; transform: none; }
-#voiceNote { font-size: 13px; color: #6a6376; }
-
-/* Two element groups per row, each with its symbol centred beneath the
-   icons. The portraits already carry their own ring, so no extra outline. */
-#elements {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 30px;
-}
-.el-group { margin: 0 0 8px; }
-
-.el-row {
-    /* sized to the chips rather than stretched across the column, so the
-       four portraits sit together instead of spread out */
-    display: flex;
-    flex-wrap: wrap;              /* Trap Team has 14 in an element */
-    justify-content: center;
-    align-items: flex-start;
-    gap: 2px;
-}
-
-.chip {
-    border: 0; background: none; padding: 0; cursor: pointer;
-    flex: 0 0 72px; width: 72px; text-align: center;
-    animation: animNavRightToLeft .45s ease-out both;
-}
-.chip img {
-    width: 54px; height: 54px; display: block; margin: 0 auto;
-    border-radius: 50%;
-    transition: transform .18s ease;
-}
-.chip:hover img, .chip:focus-visible img { animation: general-bounce .9s ease-out; }
-.chip span {
-    /* two lines are reserved whether or not the name wraps, so every chip is
-       the same height and the element symbols stay on one line */
-    display: block; margin-top: 4px; font-size: 10px; line-height: 1.2;
-    min-height: 2.4em;
-    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .02em;
-    color: var(--plum);
-}
-.chip .has-audio::after { content: " \266A"; color: var(--berry); }
-
-/* the element symbol: smaller than the portraits, centred under the group */
-.el-mark {
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    margin: 6px auto 0;
-}
-.el-mark img { width: 30px; height: 30px; display: block; }
-.el-mark span {
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 14px; letter-spacing: .1em; color: var(--el);
-}
-
-@media (max-width: 700px) {
-    #elements { grid-template-columns: minmax(0, 1fr); gap: 18px; }
-}
-
-/* --- character showcase ------------------------------------------------
-   Modelled on the Fortnite battle-pass feature carousel: a big hero render
-   centre stage, loadout cards flying in from either side, and a light
-   with the cards flying in from either side. */
-.showcase {
-    --el: #a763d8;
-    position: relative;
-    margin: 0 0 28px;
-    border-radius: 16px;
-    overflow: hidden;
-    /* no panel: sits directly on the page background */
-    background: none;
-}
-.stage {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr minmax(0, 300px) 1fr;
-    align-items: center;
-    gap: 14px;
-    min-height: 430px;
-    padding: 26px 20px 30px;
-}
-
-.hero-slot { position: relative; display: flex; justify-content: center; align-items: flex-end; }
-.hero-img {
-    max-width: 100%; max-height: 380px; display: block;
-    transition: opacity .35s ease;
-}
-.hero-img.swap { opacity: 0; }
-
-.loadouts { display: grid; gap: 14px; }
-.loadouts.left  { justify-items: end; }
-.loadouts.right { justify-items: start; }
-
-.loadout {
-    width: min(230px, 100%);
-    background: #fff;
-    border: 1px solid color-mix(in srgb, var(--el) 45%, #e4dfea);
-    border-top: 3px solid var(--el);
-    border-radius: 12px;
-    padding: 11px 14px 13px;
-    color: var(--ink);
-    box-shadow: 0 3px 10px rgba(60,30,80,.10);
-    opacity: 0;
-    transition: transform .55s cubic-bezier(.22,1,.36,1), opacity .45s ease;
-    will-change: transform, opacity;
-}
-.loadouts.left  .loadout { transform: translateX(150%)  scale(0); }
-.loadouts.right .loadout { transform: translateX(-150%) scale(0); }
-.showcase.ready .loadout { opacity: 1; transform: translateX(0) scale(1); }
-.showcase.ready .loadouts .loadout:nth-child(2) { transition-delay: .09s; }
-
-.loadout .lo-label, .loadout h4 {
-    margin: 0 0 6px;
-    font: 13px/1.2 "Luckiest Guy", Impact, sans-serif;
-    letter-spacing: .1em; text-transform: uppercase;
-    /* keep >=4.5:1 on white even for the pale elements (Air, Life, Tech) */
-    color: color-mix(in srgb, var(--el) 38%, #2f2036);
-}
-.loadout p  { margin: 0; font-size: 14px; }
-.loadout dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 13.5px; }
-.loadout dt { color: #7d7288; }
-.loadout dd { margin: 0; }
-.loadout .emblem { display: block; width: 74px; height: 74px; object-fit: contain; margin: 2px auto 0; }
-/* the portrait art already has its own ring baked in */
-.loadout .face   { display: block; width: 84px; height: 84px; border-radius: 50%; margin: 2px auto 0; }
-.loadout blockquote {
-    margin: 0; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 21px; line-height: 1.15; letter-spacing: .02em; color: var(--plum);
-}
-
-/* name plate under the hero */
-.plate { grid-column: 1 / -1; text-align: center; margin-top: 4px; }
-.plate .el-tag {
-    display: inline-block; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
-    color: #1b0f22; background: var(--el); border-radius: 20px; padding: 2px 12px; font-weight: 700;
-}
-.plate h3 {
-    margin: 7px 0 0; color: var(--plum);
-    font: 40px/1 "Luckiest Guy", Impact, sans-serif; letter-spacing: .03em;
-}
-
-.stage-nav {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
-    background: #fff; border: 2px solid color-mix(in srgb, var(--el) 55%, #e0d8e6); color: var(--plum);
-    box-shadow: 0 2px 8px rgba(60,30,80,.16);
-    font-size: 22px; line-height: 1; display: grid; place-items: center; z-index: 3;
-    transition: transform .15s ease, background .15s ease;
-}
-.stage-nav:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
-.stage-nav.prev { left: 10px; }
-.stage-nav.next { right: 10px; }
-
-.showcase .play-line {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 16px;
-    background: var(--gold); color: #2a1030; border: 0; border-radius: 7px;
-    padding: 6px 13px; cursor: pointer; margin-top: 9px; width: 100%;
-}
-.showcase .play-line:disabled {
-    background: #ece8f0; color: #6f6579; cursor: not-allowed; font-size: 13px;
-}
-
-@media (max-width: 760px) {
-    .stage { grid-template-columns: 1fr; min-height: 0; }
-    .loadouts.left, .loadouts.right { justify-items: stretch; grid-template-columns: 1fr 1fr; }
-    .loadout { width: 100%; }
-    .hero-img { max-height: 260px; }
-    .plate h3 { font-size: 30px; }
-}
-@media (prefers-reduced-motion: reduce) {
-    .loadout { transition: opacity .2s ease; }
-    .loadouts.left .loadout, .loadouts.right .loadout { transform: none; }
-}
-
-/* --- game selector ------------------------------------------------------ */
-.game-tabs {
-    display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px;
-}
-.game-tabs button {
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 13px; letter-spacing: .05em;
-    background: #fff; color: var(--plum);
-    border: 2px solid #e0d8e6; border-radius: 999px;
-    padding: 5px 13px; cursor: pointer;
-    transition: background .15s ease, border-color .15s ease, color .15s ease;
-}
-.game-tabs button:hover { border-color: var(--gold); }
-.game-tabs button[aria-pressed="true"] {
-    background: var(--plum); color: var(--gold); border-color: var(--plum);
-}
-.game-tabs button small { display: block; font-size: 11px; opacity: .78; letter-spacing: .02em; }
-/* characters without a promotional render fall back to their portrait, which
-   is small and circular -- don't blow it up to hero size */
-.hero-img.portrait-only { max-height: 190px; border-radius: 50%; }
-
-/* --- loading-screen gallery -------------------------------------------- */
-.load-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 14px; margin: 0 0 26px;
-}
-.load-card {
-    margin: 0; border-radius: 12px; overflow: hidden; background: #fff;
-    border: 1px solid #e4dfea; box-shadow: 0 3px 10px rgba(60,30,80,.10);
-}
-.load-card img { display: block; width: 100%; height: auto; }
-.load-card figcaption {
-    padding: 7px 11px 9px; font-size: 12.5px; color: var(--ink);
-}
-.load-card figcaption b {
-    display: block;
-    font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 14px; letter-spacing: .04em; color: var(--plum); font-weight: 400;
-}
-.load-card figcaption span { color: #7d7288; }
-.load-empty { color: #7d7288; font-size: 14px; }
-
-/* --- contributors ------------------------------------------------------
-   A marquee rail of cards: avatar with an element-coloured ring on the left,
-   name and role on the right, element symbol badged on the avatar. Scrolls on
-   its own, pauses on hover or keyboard focus, holds still under reduced
-   motion. The list is duplicated once so the loop has no seam. */
-.contrib-rail {
-    position: relative; overflow: hidden; margin: 0 0 30px;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-}
-.contrib-track { display: flex; gap: 12px; width: max-content;
-                 animation: contribScroll 58s linear infinite; }
-.contrib-rail:hover .contrib-track,
-.contrib-rail:focus-within .contrib-track { animation-play-state: paused; }
-@keyframes contribScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-
-@media (prefers-reduced-motion: reduce) {
-    .contrib-track { animation: none; flex-wrap: wrap; width: auto; }
-    .contrib-rail  { -webkit-mask-image: none; mask-image: none; }
-}
-/* gimmick and variant figures get a tinted name so they read apart from cores */
-.chip.special span { color: var(--berry); }
-.chip.special span::before { content: "\25C6\00a0"; font-size: 7px; vertical-align: 2px; opacity: .8; }
-/* moves list in the showcase */
-#s-moves { list-style: none; margin: 0; padding: 0; }
-#s-moves li { margin: 0 0 7px; font-size: 12.5px; line-height: 1.35; }
-#s-moves li:last-child { margin-bottom: 0; }
-#s-moves b { display: inline; color: var(--plum); font-weight: 700; }
-#s-moves i {
-    font-style: normal; font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
-    color: #1b0f22; background: color-mix(in srgb, var(--el) 40%, #e6dfec);
-    border-radius: 20px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px;
-}
-#s-moves span { display: block; color: #5c5268; font-size: 11.5px; margin-top: 1px; }
-.loadouts.right { align-content: start; }
-.sting { display: block; width: 100%; max-width: 860px; border-radius: 12px;
-         margin: 0 0 28px; background: #0d0a14; box-shadow: 0 6px 18px rgba(60,30,80,.18); }
-/* separates the vehicles from the drivers inside a SuperChargers element row */
-.el-split {
-    flex: 0 0 auto;
-    align-self: center;
-    width: 9px; height: 9px;
-    margin: 0 9px;
-    transform: rotate(45deg);
-    background: var(--el);
-    opacity: .55;
-    border-radius: 2px;
-}
-
-/* --- tighter rhythm ----------------------------------------------------
-   Headings and ledes were carrying a lot of air; pulling them in fits more
-   on a screen without crowding. */
-main { padding-bottom: 40px; }
-h2 { margin: 26px 0 6px; }
-.lede { margin: 0 0 12px; max-width: 68ch; }
-.roster-tools { margin: 0 0 12px; }
-.game-tabs { margin: 0 0 10px; }
-.el-group { margin: 0 0 4px; }
-.stage { min-height: 0; padding: 14px 16px 18px; gap: 10px; }
-.contrib-rail { margin: 0 0 20px; }
-
-/* --- live feeds --------------------------------------------------------- */
-.feed { display: grid; gap: 10px; margin: 0 0 22px; }
-.post {
-    background: #fff; border: 1px solid #e6dfec; border-left: 3px solid var(--berry);
-    border-radius: 10px; padding: 11px 14px;
-    box-shadow: 0 2px 8px rgba(60,30,80,.07);
-}
-.post header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-.post header img, .post header .noav {
-    width: 26px; height: 26px; border-radius: 50%; background: #e6dfec; flex: none;
-}
-.post header b {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 14px; letter-spacing: .03em; color: var(--plum);
-}
-.post header time { margin-left: auto; font-size: 11px; color: #8a8098; }
-.post .body { font-size: 14px; line-height: 1.55; }
-.post .body pre, .qa-body pre {
-    background: #f2eef6; border-radius: 7px; padding: 8px 10px; overflow-x: auto;
-    font: 12px/1.5 ui-monospace, monospace; margin: 6px 0;
-}
-.post .body code, .qa-body code {
-    background: #f2eef6; border-radius: 4px; padding: 1px 5px; font: 12.5px ui-monospace, monospace;
-}
-.post .body blockquote, .qa-body blockquote {
-    margin: 5px 0; padding-left: 10px; border-left: 3px solid #ddd3e6; color: #5c5268;
-}
-.post .shot { display: block; width: 100%; border-radius: 8px; margin-top: 8px; }
-.feed-empty { color: #7d7288; font-size: 14px; }
-
-/* --- FAQ ---------------------------------------------------------------- */
-.faq { display: grid; gap: 7px; margin: 0 0 22px; }
-.qa {
-    background: #fff; border: 1px solid #e6dfec; border-radius: 10px;
-    padding: 9px 13px; box-shadow: 0 2px 8px rgba(60,30,80,.06);
-}
-.qa summary {
-    cursor: pointer; list-style: none;
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 15px; letter-spacing: .02em; color: var(--plum);
-    display: flex; align-items: center; gap: 8px;
-}
-.qa summary::-webkit-details-marker { display: none; }
-.qa summary::before {
-    content: "+"; flex: none; width: 17px; height: 17px; border-radius: 50%;
-    background: var(--gold); color: #2a1030; font-size: 13px; line-height: 17px;
-    text-align: center; transition: transform .2s ease;
-}
-.qa[open] summary::before { content: "\2212"; transform: rotate(180deg); }
-.qa-body { font-size: 14px; line-height: 1.55; margin: 7px 0 2px 25px; color: #40384c; }
-
-/* --- licence ------------------------------------------------------------ */
-.lic-tabs { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; }
-.lic-tabs button {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 12px; letter-spacing: .04em;
-    background: #fff; color: var(--plum); border: 2px solid #e0d8e6; border-radius: 999px;
-    padding: 3px 11px; cursor: pointer; transition: background .15s ease, border-color .15s ease;
-}
-.lic-tabs button:hover { border-color: var(--gold); }
-.lic-tabs button[aria-pressed="true"] { background: var(--plum); color: var(--gold); border-color: var(--plum); }
-
-/* --- motion ------------------------------------------------------------
-   One reveal used everywhere, staggered by --i, driven by an
-   IntersectionObserver so nothing animates off-screen. */
-/* scoped to .js-reveal: without JavaScript nothing is ever hidden */
-.js-reveal .reveal { opacity: 0; transform: translateY(10px); }
-.js-reveal .reveal.shown {
-    opacity: 1; transform: none;
-    transition: opacity .45s ease, transform .45s cubic-bezier(.22,1,.36,1);
-    transition-delay: calc(var(--i, 0) * 45ms);
-}
-h2 { view-transition-name: none; }
-
-@media (prefers-reduced-motion: reduce) {
-    .reveal, .js-reveal .reveal.shown { opacity: 1; transform: none; transition: none; }
-    .qa summary::before { transition: none; }
-}
-
-/* --- mobile ------------------------------------------------------------- */
-/* --- mobile: the showcase is the biggest space consumer, so it becomes a
-   compact card instead of a three-column stage ------------------------- */
-@media (max-width: 700px) {
-    main { padding: 0 13px 28px; }
-    h2 { font-size: 25px; margin: 18px 0 6px; }
-    .lede { font-size: 14.5px; margin: 0 0 10px; }
-
-    /* hero and its two side columns become one flowing card */
-    .stage {
-        grid-template-columns: 1fr;
-        padding: 8px 8px 12px; gap: 6px;
-        grid-template-areas: "hero" "name" "meta";
-    }
-    .hero-slot { grid-area: hero; }
-    /* the name belongs under the art, not after the stats */
-    .plate { grid-area: name; margin: 0; }
-    .hero-img { max-height: 168px; }
-    .hero-img.portrait-only { max-height: 128px; }
-
-    /* Element and Portrait are decoration at this size -- the emblem is
-       already in the name plate and the portrait is the chip you tapped. */
-    .loadouts.left { display: none; }
-
-    .loadouts.right {
-        grid-area: meta;
-        display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-        align-content: start;
-    }
-    .loadout { width: 100%; padding: 8px 10px; border-top-width: 2px; }
-    .loadout .lo-label, .loadout .lo-label, .loadout h4 { font-size: 11px; margin-bottom: 4px; }
-    .loadout blockquote { font-size: 16px; }
-    .loadout dl { font-size: 12px; gap: 1px 8px; }
-    /* moves run full width under the two cards and scroll if long */
-    #s-moves-card { grid-column: 1 / -1; max-height: 168px; overflow-y: auto; }
-    #s-moves li { margin-bottom: 5px; }
-    #s-moves span { font-size: 11px; }
-
-    .plate h3 { font-size: 24px; margin-top: 4px; }
-    .stage-nav { width: 34px; height: 34px; font-size: 17px; }
-    .stage-nav.prev { left: 2px; } .stage-nav.next { right: 2px; }
-
-    /* roster: tighter, and the two element columns stack */
-    #elements { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-    .chip { flex: 0 0 64px; width: 64px; }
-    .chip img { width: 46px; height: 46px; }
-    .chip span { font-size: 10px; min-height: 2.4em; }
-    .el-mark img { width: 24px; height: 24px; }
-    .el-mark span { font-size: 12px; }
-    .el-row { gap: 1px; }
-
-    .game-tabs { gap: 4px; }
-    .game-tabs button { font-size: 11.5px; padding: 4px 9px; }
-    .game-tabs button small { font-size: 10.5px; }
-
-    /* A percentage width inside the max-content marquee track resolves
-       against the track's own intrinsic width, so `width: 100%` made a single
-       card 7139px wide and the Special thanks rail looked empty. Rail cards
-       keep a fixed width; only the wrapping contributor list goes full width. */
-    .post .body, .qa-body { font-size: 13.5px; }
-}
-@media (max-width: 400px) {
-    .chip { flex: 0 0 56px; width: 56px; }
-    .chip img { width: 42px; height: 42px; }
-}
-
-/* --- testers ------------------------------------------------------------
-   A plain grid rather than the contributors marquee: this list grows and
-   people want to find their own name in it, which a moving rail fights. */
-.tester-grid {
-    display: grid; gap: 8px; margin: 0 0 24px;
-    grid-template-columns: repeat(auto-fill, minmax(min(148px, 100%), 1fr));
-}
-.tester {
-    display: flex; align-items: center; gap: 8px;
-    background: #fff; border: 1px solid #e6dfec; border-radius: 999px;
-    padding: 5px 12px 5px 5px;
-    box-shadow: 0 2px 7px rgba(60,30,80,.07);
-}
-.tester img, .tester .noav {
-    width: 30px; height: 30px; border-radius: 50%; flex: none;
-    background: #ece6f2; object-fit: cover;
-    display: grid; place-items: center;
-    font: 13px/1 "Luckiest Guy", Impact, sans-serif; color: var(--plum);
-}
-.tester .tname {
-    font-size: 12.5px; color: var(--ink);
-    overflow: hidden; white-space: nowrap;   /* .fit shrinks it instead of clipping */
-}
-@media (max-width: 700px) {
-    .tester-grid { grid-template-columns: repeat(auto-fill, minmax(min(132px, 100%), 1fr)); gap: 6px; }
-    .tester .tname { font-size: 11.5px; }
-}
-
-
-/* --- mobile menu --------------------------------------------------------
-   Hidden entirely on desktop; below 760px the nav becomes a slide-in panel. */
-#navToggle { display: none; }
-#navScrim { display: none; }
-
-@media (max-width: 760px) {
-    #navToggle {
-        display: grid; place-content: center; gap: 5px;
-        position: fixed; top: 10px; right: 10px; z-index: 60;
-        width: 44px; height: 44px;              /* a real touch target */
-        border: 2px solid var(--gold); border-radius: 11px;
-        background: var(--plum); cursor: pointer; padding: 0;
-    }
-    #navToggle span {
-        display: block; width: 20px; height: 2px; border-radius: 2px;
-        background: var(--gold); transition: transform .22s ease, opacity .18s ease;
-    }
-    .nav-open #navToggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav-open #navToggle span:nth-child(2) { opacity: 0; }
-    .nav-open #navToggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    /* The closed panel is parked off the right edge, which extends the
-       scrollable width and makes the whole page scroll sideways -- the content
-       itself fits. Clip it at the root, and take the panel out of the tab order
-       while it is off-screen. */
-    /* clip, not hidden: overflow:hidden on an ancestor turns it into a scroll
-       container, which silently kills position:sticky on the menu toggle.
-       overflow-x:clip does the same clipping without that side effect. */
-    html, body { overflow-x: clip; }
-
-    #site-nav {
-        position: fixed; inset: 0 0 0 auto; z-index: 55;
-        visibility: hidden;
-        width: min(78vw, 300px);
-        display: flex; flex-direction: column; align-items: stretch; gap: 0;
-        padding: 68px 0 20px;
-        background: linear-gradient(180deg, #351042, #24092e);
-        transform: translateX(102%);
-        transition: transform .26s cubic-bezier(.22,1,.36,1);
-        overflow-y: auto;
-    }
-    .nav-open #site-nav { transform: none; visibility: visible; }
-    #site-nav a {
-        padding: 13px 22px; font-size: 17px; text-align: left;
-        border-bottom: 1px solid rgba(243,195,78,.14);
-    }
-    #site-nav a:last-child { border-bottom: 0; }
-
-    /* Only when the menu is open. `display: block` here used to override the
-       UA stylesheet's rule for the [hidden] attribute, so the scrim covered
-       the whole page as a purple tint even with the menu closed. Gating on
-       .nav-open means the attribute and the class cannot disagree. */
-    .nav-open #navScrim {
-        display: block; position: fixed; inset: 0; z-index: 50;
-        background: rgba(20,8,30,.55); backdrop-filter: blur(2px);
-        animation: scrimIn .2s ease both;
-    }
-    #navScrim[hidden] { display: none; }
-    @keyframes scrimIn { from { opacity: 0 } to { opacity: 1 } }
-
-}
-@media (prefers-reduced-motion: reduce) {
-    #site-nav { transition: none; }
-    #navToggle span { transition: none; }
-    #navScrim { animation: none; }
-}
-/* Discord custom emoji sit on the text baseline at roughly cap height. */
-.demoji {
-    display: inline-block; width: 1.35em; height: 1.35em;
-    vertical-align: -0.3em; margin: 0 1px; object-fit: contain;
-}
-.qa summary .demoji { width: 1.2em; height: 1.2em; vertical-align: -0.25em; }
-
-/* --- long links must not push the layout sideways ----------------------- */
-.qa-body, .post .body, .qa summary {
-    overflow-wrap: anywhere;      /* break inside a long URL rather than overflow */
-    word-break: break-word;
-}
-.qa-body a, .post .body a { overflow-wrap: anywhere; }
-.qa-body pre, .post .body pre { max-width: 100%; }
-
-/* markdown pieces that the renderer can now emit */
-.post .body h3, .post .body h4, .post .body h5,
-.qa-body h3, .qa-body h4, .qa-body h5 {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    color: var(--plum); margin: 8px 0 3px; letter-spacing: .02em;
-}
-.post .body h3, .qa-body h3 { font-size: 17px; }
-.post .body h4, .qa-body h4 { font-size: 15px; }
-.post .body h5, .qa-body h5 { font-size: 14px; }
-.post .body ul, .post .body ol, .qa-body ul, .qa-body ol { margin: 5px 0 5px 20px; padding: 0; }
-.post .body li, .qa-body li { margin: 2px 0; }
-.post .body u, .qa-body u { text-underline-offset: 2px; }
-.subtext { color: #7d7288; font-size: .85em; display: block; }
-.spoiler {
-    background: #3b3346; color: transparent; border-radius: 4px; padding: 0 3px;
-    cursor: pointer; transition: color .12s ease, background .12s ease;
-}
-.spoiler:hover, .spoiler:focus, .spoiler.revealed { background: #e6dfec; color: inherit; }
-
-/* --- sticky navigation --------------------------------------------------
-   Desktop: the bar sticks once the cloud header has scrolled past. */
-/* Desktop only. On mobile #site-nav is the slide-in panel and must stay
-   fixed -- a sticky/static override here previously dropped it back into the
-   document flow, leaving a tall block of dead links above the content. */
-@media (min-width: 761px) {
-    #site-nav { position: sticky; top: 0; z-index: 40; }
-}
-
-@media (max-width: 760px) {
-    /* The toggle sits below the cloud header at rest so it never covers the
-       logo, and pins to the top edge once the header is scrolled past. */
-    /* position:sticky does the whole job with no JavaScript: the button sits
-       in the header's bottom-right corner (over empty sky -- the logo is
-       centred, so nothing is covered and no vertical space is used), then pins
-       itself 8px from the top once the header scrolls away. The negative top
-       margin lifts it into the header without taking it out of flow, which is
-       what sticky needs. Doing this from a scroll or IntersectionObserver
-       handler meant the button scrolled off-screen and became unreachable if
-       the event never arrived. */
-    #navToggle {
-        position: sticky;
-        top: 8px;
-        /* Sits just under the header, then pins to the top edge once the
-           header scrolls away -- sticky handles both with no JavaScript. The
-           negative bottom margin means it does not reserve a 52px strip of
-           empty page above the first heading; the heading's own top margin
-           keeps them from colliding. */
-        margin: 6px 10px -38px auto;
-    }
-    main { padding-top: 4px; }
-    /* The toggle is 44px tall in a 6px slot, which used to push the first
-       heading a full button-height down and leave a wide empty strip beside
-       it. The heading now sits on the same line instead, with just enough
-       padding that its text can never run under the button. */
-    main > h2:first-of-type { margin-top: 2px; padding-right: 58px; }
-}
-
-/* --- section icons ------------------------------------------------------
-   One inline sprite referenced with <use>, so there are no extra requests and
-   every icon inherits currentColor. Decorative, so aria-hidden. */
-.h-ico {
-    width: .78em; height: .78em; margin-right: .32em;
-    vertical-align: -0.04em; color: var(--gold);
-    filter: drop-shadow(0 1px 0 rgba(61,17,64,.35));
-}
-h2 { display: flex; align-items: flex-start; gap: 0; }
-.h-ico { flex: none; align-self: flex-start; margin-top: .17em; }
-/* single-line headings, which is nearly all of them, still read as centred */
-h2 > .h-ico { margin-top: calc((1.22em - .78em) / 2); }
-
-/* --- motion ------------------------------------------------------------
-   Everything shares one easing and one duration scale, so the page moves as
-   a single system rather than a pile of unrelated effects. */
-:root {
-    --ease: cubic-bezier(.22, 1, .36, 1);
-    --fast: .16s;
-    --med: .28s;
-}
-
-/* interactive lift, used by every card-like surface */
-.qa, .post, .tester, .person, .p-chip, .lic-tabs button, .game-tabs button {
-    transition: transform var(--fast) var(--ease),
-                box-shadow var(--fast) var(--ease),
-                border-color var(--fast) var(--ease);
-}
-.qa:hover, .post:hover, .tester:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(60,30,80,.13); }
-.game-tabs button:hover, .lic-tabs button:hover { transform: translateY(-1px); }
-.game-tabs button[aria-pressed="true"] { transform: none; }
-
-/* the FAQ marker rotates, and the body slides open */
-.qa summary::before { transition: transform var(--med) var(--ease), background var(--fast) var(--ease); }
-.qa[open] .qa-body { animation: qaOpen var(--med) var(--ease) both; }
-@keyframes qaOpen { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-
-/* the showcase hero settles rather than snapping */
-.hero-img { animation: heroIn .34s var(--ease) both; }
-@keyframes heroIn { from { opacity: 0; transform: translateY(6px) scale(.985); } to { opacity: 1; transform: none; } }
-
-/* roster chips respond to touch as well as hover */
-.chip img { transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease); }
-.chip:active img { transform: scale(.93); }
-
-/* nav underline grows from the centre */
-#site-nav a { position: relative; }
-#site-nav a::after {
-    content: ""; position: absolute; left: 50%; right: 50%; bottom: 6px; height: 2px;
-    background: var(--gold); border-radius: 2px;
-    transition: left var(--med) var(--ease), right var(--med) var(--ease);
-}
-#site-nav a:hover::after, #site-nav a:focus-visible::after { left: 14px; right: 14px; }
-
-/* focus is always visible, and matches the palette */
-a:focus-visible, button:focus-visible, summary:focus-visible, .spoiler:focus-visible {
-    outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 6px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .qa:hover, .post:hover, .tester:hover,
-    .game-tabs button:hover, .lic-tabs button:hover { transform: none; }
-    .hero-img, .qa[open] .qa-body { animation: none; }
-    #site-nav a::after { transition: none; }
-}
-@media (max-width: 760px) {
-    /* no hover on touch, and the underline would sit under a tapped link */
-    #site-nav a::after { display: none; }
-}
+    font: 17px/1.65 var(--sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+img, svg { max-width: 100%; }
+img { height: auto; }
+a { color: var(--accent); text-underline-offset: .18em; text-decoration-thickness: .08em; }
+a:hover { color: var(--accent-2); }
+p { margin: 0 0 1em; }
+h1, h2, h3, h4 { color: var(--head); line-height: 1.2; margin: 0 0 .5em; }
+h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: .02em; }
+h1 { font-size: clamp(34px, 5vw, 52px); }
+h2 { font-size: clamp(26px, 3.4vw, 36px); }
+h3 { font-size: 19px; font-weight: 750; }
+code, pre, kbd { font-family: var(--mono); font-size: .88em; }
+code { overflow-wrap: anywhere; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; padding: .08em .35em; }
+pre { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius-sm);
+      padding: 12px 14px; overflow-x: auto; line-height: 1.5; }
+pre code { background: none; border: 0; padding: 0; }
+blockquote { margin: .6em 0; padding: .2em 0 .2em 14px; border-left: 3px solid var(--line-2); color: var(--ink-2); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+::selection { background: var(--gold); color: var(--plum-lo); }
+
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-color-scheme: light) { :focus-visible { outline-color: var(--berry); } }
 
-/* --- accessibility ------------------------------------------------------ */
 .skip-link {
-    position: absolute; left: -9999px; top: 0; z-index: 100;
-    background: var(--plum); color: var(--gold);
-    padding: 10px 16px; border-radius: 0 0 10px 0;
-    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .04em;
+    position: absolute; left: 12px; top: -60px; z-index: 100;
+    background: var(--gold); color: var(--plum-lo); font-weight: 700;
+    padding: 10px 16px; border-radius: 0 0 10px 10px; text-decoration: none;
 }
-.skip-link:focus { left: 0; }
-#main:focus { outline: none; }
-/* the lockup is the page h1 but must keep the header layout */
-h1#site-lockup { margin: 0; font-size: inherit; line-height: 1; }
-.game { margin: 0; }
+.skip-link:focus { top: 0; }
+main:focus { outline: none; }
 
-/* =======================================================================
-   The sub-pages: /legal and /contributors.
-   Shared shell (header, nav, footer) comes from the rules above; what
-   follows is only what those two pages add.
-   ======================================================================= */
+.eyebrow {
+    font-size: 13px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+}
+.lede { font-size: 18.5px; color: var(--ink-2); max-width: var(--text); }
+.fineprint { font-size: 14.5px; color: var(--muted); }
 
-/* the current page is marked in the nav rather than linking to itself */
-#site-nav a[aria-current="page"] { color: var(--gold); }
-#site-nav a[aria-current="page"]::after { transform: scaleX(1); }
+/* --- layout ------------------------------------------------------------- */
+.wrap, .band { width: min(100% - 32px, var(--wrap)); margin-inline: auto; }
+.band { padding: 72px 0 8px; }
+.page { padding: 44px 0 40px; }
+.page { min-width: 0; }
+.page > h2 { margin-top: 56px; display: flex; align-items: center; gap: 12px; }
+.page > .lede { margin-bottom: 22px; }
+.page-head { padding: 12px 0 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.page-head h1 { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.page-head .lede { margin-bottom: 8px; }
+.h-ico { width: .9em; height: .9em; color: var(--gold); flex: none; }
+.page-head .h-ico { width: 38px; height: 38px; padding: 7px; border-radius: 12px;
+                    background: var(--plum); color: var(--gold); box-shadow: inset 0 0 0 1px rgba(243, 195, 78, .25); }
+.page-head h1 { font-size: clamp(30px, 4.4vw, 46px); }
 
-/* --- the people rail on the front page ---------------------------------
-   A glance at the names, linking through to the full page. Deliberately
-   small: it is a pointer, not the list. */
-.p-chip {
-    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 9px;
-    padding: 5px 15px 5px 5px;
-    background: #fff; border: 1px solid #e6dfec; border-radius: 999px;
-    box-shadow: 0 2px 8px rgba(60,30,80,.08);
-}
-.p-chip img {
-    width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
-    background: #efe9f3; box-shadow: 0 0 0 2px var(--el);
-}
-.p-chip span { font-size: 13px; color: var(--ink); white-space: nowrap; }
+.sec-head { margin-bottom: 26px; }
+.sec-head h2 { margin-bottom: 10px; }
+.sec-head.sm h2 { font-size: clamp(22px, 2.6vw, 28px); }
+.sec-head .lede { margin: 0; }
 
-/* min-height, not a bigger font: the text stays the size it wants to be and
-   the hit area grows around it. 44px is the comfortable touch target; WCAG
-   2.2's floor is 24. The negative top margin absorbs the extra height so the
-   spacing above is unchanged. */
-.more-link { margin: -20px 0 26px; }
-.more-link a {
-    display: inline-flex; align-items: center; gap: 6px;
-    min-height: 44px; padding: 2px 0;
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
-    letter-spacing: .04em; color: var(--berry); text-decoration: none;
+.more-link { margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.more-link a, .more-link button {
+    display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none;
+    color: var(--accent); background: none; border: 0; padding: 0; font: inherit; font-weight: 700; cursor: pointer;
 }
-.more-link a svg { transition: transform var(--fast) var(--ease); }
-.more-link a:hover { color: var(--plum); }
-.more-link a:hover svg { transform: translateX(4px); }
+.more-link svg { width: 16px; height: 16px; transition: transform .2s var(--ease); }
+.more-link a:hover svg { transform: translateX(3px); }
 
-/* --- the numbers on /contributors --------------------------------------
-   Three facts, stated once, before any of the cards. */
-.stat-row {
-    list-style: none; display: grid; gap: 12px; margin: 0 0 30px; padding: 0;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+/* --- buttons ------------------------------------------------------------ */
+.btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    min-height: 46px; padding: 0 20px; border-radius: 999px;
+    font: 700 16px/1 var(--sans); text-decoration: none; cursor: pointer;
+    border: 2px solid transparent; transition: transform .15s var(--ease), background .15s, box-shadow .15s;
 }
-.stat-row li {
-    position: relative; overflow: hidden;
-    padding: 16px 18px; border-radius: 14px;
-    background: linear-gradient(160deg, #fff, #faf7fc);
-    border: 1px solid #e6dfec;
-    box-shadow: 0 3px 12px rgba(60,30,80,.07);
-}
-/* a soft gold wash in the corner, so the row is not three plain boxes */
-.stat-row li::after {
-    content: ""; position: absolute; inset: auto -30px -40px auto;
-    width: 110px; height: 110px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(243,195,78,.30), transparent 70%);
-    pointer-events: none;
-}
-.stat-row b {
-    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400; font-size: 38px; line-height: 1; color: var(--plum);
-    letter-spacing: .02em;
-}
-.stat-row > li > span { display: block; margin-top: 4px; font-size: 13px; color: #6a6376; }
-
-/* --- a person -----------------------------------------------------------
-   One card shape for both grids; --el is the element colour, or a neutral
-   for the people with no element assigned. */
-.person {
-    position: relative; display: flex; align-items: center; gap: 13px;
-    padding: 14px 16px; text-decoration: none; color: var(--ink);
-    background: #fff; border: 1px solid #e6dfec; border-top: 3px solid var(--el);
-    border-radius: 14px; box-shadow: 0 3px 11px rgba(60,30,80,.09);
-}
-a.person:hover { transform: translateY(-3px); box-shadow: 0 9px 22px rgba(60,30,80,.17); }
-a.person:hover .p-go { opacity: 1; transform: none; }
-
-.person .face { position: relative; flex: 0 0 auto; }
-.person .pfp {
-    display: block; width: 56px; height: 56px; border-radius: 50%;
-    object-fit: cover; background: #efe9f3; box-shadow: 0 0 0 3px var(--el);
-}
-.person .elicon {
-    position: absolute; right: -5px; bottom: -5px;
-    width: 24px; height: 24px; object-fit: contain;
-    background: #fff; border-radius: 50%; padding: 2px;
-    box-shadow: 0 1px 4px rgba(60,30,80,.28);
-}
-.person .body { min-width: 0; }
-.person .p-name {
-    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 16px; letter-spacing: .03em; line-height: 1.15; color: var(--plum);
-    overflow: hidden; white-space: nowrap;   /* .fit shrinks it instead of clipping */
-}
-.person .p-role {
-    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-    overflow: hidden; font-size: 12px; line-height: 1.4; color: #5c5268; margin-top: 3px;
-    max-height: 3.4em;   /* two lines at this size; .fit shrinks to stay inside */
-}
-/* the GitHub mark only resolves on hover, so it never competes with the name */
-.person .p-go {
-    position: absolute; top: 12px; right: 12px; color: #b3a6bf;
-    opacity: 0; transform: translateX(-3px);
-    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease);
+.btn svg { width: 18px; height: 18px; }
+.btn:hover { transform: translateY(-1px); }
+.btn-gold { background: var(--gold); color: var(--plum-lo); box-shadow: 0 3px 0 #b8871d; }
+.btn-gold:hover { background: var(--gold-hi); color: var(--plum-lo); }
+.btn-ghost { background: rgba(255, 255, 255, .78); color: var(--plum); border-color: rgba(61, 17, 64, .25); }
+.btn-ghost:hover { background: #fff; color: var(--plum); }
+@media (prefers-color-scheme: dark) {
+    .btn-ghost { background: rgba(20, 14, 25, .5); color: #f3eef7; border-color: rgba(243, 238, 247, .35); }
+    .btn-ghost:hover { background: rgba(20, 14, 25, .8); color: #fff; }
 }
 
-/* The lead card is the person who writes the code; it gets the full width
-   and an element-tinted wash rather than being one tile among many. */
-.person-lead-grid { display: grid; gap: 12px; margin: 0 0 12px; grid-template-columns: minmax(0, 1fr); }
-.person-lead {
-    gap: 20px; padding: 22px 24px; border-top-width: 4px;
-    background:
-        radial-gradient(120% 160% at 0% 0%, color-mix(in srgb, var(--el) 13%, #fff), #fff 62%);
+/* --- the top bar ---------------------------------------------------------
+   Always the brand plum, in both themes, so the gold wordmark has one
+   background to be designed against. */
+.topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(42, 16, 48, .94);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid rgba(243, 195, 78, .18);
 }
-.person-lead .pfp { width: 84px; height: 84px; box-shadow: 0 0 0 4px var(--el); }
-.person-lead .elicon { width: 30px; height: 30px; right: -6px; bottom: -6px; }
-.person-lead .p-name { font-size: 24px; }
-.person-lead .p-role { font-size: 14px; -webkit-line-clamp: 3; max-height: 4.4em; }
+.topbar-in {
+    width: min(100% - 32px, 1240px); margin-inline: auto; height: var(--bar-h);
+    display: flex; align-items: center; gap: 20px;
+}
+.brand { display: flex; align-items: center; gap: 10px; flex: none; text-decoration: none; }
+.brand-mark { width: 40px; height: 40px; }
+.brand-word { width: 138px; }
+/* on the front page the hero carries the full lockup, so the bar's wordmark
+   waits until the hero has scrolled away */
+.is-home .brand-word { opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s var(--ease); }
+.is-home.scrolled .brand-word { opacity: 1; transform: none; }
 
-/* minmax(0,1fr), not 1fr: a 1fr track has min-width:auto, so a long
-   unbroken name grows the track past its container instead of being
-   constrained -- the card gets wider than the page rather than the
-   text being clipped or shrunk. */
-.person-grid {
-    display: grid; gap: 12px; margin: 0 0 26px;
-    grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+#site-nav { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+#site-nav > a, .nav-ext a {
+    position: relative; display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 12px; border-radius: 9px;
+    color: #eee4f3; font: 600 15.5px/1.2 var(--sans); text-decoration: none;
+    transition: background .15s, color .15s;
+}
+#site-nav > a:hover, .nav-ext a:hover { background: rgba(255, 255, 255, .09); color: #fff; }
+#site-nav > a[aria-current="page"] { color: var(--gold); }
+#site-nav > a[aria-current="page"]::after {
+    content: ""; position: absolute; left: 12px; right: 12px; bottom: 1px; height: 3px;
+    border-radius: 3px; background: var(--gold);
+}
+.nav-ext { display: flex; gap: 2px; margin-left: 10px; padding-left: 10px; border-left: 1px solid rgba(255, 255, 255, .16); }
+.nav-ext svg { width: 19px; height: 19px; }
+.nav-ext a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.nav-ext a[hidden] { display: none; }
+
+.read-bar {
+    position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%;
+    background: var(--gold); transform-origin: 0 50%;
+    transform: scaleX(var(--scroll-progress, 0));
 }
 
-/* --- the closing card on both pages ------------------------------------ */
-.callout {
-    margin: 34px 0 8px; padding: 22px 24px; border-radius: 16px;
-    background: linear-gradient(150deg, var(--plum), var(--berry));
-    color: #f4ecf6; box-shadow: 0 8px 24px rgba(61,17,64,.24);
+#navToggle {
+    display: none; margin-left: auto; width: 44px; height: 44px; border-radius: 11px;
+    background: transparent; border: 1px solid rgba(255, 255, 255, .22); cursor: pointer;
+    flex-direction: column; justify-content: center; align-items: center; gap: 5px;
 }
-.callout h3 {
-    margin: 0 0 6px; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400; font-size: 21px; letter-spacing: .04em; color: var(--gold);
-}
-.callout p { margin: 0; font-size: 14.5px; max-width: 66ch; }
-.callout a { color: #fff; text-decoration-color: rgba(255,255,255,.5); }
-.callout a:hover { text-decoration-color: var(--gold); }
-
-/* --- /legal: the three-fact summary ------------------------------------ */
-.gist {
-    list-style: none; display: grid; gap: 12px; margin: 0 0 32px; padding: 0;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.gist li {
-    padding: 18px 18px 16px; border-radius: 14px; background: #fff;
-    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.07);
-}
-.gist svg { width: 26px; height: 26px; color: var(--berry); display: block; }
-.gist h3 {
-    margin: 9px 0 5px; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400; font-size: 16px; letter-spacing: .03em; color: var(--plum);
-}
-.gist p { margin: 0; font-size: 13px; line-height: 1.55; color: #5c5268; }
-
-/* --- /legal: the document and its sidebar ------------------------------
-   Two columns on desktop; the sidebar sticks so the document switcher and
-   the section list stay reachable through a long licence. */
-.doc-shell { display: grid; grid-template-columns: 226px 1fr; gap: 26px; align-items: start; }
-/* clears the sticky nav, whose height JS publishes as --nav-h */
-.doc-side { position: sticky; top: calc(var(--nav-h, 66px) + 16px); }
-.side-h, .toc-h {
-    margin: 0 0 8px; font-size: 10.5px; letter-spacing: .16em;
-    text-transform: uppercase; color: #8a7f96;
-}
-/* the switcher is a vertical list here, not the pill row it was inline */
-.doc-shell .lic-tabs { display: block; margin: 0 0 22px; }
-.doc-shell .lic-tabs button {
-    display: block; width: 100%; text-align: left; border-radius: 10px;
-    border: 1px solid transparent; background: transparent;
-    padding: 7px 11px; margin-bottom: 2px; font-family: inherit; letter-spacing: 0;
-}
-.doc-shell .lic-tabs button:hover { background: #fff; border-color: #e6dfec; transform: none; }
-.doc-shell .lic-tabs button[aria-pressed="true"] {
-    background: #fff; border-color: #e0d4e8; box-shadow: 0 2px 9px rgba(60,30,80,.09);
-}
-.doc-shell .lic-tabs .t-name {
-    display: block; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-size: 13.5px; letter-spacing: .035em; color: var(--plum);
-}
-.doc-shell .lic-tabs .t-note { display: block; font-size: 11px; color: #7d7288; margin-top: 1px; }
-.doc-shell .lic-tabs button[aria-pressed="true"] .t-name { color: var(--berry); }
-
-.doc-toc { border-left: 2px solid #e6dfec; padding-left: 12px; }
-.doc-toc a {
-    display: block; padding: 3px 0; font-size: 12.5px; line-height: 1.4;
-    color: #6a6376; text-decoration: none;
-    border-left: 2px solid transparent; margin-left: -14px; padding-left: 12px;
-    transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
-}
-.doc-toc a:hover { color: var(--plum); }
-.doc-toc a.here { color: var(--berry); border-left-color: var(--gold); font-weight: 600; }
-
-.doc-main {
-    background: #fff; border: 1px solid #e6dfec; border-radius: 16px;
-    padding: 30px 34px; box-shadow: 0 4px 18px rgba(60,30,80,.08);
-    min-width: 0;   /* let long lines wrap instead of widening the grid track */
-}
-.doc-body { color: #3f3849; font-size: 15px; line-height: 1.75; }
-.doc-body > :first-child { margin-top: 0; }
-.doc-body > :last-child { margin-bottom: 0; }
-.doc-title {
-    font-size: 27px; margin: 0 0 4px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
-    padding-bottom: 12px; border-bottom: 2px solid #f0e9f4;
-}
-.doc-body h2:not(.doc-title) {
-    font-size: 20px; margin: 32px 0 8px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
-}
-.doc-body h3 {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 16px; letter-spacing: .03em; color: var(--berry);
-    margin: 22px 0 6px; scroll-margin-top: calc(var(--nav-h, 66px) + 16px);
-}
-.doc-body h4 { font-size: 14px; margin: 18px 0 4px; color: var(--plum); }
-.doc-body p { margin: 0 0 14px; max-width: 68ch; }
-.doc-body ul, .doc-body ol { margin: 0 0 14px; padding-left: 20px; max-width: 68ch; }
-.doc-body li { margin-bottom: 7px; }
-.doc-body li::marker { color: var(--berry); }
-.doc-body a { color: var(--berry); text-underline-offset: 2px; word-break: break-word; }
-.doc-body code {
-    background: #f4eff7; border-radius: 4px; padding: 1px 5px;
-    font: 12.5px/1.5 ui-monospace, monospace; color: var(--plum);
-}
-.doc-body pre {
-    background: #f7f4fa; border: 1px solid #ece4f1; border-radius: 10px;
-    padding: 12px 14px; overflow-x: auto;
-    font: 12.5px/1.6 ui-monospace, monospace; margin: 0 0 16px;
-}
-.doc-body pre code { background: none; padding: 0; font-size: inherit; }
-.doc-body blockquote {
-    margin: 0 0 16px; padding: 2px 0 2px 16px;
-    border-left: 3px solid var(--gold); color: #5c5268;
-}
-.doc-body hr { border: 0; border-top: 1px solid #ece4f1; margin: 26px 0; }
-
-/* the personal-data table: a real table, and it must be able to scroll
-   rather than force the page sideways */
-.doc-table { overflow-x: auto; margin: 0 0 18px; }
-.doc-table table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-.doc-table th {
-    text-align: left; padding: 9px 12px; background: var(--plum); color: var(--gold);
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    letter-spacing: .04em; font-size: 12px; white-space: nowrap;
-}
-.doc-table th:first-child { border-radius: 8px 0 0 0; }
-.doc-table th:last-child  { border-radius: 0 8px 0 0; }
-.doc-table td { padding: 9px 12px; border-bottom: 1px solid #ece4f1; vertical-align: top; }
-.doc-table tbody tr:nth-child(even) { background: #faf7fc; }
-
-/* A LICENSE is not prose -- its numbered clauses carry their own layout, so
-   it keeps the original line breaks instead of being reflowed. */
-.lic-plain {
-    margin: 0; white-space: pre-wrap; word-break: break-word;
-    font: 12.5px/1.65 ui-monospace, monospace; color: #40384c;
-}
-.doc-loading { color: #8a7f96; font-size: 14px; }
-.doc-meta {
-    margin: 20px 0 0; padding-top: 14px; border-top: 1px solid #f0e9f4;
-    font-size: 12px; color: #8a7f96;
-}
-.doc-meta a { color: #6a6376; }
+#navToggle span { display: block; width: 20px; height: 2px; border-radius: 2px; background: #f3eef7;
+                  transition: transform .25s var(--ease), opacity .2s; }
+.nav-open #navToggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-open #navToggle span:nth-child(2) { opacity: 0; }
+.nav-open #navToggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+#navScrim { position: fixed; inset: 0; z-index: 40; background: rgba(20, 8, 24, .5); }
 
 @media (max-width: 900px) {
-    .doc-shell { grid-template-columns: 1fr; gap: 16px; }
-    /* the sidebar stops sticking once it is a header rather than a column */
-    .doc-side { position: static; }
-    .doc-shell .lic-tabs {
-        display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
-    }
-    .doc-shell .lic-tabs button {
-        width: auto; padding: 6px 13px; border-radius: 999px;
-        border-color: #e6dfec; background: #fff;
-    }
-    /* As a row of pills the selected one needs to read at a glance, so it
-       takes the same filled treatment as the game tabs rather than the
-       sidebar's quieter highlight. */
-    .doc-shell .lic-tabs button[aria-pressed="true"] {
-        background: var(--plum); border-color: var(--plum); box-shadow: none;
-    }
-    .doc-shell .lic-tabs button[aria-pressed="true"] .t-name { color: var(--gold); }
-    .doc-shell .lic-tabs .t-note { display: none; }
-    .doc-toc { display: none; }   /* the document is one scroll on mobile */
-    .doc-main { padding: 22px 20px; border-radius: 14px; }
-}
-
-@media (max-width: 760px) {
-    .stat-row, .gist { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 9px; }
-    .gist li:last-child { grid-column: 1 / -1; }
-    .stat-row li { padding: 13px 14px; }
-    .stat-row b { font-size: 30px; }
-    .person-grid { grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 9px; }
-    .person { padding: 11px 13px; gap: 15px; }   /* clears the element badge */
-    .person .pfp { width: 46px; height: 46px; }
-    .person-lead { padding: 16px 17px; gap: 15px; }
-    .person-lead .pfp { width: 66px; height: 66px; }
-    .person-lead .p-name { font-size: 20px; }
-    .callout { padding: 18px 19px; border-radius: 14px; }
-    .callout h3 { font-size: 18px; }
-    .doc-body { font-size: 14.5px; }
-    .doc-title { font-size: 23px; }
-    .doc-body h2:not(.doc-title) { font-size: 18px; margin-top: 26px; }
-}
-
-@media (max-width: 380px) {
-    h2 { font-size: 21px; }
-    main > h2:first-of-type { padding-right: 54px; }
-}
-
-@media (max-width: 520px) {
-    .stat-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
-
-    /* Three stacked cards of padding would push the documents themselves a
-       whole screen down. Same three facts, laid out as rows. */
-    .gist li {
-        display: grid; grid-template-columns: 24px 1fr; gap: 1px 12px;
-        padding: 13px 15px; align-items: center;
-    }
-    .gist svg { width: 22px; height: 22px; grid-row: span 2; align-self: start; margin-top: 2px; }
-    .gist h3 { margin: 0; font-size: 15px; }
-    .gist p { font-size: 12.5px; }
-    .stat-row li { padding: 11px 9px; text-align: center; }
-    .stat-row li::after { display: none; }
-    .stat-row b { font-size: 25px; }
-    .stat-row > li > span { font-size: 11px; line-height: 1.3; }
-    .gist { grid-template-columns: minmax(0, 1fr); }
-    .person-grid { grid-template-columns: minmax(0, 1fr); }
-
-    /* the table stacks: each row becomes a small card with its column names
-       carried down as labels, since a 3-column table cannot fit here */
-    .doc-table table, .doc-table tbody, .doc-table tr, .doc-table td { display: block; width: 100%; }
-    .doc-table thead { display: none; }
-    .doc-table tr {
-        margin-bottom: 10px; border: 1px solid #ece4f1; border-radius: 10px;
-        overflow: hidden; background: #fff;
-    }
-    .doc-table tbody tr:nth-child(even) { background: #fff; }
-    .doc-table td { border-bottom: 1px solid #f4eff7; padding: 8px 12px; }
-    .doc-table tr td:last-child { border-bottom: 0; }
-    .doc-table td::before {
-        content: attr(data-label); display: block;
-        font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-        color: #9a8fa6; margin-bottom: 2px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    a.person:hover { transform: none; }
-    .more-link a:hover svg { transform: none; }
-    .person .p-go { opacity: 1; transform: none; }
-}
-
-/* --- Easter eggs and site emoji ---------------------------------------- */
-
-/* the unicode stand-in for an emoji whose Discord id is not filled in yet;
-   sized to sit on the text baseline like the real custom emoji do */
-.demoji-uni { display: inline-block; font-size: 1.15em; line-height: 1; vertical-align: -.12em; }
-
-.egg-toast {
-    position: fixed; left: 50%; bottom: 22px; z-index: 60;
-    transform: translate(-50%, 14px); opacity: 0; pointer-events: none;
-    max-width: min(92vw, 400px); padding: 12px 18px; border-radius: 13px;
-    background: var(--plum); color: #efe2f3; font-size: 13.5px; line-height: 1.55;
-    box-shadow: 0 12px 34px rgba(30,8,36,.42);
-    border: 1px solid rgba(243,195,78,.35);
-    transition: opacity .3s var(--ease), transform .3s var(--ease);
-}
-.egg-toast.on { opacity: 1; transform: translate(-50%, 0); }
-.egg-toast b { color: var(--gold); font-family: "Luckiest Guy", Impact, sans-serif;
-               font-weight: 400; letter-spacing: .04em; }
-.egg-toast kbd {
-    font: 11px/1 ui-monospace, monospace; background: rgba(255,255,255,.14);
-    border-radius: 4px; padding: 2px 5px;
-}
-
-/* Portal of Power: --portal is swapped every 1.4s from JS, and everything
-   here is a colour change on top of the normal design -- no layout moves, so
-   nothing can break while it is on. */
-.portal { --portal: #a763d8; }
-.portal body { transition: none; }
-.portal h2,
-.portal .doc-body h2,
-.portal .p-name,
-.portal .stat-row b { color: var(--portal); transition: color 1.4s linear; }
-/* The header paints its own bottom rim with ::after, so the portal glow
-   takes ::before rather than the two fighting over one pseudo-element. */
-.portal #sky-header::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 5;
-    background: radial-gradient(70% 130% at 50% 100%, var(--portal), transparent 62%);
-    opacity: .38; mix-blend-mode: screen; transition: background 1.4s linear;
-}
-.portal footer { box-shadow: inset 0 4px 0 var(--portal); transition: box-shadow 1.4s linear; }
-.portal .person, .portal .qa, .portal .post { border-top-color: var(--portal); transition: border-color 1.4s linear; }
-
-@media (prefers-reduced-motion: reduce) {
-    .egg-toast { transition: opacity .01s; }
-    .portal h2, .portal .p-name, .portal .stat-row b,
-    .portal #sky-header::before, .portal footer, .portal .person { transition: none; }
-}
-
-/* =======================================================================
-   The games page, the front-page jump cards, the capped progress feed and
-   the nav's home mark.
-   ======================================================================= */
-
-/* --- the nav's Arkchemy mark -------------------------------------------
-   Only on desktop, and only once the cloud header has scrolled away: while
-   the header is on screen the mark is already there, twice the size, and a
-   second copy directly under it looks like a mistake. JS sets .scrolled. */
-#site-nav .nav-home { display: none; }
-@media (min-width: 761px) {
-    #site-nav .nav-home {
-        display: flex; align-items: center; gap: 9px;
-        position: absolute; left: 14px; top: 50%;
-        height: 40px; margin-top: -20px;
-        padding: 0;                  /* #site-nav a adds 7px 15px */
-        background: none;
-        opacity: 0; transform: translateY(-6px) scale(.85);
-        pointer-events: none;
-        transition: opacity .28s var(--ease), transform .28s var(--ease);
-    }
-    #site-nav .nav-home .nh-mark { width: 40px; height: 40px; object-fit: contain; }
-    /* The wordmark only appears where the centred links leave room for it.
-       Below that the balloon carries the mark on its own rather than the two
-       colliding in the middle of the bar. */
-    #site-nav .nav-home .nh-word { display: none; height: 21px; width: auto; }
-    #site-nav .nav-home::after { display: none; }   /* no underline sweep on the mark */
-    .scrolled #site-nav .nav-home { opacity: 1; transform: none; pointer-events: auto; }
-    /* the links shift right to make room, but only while the mark is there */
-    .scrolled #site-nav { padding-left: 54px; }
-}
-/* Wide enough that the balloon, the wordmark and the centred links all fit
-   without the first two reaching the third. */
-@media (min-width: 1300px) {
-    #site-nav .nav-home .nh-word { display: block; }
-    .scrolled #site-nav { padding-left: 196px; }
-}
-
-/* The horizontal nav starts at 761px but needs ~1060px to fit on one line,
-   so every width from tablet landscape to a small laptop was wrapping it onto
-   two rows -- which also doubled --nav-h and pushed the legal page's sticky
-   sidebar down. Scale the type in that band instead of letting it wrap. */
-@media (min-width: 761px) and (max-width: 1120px) {
-    #site-nav a { font-size: 16px; padding: 7px 10px; }
-    #site-nav { gap: 3px; }
-}
-@media (min-width: 761px) and (max-width: 860px) {
-    #site-nav a { font-size: 14.5px; padding: 6px 8px; }
-}
-
-/* --- front page: where to go next -------------------------------------- */
-.jump {
-    list-style: none; margin: 0 0 34px; padding: 0;
-    display: grid; gap: 12px; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-}
-.jump a {
-    display: grid; grid-template-columns: 38px 1fr; gap: 2px 14px;
-    align-items: center; height: 100%;
-    padding: 18px 20px; border-radius: 15px; text-decoration: none;
-    background: linear-gradient(155deg, #fff, #faf7fc);
-    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.08);
-    transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease),
-                border-color var(--fast) var(--ease);
-}
-.jump a:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(60,30,80,.16); border-color: #e0cfe8; }
-.jump svg { grid-row: span 2; width: 34px; height: 34px; color: var(--berry); }
-.jump b {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 18px; letter-spacing: .03em; color: var(--plum);
-}
-.jump span { font-size: 13px; line-height: 1.45; color: #6a6376; }
-
-/* --- the games page ---------------------------------------------------- */
-.game-cards { display: grid; gap: 14px; grid-template-columns: minmax(0,1fr) minmax(0,1fr); margin: 0 0 30px; }
-.game-card {
-    display: grid; grid-template-columns: 132px 1fr; gap: 18px; align-items: center;
-    padding: 18px 22px 18px 18px; border-radius: 16px; text-decoration: none;
-    color: var(--ink); background: #fff;
-    border: 1px solid #e6dfec; box-shadow: 0 3px 12px rgba(60,30,80,.08);
-    transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
-}
-.game-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(60,30,80,.18); }
-/* the game actually being ported gets the whole width and the gold edge */
-.game-card.is-now {
-    grid-column: 1 / -1; grid-template-columns: 190px 1fr;
-    border-color: var(--gold); box-shadow: 0 6px 20px rgba(243,195,78,.28);
-    background: linear-gradient(150deg, #fffdf6, #fff 60%);
-}
-.gc-logo { display: grid; place-items: center; }
-.gc-logo img { width: 100%; height: auto; max-height: 96px; object-fit: contain; }
-.game-card.is-now .gc-logo img { max-height: 128px; }
-
-.gc-body { min-width: 0; }
-.gc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
-.gc-body h3 {
-    margin: 0; min-width: 0; font-family: "Luckiest Guy", Impact, sans-serif;
-    font-weight: 400; font-size: 20px; letter-spacing: .03em; color: var(--plum);
-}
-.game-card.is-now .gc-body h3 { font-size: 25px; }
-.gc-status {
-    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-    border-radius: 999px; padding: 3px 10px; white-space: nowrap;
-}
-.st-now { background: var(--gold); color: #4a2a02; }
-.st-ref { background: #f0eaf4; color: #6a6376; }
-.gc-hook { margin: 7px 0 11px; font-size: 13.5px; line-height: 1.55; color: #5c5268; max-width: 56ch; }
-
-.gc-stats { display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: baseline; }
-.gc-stats > span { white-space: nowrap; }
-.gc-stats b {
-    font-family: "Luckiest Guy", Impact, sans-serif; font-weight: 400;
-    font-size: 17px; color: var(--berry); letter-spacing: .02em;
-}
-.gc-stats i { font-style: normal; font-size: 11.5px; color: #8a7f96; margin-left: 5px; }
-.gc-go {
-    display: inline-flex; align-items: center; gap: 5px; margin-top: 12px;
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 12.5px;
-    letter-spacing: .04em; color: var(--berry);
-}
-.gc-go svg { transition: transform var(--fast) var(--ease); }
-.game-card:hover .gc-go svg { transform: translateX(4px); }
-
-/* --- the progress feed, capped ----------------------------------------
-   The clip is a scroll container, not a truncation: everything is still
-   there and reachable, it just does not take over the page. */
-.feed-clip { position: relative; }
-.feed-clip.capped {
-    max-height: var(--cap, 460px); overflow-y: auto; overscroll-behavior: contain;
-    /* fade the last stretch rather than overlaying a gradient block, so the
-       text under it is genuinely translucent instead of sitting on paper */
-    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 84px), transparent);
-            mask-image: linear-gradient(180deg, #000 calc(100% - 84px), transparent);
-    padding-bottom: 10px;
-    scrollbar-width: thin; scrollbar-color: #ddd2e6 transparent;
-}
-.feed-clip.capped::-webkit-scrollbar { width: 8px; }
-.feed-clip.capped::-webkit-scrollbar-thumb { background: #ddd2e6; border-radius: 4px; }
-/* once you have scrolled to the end there is nothing left to hint at, so the
-   fade would just be haze over the last post */
-.feed-clip.at-end {
-    -webkit-mask-image: none; mask-image: none;
-}
-#progressMore button {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: none; border: 0; cursor: pointer;
-    min-height: 44px; padding: 2px 4px; margin-left: -4px;
-    font-family: "Luckiest Guy", Impact, sans-serif; font-size: 14px;
-    letter-spacing: .04em; color: var(--berry);
-}
-#progressMore button:hover { color: var(--plum); }
-#progressMore svg { transition: transform var(--fast) var(--ease); }
-#progressMore button:hover svg { transform: translateY(2px); }
-
-@media (max-width: 760px) {
-    .jump { grid-template-columns: minmax(0, 1fr); gap: 9px; }
-    .jump a { padding: 14px 16px; gap: 2px 12px; grid-template-columns: 30px 1fr; }
-    .jump svg { width: 28px; height: 28px; }
-    .jump b { font-size: 16px; }
-    .jump span { font-size: 12px; }
-
-    .game-cards { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-    .game-card, .game-card.is-now { grid-template-columns: 92px 1fr; gap: 14px; padding: 14px 16px 14px 13px; }
-    .gc-logo img, .game-card.is-now .gc-logo img { max-height: 68px; }
-    .gc-body h3, .game-card.is-now .gc-body h3 { font-size: 17px; }
-    .gc-hook { font-size: 12.5px; margin: 5px 0 9px; }
-    .gc-stats { gap: 3px 14px; }
-    .gc-stats b { font-size: 15px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .jump a:hover, .game-card:hover { transform: none; }
-    .game-card:hover .gc-go svg, #progressMore button:hover svg { transform: none; }
-    #site-nav .nav-home { transition: none; }
-}
-
-/* ======================================================================
-   Navigation and motion, 2026-09-14
-   ----------------------------------------------------------------------
-   Additions rather than replacements: the nav already had sticky
-   positioning, the logo swap on scroll, the hover underline sweep, the
-   mobile panel and its scrim. What it had no way of showing was *where
-   you are* -- aria-current marks the page, and the four biggest links on
-   this site all point into one page.
-
-   Everything below is gated on prefers-reduced-motion at the end of the
-   block, in keeping with the rest of this file.
-   ====================================================================== */
-
-/* --- reading progress -------------------------------------------------
-   A gold rule across the bottom edge of the nav, scaled to how far down
-   the page you are. Transform only, so it never triggers layout, and the
-   width comes from a custom property set once per frame by site.js. */
-#site-nav::before {
-    content: "";
-    position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
-    background: linear-gradient(90deg, var(--gold), #ffe9a8 55%, var(--gold));
-    transform: scaleX(var(--scroll-progress, 0));
-    transform-origin: 0 50%;
-    /* No transition: this tracks the scrollbar, and easing it would make
-       it lag behind the thing it is reporting. */
-    opacity: .85;
-    pointer-events: none;
-}
-
-/* --- the nav settles once it is stuck --------------------------------
-   Slightly tighter and lifted off the page, so the sticky bar reads as
-   floating above the content rather than being part of it. */
-@media (min-width: 761px) {
+    #navToggle { display: flex; }
     #site-nav {
-        transition: padding var(--med) var(--ease),
-                    box-shadow var(--med) var(--ease),
-                    background-color var(--med) var(--ease);
+        position: fixed; z-index: 45; top: var(--bar-h); left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        padding: 10px 16px 18px; background: var(--plum-lo);
+        border-bottom: 1px solid rgba(243, 195, 78, .25);
+        box-shadow: 0 24px 40px rgba(0, 0, 0, .35);
+        transform: translateY(-8px); opacity: 0; visibility: hidden;
+        transition: transform .25s var(--ease), opacity .2s, visibility 0s .25s;
+        max-height: calc(100vh - var(--bar-h)); overflow-y: auto;
     }
-    .scrolled #site-nav {
-        padding-top: 6px; padding-bottom: 6px;
-        box-shadow: 0 6px 20px -8px rgba(20, 8, 30, .55);
+    .nav-open #site-nav { transform: none; opacity: 1; visibility: visible; transition: transform .25s var(--ease), opacity .2s; }
+    #site-nav > a { padding: 13px 10px; font-size: 17px; border-radius: 8px; }
+    #site-nav > a[aria-current="page"]::after { left: 0; right: auto; top: 12px; bottom: 12px; width: 3px; height: auto; }
+    .nav-ext { margin: 8px 0 0; padding: 12px 0 0; border-left: 0; border-top: 1px solid rgba(255, 255, 255, .14); }
+    .nav-ext a span { position: static; width: auto; height: auto; clip: auto; }
+    .nav-ext a { padding: 10px; }
+}
+@media (max-width: 420px) { .brand-word { width: 112px; } }
+
+/* --- footer ------------------------------------------------------------- */
+.site-foot {
+    margin-top: 96px; color: #e6dcec;
+    background:
+        radial-gradient(1200px 400px at 85% -10%, rgba(122, 31, 78, .55), transparent 60%),
+        linear-gradient(180deg, #2a1030, #1a0a1e);
+}
+.site-foot a { color: #f3eef7; text-decoration: none; }
+.site-foot a:hover { color: var(--gold); text-decoration: underline; }
+.foot-in {
+    width: min(100% - 32px, var(--wrap)); margin-inline: auto; padding: 56px 0 36px;
+    display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 36px;
+}
+.foot-mark { background: none; border: 0; padding: 0; cursor: pointer; border-radius: 50%; }
+.foot-mark img { width: 58px; height: 58px; display: block; }
+.foot-tag { margin: 14px 0 12px; max-width: 34ch; }
+.foot-status { font-size: 15px; color: #d9cde2; max-width: 40ch; padding: 10px 12px; border-radius: 10px;
+               background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
+.foot-egg { font-size: 14.5px; color: var(--gold); max-width: 40ch; }
+.foot-h { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.foot-col { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.foot-col a[hidden] { display: none; }
+.foot-bar {
+    width: min(100% - 32px, var(--wrap)); margin-inline: auto; padding: 20px 0 32px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    font-size: 13.5px; color: #cfc2da;
+}
+.foot-bar p { margin: 0; max-width: 78ch; }
+.foot-bar b { color: #f3eef7; }
+.foot-built { white-space: nowrap; font-weight: 700; color: #f3eef7; }
+@media (max-width: 860px) { .foot-in { grid-template-columns: 1fr 1fr; } .foot-brand { grid-column: 1 / -1; } }
+@media (max-width: 520px) { .foot-bar { flex-direction: column; } }
+
+/* --- cards and callouts -------------------------------------------------- */
+.card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 24px; box-shadow: var(--shadow);
+}
+.card h3 { margin-bottom: 8px; }
+.card-foot { font-size: 14px; color: var(--muted); margin: 12px 0 0; }
+
+.callout {
+    margin: 44px 0 0; padding: 26px 28px; border-radius: var(--radius);
+    background: linear-gradient(135deg, var(--plum) 0%, #5a1747 60%, var(--berry) 100%);
+    color: #f5edf8; box-shadow: var(--shadow-lg);
+}
+.callout h2 { color: var(--gold); font-family: var(--display); font-weight: 400; font-size: 22px; letter-spacing: .02em; }
+.callout p { max-width: var(--text); }
+.callout p:last-child { margin-bottom: 0; }
+.callout a { color: var(--gold-hi); }
+.callout a:hover { color: #fff; }
+.callout code { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .18); color: #fff; }
+
+.feed-empty { color: var(--muted); font-style: italic; padding: 12px 0; }
+
+/* --- the front page: hero ------------------------------------------------ */
+.hero {
+    position: relative; overflow: hidden; isolation: isolate;
+    margin-top: calc(-1 * var(--bar-h)); padding: calc(var(--bar-h) + 64px) 16px 84px;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 58%, var(--sky-low) 100%);
+    text-align: center;
+}
+.hero::after {  /* the ground the page stands on */
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 90px; z-index: -1;
+    background: linear-gradient(180deg, transparent, var(--bg));
+}
+.sky { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.sk { position: absolute; display: block; }
+.sk-cloud { width: 220px; opacity: .92; }
+.sk-cloud.a { top: 16%; left: -2%; animation: drift 46s linear infinite; }
+.sk-cloud.b { top: 58%; right: 4%; width: 180px; animation: drift 58s linear infinite reverse; }
+.sk-cloud.c { top: 30%; left: 58%; width: 130px; opacity: .7; animation: drift 70s linear infinite; }
+.sk-isle { animation: bob 9s ease-in-out infinite; }
+.sk-isle.a { top: 24%; left: 7%; width: 160px; }
+.sk-isle.b { top: 14%; left: 26%; width: 70px; opacity: .8; animation-delay: -3s; }
+.sk-isle.c { top: 48%; right: 22%; width: 80px; opacity: .85; animation-delay: -5s; }
+.sk-isle.d { top: 22%; right: 6%; width: 150px; animation-delay: -1.5s; }
+.sk-balloon { top: 58%; left: 14%; width: 62px; animation: rise 14s ease-in-out infinite; }
+@keyframes drift { from { transform: translateX(-4vw); } to { transform: translateX(8vw); } }
+@keyframes bob   { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes rise  { 0%, 100% { transform: translate(0, 0) rotate(-2deg); } 50% { transform: translate(8px, -22px) rotate(2deg); } }
+@media (prefers-color-scheme: dark) {
+    .sk-cloud { opacity: .28; }
+    .sk-isle { filter: brightness(.72) saturate(.85); }
+    .sky::before {  /* stars, drawn with gradients so there is no extra request */
+        content: ""; position: absolute; inset: 0; opacity: .7;
+        background-image:
+            radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 22% 42%, #fff 50%, transparent 51%),
+            radial-gradient(1.5px 1.5px at 38% 12%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 51% 30%, #fff 50%, transparent 51%),
+            radial-gradient(1.5px 1.5px at 67% 16%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 78% 38%, #fff 50%, transparent 51%),
+            radial-gradient(1.5px 1.5px at 88% 10%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 93% 52%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 6% 60%, #fff 50%, transparent 51%),
+            radial-gradient(1px 1px at 31% 66%, #fff 50%, transparent 51%);
     }
 }
-
-/* --- you are here ----------------------------------------------------
-   Set by the scrollspy in common.js on the link whose section is in
-   view. Deliberately distinct from aria-current: that says "this page",
-   this says "this part of it", and on the home page both can be true of
-   different links at once. */
-#site-nav a.nav-here { color: #fff6dc; }
-#site-nav a.nav-here::after {
-    left: 14px; right: 14px;
-    background: var(--gold);
-    box-shadow: 0 0 10px rgba(243, 195, 78, .7);
-}
-
-/* --- heading icons ---------------------------------------------------
-   The flask, chat bubble and so on already sit beside every h2. They
-   arrive with the heading instead of just being there. */
-.reveal .h-ico, h2.reveal .h-ico { transform-origin: 50% 60%; }
-.reveal.shown .h-ico {
-    animation: icoPop .5s var(--ease) both;
-    animation-delay: calc(var(--i, 0) * 45ms + 90ms);
-}
-@keyframes icoPop {
-    0%   { transform: scale(.4) rotate(-18deg); opacity: 0 }
-    60%  { transform: scale(1.12) rotate(4deg); opacity: 1 }
-    100% { transform: none; opacity: 1 }
-}
-
-/* --- cards lift --------------------------------------------------
-   The two home-page cards and the games grid already scale their images
-   on hover; this lifts the card itself so the whole target responds,
-   which makes it read as one control rather than a picture in a box. */
-.jump a, .cards a, .games a {
-    transition: transform var(--med) var(--ease), box-shadow var(--med) var(--ease);
-}
-.jump a:hover, .jump a:focus-visible,
-.cards a:hover, .cards a:focus-visible,
-.games a:hover, .games a:focus-visible {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px -14px rgba(61, 17, 64, .5);
-}
-
-/* --- anchor landings -------------------------------------------------
-   A sticky nav covers whatever an in-page link jumps to, so every
-   heading keeps its own height clear above it. scroll-margin, not
-   padding: it moves where the browser stops, not where the text sits. */
-#project, #progress, #faq, #people, [id][class*="sec"] { scroll-margin-top: 84px; }
-
-/* Below 761px #site-nav is the slide-in panel, not a bar across the top, so a
-   progress rule along its bottom edge would be a gold line inside the menu
-   reporting on a page it is covering. */
 @media (max-width: 760px) {
-    #site-nav::before { display: none; }
+    .sk-isle.b, .sk-isle.c, .sk-cloud.c { display: none; }
+    .sk-isle.a { width: 96px; top: 12%; left: -4%; }
+    .sk-isle.d { width: 90px; top: 10%; right: -3%; }
+    .sk-balloon { display: none; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    #site-nav::before { display: none; }
-    #site-nav, .scrolled #site-nav { transition: none; }
-    .reveal.shown .h-ico { animation: none; }
-    .jump a, .cards a, .games a { transition: none; }
-    .jump a:hover, .cards a:hover, .games a:hover { transform: none; }
+.hero-in { position: relative; max-width: 860px; margin: 0 auto; }
+.lockup { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 0 22px; }
+.lockup .mark { width: clamp(72px, 11vw, 118px); height: auto; filter: drop-shadow(0 6px 10px rgba(42, 16, 48, .3)); }
+.lockup .wordmark { width: clamp(220px, 58vw, 600px); height: auto; filter: drop-shadow(0 4px 0 rgba(42, 16, 48, .18)); }
+.hero-tag {
+    font: 400 clamp(22px, 3.2vw, 32px)/1.2 var(--display); letter-spacing: .02em;
+    color: var(--plum); margin: 0 auto 14px; max-width: 26ch;
+}
+.hero-sub { font-size: clamp(16.5px, 1.8vw, 19px); color: #2c2034; max-width: 54ch; margin: 0 auto 26px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 0; }
+.hero-now {
+    display: inline-flex; align-items: center; gap: 10px; margin: 26px 0 0;
+    padding: 7px 14px 7px 10px; border-radius: 999px; font-size: 14.5px; font-weight: 600;
+    background: rgba(255, 255, 255, .8); color: var(--plum-lo); border: 1px solid rgba(61, 17, 64, .15);
+}
+.hero-now::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--berry);
+                    box-shadow: 0 0 0 0 rgba(122, 31, 78, .5); animation: pulse 2.4s ease-out infinite; }
+.hero-now[hidden] { display: none; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(122, 31, 78, .5); } 70%, 100% { box-shadow: 0 0 0 9px rgba(122, 31, 78, 0); } }
+@media (prefers-color-scheme: dark) {
+    .hero-tag { color: var(--gold); }
+    .hero-sub { color: #e8def0; }
+    .hero-now { background: rgba(20, 14, 25, .7); color: #f3eef7; border-color: rgba(243, 238, 247, .2); }
+    .hero-now::before { background: var(--gold); }
 }
 
-/* ======================================================================
-   The navbar wears the logo, 2026-09-15
-   ----------------------------------------------------------------------
-   The wordmark was only revealed once the cloud header had scrolled away,
-   and only at 1300px and up. The reasoning was sound -- while the header
-   is on screen the mark is already there, twice the size -- but the
-   result on an ordinary laptop was a bar with no branding on it at all,
-   at any scroll position.
-
-   So the wordmark is always in the bar now, from 900px up, and it is the
-   drawn logo rather than type set in Luckiest Guy. The balloon mark still
-   waits for .scrolled, because that one really is a duplicate of what the
-   header is showing directly above it.
-   ====================================================================== */
-@media (min-width: 900px) {
-    #site-nav .nav-home {
-        display: flex;
-        opacity: 1; transform: none; pointer-events: auto;
-    }
-    /* The balloon still only joins once the big one has gone. */
-    #site-nav .nav-home .nh-mark {
-        opacity: 0; width: 0; margin-right: -9px;
-        transition: opacity var(--med) var(--ease), width var(--med) var(--ease),
-                    margin var(--med) var(--ease);
-    }
-    .scrolled #site-nav .nav-home .nh-mark { opacity: 1; width: 40px; margin-right: 0; }
-
-    #site-nav .nav-home .nh-word {
-        display: block; height: 23px; width: auto;
-        filter: drop-shadow(0 1px 0 rgba(20, 8, 30, .55));
-    }
-    #site-nav { padding-left: 186px; }
-    .scrolled #site-nav { padding-left: 232px; }
-
-    /* The logo is a link; it should say so when you point at it. */
-    #site-nav .nav-home .nh-word,
-    #site-nav .nav-home .nh-mark { transition: transform var(--med) var(--ease); }
-    #site-nav .nav-home:hover .nh-word { transform: translateY(-1px) scale(1.03); }
+/* --- the front page: where it stands -------------------------------------
+   Six stages on a rail. Working stages are gold and ticked, the current wall
+   is berry and pulses, and anything not reached is a dashed outline -- so the
+   state reads from shape as well as colour. */
+.stages {
+    list-style: none; margin: 0; padding: 0; counter-reset: st;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;
+    position: relative;
 }
-@media (min-width: 900px) and (max-width: 1120px) {
-    #site-nav .nav-home .nh-word { height: 19px; }
-    #site-nav { padding-left: 152px; }
-    .scrolled #site-nav { padding-left: 196px; }
+.stp { position: relative; padding: 0 12px 0 0; }
+.stp::before {  /* the rail between this dot and the next */
+    content: ""; position: absolute; top: 15px; left: 34px; right: 0; height: 4px; border-radius: 4px;
+    background: var(--line-2);
 }
-@media (prefers-reduced-motion: reduce) {
-    #site-nav .nav-home .nh-mark,
-    #site-nav .nav-home .nh-word { transition: none; }
-    #site-nav .nav-home:hover .nh-word { transform: none; }
+.stp:last-child::before { display: none; }
+.st-works::before { background: var(--gold); }
+.st-wall::before { background: repeating-linear-gradient(90deg, var(--line-2) 0 8px, transparent 8px 14px); }
+.st-dot {
+    position: relative; z-index: 1; display: grid; place-items: center;
+    width: 34px; height: 34px; border-radius: 50%; margin-bottom: 14px;
+    background: var(--surface); border: 3px dashed var(--line-2);
 }
-
-/* ----------------------------------------------------------------------
-   Low-resolution art stays its own size
-   ----------------------------------------------------------------------
-   Several roster icons and game covers are small files. Stretched into a
-   larger box the browser interpolates them into mush, and the page reads
-   as low quality when the art is merely small. Capping each at its own
-   intrinsic width keeps it crisp -- a sharp small image looks deliberate,
-   a blurry big one looks broken.
-
-   image-set/-webkit-optimize-contrast is deliberately NOT used here: on
-   photographic art it produces jagged edges that look worse than the
-   interpolation it replaces. The cap is the fix; the filter is not.
-   ---------------------------------------------------------------------- */
-.roster img, .games img, .person img, .p-chip img {
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    image-rendering: auto;
+.st-works .st-dot { background: var(--gold); border: 3px solid var(--gold); }
+.st-works .st-dot::after {
+    content: ""; width: 13px; height: 7px; margin-top: -3px;
+    border: solid var(--plum-lo); border-width: 0 0 3px 3px; transform: rotate(-45deg);
+}
+.st-wall .st-dot { background: var(--berry); border: 3px solid var(--berry); animation: pulse 2.4s ease-out infinite; }
+.st-wall .st-dot::after { content: "!"; color: #fff; font: 800 17px/1 var(--sans); }
+.stp b { display: block; font: 400 22px/1.1 var(--display); letter-spacing: .02em; color: var(--head); }
+.stp em {
+    display: inline-block; margin: 6px 0 8px; font-style: normal; font-size: 12.5px; font-weight: 800;
+    letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px;
+    background: var(--surface-2); color: var(--muted);
+}
+.st-works em { background: var(--gold-soft); color: var(--gold-ink); }
+.st-wall em  { background: var(--berry); color: #fff; }
+.stp p { font-size: 15px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+.st-ahead b { color: var(--muted); }
+@media (max-width: 860px) {
+    .stages { grid-template-columns: 1fr; gap: 0; }
+    .stp { display: grid; grid-template-columns: 34px 1fr; column-gap: 16px; padding: 0 0 22px; }
+    .stp::before { top: 34px; bottom: -2px; left: 15px; right: auto; width: 4px; height: auto; }
+    .st-wall::before { background: repeating-linear-gradient(180deg, var(--line-2) 0 8px, transparent 8px 14px); }
+    .st-dot { grid-row: span 3; margin: 0; }
+    .stp b { align-self: center; }
+    .stp em { justify-self: start; margin: 4px 0 6px; }
 }
 
-
-/* Adding the logo and a ninth link pushed the bar onto two rows between about
-   900px and 1400px. The existing scale-down band stopped at 1120px, which was
-   right for eight links and no logo and is not right for this. Widened, and
-   the logo's reserved space shrinks with the type rather than staying fixed.
-
-   2026-09-20: one link was removed, so the bar is back to nine including
-   the logo. The widened band is now slightly conservative rather than
-   wrong -- type scales down a little earlier than it needs to. Left alone
-   rather than re-tuning two breakpoints to save a pixel. */
-@media (min-width: 900px) and (max-width: 1400px) {
-    #site-nav a { font-size: 15.5px; padding: 6px 9px; }
-    #site-nav { gap: 2px; padding-left: 150px; }
-    .scrolled #site-nav { padding-left: 196px; }
-    #site-nav .nav-home .nh-word { height: 19px; }
+.now-next { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; margin-top: 36px; }
+.now-card { border-top: 4px solid var(--berry); }
+.now-card h3 { font-size: 21px; }
+.now-card p { color: var(--ink-2); }
+.next-card { border-top: 4px solid var(--line-2); }
+.next-list { margin: 0; padding: 0; list-style: none; counter-reset: nx; }
+.next-list li { counter-increment: nx; position: relative; padding: 0 0 14px 38px; }
+.next-list li:last-child { padding-bottom: 0; }
+.next-list li::before {
+    content: counter(nx); position: absolute; left: 0; top: 1px;
+    width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--surface-2); color: var(--head); font-weight: 800; font-size: 14px;
 }
-@media (min-width: 900px) and (max-width: 1040px) {
-    #site-nav a { font-size: 14px; padding: 5px 7px; }
-    #site-nav { padding-left: 128px; }
-    .scrolled #site-nav { padding-left: 170px; }
-    #site-nav .nav-home .nh-word { height: 16px; }
+.next-list b { display: block; color: var(--head); }
+.next-list span { display: block; font-size: 15px; color: var(--muted); line-height: 1.5; }
+@media (max-width: 860px) { .now-next { grid-template-columns: 1fr; } }
+
+/* --- the front page: how it works ---------------------------------------- */
+.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; }
+.flow li {
+    position: relative; display: flex; flex-direction: column; gap: 6px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 20px; box-shadow: var(--shadow);
+}
+.flow li + li::before {  /* the arrow from the previous step */
+    content: ""; position: absolute; left: -26px; top: 42px; width: 18px; height: 18px;
+    background: var(--gold);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4l-1.4 1.4L16.2 11H4v2h12.2l-5.6 5.6L12 20l8-8z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.flow svg { width: 44px; height: 44px; padding: 9px; border-radius: 12px; background: var(--plum); color: var(--gold); margin-bottom: 6px; }
+.flow b { font-size: 18px; color: var(--head); }
+.flow span { font-size: 15px; color: var(--ink-2); line-height: 1.5; }
+.flow a { margin-top: auto; padding-top: 8px; font-size: 14.5px; font-weight: 700; }
+@media (max-width: 960px) {
+    .flow { grid-template-columns: 1fr 1fr; }
+    .flow li:nth-child(3)::before { display: none; }
+}
+@media (max-width: 560px) {
+    .flow { grid-template-columns: 1fr; gap: 26px; }
+    .flow li:nth-child(3)::before { display: block; }
+    .flow li + li::before { left: 50%; top: -22px; transform: translateX(-50%) rotate(90deg); }
 }
 
-/* ======================================================================
-   /findings, 2026-09-16
-   ----------------------------------------------------------------------
-   findings.json held 44 findings, 8 open questions and 17 corrections and
-   was rendered nowhere. This is that file made readable.
+/* --- the front page: split, games strip ---------------------------------- */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.split > div { min-width: 0; }
+@media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
 
-   The corrections get the strongest treatment on the page on purpose.
-   They are the part a reverse-engineering project is least inclined to
-   publish and the part most worth reading.
-   ====================================================================== */
+.mini-findings { display: flex; flex-direction: column; gap: 12px; }
+.mini-f {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 14px 16px; box-shadow: var(--shadow); transition: transform .15s var(--ease), border-color .15s;
+}
+.mini-f:hover { transform: translateY(-2px); border-color: var(--line-2); color: inherit; }
+.mini-f b { display: block; color: var(--head); line-height: 1.35; margin: 6px 0 0; }
+.mini-f .f-badges { margin: 0; }
+
+.game-strip { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+.game-strip a {
+    position: relative; display: grid; place-items: center; height: 110px; padding: 14px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); transition: transform .15s var(--ease), box-shadow .15s;
+}
+.game-strip a:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.game-strip img { max-height: 64px; width: auto; object-fit: contain; }
+.game-strip .is-now a { border: 2px solid var(--gold); background: var(--gold-soft); }
+.game-strip span {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+    font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    background: var(--gold); color: var(--plum-lo); padding: 3px 9px; border-radius: 999px;
+}
+@media (max-width: 900px) { .game-strip { grid-template-columns: repeat(3, 1fr); row-gap: 20px; } }
+@media (max-width: 480px) { .game-strip { grid-template-columns: repeat(2, 1fr); } }
+
+/* --- the Discord feed ----------------------------------------------------- */
+.feed { display: flex; flex-direction: column; gap: 12px; }
+.post {
+    background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--berry);
+    border-radius: var(--radius-sm); padding: 14px 18px; box-shadow: var(--shadow);
+    overflow-wrap: anywhere;
+}
+@media (prefers-color-scheme: dark) { .post { border-left-color: var(--gold); } }
+.post header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.post header img, .post .noav { width: 28px; height: 28px; border-radius: 50%; flex: none; background: var(--surface-2); }
+.post header b { color: var(--head); font-size: 15.5px; }
+.post time { margin-left: auto; font-size: 13.5px; color: var(--muted); white-space: nowrap; }
+.post .body { font-size: 16px; }
+.post .body > :last-child { margin-bottom: 0; }
+.post .shot { display: block; margin-top: 10px; border-radius: 8px; border: 1px solid var(--line); max-height: 420px; object-fit: contain; }
+.post h4, .post h5, .post h6 { margin: .4em 0 .2em; font-size: 1.02em; }
+.post ul, .post ol { margin: .3em 0; padding-left: 1.3em; }
+.subtext { display: block; font-size: 13px; color: var(--muted); }
+.feed-sm .post .body { font-size: 15.5px; }
+
+.spoiler { background: var(--ink); color: transparent; border-radius: 4px; padding: 0 3px; cursor: pointer; }
+.spoiler:hover, .spoiler:focus, .spoiler.revealed { background: var(--surface-2); color: inherit; }
+.demoji { width: 1.35em; height: 1.35em; vertical-align: -.3em; object-fit: contain; }
+.demoji-uni { display: inline-block; font-size: 1.1em; line-height: 1; vertical-align: -.1em; }
+
+/* --- people ---------------------------------------------------------------- */
+.person-lead-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.person-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.person {
+    position: relative; display: flex; align-items: center; gap: 14px; min-width: 0;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 16px; box-shadow: var(--shadow); text-decoration: none; color: inherit;
+    border-top: 4px solid var(--el, var(--line-2));
+    transition: transform .15s var(--ease), box-shadow .15s;
+}
+a.person:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); color: inherit; }
+.person .face { position: relative; flex: none; width: 56px; height: 56px; }
+.person .pfp { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: var(--surface-2);
+               box-shadow: 0 0 0 3px var(--el, var(--line-2)); }
+.person .elicon { position: absolute; right: -5px; bottom: -5px; width: 24px; height: 24px; border-radius: 50%;
+                  background: var(--surface); padding: 2px; }
+.person .body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.p-name { font-weight: 800; font-size: 17px; color: var(--head); white-space: nowrap; overflow: hidden; }
+.p-role { font-size: 14.5px; color: var(--muted); line-height: 1.4; }
+.p-go { color: var(--muted); flex: none; }
+.person-lead { padding: 18px 20px; }
+.person-lead .face, .person-lead .pfp { width: 76px; height: 76px; }
+.person-lead .elicon { width: 30px; height: 30px; }
+.person-lead .p-name { font: 400 24px/1.15 var(--display); letter-spacing: .02em; }
+.person-lead .p-role { font-size: 15.5px; }
+
+/* --- reveal-on-scroll -------------------------------------------------------
+   Only with JavaScript (the class on <html> comes from common.js), so a page
+   whose scripts fail is plainly visible rather than blank. */
+.js-reveal .reveal { opacity: 0; transform: translateY(14px); }
+.js-reveal .reveal.shown {
+    opacity: 1; transform: none;
+    transition: opacity .55s var(--ease), transform .55s var(--ease);
+    transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+/* --- badges (findings, games, roster) --------------------------------------- */
+.f-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.f-badge {
+    display: inline-flex; align-items: center; font-size: 12.5px; font-weight: 700; line-height: 1;
+    padding: 5px 9px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2);
+    white-space: nowrap;
+}
+.f-area { background: var(--info-soft); color: var(--info); }
+.f-conf-hardware_confirmed { background: var(--ok-soft); color: var(--ok); }
+.f-conf-static_confirmed, .f-conf-static_single_source { background: var(--gold-soft); color: var(--gold-ink); }
+.f-date { background: transparent; border: 1px solid var(--line-2); color: var(--muted); font-variant-numeric: tabular-nums; }
+.f-retracted { background: var(--warn-soft); color: var(--warn); }
+
+/* --- /findings ----------------------------------------------------------------- */
+.f-tabs {
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 26px 0 18px; padding: 5px;
+    background: var(--surface-2); border-radius: 14px; width: fit-content; max-width: 100%;
+}
+.f-tabs button {
+    display: inline-flex; align-items: center; gap: 8px; border: 0; cursor: pointer;
+    padding: 10px 16px; border-radius: 10px; background: transparent; color: var(--ink-2);
+    font: 700 15.5px/1 var(--sans);
+}
+.f-tabs button:hover { background: var(--surface); }
+.f-tabs button[aria-selected="true"] { background: var(--surface); color: var(--head); box-shadow: var(--shadow); }
+.f-tabs .n { font-size: 12.5px; padding: 3px 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.f-tabs button[aria-selected="true"] .n { background: var(--plum); color: var(--gold); }
+.f-panel[hidden] { display: none; }
+.f-panel > .lede { margin-bottom: 18px; }
+
+.conf-legend { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.conf-item { display: flex; gap: 10px; align-items: baseline; margin: 0; }
+.callout .conf-item span:last-child { color: #f0e6f5; }
+.callout .foot-note { font-size: 14.5px; color: #e2d4ea; margin: 10px 0 0; }
 
 .f-controls {
-    display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
-    margin: 18px 0 22px; padding: 14px 16px;
-    background: #fff; border-radius: 12px;
-    box-shadow: 0 1px 0 rgba(61, 17, 64, .07), 0 8px 20px -18px rgba(61, 17, 64, .5);
+    display: grid; grid-template-columns: 1fr 1fr 1.4fr auto; gap: 12px; align-items: end;
+    margin: 0 0 22px; padding: 14px 16px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
 }
-.f-field { display: flex; flex-direction: column; gap: 5px; }
-.f-field > span {
-    font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
-    color: #6b6479;
-}
+.f-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.f-field span { font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .f-field select, .f-field input {
-    font: inherit; font-size: 15px; color: var(--ink);
-    padding: 7px 10px; border-radius: 8px;
-    border: 1px solid rgba(61, 17, 64, .22); background: #fff;
-    min-width: 11rem;
+    font: 500 15.5px/1.2 var(--sans); color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line-2); border-radius: 10px; padding: 10px 12px; min-height: 44px; width: 100%;
 }
-.f-field select:focus-visible, .f-field input:focus-visible {
-    outline: 2px solid var(--berry); outline-offset: 1px;
-}
-.f-search input { min-width: 15rem; }
-.f-count { margin: 0 0 4px auto; font-size: 13.5px; color: #6b6479; }
+.f-count { margin: 0; font-size: 14.5px; color: var(--muted); white-space: nowrap; padding-bottom: 11px; }
+@media (max-width: 760px) { .f-controls { grid-template-columns: 1fr 1fr; } .f-search { grid-column: 1 / -1; } }
 
-.findings-list, .corrections-list { display: grid; gap: 14px; }
+/* the timeline: a rail down the left, a dated marker per day */
+.timeline { position: relative; padding-left: 30px; }
+.timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--line); }
+.t-day { position: relative; margin: 0 0 14px; }
+.t-day + .t-day { margin-top: 30px; }
+.t-date {
+    position: relative; margin: 0 0 12px; font-family: var(--sans); font-size: 14px; font-weight: 800; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--head);
+}
+.t-date::before {
+    content: ""; position: absolute; left: -29px; top: 3px; width: 15px; height: 15px; border-radius: 50%;
+    background: var(--gold); border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--gold);
+}
+.t-date small { font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); margin-left: 8px; font-size: 14px; }
+.t-items { display: flex; flex-direction: column; gap: 12px; }
 
 .finding, .correction {
-    background: #fff; border-radius: 12px; padding: 16px 18px;
-    box-shadow: 0 1px 0 rgba(61, 17, 64, .07), 0 10px 24px -20px rgba(61, 17, 64, .55);
+    min-width: 0; overflow-wrap: anywhere;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 20px; box-shadow: var(--shadow);
 }
-.f-head h3 {
-    margin: 0 0 8px; font-size: 19px; line-height: 1.3;
-    font-family: "Luckiest Guy", Impact, sans-serif; letter-spacing: .01em;
-    color: var(--plum);
+.f-head h3 { font-size: 18.5px; margin-bottom: 8px; }
+.finding.is-target { box-shadow: 0 0 0 3px var(--gold), var(--shadow-lg); }
+.f-detail { margin-top: 10px; }
+.f-detail > :last-child { margin-bottom: 0; }
+.f-row { font-size: 15px; color: var(--ink-2); margin: 10px 0 0; }
+.f-row b { color: var(--head); }
+.f-falsify { padding: 9px 12px; border-radius: 9px; background: var(--surface-2); }
+.f-prior { font-size: 14px; color: var(--muted); }
+.f-prior b { color: var(--muted); }
+.finding details { margin-top: 10px; }
+.finding summary { cursor: pointer; font-weight: 700; font-size: 15px; color: var(--accent); }
+
+.correction { border-left: 4px solid var(--warn); }
+.c-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.c-was, .c-now { margin: 0; padding: 12px 14px; border-radius: 10px; font-size: 15.5px; }
+.c-was { background: var(--warn-soft); color: var(--ink-2); }
+.c-was .c-said { text-decoration: line-through; text-decoration-color: rgba(138, 42, 20, .5); text-decoration-thickness: 1.5px; }
+@media (prefers-color-scheme: dark) { .c-was .c-said { text-decoration-color: rgba(255, 180, 158, .55); } }
+.c-now { background: var(--ok-soft); color: var(--ink); }
+.c-was > b, .c-now > b { display: block; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+.c-was > b { color: var(--warn); }
+.c-now > b { color: var(--ok); }
+.c-cost { margin: 12px 0 0; font-size: 15px; color: var(--ink-2); }
+.c-cost b { color: var(--head); }
+@media (max-width: 700px) { .c-pair { grid-template-columns: 1fr; } }
+
+.q-card { border-left: 4px solid var(--info); }
+
+/* --- /games --------------------------------------------------------------------- */
+.game-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.game-card {
+    display: grid; grid-template-columns: 150px 1fr; gap: 20px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow); color: inherit; text-decoration: none;
+    transition: transform .15s var(--ease), box-shadow .15s;
 }
-.f-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
-.f-badge {
-    font-size: 12px; padding: 3px 9px; border-radius: 999px;
-    background: rgba(61, 17, 64, .08); color: #4a3d53; white-space: nowrap;
-}
-.f-area { background: rgba(89, 194, 240, .20); color: #14556f; }
-.f-date { background: rgba(61, 17, 64, .06); color: #6b6479; }
-
-/* Confidence is the one badge worth colour-coding: it is the difference
-   between "seen on hardware" and "read once in a binary", and a reader
-   skimming should not have to open the entry to tell them apart. */
-.f-conf-hardware_confirmed { background: rgba(99, 182, 74, .22); color: #24571a; }
-.f-conf-static_confirmed   { background: rgba(243, 195, 78, .28); color: #5c4304; }
-.f-conf-static_single_source,
-.f-conf-confirmed          { background: rgba(122, 31, 78, .13); color: #6d1c46; }
-
-.f-detail { color: var(--ink); line-height: 1.6; }
-.f-detail p:first-child { margin-top: 0; }
-.f-row { margin: 9px 0 0; line-height: 1.55; }
-.f-row b { color: var(--plum); }
-.f-falsify { padding-left: 11px; border-left: 3px solid rgba(99, 182, 74, .45); }
-.f-prior   { font-size: 14px; color: #5d5668; }
-
-.conf-legend { display: grid; gap: 8px; margin: 6px 0 10px; }
-.conf-item { display: flex; gap: 10px; align-items: baseline; margin: 0; line-height: 1.5; }
-
-/* Corrections: was / now / cost, each visually distinct so the shape of the
-   entry is readable before the words are. */
-.correction { border-left: 4px solid rgba(122, 31, 78, .5); }
-.correction .f-head h3 { text-transform: capitalize; }
-.c-was, .c-now, .c-cost { margin: 8px 0 0; line-height: 1.55; }
-.c-was  { color: #6d5a66; text-decoration-color: rgba(122,31,78,.4); }
-.c-was  b { color: #8a2b57; }
-.c-now  b { color: #24571a; }
-.c-cost { font-size: 14.5px; color: #5d5668; }
-.c-cost b { color: var(--plum); }
-
-@media (max-width: 620px) {
-    .f-controls { padding: 12px; gap: 10px; }
-    .f-field select, .f-field input, .f-search input { min-width: 0; width: 100%; }
-    .f-field { width: 100%; }
-    .f-count { margin-left: 0; }
+.game-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); color: inherit; }
+.game-card.is-now { grid-column: 1 / -1; grid-template-columns: 220px 1fr; border: 2px solid var(--gold);
+                    background: linear-gradient(120deg, var(--gold-soft), var(--surface) 60%); }
+.gc-logo img { width: 100%; max-height: 110px; object-fit: contain; }
+.gc-body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.gc-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.gc-top h2 { margin: 0; font: 400 24px/1.1 var(--display); letter-spacing: .02em; white-space: nowrap; overflow: hidden; max-width: 100%; }
+.gc-status { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; }
+.st-now { background: var(--gold); color: var(--plum-lo); }
+.st-ref { background: var(--surface-2); color: var(--muted); }
+.gc-hook { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+.gc-stats { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.gc-stats span { white-space: nowrap; font-size: 14.5px; color: var(--muted); }
+.gc-stats b { color: var(--head); font-size: 17px; margin-right: 5px; }
+.gc-stats i { font-style: normal; }
+.gc-go { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--accent); font-size: 15px; }
+@media (max-width: 820px) {
+    .game-cards { grid-template-columns: 1fr; }
+    .game-card, .game-card.is-now { grid-template-columns: 110px 1fr; gap: 14px; padding: 16px; }
 }
 
-/* The legend sits inside .callout, which is a dark plum gradient, and the
-   badges above are styled for the white finding cards -- dark text on a
-   barely-tinted pill. On the callout that measured 1.41:1, which is not
-   "low contrast", it is invisible: the pills rendered as blank coloured bars.
-   Inside the callout they get light text and a solid enough pill to carry it. */
-.callout .f-badge {
-    background: rgba(255, 255, 255, .16);
-    color: #fff6dc;
+/* --- /skylanders ----------------------------------------------------------------- */
+.game-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
+.game-tabs button {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+    padding: 9px 14px; border-radius: 12px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--line-2); color: var(--head);
+    font: 700 15.5px/1.2 var(--sans); box-shadow: var(--shadow);
 }
-.callout .f-conf-hardware_confirmed { background: rgba(140, 226, 112, .28); color: #eaffe0; }
-.callout .f-conf-static_confirmed   { background: rgba(243, 195, 78, .30);  color: #fff3cf; }
-.callout .f-conf-static_single_source,
-.callout .f-conf-confirmed          { background: rgba(255, 255, 255, .20); color: #f4e8f2; }
-.callout .conf-item span:last-child { color: #efe9f4; }
+.game-tabs button small { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.game-tabs button:hover { border-color: var(--accent); }
+.game-tabs button[aria-pressed="true"] { background: var(--plum); border-color: var(--plum); color: var(--gold); }
+.game-tabs button[aria-pressed="true"] small { color: #e6d8ee; }
 
-/* Grid items default to min-width:auto, which means a grid track refuses to
-   shrink below its widest unbreakable content. These entries are full of
-   identifiers like `latte-shaders-translate-and-load` and `GX2SetColorBuffer`,
-   so at 375px a card measured 411px wide inside a 349px container and ran
-   36px past the viewport.
-   
-   It was invisible because body/html carry overflow-x: clip -- so the page did
-   not scroll sideways, it just silently cut the right-hand edge off every
-   card. min-width:0 lets the track shrink; overflow-wrap lets the long tokens
-   break rather than forcing it wide again. */
-.finding, .correction { min-width: 0; overflow-wrap: anywhere; }
-.f-detail, .f-row, .c-was, .c-now, .c-cost { overflow-wrap: anywhere; }
-
-/* Code spans keep their own line rather than being broken mid-token: a
-   register name split across two lines is worse than one that scrolls. */
-.f-detail code, .f-row code, .c-was code, .c-now code, .c-cost code {
-    overflow-wrap: normal; word-break: keep-all;
+.roster-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 20px; }
+#randomPick {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 42px; padding: 0 16px; border-radius: 999px;
+    background: var(--gold); color: var(--plum-lo); border: 0; font: 700 15px/1 var(--sans); cursor: pointer;
+    box-shadow: 0 3px 0 #b8871d;
 }
-.f-detail pre { overflow-x: auto; max-width: 100%; }
+#randomPick:hover { background: var(--gold-hi); }
+#voiceNote { font-size: 14.5px; color: var(--muted); }
 
-/* Small print under a 404 list. Renamed from a banner-specific class when
-   that banner was removed -- the rule is generic, the old name was not. */
-.fineprint { margin: 12px 0 0; font-size: 12.5px; color: rgba(214, 208, 232, .62); max-width: 62ch; }
+.showcase {
+    position: relative; margin: 0 0 30px; padding: 26px 64px;
+    border-radius: 22px; overflow: hidden; isolation: isolate;
+    background:
+        radial-gradient(60% 70% at 50% 45%, color-mix(in srgb, var(--el, #a763d8) 38%, transparent), transparent 70%),
+        linear-gradient(160deg, #2a1030, #1a0a1e);
+    color: #f3eef7; box-shadow: var(--shadow-lg); border: 1px solid rgba(243, 195, 78, .16);
+}
+.showcase .stage {
+    display: grid; grid-template-columns: 170px 1fr 300px; grid-template-areas: "left hero right" "plate plate plate";
+    gap: 18px; align-items: center; padding: 0;
+}
+.showcase .stage::before { display: none; }
+.loadouts { display: flex; flex-direction: column; gap: 12px; }
+.loadouts.left { grid-area: left; }
+.loadouts.right { grid-area: right; }
+.loadout {
+    background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 14px; padding: 12px 14px;
+    opacity: 0; transform: translateX(-16px) scale(.98);
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+}
+.loadouts.right .loadout { transform: translateX(16px) scale(.98); }
+.showcase.ready .loadout { opacity: 1; transform: none; }
+.showcase.ready .loadouts .loadout:nth-child(2) { transition-delay: .08s; }
+.showcase.ready .loadouts .loadout:nth-child(3) { transition-delay: .16s; }
+.lo-label { margin: 0 0 6px; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.loadout .emblem { width: 64px; height: 64px; display: block; }
+.loadout .face { width: 72px; height: 72px; border-radius: 50%; display: block; box-shadow: 0 0 0 3px var(--el, #a763d8); background: rgba(255,255,255,.08); }
+.loadout blockquote { margin: 0 0 8px; padding: 0; border: 0; color: #fff; font: 400 20px/1.2 var(--display); letter-spacing: .02em; }
+.play-line {
+    border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer;
+    background: var(--gold); color: var(--plum-lo); font: 700 14px/1 var(--sans);
+}
+.play-line:disabled { background: rgba(255, 255, 255, .12); color: #e3d6ea; cursor: default; font-weight: 600; }
+.loadout dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 14.5px; }
+.loadout dt { color: #cdbfd8; }
+.loadout dd { margin: 0; color: #fff; }
+#s-moves { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+#s-moves b { color: #fff; }
+#s-moves i { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+             margin-left: 7px; padding: 2px 7px; border-radius: 999px; background: rgba(243, 195, 78, .2); color: var(--gold-hi); }
+#s-moves span { display: block; color: #ddd0e6; line-height: 1.45; }
+.hero-slot { grid-area: hero; display: grid; place-items: center; min-height: 340px; }
+.hero-img { max-height: 380px; width: auto; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .45)); transition: opacity .2s; }
+.hero-img.swap { opacity: 0; }
+.hero-img.portrait-only { max-height: 200px; border-radius: 50%; box-shadow: 0 0 0 5px var(--el, #a763d8); }
+.plate { grid-area: plate; text-align: center; }
+.plate h2 { margin: 6px 0 0; color: #fff; font: 400 clamp(28px, 4vw, 42px)/1.1 var(--display); letter-spacing: .02em; }
+.el-tag { display: inline-block; font-size: 12.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+          padding: 3px 12px; border-radius: 999px; background: #1a0a1e; border: 2px solid var(--el, #a763d8); color: #fff; }
+.stage-nav {
+    position: absolute; top: 50%; z-index: 2; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+    background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .25); color: #fff; font-size: 18px;
+}
+.stage-nav:hover { background: rgba(255, 255, 255, .2); }
+.stage-nav.prev { left: 12px; }
+.stage-nav.next { right: 12px; }
+@media (max-width: 900px) {
+    .showcase { padding: 20px 16px 22px; }
+    .showcase .stage { grid-template-columns: 1fr; grid-template-areas: "hero" "plate" "left" "right"; }
+    .loadouts.left { flex-direction: row; }
+    .loadouts.left .loadout { flex: 1; }
+    .hero-slot { min-height: 240px; }
+    .hero-img { max-height: 260px; }
+    .stage-nav { top: 140px; }
+}
+
+#elements { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.el-group {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    border-top: 4px solid var(--el); padding: 14px 16px 16px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column-reverse; gap: 10px;
+}
+.el-mark { display: flex; align-items: center; gap: 8px; }
+.el-mark img { width: 28px; height: 28px; }
+.el-mark span { font: 400 20px/1 var(--display); letter-spacing: .03em; color: var(--head); }
+.el-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+    width: 84px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+    padding: 6px 4px; border: 0; border-radius: 10px; background: transparent; cursor: pointer;
+    font: 600 12.5px/1.2 var(--sans); color: var(--ink-2); text-align: center;
+}
+.chip:hover { background: var(--surface-2); }
+.chip img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px var(--el); background: var(--surface-2); }
+.chip.special img { box-shadow: 0 0 0 3px var(--el), 0 0 0 6px var(--gold); }
+.chip .has-audio::after { content: " \266A"; color: var(--accent); }
+.el-split { width: 10px; height: 10px; align-self: center; transform: rotate(45deg); background: var(--line-2); margin: 0 4px; }
+@media (max-width: 820px) { #elements { grid-template-columns: 1fr; } }
+
+/* --- /faq -------------------------------------------------------------------------- */
+.faq { display: flex; flex-direction: column; gap: 10px; }
+.qa { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.qa summary {
+    list-style: none; cursor: pointer; padding: 16px 52px 16px 20px; position: relative;
+    font-weight: 750; font-size: 17.5px; color: var(--head);
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::after {
+    content: ""; position: absolute; right: 20px; top: 50%; width: 10px; height: 10px; margin-top: -7px;
+    border: solid var(--accent); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg); transition: transform .2s;
+}
+.qa[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+.qa-body { padding: 0 20px 16px; color: var(--ink-2); overflow-wrap: anywhere; }
+.qa-body > :last-child { margin-bottom: 0; }
+
+/* --- /contributors --------------------------------------------------------------- */
+.stat-row { list-style: none; margin: 0 0 24px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.stat-row li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+.stat-row b { display: block; font: 400 36px/1 var(--display); color: var(--head); }
+.stat-row span { font-size: 15px; color: var(--muted); }
+@media (max-width: 620px) { .stat-row { grid-template-columns: 1fr; } }
+.tester-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.tester { display: flex; align-items: center; gap: 10px; padding: 10px 12px; min-width: 0;
+          background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.tester img, .tester .noav { width: 34px; height: 34px; border-radius: 50%; flex: none; }
+.tester .noav { display: grid; place-items: center; background: var(--plum); color: var(--gold); font-weight: 800; }
+.tname { font-weight: 650; font-size: 15px; white-space: nowrap; overflow: hidden; min-width: 0; }
+
+/* --- /legal --------------------------------------------------------------------- */
+.gist { list-style: none; margin: 0 0 32px; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.gist li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.gist svg { width: 30px; height: 30px; color: var(--ok); margin-bottom: 6px; }
+.gist h2 { font-family: var(--sans); font-weight: 750; letter-spacing: 0; font-size: 17.5px; margin-bottom: 6px; }
+.gist p { margin: 0; font-size: 15px; color: var(--ink-2); }
+@media (max-width: 820px) { .gist { grid-template-columns: 1fr; } }
+
+.doc-shell { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.doc-side { position: sticky; top: calc(var(--nav-h, 64px) + 16px); display: flex; flex-direction: column; gap: 14px; }
+.side-h, .toc-h { font-size: 12.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.lic-tabs { display: flex; flex-direction: column; gap: 6px; }
+.lic-tabs button {
+    text-align: left; display: flex; flex-direction: column; gap: 2px; cursor: pointer;
+    padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--head);
+}
+.lic-tabs button[aria-pressed="true"] { background: var(--plum); border-color: var(--plum); }
+.lic-tabs button[aria-pressed="true"] .t-name { color: var(--gold); }
+.lic-tabs button[aria-pressed="true"] .t-note { color: #e6d8ee; }
+.t-name { font-weight: 750; font-size: 15px; }
+.t-note { font-size: 13px; color: var(--muted); }
+.doc-toc { display: flex; flex-direction: column; gap: 2px; padding-top: 6px; border-top: 1px solid var(--line); }
+.doc-toc[hidden] { display: none; }
+.doc-toc a { font-size: 14px; padding: 4px 10px; border-left: 2px solid var(--line); text-decoration: none; color: var(--ink-2); }
+.doc-toc a.here { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+.doc-main { min-width: 0; overflow-wrap: anywhere; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 30px; box-shadow: var(--shadow); }
+.doc-body h1, .doc-body h2 { font-family: var(--sans); font-weight: 800; letter-spacing: 0; margin: 1.6em 0 .5em; }
+.doc-body h1, .doc-body h2.doc-title { font-size: 24px; }
+.doc-body h2 { font-size: 21px; }
+.doc-body > :first-child { margin-top: 0; }
+.doc-body h3 { font-size: 18px; margin-top: 1.4em; }
+.doc-body ul, .doc-body ol { padding-left: 1.3em; }
+.doc-table { overflow-x: auto; margin: 0 0 1em; }
+.doc-table table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.doc-table th, .doc-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.doc-table th { color: var(--head); }
+.lic-plain { white-space: pre-wrap; font-size: 13.5px; background: transparent; border: 0; padding: 0; }
+.doc-meta { margin: 18px 0 0; font-size: 14px; color: var(--muted); }
+.doc-loading { color: var(--muted); }
+@media (max-width: 900px) {
+    .doc-shell { grid-template-columns: 1fr; }
+    .doc-side { position: static; }
+    .lic-tabs { flex-direction: row; flex-wrap: wrap; }
+    .doc-toc { display: none; }
+    .doc-main { padding: 20px 18px; }
+}
+
+/* --- 404 -------------------------------------------------------------------------- */
+.jump { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.jump a {
+    display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 14px; align-items: center;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px;
+    box-shadow: var(--shadow); text-decoration: none; color: inherit; transition: transform .15s var(--ease);
+}
+.jump a:hover { transform: translateY(-2px); color: inherit; }
+.jump svg { grid-row: span 2; width: 44px; height: 44px; padding: 10px; border-radius: 12px; background: var(--plum); color: var(--gold); }
+.jump b { color: var(--head); font-size: 17px; }
+.jump span { font-size: 14.5px; color: var(--muted); }
+@media (max-width: 620px) { .jump { grid-template-columns: 1fr; } }
+
+/* --- easter eggs --------------------------------------------------------------------- */
+.egg-toast {
+    position: fixed; left: 50%; bottom: 24px; z-index: 90; max-width: min(92vw, 420px);
+    transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+    background: var(--plum-lo); color: #f3eef7; padding: 14px 18px; border-radius: 14px;
+    box-shadow: var(--shadow-lg); border: 1px solid rgba(243, 195, 78, .35);
+    transition: opacity .25s, transform .25s var(--ease); font-size: 15px;
+}
+.egg-toast.on { opacity: 1; transform: translate(-50%, 0); }
+.egg-toast b { color: var(--gold); font: 400 18px/1.2 var(--display); letter-spacing: .02em; }
+.egg-toast kbd { background: rgba(255, 255, 255, .14); border-radius: 4px; padding: 1px 6px; }
+
+.portal { --portal: #a763d8; }
+.portal h1, .portal h2, .portal .p-name, .portal .stat-row b, .portal .stp b { color: var(--portal); transition: color 1.4s linear; }
+.portal .topbar { box-shadow: inset 0 -3px 0 var(--portal); transition: box-shadow 1.4s linear; }
+.portal .site-foot { box-shadow: inset 0 4px 0 var(--portal); transition: box-shadow 1.4s linear; }
+.portal .person, .portal .qa, .portal .post, .portal .finding { border-top-color: var(--portal); transition: border-color 1.4s linear; }
+
+/* --- reduced motion -------------------------------------------------------------------
+   One block, at the end, so nothing declared above can outrank it. Every
+   animation on the site stops; transitions become instant. */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
+    }
+    .js-reveal .reveal { opacity: 1; transform: none; }
+    .loadout { opacity: 1; transform: none; }
+}
+
+/* --- print ------------------------------------------------------------------------------ */
+@media print {
+    .topbar, #navScrim, .sky, .hero-cta, .site-foot, .f-controls, .f-tabs, .stage-nav, #randomPick { display: none !important; }
+    .f-panel[hidden] { display: block !important; }
+    body { background: #fff; color: #000; }
+    .hero { background: none; padding: 0 0 20px; margin: 0; }
+    .card, .finding, .correction, .post, .person { box-shadow: none; break-inside: avoid; }
+}
