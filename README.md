@@ -39,12 +39,29 @@ React Native study. That repository is GPL-3.0 and asks that its artwork not
 be reused, so none of its code or artwork is here: the shader and the motion
 were written for this site.
 
+## Tests
+
+`.github/workflows/site.yml` runs two checks on every push:
+
+- **`tests/smoke.mjs`** loads every page in Playwright at desktop and phone
+  width, under the production headers that `tools/serve.py` sends. It fails
+  on errors, CSP violations, broken same-origin requests and pages that
+  scroll sideways. It also checks the hero in its rendered, still and
+  no-WebGL modes, and saves screenshots as an artifact.
+- **`tests/feed.mjs`** runs the feed route against mocked sources and parses
+  what it returns as XML.
+
+To run them locally, start `python3 tools/serve.py 8902` and then run
+`node tests/smoke.mjs`. That needs `npm install --no-save playwright`.
+There is deliberately no `package.json`, because one would make Vercel
+install dependencies for a site that has none.
+
 ## Deployment coupling
 
 This site is Vercel-shaped and worth knowing about before a move. `cleanUrls`
 gives the pages their extensionless URLs, the security headers are all declared
-in `vercel.json`, and the four routes under `api/` are Vercel serverless
-functions. Moving hosts means porting those four functions and re-declaring the
+in `vercel.json`, and the routes under `api/` are Vercel serverless
+functions. Moving hosts means porting those functions and re-declaring the
 headers somewhere else; the static pages themselves would move unchanged.
 
 Noted rather than fixed: one host is the right call today, and an abstraction
@@ -52,7 +69,7 @@ layer for a move nobody has planned would cost more than it saves.
 
 ## Serverless routes
 
-All four exist so a visitor's browser only ever talks to this one origin,
+The routes exist so a visitor's browser only ever talks to this one origin,
 rather than being sent off to GitHub or Discord directly. That keeps visitors'
 IP addresses out of third-party request logs for services they didn't ask to
 contact, and it means one shared, edge-cached lookup is spent against
@@ -64,6 +81,7 @@ GitHub's unauthenticated rate limit instead of one per visitor.
 | `api/github-repos.js` | Proxies the Arkchemy org's public repo listing |
 | `api/discord-avatar.js` | Resolves a Discord avatar via Discord's official Bot API |
 | `api/avatar-image.js` | Streams avatar image bytes back through this origin |
+| `api/feed.js` | The findings and the Discord build log as an Atom feed, at `/feed.xml` |
 
 `discord-avatar.js` requires a Discord bot token in the environment; the other
 three need no credentials.

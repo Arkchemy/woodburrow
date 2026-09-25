@@ -1,0 +1,64 @@
+# The site, checked in a real browser before it ships.
+#
+#   smoke   every page at desktop and phone width under the production
+#           headers (tools/serve.py sends vercel.json's CSP), failing on
+#           errors, CSP violations, broken same-origin requests and sideways
+#           scrolling; the front page's hero in its rendered, still and
+#           no-WebGL modes (tests/smoke.mjs)
+#   feed    /feed.xml's route with its sources mocked, and the output parsed
+#           as XML (tests/feed.mjs)
+#
+# Nothing is deployed from here; Vercel deploys on its own.
+name: site
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # no package.json on purpose: one would make Vercel install
+      # dependencies on every deploy of a site that has none
+      - name: Playwright
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Serve public/ with the production headers
+        run: |
+          python3 tools/serve.py 8902 &
+          for i in $(seq 30); do curl -sf http://127.0.0.1:8902/ >/dev/null && break; sleep 1; done
+
+      - name: Smoke test
+        run: node tests/smoke.mjs
+
+      - name: Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: tests/out/
+          retention-days: 14
+
+  feed:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Feed route
+        run: |
+          node tests/feed.mjs > /tmp/feed.xml
+          python3 -c "import sys, xml.dom.minidom; xml.dom.minidom.parse(sys.argv[1]); print('well-formed')" /tmp/feed.xml

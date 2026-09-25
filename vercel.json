@@ -46,5 +46,11 @@
       "path": "/api/rules-sync",
       "schedule": "0 5 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/feed.xml",
+      "destination": "/api/feed"
+    }
   ]
 }

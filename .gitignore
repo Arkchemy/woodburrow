@@ -29,3 +29,6 @@ branding/icon/out-tight/
 # whatever name you give it, and none of those may ever be committed.
 .vercel
 .env*
+
+# Screenshots written by tests/smoke.mjs
+tests/out/
