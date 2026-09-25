@@ -197,6 +197,91 @@ main:focus { outline: none; }
 }
 .btn svg { width: 18px; height: 18px; }
 .btn:hover { transform: translateY(-1px); }
+/* --- the front page: the rendered hero -----------------------------------
+   js/cinema.js adds .cinema-on once WebGL2 is running. Until then, and for
+   good without it, everything below is inert and the hero is the CSS sky
+   above with its copy in one column. With .cinema-on the hero is three
+   screens tall and its stage is pinned while the scroll plays it: the
+   script sets each group's opacity, blur and wipe mask as it goes.
+   .cinema-still (reduced motion) keeps the rendered backdrop but pins and
+   scrubs nothing. */
+.hero-stat { font: 400 clamp(20px, 2.6vw, 26px)/1.2 var(--display); color: var(--plum); margin: 0 auto 12px; letter-spacing: .01em; }
+.hero-stat b { font-weight: 400; color: var(--berry); }
+@media (prefers-color-scheme: dark) { .hero-stat { color: #f3eef7; } .hero-stat b { color: var(--gold); } }
+.cine-canvas, .cine-scrim, .cine-cue, .cine-fade { display: none; }
+
+.cinema-on .hero {
+    height: 300vh; height: 300svh; padding: 0; overflow: visible;
+    background: #0d0812;
+}
+.cinema-on .hero::after, .cinema-on .sky { display: none; }
+.cinema-on .cine-stage {
+    position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; touch-action: pan-y;
+}
+.cinema-on .cine-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+.cinema-on .cine-scrim {
+    display: block; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 72% 50% at 50% 46%, rgba(14, 6, 20, .52), rgba(14, 6, 20, 0) 74%);
+}
+.cinema-on .hero-in {
+    position: absolute; inset: var(--bar-h) 16px 0; max-width: none; margin: 0;
+    display: grid; place-items: center; pointer-events: none;
+}
+.cinema-on .cine-g { grid-area: 1 / 1; max-width: 920px; opacity: 0; }
+.cinema-on .cine-g a, .cinema-on .cine-g button { pointer-events: auto; }
+.cinema-on #cineC { margin-top: 30vh; }
+.cinema-on .lockup .wordmark { filter: drop-shadow(0 6px 22px rgba(10, 4, 16, .55)); }
+.cinema-on .hero-tag { color: #fff; text-shadow: 0 2px 20px rgba(10, 4, 16, .7); }
+.cinema-on .hero-stat {
+    font-size: clamp(34px, 6vw, 76px); line-height: 1.02; color: #fff; max-width: 16ch; margin-bottom: 22px;
+    text-shadow: 0 4px 30px rgba(10, 4, 16, .65);
+}
+.cinema-on .hero-stat b { color: var(--gold); display: block; }
+/* body text sits on its own pane of dark glass: at .72 over the brightest
+   sky the ground stays near 8:1 against the text */
+.cinema-on .hero-sub {
+    color: #f6f0fa; max-width: 58ch; padding: 14px 22px; border-radius: 18px;
+    background: rgba(22, 8, 28, .72); border: 1px solid rgba(255, 255, 255, .14);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 12px 34px rgba(8, 2, 14, .3);
+}
+
+/* liquid glass: translucent, blurred, with a lit top edge and a dark lower
+   one, like a thick pane catching the light */
+.cinema-on .btn-ghost, .cinema-on .hero-now {
+    background: rgba(255, 255, 255, .13); color: #fff; border-color: rgba(255, 255, 255, .34);
+    -webkit-backdrop-filter: blur(16px) saturate(1.7); backdrop-filter: blur(16px) saturate(1.7);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -1px 0 rgba(0, 0, 0, .22), 0 10px 30px rgba(8, 2, 14, .35);
+}
+.cinema-on .btn-ghost:hover { background: rgba(255, 255, 255, .24); color: #fff; }
+.cinema-on .hero-now::before { background: var(--gold); }
+
+.cinema-on .cine-cue {
+    display: block; position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); margin: 0;
+    font: 700 12px/1 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: #fff; opacity: 0;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .6); pointer-events: none;
+}
+.cinema-on .cine-cue::after {
+    content: ""; display: block; width: 1px; height: 34px; margin: 10px auto 0;
+    background: linear-gradient(#fff, transparent); animation: cue 1.8s var(--ease) infinite;
+    transform-origin: top;
+}
+@keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+.cinema-on .cine-fade {
+    display: block; position: absolute; left: 0; right: 0; bottom: 0; height: 32vh; pointer-events: none; opacity: 0;
+    background: linear-gradient(transparent, var(--bg));
+}
+
+.cinema-still .hero { height: auto; }
+.cinema-still .cine-stage { position: relative; height: auto; min-height: 100vh; min-height: 100svh; }
+.cinema-still .hero-in {
+    position: relative; inset: auto; min-height: 100svh; padding: calc(var(--bar-h) + 40px) 0 60px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;
+}
+.cinema-still .cine-g { opacity: 1; }
+.cinema-still #cineC { margin-top: 12px; }
+.cinema-still .cine-cue, .cinema-still .cine-fade { display: none; }
+
 .btn-gold { background: var(--gold); color: var(--plum-lo); box-shadow: 0 3px 0 #b8871d; }
 .btn-gold:hover { background: var(--gold-hi); color: var(--plum-lo); }
 .btn-ghost { background: rgba(255, 255, 255, .78); color: var(--plum); border-color: rgba(61, 17, 64, .25); }
@@ -211,10 +296,13 @@ main:focus { outline: none; }
    background to be designed against. */
 .topbar {
     position: sticky; top: 0; z-index: 50;
-    background: rgba(42, 16, 48, .94);
-    -webkit-backdrop-filter: saturate(1.4) blur(10px);
-    backdrop-filter: saturate(1.4) blur(10px);
-    border-bottom: 1px solid rgba(243, 195, 78, .18);
+    /* liquid glass, but never so clear that the nav text drops below AAA:
+       at .82 over a white page the effective ground is still 8:1 */
+    background: rgba(42, 16, 48, .82);
+    -webkit-backdrop-filter: saturate(1.7) blur(18px);
+    backdrop-filter: saturate(1.7) blur(18px);
+    border-bottom: 1px solid rgba(243, 195, 78, .2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .09), 0 8px 28px rgba(20, 6, 26, .18);
 }
 .topbar-in {
     width: min(100% - 32px, 1240px); margin-inline: auto; height: var(--bar-h);
@@ -597,10 +685,10 @@ a.person:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); colo
 /* --- reveal-on-scroll -------------------------------------------------------
    Only with JavaScript (the class on <html> comes from common.js), so a page
    whose scripts fail is plainly visible rather than blank. */
-.js-reveal .reveal { opacity: 0; transform: translateY(14px); }
+.js-reveal .reveal { opacity: 0; transform: translateY(18px); filter: blur(8px); }
 .js-reveal .reveal.shown {
-    opacity: 1; transform: none;
-    transition: opacity .55s var(--ease), transform .55s var(--ease);
+    opacity: 1; transform: none; filter: none;
+    transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease);
     transition-delay: calc(var(--i, 0) * 60ms);
 }
 
@@ -959,7 +1047,7 @@ a.person:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); colo
         animation-duration: .01ms !important; animation-iteration-count: 1 !important;
         transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
     }
-    .js-reveal .reveal { opacity: 1; transform: none; }
+    .js-reveal .reveal { opacity: 1; transform: none; filter: none; }
     .loadout { opacity: 1; transform: none; }
 }
 

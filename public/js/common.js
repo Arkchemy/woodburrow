@@ -398,6 +398,9 @@ fetch("emoji.json" + DATA_V).then(r => r.json()).then(d => {
         let ticking = false;
         const update = () => {
             ticking = false;
+            // js/cinema.js pins the lockup in view for the whole hero, so
+            // it decides this itself from how far the hero has played
+            if (root.classList.contains("cinema-on")) return;
             const bar = parseInt(getComputedStyle(root).getPropertyValue("--nav-h"), 10) || 64;
             root.classList.toggle("scrolled", (lockup || hero).getBoundingClientRect().bottom <= bar);
         };

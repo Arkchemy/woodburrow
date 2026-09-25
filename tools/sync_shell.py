@@ -154,6 +154,9 @@ def main() -> int:
                       "".join(f'\n    <script src="{s}"></script>' for s in cfg["scripts"]),
                       page, count=1)
 
+        # The rendered hero is the front page's alone.
+        page = re.sub(r'\n *<script src="js/cinema\.js[^"]*"></script>', '', page, count=1)
+
         # index.html marks Home as the current page; no sub-page is Home.
         page = page.replace('<a href="/" aria-current="page">Home</a>',
                             '<a href="/">Home</a>', 1)

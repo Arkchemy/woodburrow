@@ -18,6 +18,27 @@ would be untrue, and `LEGAL.md` sets out exactly what is here and why.
 | `branding/` | Logo source files (SVG / PNG) |
 | `api/` | Vercel serverless functions (see below) |
 
+## The front page's hero
+
+`public/js/cinema.js` renders it: a floating island drawn as 3D Gaussian
+splats, seen through a lens of liquid glass, played by the scroll. It is
+our own WebGL2 code, with no libraries, and the island is generated in the
+browser from a fixed seed, so it costs no download. Without WebGL2 the plain
+CSS sky is the hero; with reduced motion it is a still frame.
+
+The same renderer draws real captures. Film something, reconstruct it with
+[Open Reality](https://github.com/reality-opened/openreality) or any 3D
+Gaussian Splatting tool, convert the `.ply` with `tools/ply_to_splat.py`,
+put the result in `public/scene/` and name it in `data-scene` on the canvas
+in `index.html`. The script's docstring has the details. Anything you film
+is yours to publish or not, so check the frame first.
+
+The glass lens that climbs and shrinks takes its idea from Appllama's
+[liquid-glass-screens](https://github.com/appllama/liquid-glass-screens), a
+React Native study. That repository is GPL-3.0 and asks that its artwork not
+be reused, so none of its code or artwork is here: the shader and the motion
+were written for this site.
+
 ## Deployment coupling
 
 This site is Vercel-shaped and worth knowing about before a move. `cleanUrls`

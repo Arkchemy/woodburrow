@@ -24,7 +24,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="images/logo/arkchemy-icon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
 <link rel="apple-touch-icon" href="images/logo/arkchemy-icon-256.png">
-<link rel="stylesheet" href="css/site.css?v=1790243737">
+<link rel="stylesheet" href="css/site.css?v=1790372893">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -87,7 +87,16 @@
                 <img class="sk sk-isle d" src="images/sky/island-lg.svg" alt="" width="180" height="150">
                 <img class="sk sk-balloon" src="images/sky/balloon.svg" alt="" width="90" height="130">
             </div>
+            <!-- js/cinema.js draws the island and the glass into this canvas
+                 and scrubs the three groups below with the scroll. Without
+                 WebGL2 none of it runs and the sky above is the hero. To show
+                 a real capture instead of the generated island, add
+                 data-scene="scene/NAME.splat" (see tools/ply_to_splat.py). -->
+            <div class="cine-stage" id="cineStage">
+            <canvas id="cineCanvas" class="cine-canvas" aria-hidden="true"></canvas>
+            <div class="cine-scrim" aria-hidden="true"></div>
             <div class="hero-in">
+                <div class="cine-g" id="cineA">
                 <h1 id="site-lockup" class="lockup">
                     <img class="mark" src="images/logo/arkchemy-icon-512.png" alt="" width="512" height="512">
                     <!-- The wordmark is the drawn mark from branding/wordmark:
@@ -131,14 +140,23 @@
             </svg>
                 </h1>
                 <p class="hero-tag"><i>Skylanders: Spyro&rsquo;s Adventure</i>, rebuilt to run natively on the Nintendo Switch.</p>
+                </div>
+                <div class="cine-g" id="cineB">
+                <p class="hero-stat"><b>1.45&nbsp;million</b> PowerPC instructions, rewritten as&nbsp;C.</p>
                 <p class="hero-sub">A fan preservation project. The Wii&nbsp;U game&rsquo;s code is
                 translated, instruction by instruction, into C and compiled for the Switch.
                 No emulator runs underneath it.</p>
+                </div>
+                <div class="cine-g" id="cineC">
                 <p class="hero-cta">
                     <a class="btn btn-gold" href="#stands">Where it stands<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
                     <a class="btn btn-ghost" href="/findings">Read the findings</a>
                 </p>
                 <p class="hero-now" id="heroNow" hidden></p>
+                </div>
+            </div>
+            <p class="cine-cue" id="cineCue" aria-hidden="true">Scroll</p>
+            <div class="cine-fade" id="cineFade" aria-hidden="true"></div>
             </div>
         </section>
 
@@ -281,7 +299,8 @@
         </div>
     </footer>
 
-    <script src="js/common.js?v=1790243290"></script>
-    <script src="js/home.js?v=1790243206"></script>
+    <script src="js/common.js?v=1790372427"></script>
+    <script src="js/home.js?v=1790371844"></script>
+    <script src="js/cinema.js?v=1790372893"></script>
 </body>
 </html>
