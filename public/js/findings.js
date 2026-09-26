@@ -142,6 +142,7 @@
             f.area ? `<span class="f-badge f-area">${esc(pretty(AREA_NAME, f.area))}</span>` : "",
             conf ? `<span class="f-badge f-conf-${esc(conf)}">${esc(pretty(CONF_NAME, conf))}</span>` : "",
             `</p></header>`,
+            TOOLS,
             f.detail ? `<div class="f-detail">${mdLite(f.detail)}</div>` : "",
             row("Why it matters:", f.why_it_matters),
             row("Would be disproved by:", f.falsifiable_by || f.what_would_disprove, "f-falsify"),
@@ -271,3 +272,36 @@
         listEl.innerHTML = '<p class="feed-empty">Findings are unavailable right now.</p>';
     });
 })();
+
+/* --- the card toolbar ---------------------------------------------------------
+   A small floating toolbar on every finding: copy a link to the card, or hand
+   it to the device's share sheet where there is one. It fades in on hover
+   and on keyboard focus inside the card. One delegated listener serves all
+   of them. */
+const TOOLS =
+    `<div class="f-tools" role="group" aria-label="This finding">` +
+      `<button type="button" data-act="copy"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copy link</span></button>` +
+      (navigator.share ? `<button type="button" data-act="share"><svg aria-hidden="true"><use href="#i-share"/></svg><span>Share</span></button>` : "") +
+    `</div>`;
+
+document.addEventListener("click", e => {
+    const b = e.target.closest(".f-tools button");
+    if (!b) return;
+    const card = b.closest(".finding");
+    const url = location.origin + location.pathname + "#" + card.id;
+    const title = (card.querySelector("h3") || {}).textContent || "Arkchemy finding";
+    const label = b.querySelector("span");
+    const flash = text => {
+        const was = label.textContent;
+        label.textContent = text;
+        b.classList.add("done");
+        setTimeout(() => { label.textContent = was; b.classList.remove("done"); }, 1600);
+    };
+    if (b.dataset.act === "share") {
+        navigator.share({ title, url }).catch(() => {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => flash("Copied"), () => flash("Copy failed"));
+    } else {
+        flash("Copy failed");
+    }
+});

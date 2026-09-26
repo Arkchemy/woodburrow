@@ -25,7 +25,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="images/logo/arkchemy-icon-16.png">
 <link rel="apple-touch-icon" href="images/logo/arkchemy-icon-256.png">
 <link rel="alternate" type="application/atom+xml" title="Arkchemy: findings and build log" href="/feed.xml">
-<link rel="stylesheet" href="css/site.css?v=1790372893">
+<link rel="stylesheet" href="css/site.css?v=1790405190">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -47,6 +47,11 @@
     <symbol id="i-switch" viewBox="0 0 24 24"><path fill="currentColor" d="M8 3h3v18H8a5 5 0 01-5-5V8a5 5 0 015-5zm-.5 4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM13 3h3a5 5 0 015 5v8a5 5 0 01-5 5h-3V3zm3.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></symbol>
     <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 00-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1-2.7-1-.4-1-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 014 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.8-3.6 4 .3.3.6.8.6 1.6v2.3c0 .2.1.5.5.4A8 8 0 008 0z"/></symbol>
     <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M19.6 5.3A16.4 16.4 0 0015.5 4l-.5 1a15 15 0 00-6 0l-.5-1a16.4 16.4 0 00-4.1 1.3C1.8 9.2 1.1 13 1.4 16.8a16.6 16.6 0 005 2.5l1.1-1.7c-.6-.2-1.2-.5-1.7-.9l.4-.3a11.8 11.8 0 0011.6 0l.4.3c-.5.4-1.1.7-1.7.9l1.1 1.7a16.5 16.5 0 005-2.5c.4-4.4-.7-8.2-2.9-11.5zM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path fill="currentColor" d="M10 3a7 7 0 015.6 11.2l5.1 5.1-1.4 1.4-5.1-5.1A7 7 0 1110 3zm0 2a5 5 0 100 10 5 5 0 000-10z"/></symbol>
+    <symbol id="i-feed" viewBox="0 0 24 24"><path fill="currentColor" d="M5 17a2 2 0 110 4 2 2 0 010-4zM4 10a10 10 0 0110 10h-2.5A7.5 7.5 0 004 12.5V10zm0-6a16 16 0 0116 16h-2.5A13.5 13.5 0 004 6.5V4z"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path fill="currentColor" d="M18 16a3 3 0 00-2.4 1.2l-6.7-3.4a3 3 0 000-1.6l6.7-3.4A3 3 0 1015 7l-6.7 3.4a3 3 0 100 3.2L15 17a3 3 0 103-1z"/></symbol>
   </defs>
 </svg>
 
@@ -67,6 +72,8 @@
             <a href="/faq">FAQ</a>
             <a href="/contributors">People</a>
             <span class="nav-ext">
+                <!-- Opens the command palette (js/common.js); also Ctrl/Cmd+K or "/" -->
+                <button class="ext" type="button" id="navSearch" hidden aria-label="Search the site" aria-keyshortcuts="Control+K Meta+K /"><svg aria-hidden="true"><use href="#i-search"/></svg><span>Search</span><kbd>Ctrl K</kbd></button>
                 <a class="ext" href="https://github.com/Arkchemy" aria-label="GitHub"><svg aria-hidden="true"><use href="#i-github"/></svg><span>GitHub</span></a>
                 <a class="ext" href="#" id="navDiscord" hidden aria-label="Discord"><svg aria-hidden="true"><use href="#i-discord"/></svg><span>Discord</span></a>
             </span>
@@ -161,6 +168,22 @@
             </div>
         </section>
 
+        <!-- The project in numbers. Each figure counts up once as it scrolls
+             in (js/home.js); the text is the real number from the start, so
+             without JavaScript or with reduced motion it simply reads. The
+             findings and corrections counts are replaced with the live
+             totals from findings.json. -->
+        <section class="band stats-band" aria-label="The project in numbers">
+            <ul class="stats">
+                <li><b class="tick" data-to="1.45" data-dec="2" data-suffix="M">1.45M</b><span>PowerPC instructions, rewritten as C</span></li>
+                <li><b class="tick" data-to="19622">19,622</b><span>functions in the game&rsquo;s code</span></li>
+                <li><b class="tick" data-to="6">6</b><span>games on one engine</span></li>
+                <li><b class="tick" data-to="351">351</b><span>Skylanders catalogued</span></li>
+                <li><b class="tick" id="statFindings" data-to="50">50</b><span>findings, each with its evidence</span></li>
+                <li><b class="tick" id="statCorrections" data-to="23">23</b><span>of our own claims, corrected in public</span></li>
+            </ul>
+        </section>
+
         <section class="band" id="stands" aria-labelledby="standsH">
             <header class="sec-head">
                 <p class="eyebrow">Where it stands</p>
@@ -178,7 +201,7 @@
                 <li class="stp st-ahead"><span class="st-dot"></span><b>Play</b><em>Not reached</em><p>Input, audio, the Portal of Power.</p></li>
             </ol>
             <div class="now-next">
-                <article class="card now-card" id="nowCard">
+                <article class="card now-card beam" id="nowCard">
                     <p class="eyebrow">Working on now</p>
                     <h3 id="nowTitle">Unpicking the loading stall</h3>
                     <p id="nowDetail">The game loads its assets through a small pool of memory
@@ -206,6 +229,48 @@
                 <li><svg aria-hidden="true"><use href="#i-flask"/></svg><b>jouster</b><span>Compiles that C for the Switch&rsquo;s ARM64 chip, with a stand-in for the Wii&nbsp;U&rsquo;s operating system.</span><a href="https://github.com/Arkchemy/jouster">Switch build</a></li>
                 <li><svg aria-hidden="true"><use href="#i-switch"/></svg><b>The Switch</b><span>A native homebrew app. Every result on this site was measured on real hardware.</span></li>
             </ol>
+        </section>
+
+        <section class="band" id="elementsBand" aria-labelledby="elemH">
+            <header class="sec-head">
+                <p class="eyebrow">Spyro&rsquo;s Adventure</p>
+                <h2 id="elemH">Eight elements, four Skylanders each</h2>
+                <p class="lede">The game being ported has a perfectly balanced roster: 32
+                Skylanders, exactly four to every element. Pick one.</p>
+            </header>
+            <!-- Eight emblems orbit the portal (js/home.js); choosing one puts
+                 its four Skylanders in the centre. Without JavaScript the
+                 buttons sit still in their ring and the link below goes to
+                 the full roster. -->
+            <div class="orbit" id="orbit">
+                <div class="orbit-ring" aria-hidden="true"></div>
+                <div class="orbit-core" id="orbitCore" aria-live="polite">
+                    <img class="orbit-mark" src="images/logo/arkchemy-icon-256.png" alt="" width="256" height="256">
+                    <p class="orbit-name" id="orbitName">Pick an element</p>
+                    <ul class="orbit-crew" id="orbitCrew"></ul>
+                </div>
+                <button type="button" class="orb-el" style="--k:0" data-el="Magic" aria-pressed="false"><img src="images/elements/magic.webp" alt="" width="64" height="64"><span>Magic</span></button>
+                <button type="button" class="orb-el" style="--k:1" data-el="Tech" aria-pressed="false"><img src="images/elements/tech.webp" alt="" width="64" height="64"><span>Tech</span></button>
+                <button type="button" class="orb-el" style="--k:2" data-el="Life" aria-pressed="false"><img src="images/elements/life.webp" alt="" width="64" height="64"><span>Life</span></button>
+                <button type="button" class="orb-el" style="--k:3" data-el="Undead" aria-pressed="false"><img src="images/elements/undead.webp" alt="" width="64" height="64"><span>Undead</span></button>
+                <button type="button" class="orb-el" style="--k:4" data-el="Earth" aria-pressed="false"><img src="images/elements/earth.webp" alt="" width="64" height="64"><span>Earth</span></button>
+                <button type="button" class="orb-el" style="--k:5" data-el="Air" aria-pressed="false"><img src="images/elements/air.webp" alt="" width="64" height="64"><span>Air</span></button>
+                <button type="button" class="orb-el" style="--k:6" data-el="Fire" aria-pressed="false"><img src="images/elements/fire.webp" alt="" width="64" height="64"><span>Fire</span></button>
+                <button type="button" class="orb-el" style="--k:7" data-el="Water" aria-pressed="false"><img src="images/elements/water.webp" alt="" width="64" height="64"><span>Water</span></button>
+            </div>
+            <p class="more-link"><a href="/skylanders?game=ssa">All 32 in Spyro&rsquo;s Adventure<svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </section>
+
+        <section class="band marquee-band" aria-labelledby="marqH">
+            <header class="sec-head">
+                <p class="eyebrow">Findings</p>
+                <h2 id="marqH">What taking the engine apart has shown</h2>
+            </header>
+            <!-- Two rows of finding titles drifting in opposite directions,
+                 filled from findings.json (js/home.js). Paused on hover and
+                 focus, still with reduced motion; every title is a link. -->
+            <div class="marquee" id="marqueeA" data-dir="left"></div>
+            <div class="marquee" id="marqueeB" data-dir="right"></div>
         </section>
 
         <section class="band split" aria-label="Latest">
@@ -282,15 +347,32 @@
                 <a href="/games">The games</a>
                 <a href="/skylanders">Skylanders</a>
                 <a href="/contributors">Contributors</a>
+                <a href="/feed.xml">Feed</a>
             </nav>
             <nav class="foot-col" aria-label="Elsewhere">
                 <p class="foot-h">Elsewhere</p>
                 <a href="https://github.com/Arkchemy">GitHub</a>
                 <a href="#" id="footDiscord" hidden>Discord</a>
-                <a href="/feed.xml">Feed</a>
                 <a href="/legal">Legal &amp; privacy</a>
+                <a href="/.well-known/security.txt">Security contact</a>
             </nav>
         </div>
+        <!-- The dock: every place on the site in one centred row. Items grow
+             under the pointer (js/common.js); a plain row of links without
+             JavaScript or with reduced motion. -->
+        <nav class="dock" id="dock" aria-label="Quick links">
+            <a href="/" data-tip="Home"><svg aria-hidden="true"><use href="#i-home"/></svg><span>Home</span></a>
+            <a href="/progress" data-tip="Progress"><svg aria-hidden="true"><use href="#i-wall"/></svg><span>Progress</span></a>
+            <a href="/findings" data-tip="Findings"><svg aria-hidden="true"><use href="#i-flask"/></svg><span>Findings</span></a>
+            <a href="/games" data-tip="Games"><svg aria-hidden="true"><use href="#i-controller"/></svg><span>Games</span></a>
+            <a href="/skylanders" data-tip="Skylanders"><svg aria-hidden="true"><use href="#i-spark"/></svg><span>Skylanders</span></a>
+            <i class="dock-sep" aria-hidden="true"></i>
+            <a href="/faq" data-tip="Questions"><svg aria-hidden="true"><use href="#i-help"/></svg><span>Questions</span></a>
+            <a href="/contributors" data-tip="People"><svg aria-hidden="true"><use href="#i-people"/></svg><span>People</span></a>
+            <a href="https://github.com/Arkchemy" data-tip="GitHub"><svg aria-hidden="true"><use href="#i-github"/></svg><span>GitHub</span></a>
+            <a href="/feed.xml" data-tip="Feed"><svg aria-hidden="true"><use href="#i-feed"/></svg><span>Feed</span></a>
+            <a href="/legal" data-tip="Legal"><svg aria-hidden="true"><use href="#i-doc"/></svg><span>Legal</span></a>
+        </nav>
         <div class="foot-bar">
             <p><b>Arkchemy</b> &middot; a fan preservation project. Not affiliated
             with, endorsed by or sponsored by Activision Publishing, Inc.
@@ -301,8 +383,8 @@
         </div>
     </footer>
 
-    <script src="js/common.js?v=1790372427"></script>
-    <script src="js/home.js?v=1790371844"></script>
+    <script src="js/common.js?v=1790406299"></script>
+    <script src="js/home.js?v=1790404380"></script>
     <script src="js/cinema.js?v=1790372893"></script>
 </body>
 </html>

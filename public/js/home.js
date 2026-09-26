@@ -96,9 +96,100 @@ fetch("findings.json" + DATA_V).then(r => r.json()).then(d => {
         host.appendChild(a);
     });
     watchReveal();
+
+    // the live totals for the stats band, before it counts up
+    const setStat = (id, n) => { const el = document.getElementById(id); if (el) { el.dataset.to = n; el.textContent = n.toLocaleString("en-GB"); } };
+    setStat("statFindings", (d.findings || []).length);
+    setStat("statCorrections", (d.corrections || []).length);
+
+    // the marquee: every finding, split across two rows
+    const titled = (d.findings || []).filter(f => f.title);
+    fillMarquee(document.getElementById("marqueeA"), titled.filter((_, i) => i % 2 === 0));
+    fillMarquee(document.getElementById("marqueeB"), titled.filter((_, i) => i % 2 === 1));
 }).catch(() => {
     document.getElementById("latestFindings").innerHTML = '<p class="feed-empty">Findings are unavailable right now.</p>';
+    document.querySelectorAll(".marquee-band").forEach(b => { b.hidden = true; });
 });
+
+/* --- the findings marquee ----------------------------------------------------
+   One track holding the titles twice; CSS slides it by exactly half its
+   width and loops, so the seam never shows. The second copy is hidden from
+   assistive technology and from tabbing, so each finding is announced and
+   focusable once. Hover or focus pauses it (CSS). */
+function fillMarquee(host, list) {
+    if (!host || !list.length) return;
+    const track = document.createElement("div");
+    track.className = "marquee-track";
+    const item = (f, dup) => {
+        const a = document.createElement("a");
+        a.className = "marquee-item";
+        a.href = "/findings#f-" + encodeURIComponent(f.id || "");
+        a.innerHTML = `<span class="marquee-conf f-conf-${esc(f.confidence || "")}" aria-hidden="true"></span>${esc(f.title)}`;
+        if (dup) { a.tabIndex = -1; a.setAttribute("aria-hidden", "true"); }
+        return a;
+    };
+    list.forEach(f => track.appendChild(item(f, false)));
+    list.forEach(f => track.appendChild(item(f, true)));
+    // the same speed whatever the row's length: about 60px a second
+    host.style.setProperty("--dur", Math.max(30, Math.round(list.length * 260 / 60)) + "s");
+    host.appendChild(track);
+}
+
+/* --- the stats band: count up once, on first sight -----------------------------
+   The number is already in the markup, so this only animates it. Nothing
+   moves with reduced motion. */
+{
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const run = el => {
+        const to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0), suffix = el.dataset.suffix || "";
+        if (!isFinite(to)) return;
+        const fmt = v => v.toLocaleString("en-GB", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suffix;
+        const t0 = performance.now(), dur = 1400;
+        const step = now => {
+            const t = Math.min(1, (now - t0) / dur);
+            const e = 1 - Math.pow(1 - t, 4);
+            el.textContent = fmt(to * e);
+            if (t < 1) requestAnimationFrame(step); else el.textContent = fmt(to);
+        };
+        requestAnimationFrame(step);
+    };
+    const ticks = document.querySelectorAll(".tick");
+    if (!reduce && ticks.length && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver(es => es.forEach(e => {
+            if (e.isIntersecting) { io.unobserve(e.target); run(e.target); }
+        }), { threshold: 0.6 });
+        ticks.forEach(t => io.observe(t));
+    }
+}
+
+/* --- the elements orbit ----------------------------------------------------------
+   Spyro's Adventure: eight elements, four Skylanders each. The emblems
+   circle the portal (CSS, paused while the pointer or focus is on it);
+   choosing one lists its four in the centre, each linking to its card on
+   /skylanders. The roster comes from rosters.json. */
+fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
+    const orbit = document.getElementById("orbit");
+    const ssa = d.games && d.games.ssa && d.games.ssa.roster;
+    if (!orbit || !ssa) return;
+    const name = document.getElementById("orbitName");
+    const crew = document.getElementById("orbitCrew");
+    const buttons = orbit.querySelectorAll(".orb-el");
+    const pick = btn => {
+        const el = btn.dataset.el;
+        buttons.forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+        orbit.style.setProperty("--el", ELEMENT_COLOUR[el] || "var(--gold)");
+        orbit.classList.add("picked");
+        name.textContent = el;
+        crew.innerHTML = (ssa[el] || []).map(c =>
+            `<li><a href="/skylanders?game=ssa&amp;s=${encodeURIComponent(c.slug)}">` +
+            `<img src="images/characters/${esc(c.icon || c.slug)}.png" alt="" loading="lazy" width="56" height="56">` +
+            `<span>${esc(c.name)}</span></a></li>`).join("");
+    };
+    buttons.forEach(b => {
+        b.style.setProperty("--c", ELEMENT_COLOUR[b.dataset.el] || "#888");
+        b.addEventListener("click", () => pick(b));
+    });
+}).catch(() => {});
 
 /* --- the people, in brief ---------------------------------------------------
    The core contributors only. Special thanks and the beta-tester list are

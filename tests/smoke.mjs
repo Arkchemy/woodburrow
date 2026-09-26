@@ -119,6 +119,38 @@ for (const path of pages) {
 }
 await visit(browser, "/", VIEWPORTS[0], { expect: "still", reduce: true, label: "reduced-motion" });
 await visit(browser, "/", VIEWPORTS[0], { expect: "rendered", dark: true, label: "dark" });
+// the interactive pieces: each must actually do its job, not just load
+{
+    const where = "/ features";
+    console.log(where);
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const page = await ctx.newPage();
+    page.on("pageerror", e => fail(where, "uncaught: " + e.message));
+    await page.goto(BASE + "/", { waitUntil: "load" });
+    await page.waitForTimeout(1500);
+    // the command palette finds a Skylander by name
+    await page.keyboard.press("Control+k");
+    await page.keyboard.type("eruptor");
+    await page.waitForTimeout(800);
+    const hit = await page.evaluate(() => {
+        const a = document.querySelector("dialog.cmdk[open] .cmdk-list a");
+        return a ? a.getAttribute("href") : null;
+    });
+    if (!hit || !hit.includes("s=eruptor")) fail(where, `palette did not find Eruptor (first result ${hit})`);
+    await page.keyboard.press("Escape");
+    // the orbit lists an element's four Skylanders
+    await page.click('.orb-el[data-el="Water"]', { force: true });
+    const crew = await page.$$eval("#orbitCrew a", as => as.length);
+    if (crew !== 4) fail(where, `orbit listed ${crew} Water Skylanders, not 4`);
+    // the marquee holds every finding, twice over its two rows
+    const counts = await page.evaluate(() => ({
+        items: document.querySelectorAll(".marquee-item").length,
+        findings: +document.getElementById("statFindings").dataset.to,
+    }));
+    if (counts.items !== counts.findings * 2) fail(where, `marquee has ${counts.items} items for ${counts.findings} findings`);
+    await ctx.close();
+}
+
 await browser.close();
 
 const noGL = await chromium.launch({ args: ["--disable-webgl", "--disable-3d-apis"] });

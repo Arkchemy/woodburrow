@@ -27,8 +27,16 @@
             tabs.appendChild(b);
         });
         /* ?game=giants from the games page, when it is a game we have. */
-        const want = new URLSearchParams(location.search).get("game");
+        const params = new URLSearchParams(location.search);
+        const want = params.get("game");
         selectGame(d.order.includes(want) ? want : "ssa");
+        /* ?s=<slug> opens that Skylander -- the front page's element orbit
+           links here */
+        const slug = params.get("s");
+        if (slug) {
+            const i = VISIBLE.findIndex(c => c.slug === slug);
+            if (i >= 0) showcase(i, false);
+        }
 
         document.getElementById("randomPick").addEventListener("click", () => {
             if (!VISIBLE.length) return;

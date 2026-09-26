@@ -39,6 +39,25 @@ React Native study. That repository is GPL-3.0 and asks that its artwork not
 be reused, so none of its code or artwork is here: the shader and the motion
 were written for this site.
 
+## Components
+
+Several pieces are rebuilt natively from ideas in magicui, ui.unlumen and
+smoothui:
+
+- stats that count up;
+- the eight elements orbiting the portal;
+- a findings marquee;
+- pipeline beams and a border beam;
+- a dock in the footer;
+- a command palette (Ctrl/Cmd+K or `/`);
+- a floating copy-link toolbar on findings.
+
+Those are React and Tailwind libraries, and this site has no build step and
+a strict CSP. So each piece is a few lines of CSS and vanilla JS in
+`site.css`, `common.js` and `home.js`. Each one reads as plain, still HTML
+without JavaScript or with reduced motion. `tests/smoke.mjs` checks that the
+palette, the orbit and the marquee actually work.
+
 ## Tests
 
 `.github/workflows/site.yml` runs two checks on every push:

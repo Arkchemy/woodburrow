@@ -578,3 +578,186 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitT
         if (d && d.fetched === 0) return '<p class="feed-empty">Nothing posted in that channel yet.</p>';
         return '<p class="feed-empty">Nothing to show right now.</p>';
     };
+
+/* --- the command palette --------------------------------------------------
+   Ctrl/Cmd+K, "/", or the search button in the bar: one box that finds any
+   page, any finding or correction, and any of the 351 Skylanders. The data
+   is fetched the first time it opens, not on every page load. A native
+   <dialog>, so focus is held inside it and Escape closes it for free. */
+{
+    const btn = document.getElementById("navSearch");
+    const PAGES = [
+        ["Home", "/", "The port, where it stands, how it works"],
+        ["Progress", "/progress", "The build log, live from Discord"],
+        ["Findings", "/findings", "What the engine has shown, and the corrections"],
+        ["Games", "/games", "The six Skylanders games on one engine"],
+        ["Skylanders", "/skylanders", "All 351, by game and element"],
+        ["Questions", "/faq", "Is there a download? What does it need?"],
+        ["People", "/contributors", "Who builds it, and the testers"],
+        ["Legal & privacy", "/legal", "Trademarks, takedowns, licences, no tracking"],
+        ["Feed", "/feed.xml", "Findings and the build log as an Atom feed"],
+    ];
+    let items = null, dlg, input, list, sel = 0, shown = [];
+
+    const load = () => {
+        if (items) return Promise.resolve(items);
+        items = PAGES.map(([t, href, sub]) => ({ kind: "Page", t, href, sub }));
+        return Promise.all([
+            fetch("findings.json" + DATA_V).then(r => r.json()).then(d => {
+                (d.findings || []).forEach(f => f.title && items.push({ kind: "Finding", t: f.title,
+                    href: "/findings#f-" + encodeURIComponent(f.id || ""), sub: f.area || "" }));
+                (d.corrections || []).forEach(c => items.push({ kind: "Correction",
+                    t: (c.title || (c.id || "").replace(/-/g, " ")), href: "/findings#c-" + encodeURIComponent(c.id || ""), sub: c.date || "" }));
+            }).catch(() => {}),
+            fetch("rosters.json" + DATA_V).then(r => r.json()).then(d => {
+                Object.entries(d.games || {}).forEach(([g, game]) =>
+                    Object.entries(game.roster || {}).forEach(([el, crew]) => crew.forEach(c => items.push({
+                        kind: "Skylander", t: c.name, sub: el + " · " + game.title,
+                        href: "/skylanders?game=" + g + "&s=" + encodeURIComponent(c.slug) }))));
+            }).catch(() => {}),
+        ]).then(() => items);
+    };
+
+    // every word of the query must appear; earlier and whole-word hits rank higher
+    const score = (it, words) => {
+        const hay = (it.t + " " + it.sub).toLowerCase();
+        let s = 0;
+        for (const w of words) {
+            const i = hay.indexOf(w);
+            if (i < 0) return -1;
+            s += (i === 0 ? 30 : 0) + (/\W/.test(hay[i - 1] || " ") ? 10 : 0) - i * 0.05;
+        }
+        return s + (it.kind === "Page" ? 15 : 0);
+    };
+
+    const render = () => {
+        const q = input.value.trim().toLowerCase();
+        const words = q.split(/\s+/).filter(Boolean);
+        shown = !words.length ? items.filter(it => it.kind === "Page")
+            : items.map(it => [score(it, words), it]).filter(([s]) => s >= 0)
+                   .sort((a, b) => b[0] - a[0]).slice(0, 40).map(([, it]) => it);
+        sel = 0;
+        list.innerHTML = shown.length ? shown.map((it, i) =>
+            `<li role="option" id="cmdk-${i}" aria-selected="${i === 0}"><a href="${esc(it.href)}" tabindex="-1">` +
+            `<span class="cmdk-kind">${esc(it.kind)}</span><b>${esc(it.t)}</b><small>${esc(it.sub)}</small></a></li>`).join("")
+            : `<li class="cmdk-none">Nothing matches &ldquo;${esc(input.value)}&rdquo;</li>`;
+        input.setAttribute("aria-activedescendant", shown.length ? "cmdk-0" : "");
+    };
+
+    const move = d => {
+        if (!shown.length) return;
+        const lis = list.querySelectorAll("li[role=option]");
+        lis[sel].setAttribute("aria-selected", "false");
+        sel = (sel + d + shown.length) % shown.length;
+        lis[sel].setAttribute("aria-selected", "true");
+        lis[sel].scrollIntoView({ block: "nearest" });
+        input.setAttribute("aria-activedescendant", "cmdk-" + sel);
+    };
+
+    const build = () => {
+        dlg = document.createElement("dialog");
+        dlg.className = "cmdk";
+        dlg.setAttribute("aria-label", "Search the site");
+        dlg.innerHTML =
+            `<div class="cmdk-box">` +
+              `<label class="cmdk-field"><svg aria-hidden="true"><use href="#i-search"/></svg>` +
+              `<input type="search" placeholder="Search pages, findings, Skylanders..." autocomplete="off" spellcheck="false"` +
+              ` role="combobox" aria-expanded="true" aria-controls="cmdkList" aria-autocomplete="list">` +
+              `<kbd>Esc</kbd></label>` +
+              `<ul class="cmdk-list" id="cmdkList" role="listbox"></ul>` +
+              `<p class="cmdk-foot"><span><kbd>&uarr;</kbd><kbd>&darr;</kbd> to move</span><span><kbd>Enter</kbd> to open</span></p>` +
+            `</div>`;
+        document.body.appendChild(dlg);
+        input = dlg.querySelector("input");
+        list = dlg.querySelector(".cmdk-list");
+        input.addEventListener("input", render);
+        input.addEventListener("keydown", e => {
+            if (e.key === "ArrowDown") { e.preventDefault(); move(1); }
+            else if (e.key === "ArrowUp") { e.preventDefault(); move(-1); }
+            else if (e.key === "Enter" && shown[sel]) { e.preventDefault(); location.href = shown[sel].href; dlg.close(); }
+            // a search input spends the first Escape on clearing itself;
+            // here Escape should always close, as the Esc hint says
+            else if (e.key === "Escape") { e.preventDefault(); dlg.close(); }
+        });
+        list.addEventListener("click", () => dlg.close());
+        // a click on the backdrop (the dialog itself, outside the box) closes it
+        dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+    };
+
+    const open = () => {
+        if (!dlg) build();
+        if (dlg.open) return;
+        input.value = "";
+        list.innerHTML = `<li class="cmdk-none">Loading&hellip;</li>`;
+        dlg.showModal();
+        load().then(render);
+    };
+
+    if (btn && typeof HTMLDialogElement === "function") {
+        btn.hidden = false;
+        const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        const k = btn.querySelector("kbd");
+        if (k && mac) k.textContent = "⌘ K";
+        btn.addEventListener("click", open);
+        document.addEventListener("keydown", e => {
+            const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable;
+            if ((e.key === "k" || e.key === "K") && (e.ctrlKey || e.metaKey)) { e.preventDefault(); open(); }
+            else if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); open(); }
+        });
+    }
+}
+
+/* --- the dock -------------------------------------------------------------
+   Items grow as the pointer nears them, falling off with distance, like the
+   macOS dock. Only for a real mouse, and never with reduced motion. */
+{
+    const dock = document.getElementById("dock");
+    if (dock && !matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover)").matches) {
+        const links = [...dock.querySelectorAll("a")];
+        let raf = 0, px = null;
+        const apply = () => {
+            raf = 0;
+            links.forEach(a => {
+                if (px === null) { a.style.removeProperty("--mag"); return; }
+                const r = a.getBoundingClientRect();
+                const d = Math.abs(px - (r.left + r.width / 2));
+                a.style.setProperty("--mag", Math.max(0, 1 - d / 150).toFixed(3));
+            });
+        };
+        dock.addEventListener("pointermove", e => { px = e.clientX; if (!raf) raf = requestAnimationFrame(apply); });
+        dock.addEventListener("pointerleave", () => { px = null; if (!raf) raf = requestAnimationFrame(apply); });
+    }
+}
+
+/* --- scrambled section labels ------------------------------------------------
+   Each eyebrow decodes itself from noise the first time it comes into view.
+   The real text is in the markup from the start and in aria-label during the
+   effect, so it is never lost; nothing happens with reduced motion. */
+{
+    const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=<>";
+    const scramble = el => {
+        const final = el.textContent;
+        if (!final.trim() || el.dataset.scrambled) return;
+        el.dataset.scrambled = "1";
+        el.setAttribute("aria-label", final);
+        const t0 = performance.now(), dur = 700;
+        const step = now => {
+            const t = Math.min(1, (now - t0) / dur);
+            const settled = Math.floor(final.length * t);
+            let out = "";
+            for (let i = 0; i < final.length; i++)
+                out += i < settled || final[i] === " " ? final[i] : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+            el.textContent = out;
+            if (t < 1) requestAnimationFrame(step);
+            else { el.textContent = final; el.removeAttribute("aria-label"); }
+        };
+        requestAnimationFrame(step);
+    };
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver(es => es.forEach(e => {
+            if (e.isIntersecting) { io.unobserve(e.target); scramble(e.target); }
+        }), { threshold: 1 });
+        document.addEventListener("DOMContentLoaded", () =>
+            document.querySelectorAll(".band .eyebrow, .page-head .eyebrow").forEach(el => io.observe(el)));
+    }
+}
